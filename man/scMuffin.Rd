@@ -4,10 +4,12 @@
 \alias{scMuffin}
 \title{scMuffin: main function that runs the whole pipeline}
 \usage{
-scMuffin(genes_by_cells)
+scMuffin(genes_by_cells, custom_signatures = NULL)
 }
 \arguments{
-\item{genes_by_cells}{genes-by-cells input matrix}
+\item{genes_by_cells}{seurat_object_data, genes-by-cells input matrix}
+
+\item{custom_signatures}{list of gene sets}
 }
 \description{
 scMuffin: main function that runs the whole pipeline
