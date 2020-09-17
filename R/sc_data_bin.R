@@ -2,7 +2,6 @@
 #' @param seurat_data seurat data object
 #' @param nbins number of bins
 #' @param use.log use logarithm
-##' @import libreria_necessaria
 
 
 sc_data_bin <- function(seurat_data, nbins=25, use.log=TRUE){
