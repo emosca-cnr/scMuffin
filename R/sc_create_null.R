@@ -1,7 +1,8 @@
 #' sc_create_null
 #' @param seurat_data seurat data object
-#' @param nbins number of bins
-#' @param use.log use logarithm
+#' @param bins bins
+#' @param gene_set genes
+#' @param k number of permutations
 
 sc_create_null <- function(seurat_data, bins, gene_set, k=100){
 
