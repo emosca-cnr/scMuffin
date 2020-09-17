@@ -9,6 +9,8 @@
 #' @param k number of permutations
 #' @param alt alterative
 #' @param test type of test
+#' @import graphics
+#' @importFrom stats median na.omit p.adjust t.test wilcox.test
 
 gene_set_score_in_clusters <- function(current_gene_set, seurat_object_data, seurat_object_ident, nmark_min=5, perc=0.75, ncells_min = NULL, bins = NULL, k=100, alt="g", test="t"){
 
