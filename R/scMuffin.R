@@ -36,6 +36,8 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL){
 
   #CNV @Valentina
 
+  #mclapply(genes_by_cells, function(i_col) CNV(i_col), ...)
+
 
   #merge everithing
 
