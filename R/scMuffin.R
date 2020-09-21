@@ -8,7 +8,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL){
 
   #Seurat clustering @Noemi
 
-  #seurat_clusters <-
+  expression_clusters <- find_clusters(genes_by_cells) #too slow???
 
   #signature expression @Ettore
   if(!is.null(custom_signatures)){
@@ -48,5 +48,6 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL){
   #Plots and Tables as outputs
 
 
+  return(res)
 
 }

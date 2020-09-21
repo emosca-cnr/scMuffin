@@ -4,9 +4,8 @@
 #' @import Seurat
 #' @export
 
-find_clusters <- function(seurat_object, dims=1:10){
+find_clusters <- function(seurat_object){
 	
-	ans <- Seurat::FindNeighbors(seurat_object, dims = dims)
 	ans <- Seurat::FindClusters(ans)
 	
 	return(ans)

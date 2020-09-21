@@ -2,7 +2,7 @@
 #' @import parallel
 #' @export
 
-ettore <- function(x){
+ettore <- function(){
 	
 	# library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 	# temp <- select(TxDb.Hsapiens.UCSC.hg19.knownGene, keys = head(keys(TxDb.Hsapiens.UCSC.hg19.knownGene)), columns=c('GENEID', 'TXCHROM', 'TXSTART', 'TXEND', 'TXID'), keytype="GENEID")
@@ -17,19 +17,15 @@ ettore <- function(x){
 	# gene_locations$pos <- apply(abs(gene_locations[, c("start_location", "end_location")]), 1, min) 
 	# gene_locations$start_location <- NULL
 	# gene_locations$end_location <- NULL
+
 	
+	#expression_clusters <- find_clusters(genes_by_cells)
+		
+	data_bins <- sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE)
 	
-	#example data
-	load("/home/bioinformatics/ndinanni/SC/SC_2/Yuan2018/PJ016/data_PJ016.RData") #it contains the Seurat object "cell"
-	#load("sysdata.rda")
+	#	res <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, genes_by_cells, expression_clusters, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(signatures), 2))
 	
-	genes_by_cells <- as.matrix(cell@assays$RNA@data)
-	
-	
-	names(seurat_object_ident) <- names(cell$seurat_clusters)
-	rm(cell)
-	
-	res <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, 	as.matrix(cell@assays$RNA@data), seurat_object_ident, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(all_markers_sets), 2))
+	res <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = genes_by_cells, bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = 2)
 	
 	return(res)
 	

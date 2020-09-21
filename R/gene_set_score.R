@@ -1,11 +1,17 @@
 #' gene_set_score
-#' @param gene_set_data real data
-#' @param control_set_data control data
+#' @param genes_by_cells real data
+#' @param bins random data
 #' @param nmark_min min number of markers
 #' @param ncells_min min number of cells
+#' @param k number of random gene set to be considered
 
-gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
-
+#gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
+gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100){
+	
+	gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
+	
+	control_set_data <- sc_create_null(genes_by_cells, bins = bins, gene_set = gene_set, k = k)
+	
   #old version
   #ans <- data.frame(case=colMeans(gene_set_data), control=colMeans(control_set_data), case.N=nrow(gene_set_data), case.AV=colSums(gene_set_data!=0), case.NA=colSums(gene_set_data==0), control.N=nrow(control_set_data), control.AV=colSums(control_set_data != 0), control.NA=colSums(control_set_data==0), stringsAsFactors = F)
   #ans$score <- ans$case - ans$control
@@ -61,7 +67,7 @@ gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_
       res <- data.frame(ans[[1]], avg_control=NA, avg_delta_score=NA, stringsAsFactors = F)
     }
 
-    res <- res[res$nmark_min, ] #eliminate cells without a sufficient number of genes
+    #res <- res[res$nmark_min, ] #eliminate cells without a sufficient number of genes
 
   }else{
 
