@@ -18,7 +18,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 	control_set_data <- sc_create_null(genes_by_cells, bins = bins, gene_set = gene_set, k = k)
 	
 	null_mod_gs <- list(gs=hist(log2(rowSums(gene_set_data)), 20, plot = F))
-	null_mod_gs <- c(null_mod_gs, lapply(cl1_null, function(x) hist(log2(rowSums(x)), 20, plot = F)))
+	null_mod_gs <- c(null_mod_gs, lapply(control_set_data, function(x) hist(log2(rowSums(x)), 20, plot = F)))
 	
   #old version
   #ans <- data.frame(case=colMeans(gene_set_data), control=colMeans(control_set_data), case.N=nrow(gene_set_data), case.AV=colSums(gene_set_data!=0), case.NA=colSums(gene_set_data==0), control.N=nrow(control_set_data), control.AV=colSums(control_set_data != 0), control.NA=colSums(control_set_data==0), stringsAsFactors = F)

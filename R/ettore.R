@@ -25,9 +25,16 @@ ettore <- function(){
 	
 	#	res <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, genes_by_cells, expression_clusters, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(signatures), 2))
 	
-	#res <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = 2)
+	res <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = 2)
 
 	res <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5))
+	
+	res_clusters <- lapply(res, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
+	# res_clusters <- vector("list", length = length(res))
+	# for(i in 1:length(res)){
+	# 	cat(i)
+	# 	res_clusters[[i]] <- gene_set_score_in_clusters(res[[i]]$score_table, genes_by_cells@active.ident, ncells_min = 5)
+	# }
 	
 	return(res)
 	
