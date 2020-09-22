@@ -3,7 +3,7 @@
 #' @param custom_signatures list of gene sets
 #' @import parallel
 
-scMuffin <- function(genes_by_cells, custom_signatures=NULL){
+scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NULL){
 
 
   #Seurat clustering @Noemi
