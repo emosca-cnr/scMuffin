@@ -3,9 +3,9 @@
 \docType{data}
 \name{genes_by_cells}
 \alias{genes_by_cells}
-\title{Example dataset}
+\title{Seurat object, example dataset}
 \format{
-An object of class \code{matrix} with 27298 rows and 3085 columns.
+An object of class \code{Seurat} with 27298 rows and 3085 columns.
 }
 \usage{
 genes_by_cells

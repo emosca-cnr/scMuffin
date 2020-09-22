@@ -8,7 +8,6 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
 
   #Seurat clustering @Noemi
 
-  expression_clusters <- find_clusters(genes_by_cells) #too slow???
 
   #signature expression @Ettore
   if(!is.null(custom_signatures)){

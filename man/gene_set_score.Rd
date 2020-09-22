@@ -5,20 +5,24 @@
 \title{gene_set_score}
 \usage{
 gene_set_score(
-  gene_set_data,
-  control_set_data,
+  gene_set,
+  genes_by_cells,
+  bins,
   nmark_min = 5,
-  ncells_min = NULL
+  ncells_min = 5,
+  k = 100
 )
 }
 \arguments{
-\item{gene_set_data}{real data}
+\item{genes_by_cells}{real data}
 
-\item{control_set_data}{control data}
+\item{bins}{random data}
 
 \item{nmark_min}{min number of markers}
 
 \item{ncells_min}{min number of cells}
+
+\item{k}{number of random gene set to be considered}
 }
 \description{
 gene_set_score
