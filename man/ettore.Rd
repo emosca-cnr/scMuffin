@@ -4,7 +4,7 @@
 \alias{ettore}
 \title{ettore}
 \usage{
-ettore(x)
+ettore()
 }
 \description{
 ettore

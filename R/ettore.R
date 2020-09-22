@@ -21,11 +21,13 @@ ettore <- function(){
 	
 	#expression_clusters <- find_clusters(genes_by_cells)
 		
-	data_bins <- sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE)
+	data_bins <- sc_data_bin(as.matrix(genes_by_cells@assays$RNA@data), nbins = 25, use.log = TRUE)
 	
 	#	res <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, genes_by_cells, expression_clusters, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(signatures), 2))
 	
-	res <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = genes_by_cells, bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = 2)
+	#res <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = 2)
+
+	res <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5))
 	
 	return(res)
 	

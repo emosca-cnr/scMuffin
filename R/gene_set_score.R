@@ -4,13 +4,21 @@
 #' @param nmark_min min number of markers
 #' @param ncells_min min number of cells
 #' @param k number of random gene set to be considered
+#' @return list with
+#'    score_table: data frame with gene set score for each cell
+#'    permutations: list with the permutations
+#' @author Ettore Mosca
+#' @export
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
-gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100){
+gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, verbose=F){
 	
 	gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
 	
 	control_set_data <- sc_create_null(genes_by_cells, bins = bins, gene_set = gene_set, k = k)
+	
+	null_mod_gs <- list(gs=hist(log2(rowSums(gene_set_data)), 20, plot = F))
+	null_mod_gs <- c(null_mod_gs, lapply(cl1_null, function(x) hist(log2(rowSums(x)), 20, plot = F)))
 	
   #old version
   #ans <- data.frame(case=colMeans(gene_set_data), control=colMeans(control_set_data), case.N=nrow(gene_set_data), case.AV=colSums(gene_set_data!=0), case.NA=colSums(gene_set_data==0), control.N=nrow(control_set_data), control.AV=colSums(control_set_data != 0), control.NA=colSums(control_set_data==0), stringsAsFactors = F)
@@ -37,8 +45,10 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 
   #null_ok <- rowSums(vect_selected[, -1])  > (ncol(vect_selected[, -1])) #old
   gene_set_ok_in_nulls <- rowSums(vect_selected[, -1]) #new
-  cat("gene_set_ok_in_nulls...\n")
-  print(table(gene_set_ok_in_nulls[gene_set_ok_in_nulls>0]))
+  if(verbose){
+  	cat("gene_set_ok_in_nulls...\n")
+  	print(table(gene_set_ok_in_nulls[gene_set_ok_in_nulls>0]))
+  }
 
   null_ok <- gene_set_ok_in_nulls > (ncol(vect_selected)-1)*0.9 #new
 
@@ -76,7 +86,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 
   }
 
-  ans <- list(gs_score=ans, res=res, cells_ok=vect_selected)
+  ans <- list(score_table=res, permutations=ans[-1])
 
   return(ans)
 
