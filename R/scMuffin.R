@@ -30,7 +30,8 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
   #Diffusion pseudotime (DPT) (Destiny): @Noemi
 
   #Paride score @Noemi
-
+  exp_Rate_score <- exp_Rate(genes_by_cells)
+  
   #Cell cycle state TO DO
 
 
