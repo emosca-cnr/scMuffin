@@ -5,21 +5,33 @@
 #' @details Preprocessing with 'preprocess_for_heatmap' needed. 
 #' @usage heatmap_CNV(chr_merged)
 #' @author Valentina Nale
+#' @import RColorBrewer
 
-heatmap_CNV <- function(chr_merged, list_ncol_chr) {
+heatmap_CNV <- function(chr_merged, ngenes_chrom) {
 	
-	X = chr_merged
-	X <- log(X)
+	
+	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
+	
+	ngenes_chrom_cumsum <- cumsum(ngenes_chrom)
+	
+	X <- rotate(chr_merged)
+	#X <- log2(X)
 	layout.show(layout(matrix(c(1, 2), byrow = T, nrow = 1), widths = c(0.8, 0.2))) 
 	
 	par(mar=c(5, 5, 1, 1))
-	library(RColorBrewer)
-	image(X, xaxt="none", yaxt="none", col=rev(brewer.pal(9,"RdYlGn"))) #, breaks = c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6)))
+	image(X, xaxt="none", yaxt="none", col=rev(brewer.pal(9, "RdYlGn"))) #, breaks = c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6)))
 	
 	xx <- seq(0, 1, length.out = nrow(X))
 	yy <- seq(0, 1, length.out = ncol(X))
 	xx_lab <- rownames(X) #horizontal axis
 	yy_lab <- colnames(X) #vertical axis
+	axis(1, xx, xx_lab, las=2, cex=0.3)
+	axis(2, yy, yy_lab, las=2, cex=0.3)
+	
+	#grid(ncol(X), nrow(X)) #X è la matrice plottata
+	U <- par("usr")
+	abline(h=seq(U[2], U[1], length.out = nrow(chr_merged)+1)[ngenes_chrom_cumsum+1])
+	
 	
 	# new legend
 	par(mar=c(0, 0, 0, 0))
@@ -33,7 +45,7 @@ heatmap_CNV <- function(chr_merged, list_ncol_chr) {
 	
 	abline(v=1220, untf = FALSE, col = "blue")
 	
-	dev.off()
+	#dev.off()
 	
 	# ****************************************************************************
 	# ******************** CHROMOSOME DIVISION / ABLINE (?) **********************

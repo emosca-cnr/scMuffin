@@ -6,18 +6,13 @@
 #' @return A matrix to be used by the function heatmap_CNV.
 #' @author Valentina Nale
 
-heatmap_cnv <- function(result_cnv) {
-	list_ncol_chr <- c()
-	for (i in 1:length(result_cnv)) {
-		temp <- paste0("cnv_chr", i)
-		print(temp)
-		temp <- result_cnv[[i]]
-		temp <- t(temp)	
-		ncol_chr <- print(ncol(temp))
-		list_ncol_chr <- c(list_ncol_chr, ncol_chr)
-		list_ncol_chr <<- list_ncol_chr
-		chr_merged <- matrix(nrow = nrow(temp))
-		chr_merged <- cbind(chr_merged, temp)
-		chr_merged <<- chr_merged
-	}
+preprocess_for_heatmap <- function(result_cnv) {
+
+	for(i in 1:length(result_cnv)){
+		rownames(result_cnv[[i]]) <- paste0("chr", names(result_cnv)[i], "_", rownames(result_cnv[[i]]))
+	} 
+	
+	chr_merged <- do.call(rbind, result_cnv)
+	
+	return(chr_merged)
 }
