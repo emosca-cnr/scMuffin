@@ -18,3 +18,6 @@ sc_create_null(seurat_data, bins, gene_set, k = 100)
 \description{
 sc_create_null
 }
+\author{
+Ettore Mosca
+}

@@ -10,7 +10,8 @@ gene_set_score(
   bins,
   nmark_min = 5,
   ncells_min = 5,
-  k = 100
+  k = 100,
+  verbose = F
 )
 }
 \arguments{
@@ -24,6 +25,14 @@ gene_set_score(
 
 \item{k}{number of random gene set to be considered}
 }
+\value{
+list with
+score_table: data frame with gene set score for each cell
+permutations: list with the permutations
+}
 \description{
 gene_set_score
+}
+\author{
+Ettore Mosca
 }

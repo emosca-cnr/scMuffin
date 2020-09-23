@@ -5,13 +5,13 @@
 #' @usage preprocess_object_for_cnv(input_object)
 #' @return list of dataframes, where every dataframe is a chromosome
 #' @author Valentina Nale
+#' @import Seurat org.Hs.eg.db
 
 preprocess_object_for_CNV <- function(input_object) {
   
   # retrieve gene informations
-  #input_matrix=cellObj
+  #input_object=cellObj
   
-  library(org.Hs.eg.db)
   gene_locations <- as.data.frame(org.Hs.egCHRLOC)
   temp <- as.data.frame(org.Hs.egCHRLOCEND)
   eg2sym <- as.data.frame(org.Hs.egSYMBOL)
@@ -23,7 +23,7 @@ preprocess_object_for_CNV <- function(input_object) {
   gene_locations$end_location <- NULL
   
   # merged Seurat matrix and annotation matrix via "symbol"
-  temp_matrix <- GetAssayData(object=input_matrix, slot="data")
+  temp_matrix <- Seurat::GetAssayData(object=input_object, slot="data")
   matrix_complete <- merge(gene_locations, temp_matrix, by.x="symbol", by.y=0, sort=FALSE)
   
   # remove chromosome names not in 1:22 and X,Y -- long names, duplicates
@@ -50,5 +50,5 @@ preprocess_object_for_CNV <- function(input_object) {
   mat_sorted <- lapply(mat_splitted, function(df){
     df[order(df$pos),]
   })
-  
+  return(mat_sorted)
 }

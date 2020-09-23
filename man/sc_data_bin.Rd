@@ -14,5 +14,5 @@ sc_data_bin(seurat_data, nbins = 25, use.log = TRUE)
 \item{use.log}{use logarithm}
 }
 \description{
-sc_data_bin
+Split the input data matrix by rows into nbins
 }

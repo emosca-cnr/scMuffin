@@ -5,12 +5,10 @@
 \title{gene_set_score_in_clusters}
 \usage{
 gene_set_score_in_clusters(
-  current_gene_set,
-  seurat_object_data,
-  seurat_object_ident,
+  score_table,
+  cell_clusters,
   nmark_min = 5,
-  perc = 0.75,
-  ncells_min = NULL,
+  ncells_min = 5,
   bins = NULL,
   k = 100,
   alt = "g",
@@ -18,15 +16,7 @@ gene_set_score_in_clusters(
 )
 }
 \arguments{
-\item{current_gene_set}{real data}
-
-\item{seurat_object_data}{control data}
-
-\item{seurat_object_ident}{min number of markers}
-
 \item{nmark_min}{min number of cells}
-
-\item{perc}{min percentage of gene set}
 
 \item{ncells_min}{min number of cells}
 
@@ -37,6 +27,14 @@ gene_set_score_in_clusters(
 \item{alt}{alterative}
 
 \item{test}{type of test}
+
+\item{current_gene_set}{real data}
+
+\item{seurat_object_data}{control data}
+
+\item{seurat_object_ident}{min number of markers}
+
+\item{perc}{min percentage of gene set}
 }
 \description{
 gene_set_score_in_clusters

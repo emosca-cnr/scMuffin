@@ -7,12 +7,16 @@
 #' @author Valentina Nale
 
 heatmap_cnv <- function(result_cnv) {
+	list_ncol_chr <- c()
 	for (i in 1:length(result_cnv)) {
-		temp <- paste0("cnv_cnr", i)
+		temp <- paste0("cnv_chr", i)
 		print(temp)
 		temp <- result_cnv[[i]]
 		temp <- t(temp)	
-		chr_merged <- matrix(nrow= nrow(temp))
+		ncol_chr <- print(ncol(temp))
+		list_ncol_chr <- c(list_ncol_chr, ncol_chr)
+		list_ncol_chr <<- list_ncol_chr
+		chr_merged <- matrix(nrow = nrow(temp))
 		chr_merged <- cbind(chr_merged, temp)
 		chr_merged <<- chr_merged
 	}

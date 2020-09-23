@@ -2,13 +2,22 @@
 % Please edit documentation in R/CNV.R
 \name{CNV}
 \alias{CNV}
-\title{cnv}
+\title{CNV}
 \usage{
-CNV(x)
+result_cnv <- mclapply(mat_sorted, function(x) apply(x[,5:dim(x)[2]], 2, function( y ) CNV(y)), mc.cores = 2)
 }
 \arguments{
-\item{x}{matrix for cnv calculation}
+\item{x}{list of dataframes retrieved by 'preprocess_object_for_cnv'.}
 }
 \description{
-cnv
+Function to compute CNV.
+}
+\details{
+As a list of dataframes, it is convenient to use 'mclapply' from parallel package.
+}
+\references{
+Patel paper supplementary material (?)
+}
+\author{
+Valentina Nale
 }
