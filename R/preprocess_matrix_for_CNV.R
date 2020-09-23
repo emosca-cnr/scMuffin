@@ -1,7 +1,11 @@
-#' preprocess_matrix_for_cnv
-#' @param input_matrix = Seurat object. Preprocessing pipeline to obtain a list of ordered dataframes (chromosomes) 
+#' preprocess_object_for_cnv
+#' @param input_object Seurat object. 
+#' @return list of dataframes, where every dataframe is a chromosome
+#' @details Preprocessing pipeline to obtain a list of ordered dataframes (one for each chromosome). 
+#'          Preprocessing consist of annotation, removing duplicates and NA values
+#' @author Valentina Nale
 
-preprocess_matrix_for_CNV <- function(input_matrix) {
+preprocess_object_for_CNV <- function(input_object) {
   
   # retrieve gene informations
   #input_matrix=cellObj

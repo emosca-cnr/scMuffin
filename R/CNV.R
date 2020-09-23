@@ -1,5 +1,10 @@
 #' cnv
-#' @param x matrix for cnv calculation
+#' @param x list of dataframes retrieved by 'preprocess_object_for_cnv'.
+#' @description Function to compute CNV.
+#' @details As a list of dataframes, it is convenient to use 'mclapply' from parallel package. 
+#' @usage mclapply(mat_sorted, function(x) apply(x[,5:dim(x)[2]], 2, function( y ) CNV(y)), mc.cores = 2)
+#' @references Patel paper supplementary material (?)
+#' @author Valentina Nale
 
 
 CNV <- function(x) {
