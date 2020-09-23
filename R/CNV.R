@@ -1,4 +1,4 @@
-#' cnv
+#' CNV
 #' @param x list of dataframes retrieved by 'preprocess_object_for_cnv'.
 #' @description Function to compute CNV.
 #' @details As a list of dataframes, it is convenient to use 'mclapply' from parallel package. 
