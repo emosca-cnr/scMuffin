@@ -28,9 +28,12 @@ DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o,
                                    k = 30)
 
 SR <- DoDiffusionMap.o$SR
+names(SR) <- colnames(DoDiffusionMap.o$data)
+
 dm <- DoDiffusionMap.o$DM
 root.idx <- IDoDiffusionMap.o$root
 dpt <- destiny::DPT(dm, tips = DoDiffusionMap.o$root)
+names(dpt) <- rownames(dm@eigenvectors)
 
 landscent_list <- list(SR= SR,
                        DPT = dpt,
