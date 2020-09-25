@@ -14,19 +14,22 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom) {
 	
 	ngenes_chrom_cumsum <- cumsum(ngenes_chrom)
 	
+	res <- hclust(dist(t(chr_merged)))
+	chr_merged <- chr_merged[, res$order]
+	
 	X <- rotate(chr_merged)
 	#X <- log2(X)
 	layout.show(layout(matrix(c(1, 2), byrow = T, nrow = 1), widths = c(0.8, 0.2))) 
 	
 	par(mar=c(5, 5, 1, 1))
-	image(X, xaxt="none", yaxt="none", col=rev(brewer.pal(9, "RdYlGn"))) #, breaks = c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6)))
+	image(X, xaxt="none", yaxt="none", col=(brewer.pal(9, "BuGn"))) #, breaks = c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6)))
 	
 	xx <- seq(0, 1, length.out = nrow(X))
 	yy <- seq(0, 1, length.out = ncol(X))
 	xx_lab <- rownames(X) #horizontal axis
 	yy_lab <- colnames(X) #vertical axis
 	axis(1, xx, xx_lab, las=2, cex=0.3)
-	axis(2, yy, yy_lab, las=2, cex=0.3)
+	axis(2, rev(yy)[ngenes_chrom_cumsum], gsub("_.*", "", rev(yy_lab)[ngenes_chrom_cumsum]), las=2, cex=0.3)
 	
 	#grid(ncol(X), nrow(X)) #X è la matrice plottata
 	U <- par("usr")
@@ -41,21 +44,9 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom) {
 	
 	#leg_text <- cbind(c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6))[-12], c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6))[-1])
 	leg_text <- apply(leg_text, 1, function(x) paste0(format(x[1], digits = 2), ", ", format(x[2], digits = 2)))
-	legend("center", rev(leg_text), pch=16, col=brewer.pal(9, "RdYlGn"), cex=0.8, xpd=T, pt.cex=1)
+	legend("center", rev(leg_text), pch=16, col=brewer.pal(9, "BuGn"), cex=0.8, xpd=T, pt.cex=1)
 	
-	abline(v=1220, untf = FALSE, col = "blue")
 	
 	#dev.off()
-	
-	# ****************************************************************************
-	# ******************** CHROMOSOME DIVISION / ABLINE (?) **********************
-	# ****************************************************************************
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

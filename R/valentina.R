@@ -9,7 +9,7 @@ valentina <- function() {
 	#exclude chrom with <100 genes
 	punto1 <- punto1[unlist(lapply(punto1, nrow)) > 100]
 	
-	punto2 <- mclapply(punto1, function(x) apply(x[, 4:103], 2, function(y) CNV(y)), mc.cores = 2)
+	punto2 <- mclapply(punto1, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = 2)
 	ngenes_chrom <- unlist(lapply(punto2, nrow))
 	
 	punto3 <- preprocess_for_heatmap(punto2)

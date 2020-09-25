@@ -2,6 +2,7 @@
 
 export(ettore)
 export(gene_set_score)
+import(RColorBrewer)
 import(Seurat)
 import(graphics)
 import(org.Hs.eg.db)

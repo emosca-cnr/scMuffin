@@ -10,7 +10,7 @@
 preprocess_object_for_CNV <- function(input_object) {
   
   # retrieve gene informations
-  #input_object=cellObj
+  # input_object=cellObj
   
   gene_locations <- as.data.frame(org.Hs.egCHRLOC)
   temp <- as.data.frame(org.Hs.egCHRLOCEND)

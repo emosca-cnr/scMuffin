@@ -1,7 +1,7 @@
 #' preprocess_for_heatmap
 #' @param result_cnv 
 #' @description Bind chromosomes together as a matrix. 
-#' @details Every chromosome is first transposed. 
+#' @details 
 #' @usage preprocess_for_heatmap(result_cnv)
 #' @return A matrix to be used by the function heatmap_CNV.
 #' @author Valentina Nale
