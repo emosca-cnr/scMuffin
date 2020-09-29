@@ -36,6 +36,21 @@ ettore <- function(){
 	# 	res_clusters[[i]] <- gene_set_score_in_clusters(res[[i]]$score_table, genes_by_cells@active.ident, ncells_min = 5)
 	# }
 	
+	pbmc <- CreateSeuratObject(counts = punto3, min.cells = 0, min.features = 0)
+	all.genes <- rownames(pbmc)
+	
+	pbmc <- ScaleData(pbmc, features = all.genes)
+	pbmc <- RunPCA(pbmc, features = all.genes)
+	pbmc <- FindNeighbors(pbmc, dims = 1:10)
+	pbmc <- FindClusters(pbmc)
+	
+	pbmc <- BuildClusterTree(pbmc, features = all.genes, reorder = T)
+	temp <- as.hclust(pbmc@tools$BuildClusterTree)
+	
+	
+	#ElbowPlot(pbmc)
+	
+	
 	return(res)
 	
 }

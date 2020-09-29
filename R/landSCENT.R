@@ -5,7 +5,7 @@
 #' @param clusterMethod indicates the method to do clustering: "dbscan" or "PAM"
 #' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
 
-landSCENT <- function(genes_by_cells, ppi, reduceMethod = "PCA", clusterMethod = "dbscan", ){
+landSCENT <- function(genes_by_cells, ppi, reduceMethod = "PCA", clusterMethod = "dbscan"){
   
 #integration matrix - ppi
 Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi, log_trans = T)
@@ -17,8 +17,7 @@ SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = 4)
 InferPotency.o <- InferPotency(SR.o)
 PS <- InferPotency.o$potencyState
 
-InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState,
-                                 reduceMethod = "PCA", clusterMethod = "dbscan")
+InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
 
 #`DoDiffusionMap` function
 DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o,
