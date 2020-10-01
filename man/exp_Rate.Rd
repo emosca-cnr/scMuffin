@@ -11,6 +11,9 @@ exp_Rate(genes_by_cells, ngenes_min = 5)
 
 \item{ngenes_min}{min number of genes in each cell}
 }
+\value{
+expRate_vect vector with expression rate for each cell
+}
 \description{
 Expression_rate
 }

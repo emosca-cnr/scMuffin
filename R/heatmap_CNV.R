@@ -7,7 +7,7 @@
 #' @author Valentina Nale
 #' @import RColorBrewer Seurat
 
-heatmap_CNV <- function(chr_merged, ngenes_chrom, file="CNV_heatmap.jpg", pal=NULL, n_colors=11, cluster_cells=F, scale_cells=T) {
+heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, cluster_cells=F, scale_cells=T) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
 	

@@ -11,6 +11,7 @@
 #' @param test type of test
 #' @import graphics
 #' @importFrom stats median na.omit p.adjust t.test wilcox.test
+#' @export
 
 gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, ncells_min = 5, bins = NULL, k=100, alt="g", test="t"){
 	
@@ -22,7 +23,9 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, 
 	score_table_clusters$filter <- score_table_clusters$nmark_min & !is.na(score_table_clusters$avg_control)
 	score_table_clusters <- score_table_clusters[score_table_clusters$filter, ]
 	
-	
+	if(nrow(score_table_clusters)>= ncells_min){ 
+		
+
 	cluster_scores <- data.frame(
 		cells=tapply(score_table_clusters$nmark_min, score_table_clusters$cluster, sum),
 		med_case=tapply(score_table_clusters$case, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
@@ -69,12 +72,15 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, 
 	#missing values to 0
 	if(!all(clusters %in% cluster_scores$cluster)){
 		clusters_missing <- clusters[!clusters %in% cluster_scores$cluster]
-		cluster_scores <- rbind(cluster_scores, data.frame(cluster=clusters_missing, cells=NA, case=NA, control=NA, score=0, case.z=NA, stat=0, p=1, fdr=1, stringsAsFactors = F))
+		cluster_scores <- rbind(cluster_scores, data.frame(cluster=clusters_missing, cells=NA, med_case=NA, med_control=NA, med_case_z=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F))
 		
 	}
 	
-
+	}else{
+		warning("not enough cells in any cluster")
+		cluster_scores <- data.frame(cluster=clusters, cells=NA, med_case=NA, med_control=NA, med_case_z=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F)
+	}
+	
 	return(cluster_scores)
-
 
 }

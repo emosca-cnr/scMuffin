@@ -6,6 +6,7 @@
 #' @param nbins number of bins
 #' @param use.log use logarithm
 #' @value vector with bin id for each row
+#' @export
 
 
 sc_data_bin <- function(seurat_data, nbins=25, use.log=TRUE){
