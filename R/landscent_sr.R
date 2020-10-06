@@ -19,7 +19,13 @@ landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", cluster
 		stop("less than 5 elements in common between geens-by-cells matrix and ppi. Check the identifiers!")
 	}
 	
-	Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi, log_trans = T)
+	if(min(genes_by_cells)==0){
+		cat("Detected 0 values...")
+		half_min <- min(genes_by_cells[genes_by_cells>0]) / 2
+		cat("\tsetting 0 values to:", half_min, "\n")
+		genes_by_cells[genes_by_cells==0] <- half_min
+	}
+	Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi)
 	
 	#compute SR
 	cat("Computing SR...\n")
@@ -30,24 +36,25 @@ landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", cluster
 	InferPotency.o <- InferPotency(SR.o)
 	PS <- InferPotency.o$potencyState
 	
-	cat("Inferring landmark...\n")
-	InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
+	#cat("Inferring landmark...\n")
+	#InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
 	
 	#`DoDiffusionMap` function
 	cat("Diffusion map...\n")
 	DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o, mean_gap = 1, sd_gap = 1, root = c("cell", "state"), num_comp = 3, k = 30)
 	
-	SR <- DoDiffusionMap.o$SR
+	#SR <- DoDiffusionMap.o$SR
 	names(SR) <- colnames(DoDiffusionMap.o$data)
 	
 	dm <- DoDiffusionMap.o$DM
 	root.idx <- IDoDiffusionMap.o$root
+	
 	cat("Diffusion pseudotimes...\n")
 	dpt <- destiny::DPT(dm, tips = DoDiffusionMap.o$root)
 	names(dpt) <- rownames(dm@eigenvectors)
 	
 	landscent_list <- list(SR= SR, DPT = dpt, potency_states = PS, complete_output = DoDiffusionMap.o)
 	
-	return(landscent_list)ù
+	return(landscent_list)
 	
 }

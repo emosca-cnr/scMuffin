@@ -2,7 +2,8 @@
 #' 
 #' 
 calculate_CNV <- function(genes_by_cells, mc.cores=2) {
-	
+
+	cat("Calculating CNV...\n")	
 	ans <- preprocess_object_for_CNV(genes_by_cells)
 	
 	temp <- factor(names(ans), levels = c(1, 2, 3 ,4 ,5 ,6 ,7 ,8 , 9, 10, 11, 12 , 13, 14 ,15, 16, 17, 18, 19, 20, 21, 22, "X", "Y"))

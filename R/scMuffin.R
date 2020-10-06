@@ -17,18 +17,23 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
   #dataset bins
   data_bins <- sc_data_bin(as.matrix(genes_by_cells@assays$RNA@data), nbins = 25, use.log = TRUE)
 
+  #signatures-by-cell matrix
   res_signatures <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = mc.cores)
 
+  #gene-set score per cluster list
   res_signatures_clusters <- lapply(res, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
   
-  #assemble matrix (cluster level)
+  #signatures-by-clusters matrix
   SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
 
+  #output
+  heatmap_signatures(SC_signatures_by_cluster_matrix)
+  write.table(SC_signatures_by_cluster_matrix, file="signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
   
   ##################	Signalling entropy rate (SR) @Noemi 	  ##################	
   ##################	Potency states (LandScent): labels @Noemi 	  ##################	
   ##################	Diffusion pseudotime (DPT) (Destiny): @Noemi   ##################	
-  cat("Calcuting gene signature scores...\n")
+  cat("Calcuting landscent-related scores...\n")
   output_landscent <- landscent_sr(as.matrix(genes_by_cells@assays$RNA@data), mc.cores=mc.cores)
 
   
@@ -41,15 +46,20 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
   ##################	CNV @Valentina   ##################	
   cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data)[, 1:500], mc.cores = mc.cores)
   
+  ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
+  cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
+  heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom)
 
   ##################	merge everithing   ##################	
-  features_by_cells <- merge_matrix(features_by_cells = res_signatures, expr_score = exp_rate_score, landscent_list = output_landscent){
+  features_by_cells <- merge_matrix(features_by_cells = res_signatures, expr_score = exp_rate_score, landscent_list = output_landscent)
 
   ##################	re-clustering   ##################	
 
+  
 
-  #Plots and Tables as outputs
+  #### FINAL OUTPUTS ###
 
+  
 
   return(res)
 
