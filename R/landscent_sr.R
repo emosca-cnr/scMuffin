@@ -4,56 +4,50 @@
 #' @param reduceMethod indicates the method to do dimension reduction: "PCA" or "tSNE"
 #' @param clusterMethod indicates the method to do clustering: "dbscan" or "PAM"
 #' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
-#' @import LandSCENT destiny org	
+#' @import LandSCENT destiny
 
 landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
-  
-#integration matrix - ppi
-if(is.null(ppi)){
-	cat("Using default network provided by LanSCENT, i.e., \"net17Jan16.m\"\n")
-	ppi <- LandSCENT::net17Jan16.m
-	eg2sym <- as.data.frame(org.Hs.eg.db::org.Hs.egSYMBOL)
-	eg2sym <- eg2sym[eg2sym$gene_id %in% rownames(ppi), ]
 	
-	eg2sym <- merge(eg2sym, data.frame(gene_id=rownames(ppi), stringsAsFactors = F), by="gene_id", sort=F)
+	#integration matrix - ppi
+	if(is.null(ppi)){
+		cat("Using LandSCENT::net17Jan16.m\n")
+		ppi <- scMuffin::ppi
+	}
 	
+	temp <- sum(rownames(genes_by_cells) %in% rownames(ppi))
+	if(temp<5){
+		stop("less than 5 elements in common between geens-by-cells matrix and ppi. Check the identifiers!")
+	}
 	
-}
+	Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi, log_trans = T)
 	
-temp <- sum(rownames(genes_by_cells) %in% rownames(ppi))
-if(temp<5){
-	stop("less than 5 elements in common between geens-by-cells matrix and ppi. Check the identifiers!")
-}
+	#compute SR
+	cat("Computing SR...\n")
+	SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = mc.cores)
 	
-Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi, log_trans = T)
-
-#compute SR
-SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = mc.cores)
-
-#Infer the potency states
-InferPotency.o <- InferPotency(SR.o)
-PS <- InferPotency.o$potencyState
-
-InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
-
-#`DoDiffusionMap` function
-DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o,
-                                   mean_gap = 1, sd_gap = 1,
-                                   root = c("cell", "state"),
-                                   num_comp = 3,
-                                   k = 30)
-
-SR <- DoDiffusionMap.o$SR
-names(SR) <- colnames(DoDiffusionMap.o$data)
-
-dm <- DoDiffusionMap.o$DM
-root.idx <- IDoDiffusionMap.o$root
-dpt <- destiny::DPT(dm, tips = DoDiffusionMap.o$root)
-names(dpt) <- rownames(dm@eigenvectors)
-
-landscent_list <- list(SR= SR,
-                       DPT = dpt,
-                       potency_states = PS,
-                       complete_output = DoDiffusionMap.o)
-return(landscent_list)
+	#Infer the potency states
+	cat("Inferring potency states...\n")
+	InferPotency.o <- InferPotency(SR.o)
+	PS <- InferPotency.o$potencyState
+	
+	cat("Inferring landmark...\n")
+	InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
+	
+	#`DoDiffusionMap` function
+	cat("Diffusion map...\n")
+	DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o, mean_gap = 1, sd_gap = 1, root = c("cell", "state"), num_comp = 3, k = 30)
+	
+	SR <- DoDiffusionMap.o$SR
+	names(SR) <- colnames(DoDiffusionMap.o$data)
+	
+	dm <- DoDiffusionMap.o$DM
+	root.idx <- IDoDiffusionMap.o$root
+	cat("Diffusion pseudotimes...\n")
+	dpt <- destiny::DPT(dm, tips = DoDiffusionMap.o$root)
+	names(dpt) <- rownames(dm@eigenvectors)
+	
+	landscent_list <- list(SR= SR, DPT = dpt, potency_states = PS, complete_output = DoDiffusionMap.o)
+	
+	return(landscent_list)ù
+	
 }

@@ -12,18 +12,18 @@ merge_matrix <- function(features_by_cells, expr_score, landscent_list){
   dpt <- landscent_list$DPT
   
   #match colnames
-  expr_score <- expr_score[,match(colnames(features_by_cells), colnames(expr_score))]
-  SR <- SR[,match(colnames(features_by_cells), colnames(SR))]
-  dpt <- dpt[,match(colnames(features_by_cells), colnames(expr_score))]
+  expr_score <- expr_score[, match(colnames(features_by_cells), colnames(expr_score))]
+  SR <- SR[, match(colnames(features_by_cells), colnames(SR))]
+  dpt <- dpt[, match(colnames(features_by_cells), colnames(expr_score))]
   
   #merge
   matrix_merged <- rbind(features_by_cells, expR, SR, dpt)
   
   #scale data
-  mm_seurat<- CreateSeuratObject(counts = matrix_merged, min.cells = 0, min.features = 0)
-  all.genes <- rownames(mm_seurat)
-  mm_seurat <- ScaleData(mm_seurat, features = all.genes)
-  matrix_Scaled <-GetAssayData(object = mm_seurat, slot = "scale.data")
+  matrix_merged<- CreateSeuratObject(counts = matrix_merged, min.cells = 0, min.features = 0)
+  all.genes <- rownames(matrix_merged)
+  matrix_merged <- ScaleData(matrix_merged, features = all.genes)
+  matrix_merged <- GetAssayData(object = matrix_merged, slot = "scale.data")
   
-  return(matrix_Scaled)
+  return(matrix_merged)
 }
