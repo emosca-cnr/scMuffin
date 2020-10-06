@@ -15,26 +15,25 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
   }
   print(signatures)
 
-  data_bins <- sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE)
+  data_bins <- sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE, mc.cores=2)
 
   #parallel
-  res <- mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, seurat_object_data = genes_by_cells, seurat_object_ident = seurat_clusters, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(all_markers_sets), 2))
+  res_signatures <- mclapply(signatures, function(i_marker_set) gene_set_score_in_clusters(i_marker_set, seurat_object_data = genes_by_cells, seurat_object_ident = seurat_clusters, perc=0.25, bins = data_bins, k=100, alt = "two.sided", test="t", nmark_min = 5, ncells_min=10), mc.cores = min(length(all_markers_sets), 2))
 
   #Signalling entropy rate (SR) @Noemi
   #Potency states (LandScent): labels @Noemi
   #Diffusion pseudotime (DPT) (Destiny): @Noemi
-  output_landscent <- landSCENT(genes_by_cells, ppi)
+  
+  output_landscent <- landscent_sr(genes_by_cells)
 
   #Paride score @Noemi
-  exp_Rate_score <- exp_Rate(genes_by_cells)
+  exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
   
   #Cell cycle state TO DO
 
-
   #CNV @Valentina
-
-  #mclapply(genes_by_cells, function(i_col) CNV(i_col), ...)
-
+  cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data)[, 1:500], mc.cores = mc.cores)
+  
 
   #merge everithing
 

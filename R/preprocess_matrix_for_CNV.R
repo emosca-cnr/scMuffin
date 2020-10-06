@@ -4,16 +4,15 @@
 #' @details Preprocessing pipeline to obtain a list of ordered dataframes (one for each chromosome). 
 #'          Preprocessing consist of annotation, removing duplicates and NA values
 #' @author Valentina Nale
-
+#' @import org.Hs.eg.db
 preprocess_object_for_CNV <- function(input_object) {
   
   # retrieve gene informations
   #input_matrix=cellObj
   
-  library(org.Hs.eg.db)
-  gene_locations <- as.data.frame(org.Hs.egCHRLOC)
-  temp <- as.data.frame(org.Hs.egCHRLOCEND)
-  eg2sym <- as.data.frame(org.Hs.egSYMBOL)
+  gene_locations <- as.data.frame(org.Hs.eg.db::org.Hs.egCHRLOC)
+  temp <- as.data.frame(org.Hs.eg.db::org.Hs.egCHRLOCEND)
+  eg2sym <- as.data.frame(org.Hs.eg.db::org.Hs.egSYMBOL)
   
   gene_locations <- merge(eg2sym, gene_locations, by="gene_id", sort=F)
   gene_locations <- merge(gene_locations, temp, by=c("gene_id", "Chromosome"), sort=F)
@@ -49,5 +48,7 @@ preprocess_object_for_CNV <- function(input_object) {
   mat_sorted <- lapply(mat_splitted, function(df){
     df[order(df$pos),]
   })
+  
+  return(mat_sorted)
   
 }

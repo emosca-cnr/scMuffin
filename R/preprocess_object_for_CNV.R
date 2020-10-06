@@ -1,5 +1,5 @@
 #' preprocess_object_for_CNV
-#' @param input_object Seurat object. 
+#' @param input_object genes-by-cells input matrix
 #' @description Preprocessing pipeline to obtain a list of ordered dataframes (one for each chromosome). 
 #' @details Preprocessing consist of annotation, removing duplicates and NA values.
 #' @usage preprocess_object_for_cnv(input_object)
@@ -12,9 +12,10 @@ preprocess_object_for_CNV <- function(input_object) {
   # retrieve gene informations
   # input_object=cellObj
   
-  gene_locations <- as.data.frame(org.Hs.egCHRLOC)
-  temp <- as.data.frame(org.Hs.egCHRLOCEND)
-  eg2sym <- as.data.frame(org.Hs.egSYMBOL)
+	cat("Retrieving gene locations...\n")
+  gene_locations <- as.data.frame(org.Hs.eg.db::org.Hs.egCHRLOC)
+  temp <- as.data.frame(org.Hs.eg.db::org.Hs.egCHRLOCEND)
+  eg2sym <- as.data.frame(org.Hs.eg.db::org.Hs.egSYMBOL)
   
   gene_locations <- merge(eg2sym, gene_locations, by="gene_id", sort=F)
   gene_locations <- merge(gene_locations, temp, by=c("gene_id", "Chromosome"), sort=F)
@@ -23,8 +24,8 @@ preprocess_object_for_CNV <- function(input_object) {
   gene_locations$end_location <- NULL
   
   # merged Seurat matrix and annotation matrix via "symbol"
-  temp_matrix <- Seurat::GetAssayData(object=input_object, slot="data")
-  matrix_complete <- merge(gene_locations, temp_matrix, by.x="symbol", by.y=0, sort=FALSE)
+  #input_object <- Seurat::GetAssayData(object=input_object, slot="data")
+  matrix_complete <- merge(gene_locations, input_object, by.x="symbol", by.y=0, sort=FALSE)
   
   # remove chromosome names not in 1:22 and X,Y -- long names, duplicates
   matrix_complete <- matrix_complete[-which(grepl("_", matrix_complete$Chromosome)), ]

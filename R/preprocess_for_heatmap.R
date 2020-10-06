@@ -6,7 +6,7 @@
 #' @return A matrix to be used by the function heatmap_CNV.
 #' @author Valentina Nale
 
-preprocess_for_heatmap <- function(result_cnv) {
+merge_ <- function(result_cnv) {
 
 	for(i in 1:length(result_cnv)){
 		rownames(result_cnv[[i]]) <- paste0("chr", names(result_cnv)[i], "_", rownames(result_cnv[[i]]))
