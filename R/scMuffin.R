@@ -3,10 +3,10 @@
 #' @param custom_signatures list of gene sets
 #' @import parallel
 
-scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NULL, mc.cores=2){
+scMuffin <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2){
 
 
-  ##################	SIGNATURES #################
+	##################	SIGNATURES #################
 	cat("Calcuting gene signature scores...\n")
 	
 	if(!is.null(custom_signatures)){
@@ -53,14 +53,21 @@ scMuffin <- function(genes_by_cells, cell_clustering=NULL, custom_signatures=NUL
   ##################	merge everithing   ##################	
   features_by_cells <- merge_matrix(features_by_cells = res_signatures, expr_score = exp_rate_score, landscent_list = output_landscent)
 
-  ##################	re-clustering   ##################	
-
+  feature_corr <- cor(features_by_cells, method="spearman") #will this work?
   
-
+  
+  ##################	re-clustering   ##################	
+  features_by_cells <- re_clustering(features_by_cells)
+  
   #### FINAL OUTPUTS ###
 
+  #### Visual comparison between initial and final clusters ###
+  plot_umap(genes_by_cells, "umap_genes.jpg")
   
-
-  return(res)
-
+  plot_umap(features_by_cells, "umap_features.jpg")
+  
+  #add initial clusters information in features_by_cells meta.data
+  features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
+  plot_umap(features_by_cells, "umap_features_initial_clusters.jpg", color_by="initial_clusters")
+  
 }

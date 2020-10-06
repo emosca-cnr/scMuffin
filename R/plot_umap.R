@@ -1,6 +1,10 @@
-plot_umap <- function(data_plot, file="umap.jpg"){
+#' plot_umap
+#' @import Seurat
 
-	
+plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident"){
+
+	data_plot <- Seurat::FetchData(genes_by_cells, vars = c("UMAP_1", "UMAP_2", color_by))
+
 	col_levels <- levels(data_plot$data[, 3])
 		
 	jpeg(file, width=180, height=180, units="mm", res=300)
