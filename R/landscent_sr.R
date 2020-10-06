@@ -4,14 +4,20 @@
 #' @param reduceMethod indicates the method to do dimension reduction: "PCA" or "tSNE"
 #' @param clusterMethod indicates the method to do clustering: "dbscan" or "PAM"
 #' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
-#' @import LandSCENT destiny
+#' @import LandSCENT destiny org	
 
-landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan"){
+landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
   
 #integration matrix - ppi
 if(is.null(ppi)){
 	cat("Using default network provided by LanSCENT, i.e., \"net17Jan16.m\"\n")
 	ppi <- LandSCENT::net17Jan16.m
+	eg2sym <- as.data.frame(org.Hs.eg.db::org.Hs.egSYMBOL)
+	eg2sym <- eg2sym[eg2sym$gene_id %in% rownames(ppi), ]
+	
+	eg2sym <- merge(eg2sym, data.frame(gene_id=rownames(ppi), stringsAsFactors = F), by="gene_id", sort=F)
+	
+	
 }
 	
 temp <- sum(rownames(genes_by_cells) %in% rownames(ppi))
@@ -22,7 +28,7 @@ if(temp<5){
 Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi, log_trans = T)
 
 #compute SR
-SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = 4)
+SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = mc.cores)
 
 #Infer the potency states
 InferPotency.o <- InferPotency(SR.o)
