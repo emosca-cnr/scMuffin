@@ -51,7 +51,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2){
   heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom)
 
   ##################	merge everithing   ##################	
-  features_by_cells <- merge_matrix(features_by_cells = res_signatures, expr_score = exp_rate_score, landscent_list = output_landscent)
+  features_by_cells <- merge_matrix(signatures_by_cells = res_signatures, expr_score = exp_rate_score, cnv=cnv_res, output_landscent = output_landscent)
 
   feature_corr <- cor(features_by_cells, method="spearman") #will this work?
   

@@ -1,4 +1,4 @@
-#' landscent_sr
+#' landscent
 #' @param genes_by_cells real data
 #' @param ppi The adjacency matrix of a user-given PPI network with rownames and colnames labeling genes (same gene identifier as in genes_by_cells)
 #' @param reduceMethod indicates the method to do dimension reduction: "PCA" or "tSNE"
@@ -6,7 +6,8 @@
 #' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
 #' @import LandSCENT destiny
 
-landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
+landscent <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
+	
 	
 	#integration matrix - ppi
 	if(is.null(ppi)){
@@ -25,36 +26,30 @@ landscent_sr <- function(genes_by_cells, ppi=NULL, reduceMethod = "PCA", cluster
 		cat("\tsetting 0 values to:", half_min, "\n")
 		genes_by_cells[genes_by_cells==0] <- half_min
 	}
-	Integration.l <- DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi)
+	Integration.l <- LandSCENT::DoIntegPPI(exp.m = genes_by_cells, ppiA.m = ppi)
 	
-	#compute SR
+	#compute Signalling entRopy
 	cat("Computing SR...\n")
-	SR.o <- CompSRana(Integration.l, local = TRUE, mc.cores = mc.cores)
+	Integration.l <- LandSCENT::CompSRana(Integration.l, local = TRUE, mc.cores = mc.cores)
 	
 	#Infer the potency states
 	cat("Inferring potency states...\n")
-	InferPotency.o <- InferPotency(SR.o)
-	PS <- InferPotency.o$potencyState
+	Integration.l <- LandSCENT::InferPotency(Integration.l)
 	
 	#cat("Inferring landmark...\n")
 	#InferLandmark.o <- InferLandmark(InferPotency.o, pheno.v = InferPotency.o$potencyState, reduceMethod = "PCA", clusterMethod = "dbscan")
 	
-	#`DoDiffusionMap` function
+	#extract DiffusionMap and root index objects to calculate DPT
 	cat("Diffusion map...\n")
-	DoDiffusionMap.o <- DoDiffusionMap(InferPotency.o, mean_gap = 1, sd_gap = 1, root = c("cell", "state"), num_comp = 3, k = 30)
+	Integration.l <- LandSCENT::DoDiffusionMap(Integration.l, mean_gap = 1, sd_gap = 1, root = c("cell", "state"), num_comp = 3, k = 30)
 	
-	#SR <- DoDiffusionMap.o$SR
-	names(SR) <- colnames(DoDiffusionMap.o$data)
-	
-	dm <- DoDiffusionMap.o$DM
-	root.idx <- IDoDiffusionMap.o$root
-	
+	#Il DPT è metrica che dipende dalla cellula scelta, identical(dpt[root.idx], dpt$dpt) dpt[["dpt"]]
 	cat("Diffusion pseudotimes...\n")
-	dpt <- destiny::DPT(dm, tips = DoDiffusionMap.o$root)
-	names(dpt) <- rownames(dm@eigenvectors)
+	dpt <- destiny::DPT(dm, tips = Integration.l$root)
 	
-	landscent_list <- list(SR= SR, DPT = dpt, potency_states = PS, complete_output = DoDiffusionMap.o)
+	#Create DF: cell name, dpt, SR and PS
+	score <- data.frame(cell=rownames(dm@eigenvectors), dpt=dpt$dpt, SR=Integration.l$SR, PS=Integration.l$potencyState, stringsAsFactors = F)
 	
-	return(landscent_list)
+	return(score)
 	
 }
