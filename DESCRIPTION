@@ -14,11 +14,15 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Depends: 
-    R (>= 2.10)
-Imports:
+    R (>= 2.10),
     Seurat,
+    parallel
+Imports:
     graphics,
     parallel,
     org.Hs.eg.db,
     RColorBrewer,
-    dendextend
+    dendextend,
+    LandSCENT,
+    destiny
+

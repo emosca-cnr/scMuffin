@@ -4,7 +4,12 @@
 \alias{scMuffin}
 \title{scMuffin: main function that runs the whole pipeline}
 \usage{
-scMuffin(genes_by_cells, cell_clustering = NULL, custom_signatures = NULL)
+scMuffin(
+  genes_by_cells,
+  custom_signatures = NULL,
+  analyses = c("signatures", "landscent", "cnv", "expr_rate"),
+  mc.cores = 2
+)
 }
 \arguments{
 \item{genes_by_cells}{seurat_object_data, genes-by-cells input matrix}

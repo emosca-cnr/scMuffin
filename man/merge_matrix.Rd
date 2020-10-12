@@ -4,12 +4,16 @@
 \alias{merge_matrix}
 \title{merge_matrix}
 \usage{
-merge_matrix(features_by_cells, expr_score, landscent_list)
+merge_matrix(
+  signatures_by_cells = NULL,
+  expr_score = NULL,
+  output_landscent = NULL
+)
 }
 \arguments{
-\item{features_by_cells}{features-by-cells input matrix}
-
 \item{expr_score}{expression scores (output of exp_Rate)}
+
+\item{features_by_cells}{features-by-cells input matrix}
 
 \item{landscent_list}{list with the following elements: SR, DPT, potency_states, complete_output (output of landSCENT)}
 }

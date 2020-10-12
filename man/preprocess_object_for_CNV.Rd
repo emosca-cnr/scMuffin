@@ -10,7 +10,7 @@ preprocess_object_for_CNV(input_object)
 preprocess_object_for_cnv(input_object)
 }
 \arguments{
-\item{input_object}{Seurat object.}
+\item{input_object}{genes-by-cells input matrix}
 }
 \value{
 list of dataframes, where every dataframe is a chromosome
