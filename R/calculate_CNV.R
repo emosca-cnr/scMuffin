@@ -19,7 +19,7 @@ calculate_CNV <- function(genes_by_cells, mc.cores=2) {
 	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = mc.cores)
 
 	#merge chromosomes into a unique table
-	ans <- do.call(rbind, ans)
+	#ans <- do.call(rbind, ans)
 	
 	return(ans)
 }

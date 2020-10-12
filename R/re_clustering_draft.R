@@ -7,7 +7,7 @@
 #' @export
 #' @Author Noemi Di Nanni
 
-re_clustering <- function(features_by_cells, n_comp = 10, file1= "ElbowPlot.jpeg", file2 = "clustering.jpeg"){
+re_clustering_draft <- function(features_by_cells, n_comp = 10, file1= "ElbowPlot.jpeg", file2 = "clustering.jpeg"){
 	
 	features_by_cells <- CreateSeuratObject(counts = features_by_cells, min.cells = 0, min.features = 0)
 	all.genes <- rownames(features_by_cells)

@@ -10,11 +10,7 @@
 
 re_clustering <- function(features_by_cells, n_comp = 10){
 	
-	features_by_cells <- CreateSeuratObject(counts = temp_new, min.cells = 0, min.features = 0)
-	all.genes <- rownames(features_by_cells)
-	
-	features_by_cells <- ScaleData(features_by_cells, features = all.genes)
-	features_by_cells <- RunPCA(features_by_cells, features = all.genes)
+	features_by_cells <- RunPCA(features_by_cells, features = rownames(features_by_cells))
 
 	features_by_cells <- FindNeighbors(features_by_cells, dims = 1:n_comp)
 	features_by_cells <- FindClusters(features_by_cells)

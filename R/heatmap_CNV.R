@@ -7,9 +7,10 @@
 #' @author Valentina Nale
 #' @import RColorBrewer Seurat
 
-heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, cluster_cells=F, scale_cells=T) {
+heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, cluster_cells=T, scale_cells=T) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
+	ans <- NULL
 	
 	if(is.null(pal)){
 		colors_ <- rev(brewer.pal(n_colors, "RdYlBu"))
@@ -37,6 +38,7 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 		rm(seu_obj)
 		
 		chr_merged <- chr_merged[, order(clusters)]
+		ans <- clusters
 	}
 	X <- rotate(chr_merged)
 	#X <- log2(X)
