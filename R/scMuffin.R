@@ -8,7 +8,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	
 	##################	SIGNATURES #################
 	SC_signatures_by_cell_matrix <- NULL
-	if("signatures" %in% analysis){
+	if("signatures" %in% analyses){
 		cat("Calcuting gene signature scores...\n")
 		
 		if(!is.null(custom_signatures)){
@@ -39,7 +39,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	##################	Potency states (LandScent): labels @Noemi 	  ##################	
 	##################	Diffusion pseudotime (DPT) (Destiny): @Noemi   ##################	
 	output_landscent <- NULL
-	if("landscent" %in% analysis){
+	if("landscent" %in% analyses){
 		
 		
 		cat("Calcuting landscent-related scores...\n")
@@ -49,7 +49,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	
 	##################	EXPRESSION RATE   ##################	
 	exp_rate_score <- NULL
-	if("expr_rate" %in% analysis){
+	if("expr_rate" %in% analyses){
 		exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
 	}
 	##################	Cell cycle state   ##################	
@@ -57,7 +57,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	
 	##################	CNV @Valentina   ##################	
 	heatmap_CNV_clusters <- NULL
-	if("cnv" %in% analysis){
+	if("cnv" %in% analyses){
 		cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data), mc.cores = mc.cores)
 		
 		ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
@@ -88,8 +88,13 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	plot_umap(features_by_cells, "umap_by_features.jpg")
 	
 	
+	### COLOR BY FEATURE
+	plot_gene_cluster_colored_features(genes_by_cells, features_by_cells)
+	plot_feature_cluster_colored_features(features_by_cells, features_by_cells)
+	
+
 	#Visualization of CNV on gene expression clusters
-	genes_by_cells@meta.data$cnv <- as.numeric(heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))])
+	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
 	plot_umap(genes_by_cells, "umap_genes_cnv_clusters.jpg", color_by="cnv")
 	
 	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
@@ -99,9 +104,13 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
 	plot_umap(features_by_cells, "umap_features_initial_clusters.jpg", color_by="initial_clusters")
 	
+	#potency state plot
+	genes_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))]
+	plot_umap(genes_by_cells, "umap_genes_ps_clusters.jpg", color_by="ps")
 	
-	plot_gene_cluster_colored_features(genes_by_cells, features_by_cells)
-	plot_feature_cluster_colored_features(features_by_cells, features_by_cells)
+	features_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))]
+	plot_umap(features_by_cells, "umap_features_ps_clusters.jpg", color_by="ps")
 	
 	
+		
 }

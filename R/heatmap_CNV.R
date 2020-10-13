@@ -5,9 +5,9 @@
 #' @details Preprocessing with 'preprocess_for_heatmap' needed. 
 #' @usage heatmap_CNV(chr_merged)
 #' @author Valentina Nale
-#' @import RColorBrewer Seurat
+#' @import RColorBrewer Seurat grDevices stats
 
-heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, cluster_cells=T, scale_cells=T) {
+heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, scale_cells=T) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
 	ans <- NULL
@@ -15,7 +15,7 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 	if(is.null(pal)){
 		colors_ <- rev(brewer.pal(n_colors, "RdYlBu"))
 	}
-		
+	
 	ngenes_chrom_cumsum <- cumsum(ngenes_chrom)
 	
 	if(scale_cells){
@@ -25,27 +25,34 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 		rm(temp)
 	}
 	
-	if(cluster_cells){
-		seu_obj <- CreateSeuratObject(counts = chr_merged, min.cells = 0, min.features = 0)
-		all.genes <- rownames(seu_obj)
+	seu_obj <- CreateSeuratObject(counts = chr_merged, min.cells = 0, min.features = 0)
+	all.genes <- rownames(seu_obj)
+	
+	seu_obj <- ScaleData(seu_obj, features = all.genes)
+	seu_obj <- RunPCA(seu_obj, features = all.genes)
+	seu_obj <- FindNeighbors(seu_obj, dims = 1:10)
+	seu_obj <- FindClusters(seu_obj)
+	seu_obj <- BuildClusterTree(seu_obj, features = all.genes, reorder = T)
+	hc_cells <- as.hclust(seu_obj@tools$BuildClusterTree)
 		
-		seu_obj <- ScaleData(seu_obj, features = all.genes)
-		seu_obj <- RunPCA(seu_obj, features = all.genes)
-		seu_obj <- FindNeighbors(seu_obj, dims = 1:10)
-		seu_obj <- FindClusters(seu_obj)
-		
-		clusters <- seu_obj@active.ident
-		rm(seu_obj)
-		
-		chr_merged <- chr_merged[, order(clusters)]
-		ans <- clusters
-	}
+	clusters <- seu_obj@active.ident
+	rm(seu_obj)
+	
+	chr_merged <- chr_merged[, order(clusters)]
+	ans <- clusters
+	
 	X <- rotate(chr_merged)
 	#X <- log2(X)
 	
-	jpeg(file, width=180, height=180, res=300, units="mm")
+	grDevices::jpeg(file, width=180, height=180, res=300, units="mm")
 	
-	layout.show(layout(matrix(c(1, 2), byrow = T, nrow = 1), widths = c(0.8, 0.2))) 
+	layout.show(layout(matrix(c(1, 2, 3, 4), byrow = T, nrow = 2), widths = c(0.8, 0.2), heights = c(0.1, 0.9)))
+	
+	#cluster dendrograms
+	par(mar=c(0, 5, 0.1, 1))
+	plot(as.dendrogram(hc_cells), type = "rectangle", leaflab = "none", axes=F, edgePar = list())
+	
+	plot.new()
 	
 	par(mar=c(5, 5, 1, 1))
 	
@@ -67,8 +74,13 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 	
 	#grid(ncol(X), nrow(X)) #X è la matrice plottata
 	U <- par("usr")
-	abline(h=seq(U[2], U[1], length.out = nrow(chr_merged)+1)[ngenes_chrom_cumsum+1])
+	abline(h=seq(U[4], U[3], length.out = nrow(chr_merged)+1)[ngenes_chrom_cumsum+1])
 	
+	clusters_ordered <- as.numeric(ans[match(colnames(chr_merged), names(ans))])
+	clust_col_sep <- c(which(clusters_ordered[2:length(clusters_ordered)] - clusters_ordered[1:(length(clusters_ordered)-1)]!=0), length(clusters_ordered)) 
+	abline(v=seq(U[1], U[2], length.out = ncol(chr_merged)+1)[clust_col_sep+1]) 	
+	
+	axis(1, xx[clust_col_sep], ans[match(colnames(chr_merged), names(ans))][clust_col_sep], las=2, cex=0.2)
 	
 	# new legend
 	par(mar=c(0, 0, 0, 0))

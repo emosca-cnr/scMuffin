@@ -4,7 +4,7 @@
 #' @param reduceMethod indicates the method to do dimension reduction: "PCA" or "tSNE"
 #' @param clusterMethod indicates the method to do clustering: "dbscan" or "PAM"
 #' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
-#' @import LandSCENT destiny
+#' @import LandSCENT
 #' @importFrom destiny DPT
 
 landscent <- function(genes_by_cells_matrix_matrix, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){

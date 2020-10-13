@@ -15,14 +15,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Depends: 
     R (>= 2.10),
-    Seurat,
-    parallel
+    Seurat
 Imports:
     graphics,
     parallel,
     org.Hs.eg.db,
     RColorBrewer,
     dendextend,
-    LandSCENT,
-    destiny
-
+    LandSCENT
