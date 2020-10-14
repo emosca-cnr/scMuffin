@@ -3,7 +3,7 @@
 #' @param expr_score expression scores (output of exp_Rate)
 #' @param landscent_list list with the following elements: SR, DPT, potency_states, complete_output (output of landSCENT)
 #' @return matrix_Scaled matrix merged and scaled
-
+#' @export
 
 merge_matrix <- function(signatures_by_cells = NULL, expr_score = NULL, output_landscent = NULL){
   

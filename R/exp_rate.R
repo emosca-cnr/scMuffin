@@ -3,6 +3,7 @@
 #' @param genes_by_cells real data
 #' @param ngenes_min min number of genes in each cell
 #' @return expRate_vect vector with expression rate for each cell
+#' @export
  
 exp_rate <- function(genes_by_cells, ngenes_min = 5){
   

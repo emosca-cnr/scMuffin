@@ -4,6 +4,7 @@
 #' @usage preprocess_for_heatmap(result_cnv)
 #' @return A matrix to be used by the function heatmap_CNV.
 #' @author Valentina Nale
+#' @export
 
 preprocess_for_heatmap_CNV <- function(result_cnv) {
 

@@ -1,5 +1,6 @@
 #' plot_cluster_comparison
 #' @import Seurat RColorBrewer graphics
+#' @export
 
 plot_cluster_comparison <- function(X, dend_row, dend_col, file="heatmap_cluster_comparison.jpg", pal=NULL, n_colors=9, width=180, height=180, res=300, cex.axis=0.6){
 	

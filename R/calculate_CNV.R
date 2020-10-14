@@ -1,6 +1,6 @@
 #' Calculate CNV
 #' 
-#' 
+#' @export
 calculate_CNV <- function(genes_by_cells, mc.cores=2) {
 
 	cat("Calculating CNV...\n")	

@@ -1,7 +1,7 @@
 #' cluster_comparison
 #' 
 #' 
-#' 
+#' @export
 
 cluster_comparison <- function(cl1, cl2, ctree1, ctree2){
 	

@@ -1,7 +1,7 @@
 #' plot_gene_cluster_colored_features
 #'
 #'
-#'
+#' @export
 
 plot_gene_cluster_colored_features <- function(seurat_object, features_by_cells, n_colors=11){
 	

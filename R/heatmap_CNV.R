@@ -7,6 +7,7 @@
 #' @author Valentina Nale
 #' @import RColorBrewer Seurat grDevices stats
 #' @import graphics
+#' @export
 
 heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, scale_cells=T) {
 	

@@ -1,6 +1,6 @@
 #' plot_umap
 #' @import Seurat graphics
-
+#' @export
 plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident"){
 
 	data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", color_by))
