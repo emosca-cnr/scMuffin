@@ -4,7 +4,7 @@
 \alias{CNV}
 \title{CNV}
 \usage{
-result_cnv <- mclapply(mat_sorted, function(x) apply(x[,5:dim(x)[2]], 2, function( y ) CNV(y)), mc.cores = 2)
+CNV(x)
 }
 \arguments{
 \item{x}{list of dataframes retrieved by 'preprocess_object_for_cnv'.}

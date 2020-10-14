@@ -2,6 +2,7 @@
 #' @param genes_by_cells seurat_object_data, genes-by-cells input matrix
 #' @param custom_signatures list of gene sets
 #' @import parallel stats
+#' @importFrom utils write.table
 
 scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signatures", "landscent", "cnv", "expr_rate"), mc.cores=2){
 	
@@ -20,7 +21,7 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 		data_bins <- sc_data_bin(as.matrix(GetAssayData(genes_by_cells)), nbins = 25, use.log = TRUE)
 		
 		#signatures-by-cell matrix
-		res_signatures <- mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = mc.cores)
+		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = mc.cores)
 		
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
 		
@@ -40,7 +41,6 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	##################	Diffusion pseudotime (DPT) (Destiny): @Noemi   ##################	
 	output_landscent <- NULL
 	if("landscent" %in% analyses){
-		
 		
 		cat("Calcuting landscent-related scores...\n")
 		output_landscent <- landscent(as.matrix(genes_by_cells@assays$RNA@data), mc.cores=mc.cores)

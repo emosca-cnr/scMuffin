@@ -7,7 +7,7 @@
 preprocess_for_heatmap(result_cnv)
 }
 \arguments{
-\item{result_cnv}{}
+\item{result_cnv}{...}
 }
 \value{
 A matrix to be used by the function heatmap_CNV.

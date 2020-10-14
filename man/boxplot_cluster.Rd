@@ -4,7 +4,12 @@
 \alias{boxplot_cluster}
 \title{boxplot_cluster}
 \usage{
-boxplot_cluster(features_by_cells, cell_clusters, ntop, dir_out)
+boxplot_cluster(
+  features_by_cells_matrix,
+  cell_clusters,
+  n_top = 3,
+  dir_out = "./"
+)
 }
 \description{
 boxplot_cluster

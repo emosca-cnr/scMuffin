@@ -9,8 +9,7 @@
 #' @param k number of permutations
 #' @param alt alterative
 #' @param test type of test
-#' @import graphics
-#' @importFrom stats median na.omit p.adjust t.test wilcox.test
+#' @import stats
 #' @export
 
 gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, ncells_min = 5, bins = NULL, k=100, alt="g", test="t"){

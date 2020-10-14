@@ -17,3 +17,6 @@ features_by_cells Seurat Object
 \description{
 Clustering of the features_by_cell matrix
 }
+\author{
+Noemi Di Nanni
+}

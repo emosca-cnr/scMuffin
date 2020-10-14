@@ -6,7 +6,7 @@
 #' 
 #' @import Seurat
 #' @export
-#' @Author Noemi Di Nanni
+#' @author Noemi Di Nanni
 
 re_clustering <- function(features_by_cells, n_comp = 10){
 	

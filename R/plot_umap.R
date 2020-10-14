@@ -1,5 +1,5 @@
 #' plot_umap
-#' @import Seurat
+#' @import Seurat graphics
 
 plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident"){
 

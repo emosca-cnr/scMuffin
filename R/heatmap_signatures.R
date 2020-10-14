@@ -1,11 +1,11 @@
 #' heatmap of signatures
-#' @param chr_merged 
-#' @param list_ncol_chr
+#' @param X ...
+#' @param file ...
 #' @description Plot as an heatmap the resulting data from CNV. 
 #' @details Preprocessing with 'preprocess_for_heatmap' needed. 
 #' @usage heatmap_CNV(chr_merged)
 #' @author Ettore Mosca
-#' @import RColorBrewer
+#' @import RColorBrewer graphics
 #' @importFrom dendextend color_branches
 #' @export
 
@@ -20,7 +20,7 @@ heatmap_signatures <- function(X, file="heatmap_signatures.jpg", pal=NULL, n_col
 
 	#cells clustering
 	if(!is.null(seurat_dendrogram)){
-		hc_col <- seurat_dendrogram[[kk]]
+		hc_col <- seurat_dendrogram
 		X <- X[, match(hc_col$labels, gsub("^.+_", "", colnames(X)))]
 	}else{
 		hc_col <- hclust(dist(t(X))) #COLUMNS

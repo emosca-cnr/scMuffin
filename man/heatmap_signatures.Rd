@@ -7,7 +7,9 @@
 heatmap_CNV(chr_merged)
 }
 \arguments{
-\item{chr_merged}{}
+\item{X}{...}
+
+\item{file}{...}
 }
 \description{
 Plot as an heatmap the resulting data from CNV.

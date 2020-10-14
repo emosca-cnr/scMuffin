@@ -8,6 +8,7 @@
 #'    score_table: data frame with gene set score for each cell
 #'    permutations: list with the permutations
 #' @author Ettore Mosca
+#' @import graphics
 #' @export
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){

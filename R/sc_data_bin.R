@@ -5,7 +5,7 @@
 #' @param seurat_data seurat data object
 #' @param nbins number of bins
 #' @param use.log use logarithm
-#' @value vector with bin id for each row
+#' @return vector with bin id for each row
 #' @export
 
 
