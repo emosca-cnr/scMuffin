@@ -5,7 +5,7 @@
 #' @importFrom utils write.table
 #' @export
 
-scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signatures", "landscent", "cnv", "expr_rate"), mc.cores=2){
+scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signatures", "landscent", "cnv", "expr_rate"), mc.cores=2){
 	
 	
 	##################	SIGNATURES #################
@@ -112,6 +112,4 @@ scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signa
 	features_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))]
 	plot_umap(features_by_cells, "umap_features_ps_clusters.jpg", color_by="ps")
 	
-	
-		
 }
