@@ -3,6 +3,7 @@
 #' @param custom_signatures list of gene sets
 #' @import parallel stats
 #' @importFrom utils write.table
+#' @export
 
 scMuffin <- function(genes_by_cells, custom_signatures=NULL, analyses = c("signatures", "landscent", "cnv", "expr_rate"), mc.cores=2){
 	
