@@ -68,7 +68,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 		ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
 		cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
 		heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom)
-		save(cnv_res, file="cnv_res.RData", compress = "bzip2")
+		save(cnv_res, heatmap_CNV_clusters, file="cnv_res.RData", compress = "bzip2")
 	}
 	
 	##################	merge everithing   ##################	

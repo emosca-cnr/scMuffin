@@ -5,7 +5,7 @@
 \title{landscent}
 \usage{
 landscent(
-  genes_by_cells_matrix_matrix,
+  genes_by_cells_matrix,
   ppi = NULL,
   reduceMethod = "PCA",
   clusterMethod = "dbscan",
@@ -13,13 +13,13 @@ landscent(
 )
 }
 \arguments{
+\item{genes_by_cells_matrix}{real data}
+
 \item{ppi}{The adjacency matrix of a user-given PPI network with rownames and colnames labeling genes (same gene identifier as in genes_by_cells_matrix)}
 
 \item{reduceMethod}{indicates the method to do dimension reduction: "PCA" or "tSNE"}
 
 \item{clusterMethod}{indicates the method to do clustering: "dbscan" or "PAM"}
-
-\item{genes_by_cells_matrix}{real data}
 }
 \value{
 landscent_list list with the following elements: SR, DPT, potency_states, complete_output

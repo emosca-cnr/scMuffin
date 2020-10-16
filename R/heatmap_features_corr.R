@@ -1,7 +1,8 @@
 #' heatmap_features_corr
 #' @import Seurat RColorBrewer
 #' @import graphics
-
+#' @export
+#' 
 heatmap_features_corr <- function(X, file="heatmap_features_corr.jpg", pal=NULL, n_colors=11, width=180, height=180, res=300, cex.axis=0.6){
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90

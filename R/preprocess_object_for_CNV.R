@@ -6,7 +6,7 @@
 #' @return list of dataframes, where every dataframe is a chromosome
 #' @author Valentina Nale
 #' @import Seurat org.Hs.eg.db
-
+#' @export
 preprocess_object_for_CNV <- function(input_object) {
   
   # retrieve gene informations

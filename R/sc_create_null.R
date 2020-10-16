@@ -4,6 +4,7 @@
 #' @param gene_set genes
 #' @param k number of permutations
 #' @author Ettore Mosca
+#' @export
 
 sc_create_null <- function(seurat_data, bins, gene_set, k=100){
 

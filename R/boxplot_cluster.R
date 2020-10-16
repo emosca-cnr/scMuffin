@@ -3,7 +3,7 @@
 #' 
 #' @importFrom grDevices jpeg
 #' @import graphics
-
+#' @export
 
 boxplot_cluster <- function(features_by_cells_matrix, cell_clusters, n_top=3, dir_out="./"){
 	
