@@ -10,11 +10,11 @@ merge_matrix <- function(signatures_by_cells = NULL, expr_score = NULL, output_l
 	expr_score <- expr_score[match(colnames(signatures_by_cells), names(expr_score))]
 	
 	if(!is.null(output_landscent)){
-		output_landscent <- t(output_landscent[match(colnames(signatures_by_cells), rownames(output_landscent)), ])
+		output_landscent <- t(output_landscent[match(colnames(signatures_by_cells), rownames(output_landscent)), c("dpt", "SR")])
 	}
 
   #merge
-  matrix_merged <- rbind(signatures_by_cells, expr_score=expr_score, output_landscent[, c("dpt", "SR")])
+  matrix_merged <- rbind(signatures_by_cells, expr_score=expr_score, output_landscent)
   
   #scale data
   matrix_merged <- CreateSeuratObject(counts = matrix_merged, min.cells = 0, min.features = 0)
