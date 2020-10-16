@@ -8,7 +8,7 @@
 #' @importFrom destiny DPT
 #' @export
 
-landscent <- function(genes_by_cells_matrix_matrix, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
+landscent <- function(genes_by_cells_matrix, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
 	
 	
 	#integration matrix - ppi
