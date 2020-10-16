@@ -26,6 +26,8 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 		
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
 		
+		save(SC_signatures_by_cell_matrix, file="SC_signatures_by_cell_matrix.RData", compress = "bzip2")
+		
 		#gene-set score per cluster list
 		res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
 		
@@ -45,6 +47,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 		
 		cat("Calcuting landscent-related scores...\n")
 		output_landscent <- landscent(as.matrix(genes_by_cells@assays$RNA@data), mc.cores=mc.cores)
+		save(output_landscent, file="output_landscent.RData", compress = "bzip2")
 		
 	}
 	
@@ -52,6 +55,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 	exp_rate_score <- NULL
 	if("expr_rate" %in% analyses){
 		exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
+		save(exp_rate_score, file="exp_rate_score.RData", compress = "bzip2")
 	}
 	##################	Cell cycle state   ##################	
 	
@@ -64,16 +68,19 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 		ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
 		cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
 		heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom)
+		save(cnv_res, file="cnv_res.RData", compress = "bzip2")
 	}
 	
 	##################	merge everithing   ##################	
 	features_by_cells <- merge_matrix(signatures_by_cells = SC_signatures_by_cell_matrix, expr_score = exp_rate_score, output_landscent = output_landscent)
+	
 	
 	feature_corr <- cor(t(GetAssayData(features_by_cells, slot = "scale.data")), method="spearman")
 	heatmap_features_corr(feature_corr)
 	
 	##################	re-clustering   ##################	
 	features_by_cells <- re_clustering(features_by_cells)
+	save(features_by_cells, file="features_by_cells.RData", compress = "bzip2")
 	
 	dendrogram_genes <- as.dendrogram(BuildClusterTree(genes_by_cells, reorder = T, features = rownames(genes_by_cells))@tools$BuildClusterTree)
 	dendrogram_features <- as.dendrogram(BuildClusterTree(features_by_cells, reorder = T, features = rownames(features_by_cells), slot = "scale.data")@tools$BuildClusterTree)

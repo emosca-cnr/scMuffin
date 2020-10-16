@@ -8,6 +8,7 @@
 merge_matrix <- function(signatures_by_cells = NULL, expr_score = NULL, output_landscent = NULL){
   
 	expr_score <- expr_score[match(colnames(signatures_by_cells), names(expr_score))]
+	
 	if(!is.null(output_landscent)){
 		output_landscent <- t(output_landscent[match(colnames(signatures_by_cells), rownames(output_landscent)), ])
 	}
