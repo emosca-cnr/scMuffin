@@ -1,18 +1,23 @@
-#' boxplot_cluster
-#'
+#' Boxplot clusters 
 #' 
+#' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+#' @param features_by_cells matrix, features by cells matrix
+#' @param cell_clusters array with cell values named by their cluster ID
+#' @param n_top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
+#' @param dir_out string, output directory
 #' @importFrom grDevices jpeg
 #' @import graphics
 #' @export
+#' @author Noemi Di Nanni
 
-boxplot_cluster <- function(features_by_cells_matrix, cell_clusters, n_top=3, dir_out="./"){
+boxplot_cluster <- function(features_by_cells, cell_clusters, n_top=3, dir_out="./"){
 	
 	
- #t-test: for each features in each cluster
-	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells_matrix), dimnames = list(rownames(features_by_cells_matrix), levels(cell_clusters)))
+ #t-test: for each feature in each cluster
+	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells), dimnames = list(rownames(features_by_cells), levels(cell_clusters)))
 	for(i in 1:nrow(mat)){
 		for(j in 1:ncol(mat)){
-			mat[i, j] <- t.test(features_by_cells_matrix[i, colnames(features_by_cells_matrix) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], features_by_cells_matrix[i, !colnames(features_by_cells_matrix) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], alternative = "g")$p.value
+			mat[i, j] <- t.test(features_by_cells[i, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], features_by_cells[i, !colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], alternative = "g")$p.value
 		}
 	}
 	
@@ -32,15 +37,15 @@ boxplot_cluster <- function(features_by_cells_matrix, cell_clusters, n_top=3, di
 		
 		#distribution of all cells by feature
 		#feature data of the cluster
-		data_clust <- as.data.frame(t(features_by_cells_matrix[, colnames(features_by_cells_matrix) %in% names(cell_clusters)[cell_clusters == colnames(mat)[cl]]]))
+		data_clust <- as.data.frame(t(features_by_cells[, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[cl]]]))
 		#feature data other clusters
-		data_no_clust <- as.data.frame(t(features_by_cells_matrix[, ! colnames(features_by_cells_matrix) %in% names(cell_clusters)[cell_clusters == colnames(mat)[cl]]]))
+		data_no_clust <- as.data.frame(t(features_by_cells[, ! colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[cl]]]))
 
 		#boxplots of the cluster
 		data_clust_at <- seq(1, nrow(mat)*2, by = 2)
-		boxplot(data_clust, at = data_clust_at , las=2, main = paste0("Cluster ", colnames(mat)[cl]), xaxt = "n", pch=16, outline = F, ylim=c(min(features_by_cells_matrix), max(features_by_cells_matrix)))
-		for(i in 1:nrow(features_by_cells_matrix)){
-			if(rownames(features_by_cells_matrix)[i] %in% top_clusters[[cl]]){
+		boxplot(data_clust, at = data_clust_at , las=2, main = paste0("Cluster ", colnames(mat)[cl]), xaxt = "n", pch=16, outline = F, ylim=c(min(features_by_cells), max(features_by_cells)))
+		for(i in 1:nrow(features_by_cells)){
+			if(rownames(features_by_cells)[i] %in% top_clusters[[cl]]){
 				col <- "red"
 			}else{
 				col <- "pink"
@@ -51,7 +56,7 @@ boxplot_cluster <- function(features_by_cells_matrix, cell_clusters, n_top=3, di
 		#boxplots of other clusters
 		data_no_clust_at <- seq(2, nrow(mat)*2, by = 2)
 		boxplot(data_no_clust, at = seq(2, nrow(mat)*2, by = 2), las=2, main = paste0("Cluster ", colnames(mat)[cl]), xaxt = "n", pch=16, add = T, outline = F)
-		for(i in 1:nrow(features_by_cells_matrix)){
+		for(i in 1:nrow(features_by_cells)){
 			points(jitter(rep(data_no_clust_at[i], nrow(data_no_clust)), amount=0.3), data_no_clust[, i], col=adjustcolor("darkgray", 0.4), pch=16, cex=0.3)
 		}
 		

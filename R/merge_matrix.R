@@ -1,9 +1,12 @@
 #' merge_matrix
-#' @param features_by_cells features-by-cells input matrix
-#' @param expr_score expression scores (output of exp_Rate)
-#' @param landscent_list list with the following elements: SR, DPT, potency_states, complete_output (output of landSCENT)
-#' @return matrix_Scaled matrix merged and scaled
+#' 
+#' Create and scale a matrix with different features (row) for each cell (column), like signature/landscend scores
+#' @param signatures_by_cells matrix, signatures-by-cells input 
+#' @param expr_score matrix, expression scores (output of exp_Rate)
+#' @param output_landscent dataframe, df with the following elements: SR, DPT, potency_states (output of landSCENT)
+#' @return matrix_merged seurat object, object with the merged and scaled matrix
 #' @export
+#' @author Noemi Di Nanni
 
 merge_matrix <- function(signatures_by_cells = NULL, expr_score = NULL, output_landscent = NULL){
   

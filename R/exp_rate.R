@@ -1,9 +1,11 @@
 #' Expression_rate
-#' ration between the number of expressed genes and the total number of reads
-#' @param genes_by_cells real data
-#' @param ngenes_min min number of genes in each cell
+#' 
+#' Ratio between the number of expressed genes and the total number of reads
+#' @param genes_by_cells matrix, real data
+#' @param ngenes_min min numeric, number of genes in each cell
 #' @return expRate_vect vector with expression rate for each cell
 #' @export
+#' @author Noemi Di Nanni
  
 exp_rate <- function(genes_by_cells, ngenes_min = 5){
   

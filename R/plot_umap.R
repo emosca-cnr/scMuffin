@@ -1,6 +1,13 @@
 #' plot_umap
+#' 
+#' Generate a UMAP visualization
+#' @param seurat_object seurat object, object with saved dimension reduction components
+#' @param file string, file name output
+#' @param color_by string, specification of a feature to colour by (e.g. cluster ID)
+#' 
 #' @import Seurat graphics
 #' @export
+#' 
 plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident"){
 
 	data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", color_by))

@@ -1,5 +1,9 @@
 #' plot_feature_cluster_colored_features
-#'
+#' 
+#' Generate a UMAP visualization colored by feature distributions 
+#' @param seurat_object seurat object, object with saved dimension reduction components calculate on features by cells matrix (output re_clustering)
+#' @param features_by_cells matrix, features by cells matrix
+#' @param n_colors numeric, number of colors to be used
 #' @export
 
 plot_feature_cluster_colored_features <- function(seurat_object, features_by_cells, n_colors=11){

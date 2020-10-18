@@ -1,9 +1,9 @@
+#' re_clustering
+#' 
 #' Clustering of the features_by_cell matrix
-#' 
-#' @param matrix matrix of features
-#' @param n_comp Dimensions of reduction to use as input
-#' @return features_by_cells Seurat Object
-#' 
+#' @param features_by_cells matrix, features by cells matrix 
+#' @param n_comp numeric, Dimensions of reduction to use as input
+#' @return features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix
 #' @import Seurat
 #' @export
 #' @author Noemi Di Nanni

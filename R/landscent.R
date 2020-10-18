@@ -1,12 +1,15 @@
-#' landscent
+#' Landscent
+#' 
+#' The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
 #' @param genes_by_cells_matrix real data
 #' @param ppi The adjacency matrix of a user-given PPI network with rownames and colnames labeling genes (same gene identifier as in genes_by_cells_matrix)
 #' @param reduceMethod indicates the method to do dimension reduction: "PCA" or "tSNE"
 #' @param clusterMethod indicates the method to do clustering: "dbscan" or "PAM"
-#' @return landscent_list list with the following elements: SR, DPT, potency_states, complete_output
+#' @return score dataframe with the following elements: SR, DPT, potency_states
 #' @import LandSCENT
 #' @importFrom destiny DPT
 #' @export
+#' @author Noemi Di Nanni
 
 landscent <- function(genes_by_cells_matrix, ppi=NULL, reduceMethod = "PCA", clusterMethod = "dbscan", mc.cores=2){
 	
