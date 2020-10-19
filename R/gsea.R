@@ -7,7 +7,6 @@
 #' @param mc_cores_perm number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm
 #' @import parallel
 #' @return data.frame with es, nes, p-value, adjusted p-value and FDR q-value
-#' @export
 
 gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
 

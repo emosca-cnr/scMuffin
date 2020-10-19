@@ -2,7 +2,7 @@
 % Please edit documentation in R/landscent.R
 \name{landscent}
 \alias{landscent}
-\title{landscent}
+\title{Landscent}
 \usage{
 landscent(
   genes_by_cells_matrix,
@@ -22,8 +22,11 @@ landscent(
 \item{clusterMethod}{indicates the method to do clustering: "dbscan" or "PAM"}
 }
 \value{
-landscent_list list with the following elements: SR, DPT, potency_states, complete_output
+score dataframe with the following elements: SR, DPT, potency_states
 }
 \description{
-landscent
+The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
+}
+\author{
+Noemi Di Nanni
 }

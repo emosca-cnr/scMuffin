@@ -2,17 +2,17 @@
 % Please edit documentation in R/re_clustering.R
 \name{re_clustering}
 \alias{re_clustering}
-\title{Clustering of the features_by_cell matrix}
+\title{re_clustering}
 \usage{
 re_clustering(features_by_cells, n_comp = 10)
 }
 \arguments{
-\item{n_comp}{Dimensions of reduction to use as input}
+\item{features_by_cells}{matrix, features by cells matrix}
 
-\item{matrix}{matrix of features}
+\item{n_comp}{numeric, Dimensions of reduction to use as input}
 }
 \value{
-features_by_cells Seurat Object
+features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix
 }
 \description{
 Clustering of the features_by_cell matrix

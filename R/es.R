@@ -3,7 +3,6 @@
 #' @param idx vector of indices a subset of elements of x
 #' @param x named vector, ranked list
 #' @return enrichment score
-#' @export
 #'
 es <- function(idx, x, le=F){
 

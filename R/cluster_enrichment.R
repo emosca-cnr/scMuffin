@@ -27,4 +27,6 @@ cluster_enrichment <- function(features_by_cells, cell_clusters, n_top=3, dir_ou
 	nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
 	fdrq_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$FDRq, dimnames = list(x$id))))
 	
+	return(list(ttestp=mat, nes=nes_table, fdrq=fdrq_table))
+	
 }

@@ -11,15 +11,18 @@ merge_matrix(
 )
 }
 \arguments{
-\item{expr_score}{expression scores (output of exp_Rate)}
+\item{signatures_by_cells}{matrix, signatures-by-cells input}
 
-\item{features_by_cells}{features-by-cells input matrix}
+\item{expr_score}{matrix, expression scores (output of exp_Rate)}
 
-\item{landscent_list}{list with the following elements: SR, DPT, potency_states, complete_output (output of landSCENT)}
+\item{output_landscent}{dataframe, df with the following elements: SR, DPT, potency_states (output of landSCENT)}
 }
 \value{
-matrix_Scaled matrix merged and scaled
+matrix_merged seurat object, object with the merged and scaled matrix
 }
 \description{
-merge_matrix
+Create and scale a matrix with different features (row) for each cell (column), like signature/landscend scores
+}
+\author{
+Noemi Di Nanni
 }

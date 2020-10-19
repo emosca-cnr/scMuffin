@@ -4,8 +4,15 @@
 \alias{plot_umap}
 \title{plot_umap}
 \usage{
-plot_umap(seurat_object, file = "umap.jpg", color_by = "ident")
+plot_umap(seurat_object, file = "umap.jpg", color_by = "ident", pal = NULL)
+}
+\arguments{
+\item{seurat_object}{seurat object, object with saved dimension reduction components}
+
+\item{file}{string, file name output}
+
+\item{color_by}{string, specification of a feature to colour by (e.g. cluster ID)}
 }
 \description{
-plot_umap
+Generate a UMAP visualization
 }

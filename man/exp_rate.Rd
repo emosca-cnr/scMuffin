@@ -2,20 +2,21 @@
 % Please edit documentation in R/exp_rate.R
 \name{exp_rate}
 \alias{exp_rate}
-\title{Expression_rate
-ration between the number of expressed genes and the total number of reads}
+\title{Expression_rate}
 \usage{
 exp_rate(genes_by_cells, ngenes_min = 5)
 }
 \arguments{
-\item{genes_by_cells}{real data}
+\item{genes_by_cells}{matrix, real data}
 
-\item{ngenes_min}{min number of genes in each cell}
+\item{ngenes_min}{min numeric, number of genes in each cell}
 }
 \value{
 expRate_vect vector with expression rate for each cell
 }
 \description{
-Expression_rate
-ration between the number of expressed genes and the total number of reads
+Ratio between the number of expressed genes and the total number of reads
+}
+\author{
+Noemi Di Nanni
 }
