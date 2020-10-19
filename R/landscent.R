@@ -53,7 +53,7 @@ landscent <- function(genes_by_cells_matrix, ppi=NULL, reduceMethod = "PCA", clu
 	dpt <- destiny::DPT(Integration.l$DM, tips = Integration.l$root)
 	
 	#Create DF: cell name, dpt, SR and PS
-	score <- data.frame(dpt=dpt$dpt, SR=Integration.l$SR, PS=Integration.l$potencyState, stringsAsFactors = F, row.names = rownames(Integration.l$DM@eigenvectors))
+	score <- data.frame(dpt_raw=dpt$dpt, dpt=-dpt + max(dpt), SR=Integration.l$SR, PS=Integration.l$potencyState, stringsAsFactors = F, row.names = rownames(Integration.l$DM@eigenvectors))
 	
 	return(score)
 	

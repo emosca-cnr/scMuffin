@@ -26,13 +26,12 @@ boxplot_cluster <- function(features_by_cells, cell_clusters, n_top=3, dir_out="
 	#top 3 features of each cluster
 	top_clusters <- lapply(split(data.frame(t(mat)), colnames(mat)), function(x) rownames(mat)[rank(x) <= n_top])
 	
-	dir_output <- paste0(dir_out, "/boxplot_cluster/")
-	dir.create(dir_output, showWarnings = F)
+	dir.create(dir_out, showWarnings = F, recursive = T)
 	
 	#boxplot for each cluster
 	for(cl in 1:ncol(mat)){
 		
-		grDevices::jpeg(paste0(dir_output, "cluster_", colnames(mat)[cl],".jpg"), width=180, height=180, units="mm", res=300)
+		grDevices::jpeg(paste0(dir_out, "cluster_", colnames(mat)[cl],".jpg"), width=180, height=180, units="mm", res=300)
 		par(mar = c(10, 4, 2, 1))
 		
 		#distribution of all cells by feature

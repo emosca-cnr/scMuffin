@@ -73,8 +73,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 	
 	##################	merge everithing   ##################	
 	features_by_cells <- merge_matrix(signatures_by_cells = SC_signatures_by_cell_matrix, expr_score = exp_rate_score, output_landscent = output_landscent)
-	
-	
+
 	feature_corr <- cor(t(GetAssayData(features_by_cells, slot = "scale.data")), method="spearman")
 	heatmap_features_corr(feature_corr)
 	
@@ -92,31 +91,42 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 	#### FINAL OUTPUTS ###
 	
 	#### Visual comparison between initial and final clusters ###
-	plot_umap(genes_by_cells, "umap_by_gene_expression.jpg")
-	plot_umap(features_by_cells, "umap_by_features.jpg")
+	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
+	plot_umap(genes_by_cells, "umap_by_gene_expression.jpg", pal = pal)
+	
+	pal <- rainbow(length(levels(features_by_cells@active.ident)))
+	plot_umap(features_by_cells, "umap_by_features.jpg", pal = pal)
 	
 	
 	### COLOR BY FEATURE
-	plot_gene_cluster_colored_features(genes_by_cells, features_by_cells)
-	plot_feature_cluster_colored_features(features_by_cells, features_by_cells)
-	
+	plot_umap_colored_features(genes_by_cells, features_by_cells)
 
 	#Visualization of CNV on gene expression clusters
 	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
-	plot_umap(genes_by_cells, "umap_genes_cnv_clusters.jpg", color_by="cnv")
+	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
+	plot_umap(genes_by_cells, "umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
-	plot_umap(features_by_cells, "umap_features_cnv_clusters.jpg", color_by="cnv")
+	pal <- rainbow(length(levels(features_by_cells@meta.data$cnv)))
+	plot_umap(features_by_cells, "umap_features_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	#add initial clusters information in features_by_cells meta.data
 	features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
-	plot_umap(features_by_cells, "umap_features_initial_clusters.jpg", color_by="initial_clusters")
+	pal <- rainbow(length(levels(features_by_cells@meta.data$initial_clusters)))
+	plot_umap(features_by_cells, "umap_features_initial_clusters.jpg", color_by="initial_clusters", pal = pal)
 	
 	#potency state plot
 	genes_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))]
-	plot_umap(genes_by_cells, "umap_genes_ps_clusters.jpg", color_by="ps")
+	pal <- rainbow(length(levels(genes_by_cells@meta.data$ps)))
+	plot_umap(genes_by_cells, "umap_genes_ps_clusters.jpg", color_by="ps", pal = pal)
 	
 	features_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))]
-	plot_umap(features_by_cells, "umap_features_ps_clusters.jpg", color_by="ps")
+	pal <- rainbow(length(levels(features_by_cells@meta.data$ps)))
+	plot_umap(features_by_cells, "umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
+	
+	#BOXPLOT feature in clusters
+	boxplot_cluster(GetAssayData(genes_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "boxplot_cluster_by_genes")
+	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), features_by_cells@active.ident, dir_out = "boxplot_cluster_by_features")
+	
 	
 }
