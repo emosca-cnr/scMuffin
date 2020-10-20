@@ -8,23 +8,12 @@
 #' @export
 #' @author Noemi Di Nanni
 
-merge_matrix <- function(signatures_by_cells = NULL, expr_score = NULL, output_landscent = NULL){
+merge_matrix <- function(feature_list=NULL){
   
-	expr_score <- expr_score[match(colnames(signatures_by_cells), names(expr_score))]
+	feature_list <- Reduce(merge, feature_list)
+	rownames(feature_list) <- feature_list$id
+	feature_list$id <- NULL
 	
-	if(!is.null(output_landscent)){
-		output_landscent <- t(output_landscent[match(colnames(signatures_by_cells), rownames(output_landscent)), c("dpt", "SR")])
-	}
-
-  #merge
-  matrix_merged <- rbind(signatures_by_cells, expr_score=expr_score, output_landscent)
-  
-  #scale data
-  matrix_merged <- CreateSeuratObject(counts = matrix_merged, min.cells = 0, min.features = 0)
-  all.genes <- rownames(matrix_merged)
-  matrix_merged <- ScaleData(matrix_merged, features = all.genes)
-  #matrix_merged <- GetAssayData(object = matrix_merged, slot = "scale.data")
-  
-  return(matrix_merged)
+  return(feature_list)
   
 }

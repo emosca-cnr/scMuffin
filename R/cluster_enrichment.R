@@ -8,7 +8,7 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_enrichment <- function(features_by_cells, cell_clusters, n_top=3, dir_out="./"){
+cluster_enrichment <- function(features_by_cells, cell_clusters){
 	
  #t-test: for each feature in each cluster
 	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells), dimnames = list(rownames(features_by_cells), levels(cell_clusters)))
@@ -22,7 +22,7 @@ cluster_enrichment <- function(features_by_cells, cell_clusters, n_top=3, dir_ou
 	
 	#GSEA process on features-by-cells
 	gsl <- lapply(split(cell_clusters, cell_clusters), function(x) names(x))
-	gsea_res <- gsea(t(GetAssayData(features_by_cells, slot="scale.data")), gsl, mc_cores_perm = 2, ord.mode = rep(-1, nrow(features_by_cells)), k = 99)
+	gsea_res <- gsea(t(features_by_cells), gsl, mc_cores_perm = 2, ord.mode = rep(-1, nrow(features_by_cells)), k = 99)
 	
 	nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
 	fdrq_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$FDRq, dimnames = list(x$id))))

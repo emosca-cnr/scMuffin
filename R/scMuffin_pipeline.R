@@ -72,13 +72,22 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, analyses =
 	}
 	
 	##################	merge everithing   ##################	
-	features_by_cells <- merge_matrix(signatures_by_cells = SC_signatures_by_cell_matrix, expr_score = exp_rate_score, output_landscent = output_landscent)
+	feature_list <- list(
+		data.frame(id=colnames(SC_signatures_by_cell_matrix), t(SC_signatures_by_cell_matrix), stringsAsFactors = F),
+		data.frame(id=names(exp_rate_score), expr=exp_rate_score, stringsAsFactors = F),
+		data.frame(id=rownames(output_landscent), output_landscent, stringsAsFactors = F),
+		data.frame(id=names(heatmap_CNV_clusters), cnv=heatmap_CNV_clusters, stringsAsFactors = F)
+	)
+	
+	cells_by_features_df <- merge_matrix(feature_list)
+	
+	feature_type <- unlist(lapply(cells_by_features_df, class))
 
-	feature_corr <- cor(t(GetAssayData(features_by_cells, slot = "scale.data")), method="spearman")
+	feature_corr <- cor(as.matrix(cells_by_features_df[, feature_type == "numeric"]), method="spearman")
 	heatmap_features_corr(feature_corr)
 	
 	##################	re-clustering   ##################	
-	features_by_cells <- re_clustering(features_by_cells)
+	features_by_cells <- re_clustering(t(as.matrix(cells_by_features_df[, feature_type == "numeric"])))
 	save(features_by_cells, file="features_by_cells.RData", compress = "bzip2")
 	
 	dendrogram_genes <- as.dendrogram(BuildClusterTree(genes_by_cells, reorder = T, features = rownames(genes_by_cells))@tools$BuildClusterTree)

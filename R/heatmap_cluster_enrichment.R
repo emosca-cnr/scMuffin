@@ -46,7 +46,9 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	
 	#rotation
 	X <- rotate(X)
-
+	Y <- rotate(Y)
+	Y <- Y[match(rownames(X), rownames(Y)), match(colnames(X), colnames(Y))]
+	
 	jpeg(file, width = width, height = height, res=res, units="mm")
 	
 	layout.show(layout(matrix(c(1, 2, 3, 4), ncol = 2, byrow = T), heights = c(0.15, 0.95), widths = c(0.2, 0.8)))
@@ -69,7 +71,7 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	plot(rev(dend_row), type = "rectangle", leaflab = "none", axes=F, horiz = T)
 	#plot.new()
 	
-	par(mar=c(3, 3, 1.5, 1))
+	par(mar=c(6, 3, 1.5, 1))
 	image(X, xaxt="none", yaxt="none", col=colors_, breaks = c(seq(min(X), -0.1, length.out = 5), 0, seq(0.1, max(X), length.out = 6)))
 	
 	xx <- seq(0, 1, length.out = nrow(X))
@@ -82,13 +84,10 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	for(i in 1:nrow(X)){ #xx
 		for(j in 1:ncol(X)){ #yy
 			
-			if(X[i, j] == 0){
-				text(xx[i], yy[j], "X", cex=.6)
-			}
-			
-			if((ncol(X):1)[sample_labels[i]]==j){
+			if(Y[i, j] < 0.05 & X[i, j] > 0){ #significant and positive nes
 				points(xx[i], yy[j], pch="*", cex=2, lwd=2, col="pink")
 			}
+			
 		}
 	}
 	
