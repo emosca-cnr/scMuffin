@@ -1,9 +1,11 @@
 #' preprocess_object_for_CNV
 #' @param input_object genes-by-cells input matrix
-#' @description Preprocessing pipeline to obtain a list of ordered dataframes (one for each chromosome). 
-#' @details Preprocessing consist of annotation, removing duplicates and NA values.
+#' @description Preprocessing function to obtain a genomically-ordered list of chromosomes. 
+#' @details The preliminary step consist of annotation, duplicates and NA values removal. 
+#' Then, the matrix is splitted as a list of dataframe, where every dataframe is a chromosome.
+#' Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position. 
 #' @usage preprocess_object_for_cnv(input_object)
-#' @return list of dataframes, where every dataframe is a chromosome
+#' @return list of genomically-ordered chromosomes
 #' @author Valentina Nale
 #' @import Seurat org.Hs.eg.db
 #' @export

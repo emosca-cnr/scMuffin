@@ -10,13 +10,15 @@ preprocess_object_for_cnv(input_object)
 \item{input_object}{genes-by-cells input matrix}
 }
 \value{
-list of dataframes, where every dataframe is a chromosome
+list of genomically-ordered chromosomes
 }
 \description{
-Preprocessing pipeline to obtain a list of ordered dataframes (one for each chromosome).
+Preprocessing function to obtain a genomically-ordered list of chromosomes.
 }
 \details{
-Preprocessing consist of annotation, removing duplicates and NA values.
+The preliminary step consist of annotation, duplicates and NA values removal.
+Then, the matrix is splitted as a list of dataframe, where every dataframe is a chromosome.
+Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position.
 }
 \author{
 Valentina Nale

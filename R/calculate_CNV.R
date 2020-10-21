@@ -1,7 +1,9 @@
+
 #' Calculate CNV
 #' 
 #' @export
-calculate_CNV <- function(genes_by_cells, mc.cores=2) {
+calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
+	
 
 	cat("Calculating CNV...\n")	
 	ans <- preprocess_object_for_CNV(genes_by_cells)
@@ -13,10 +15,25 @@ calculate_CNV <- function(genes_by_cells, mc.cores=2) {
 	
 	#exclude chrom with <100 genes
 	ans <- ans[unlist(lapply(ans, nrow)) > 100]
+	
+	# **********************************************
+	# ----> second argument for function cnv = 'reference_vector' ---> load("GTEx_ok")
+	if (is.null(reference_vector)) {
+		# do CNV on 'gene_by_cell' ---> 'ans'
+		#calculate CNV
+		cat("Calculating CNV...\n")
+		ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = mc.cores)
+	} else {
+		# 'reference_vector' is present = GTEx integration
+		#w_ref <- merge(gene_by_cells, reference_vector, all.x=TRUE) --- why? 
+		cat("Adding reference...\n")
+		ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(x) x-reference_vector), mc.cores = mc.cores)
+		cat("Calculating CNV...\n")
+		ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = mc.cores)
+	}
+	# **********************************************
+	
 
-	#calculate CNV
-	cat("Calculating CNV...\n")
-	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = mc.cores)
 
 	#merge chromosomes into a unique table
 	#ans <- do.call(rbind, ans)

@@ -1,8 +1,7 @@
 #' CNV
 #' @param x list of dataframes retrieved by 'preprocess_object_for_cnv'.
-#' @description Function to compute CNV.
-#' @details As a list of dataframes, it is convenient to use 'mclapply' from parallel package. 
-#' @references Patel paper supplementary material (?)
+#' @description Function to be used in calculate_CNV.
+#' @references "Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al., Supplementary materials
 #' @author Valentina Nale
 
 

@@ -4,7 +4,7 @@
 \alias{calculate_CNV}
 \title{Calculate CNV}
 \usage{
-calculate_CNV(genes_by_cells, mc.cores = 2)
+calculate_CNV(genes_by_cells, reference_vector = NULL, mc.cores = 2)
 }
 \description{
 Calculate CNV
