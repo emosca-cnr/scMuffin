@@ -24,7 +24,8 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	
 	SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
 	
-	save(SC_signatures_by_cell_matrix, file="SC_signatures_by_cell_matrix.RData", compress = "bzip2")
+	dir.create("signatures")
+	save(SC_signatures_by_cell_matrix, file="signatures/SC_signatures_by_cell_matrix.RData", compress = "bzip2")
 	
 	#gene-set score per cluster list
 	res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
@@ -34,7 +35,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	
 	#output
 	heatmap_signatures(SC_signatures_by_cluster_matrix)
-	write.table(SC_signatures_by_cluster_matrix, file="signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
+	write.table(SC_signatures_by_cluster_matrix, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
 	
 	
 	##################	Signalling entropy rate (SR) @Noemi 	  ##################	
@@ -44,13 +45,15 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	cat("Calcuting landscent-related scores...\n")
 	output_landscent <- landscent(as.matrix(genes_by_cells@assays$RNA@data), mc.cores=mc.cores)
 	
-	save(output_landscent, file="output_landscent.RData", compress = "bzip2")
+	dir.create("landscent")
+	save(output_landscent, file="landscent/output_landscent.RData", compress = "bzip2")
 	
 	
 	
 	##################	EXPRESSION RATE   ##################	
 	exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
-	save(exp_rate_score, file="exp_rate_score.RData", compress = "bzip2")
+	dir.create("expr_score")
+	save(exp_rate_score, file="expr_score/exp_rate_score.RData", compress = "bzip2")
 	
 	##################	Cell cycle state   ##################	
 	
@@ -61,7 +64,9 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
 	cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
 	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom)
-	save(cnv_res, heatmap_CNV_clusters, file="cnv_res.RData", compress = "bzip2")
+	
+	dir.create("cnv")
+	save(cnv_res, heatmap_CNV_clusters, file="cnv/cnv_res.RData", compress = "bzip2")
 	
 	
 	##################	merge everithing   ##################	
@@ -77,41 +82,49 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	feature_type <- unlist(lapply(cells_by_features_df, class))
 	
 	feature_corr <- cor(as.matrix(cells_by_features_df[, feature_type == "numeric"]), method="spearman")
-	heatmap_features_corr(feature_corr)
+	
+	dir.create("features")
+	heatmap_features_corr(feature_corr, file = "features/heatmap_corr.jpg")
 	
 	##################	re-clustering   ##################	
 	features_by_cells <- re_clustering(t(as.matrix(cells_by_features_df[, feature_type == "numeric"])))
-	save(features_by_cells, file="features_by_cells.RData", compress = "bzip2")
+	save(features_by_cells, file="features/features_by_cells.RData", compress = "bzip2")
 	
 	dendrogram_genes <- as.dendrogram(BuildClusterTree(genes_by_cells, reorder = T, features = rownames(genes_by_cells))@tools$BuildClusterTree)
 	dendrogram_features <- as.dendrogram(BuildClusterTree(features_by_cells, reorder = T, features = rownames(features_by_cells), slot = "scale.data")@tools$BuildClusterTree)
 	
 	clust_comp_matrix <- cluster_comparison(genes_by_cells@active.ident, features_by_cells@active.ident, dendrogram_genes, dendrogram_features)
-	plot_cluster_comparison(clust_comp_matrix$freq, dend_row = dendrogram_genes, dend_col = dendrogram_features)
+	dir.create("cluster_comparison")
+	plot_cluster_comparison(clust_comp_matrix$freq, dend_row = dendrogram_genes, dend_col = dendrogram_features, file = "cluster_comparison/heatmpa_cluster_comparison.jpg")
 	
-	clust_enr_res <- cluster_enrichment(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
-	clust_enr_res_global_expr <- cluster_enrichment(as.matrix(GetAssayData(features_by_cells)), genes_by_cells@active.ident)
-	heatmap_cluster_enrichment(clust_enr_res$nes, clust_enr_res$fdrq)
-	heatmap_cluster_enrichment(clust_enr_res_global_expr$nes, clust_enr_res_global_expr$fdrq, file = "heatmap_cluster_enrichment_glob_expr.jpg", cex.axis = 0.6)
+	clust_enr_res <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
+	clust_enr_res_global_expr <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), genes_by_cells@active.ident)
+	
+	#clust_chi_res <- cluster_chisq(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
+	
+	heatmap_cluster_enrichment(clust_enr_res$nes, clust_enr_res$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_features.jpg")
+	heatmap_cluster_enrichment(clust_enr_res_global_expr$nes, clust_enr_res_global_expr$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_glob_expr.jpg", cex.axis = 0.6)
 	
 	
 	#### FINAL OUTPUTS ###
 	
+	dir.create("clusters")
+	
 	#### Visual comparison between initial and final clusters ###
 	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
-	plot_umap(genes_by_cells, "umap_by_gene_expression.jpg", pal = pal)
+	plot_umap(genes_by_cells, "clusters/umap_by_gene_expression.jpg", pal = pal)
 	
 	pal <- rainbow(length(levels(features_by_cells@active.ident)))
-	plot_umap(features_by_cells, "umap_by_features.jpg", pal = pal)
+	plot_umap(features_by_cells, "clusters/umap_by_features.jpg", pal = pal)
 	
 	
 	### COLOR BY FEATURE
-	plot_umap_colored_features(genes_by_cells, features_by_cells)
+	plot_umap_colored_features(genes_by_cells, features_by_cells, dir="clusters") 
 	
 	#Visualization of CNV on gene expression clusters
 	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
 	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
-	plot_umap(genes_by_cells, "umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
+	plot_umap(genes_by_cells, "clusters/umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
 	pal <- rainbow(length(levels(features_by_cells@meta.data$cnv)))
@@ -120,20 +133,20 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	#add initial clusters information in features_by_cells meta.data
 	features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
 	pal <- rainbow(length(levels(features_by_cells@meta.data$initial_clusters)))
-	plot_umap(features_by_cells, "umap_features_initial_clusters.jpg", color_by="initial_clusters", pal = pal)
+	plot_umap(features_by_cells, "clusters/umap_features_initial_clusters.jpg", color_by="initial_clusters", pal = pal)
 	
 	#potency state plot
 	genes_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))]
 	pal <- rainbow(length(levels(genes_by_cells@meta.data$ps)))
-	plot_umap(genes_by_cells, "umap_genes_ps_clusters.jpg", color_by="ps", pal = pal)
+	plot_umap(genes_by_cells, "clusters/umap_genes_ps_clusters.jpg", color_by="ps", pal = pal)
 	
 	features_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))]
 	pal <- rainbow(length(levels(features_by_cells@meta.data$ps)))
-	plot_umap(features_by_cells, "umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
+	plot_umap(features_by_cells, "clusters/umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
 	
 	#BOXPLOT feature in clusters
-	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "boxplot_cluster_by_genes")
-	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), features_by_cells@active.ident, dir_out = "boxplot_cluster_by_features")
+	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_genes")
+	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), features_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_features")
 	
 	
 }

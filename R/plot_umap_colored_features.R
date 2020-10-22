@@ -7,7 +7,7 @@
 #' @import RColorBrewer
 #' @export
 
-plot_umap_colored_features <- function(seurat_object, features_by_cells){
+plot_umap_colored_features <- function(seurat_object, features_by_cells, dir="./"){
 	
 	for(i in 1:nrow(features_by_cells)){
 		feature_data <- GetAssayData(features_by_cells, slot = "scale.data")[i, ]
@@ -26,11 +26,11 @@ plot_umap_colored_features <- function(seurat_object, features_by_cells){
 		}
 	
 		#UMAP by genes, colored by feature
-		plot_umap(seurat_object, paste0("umap_by_genes_col_feature_", rownames(features_by_cells)[i],".jpg"), color_by="feature", pal=pal)
+		plot_umap(seurat_object, paste0(dir, "/umap_by_genes_col_feature_", rownames(features_by_cells)[i],".jpg"), color_by="feature", pal=pal)
 		
 		#UMAP by feature, colored by feature
 		features_by_cells@meta.data$feature <- seurat_object@meta.data$feature
-		plot_umap(features_by_cells, paste0("umap_by_feature_col_feature_", rownames(features_by_cells)[i],".jpg"), color_by="feature", pal=pal)
+		plot_umap(features_by_cells, paste0(dir, "/umap_by_feature_col_feature_", rownames(features_by_cells)[i],".jpg"), color_by="feature", pal=pal)
 		
 	}
 	
