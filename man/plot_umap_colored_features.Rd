@@ -4,7 +4,7 @@
 \alias{plot_umap_colored_features}
 \title{plot_umap_colored_features}
 \usage{
-plot_umap_colored_features(seurat_object, features_by_cells)
+plot_umap_colored_features(seurat_object, features_by_cells, dir = "./")
 }
 \arguments{
 \item{seurat_object}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}

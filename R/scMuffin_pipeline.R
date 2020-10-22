@@ -98,7 +98,12 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	plot_cluster_comparison(clust_comp_matrix$freq, dend_row = dendrogram_genes, dend_col = dendrogram_features, file = "cluster_comparison/heatmpa_cluster_comparison.jpg")
 	
 	clust_enr_res <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
+	write.table(clust_enr_res$nes, file="cluster_comparison/clust_enr_res_nes.txt", row.names = T, col.names = NA, sep="\t")
+	write.table(clust_enr_res$fdrq, file="cluster_comparison/clust_enr_res_fdrq.txt", row.names = T, col.names = NA, sep="\t")
+	
 	clust_enr_res_global_expr <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), genes_by_cells@active.ident)
+	write.table(clust_enr_res_global_expr$nes, file="cluster_comparison/clust_enr_res_glob_expr_nes.txt", row.names = T, col.names = NA, sep="\t")
+	write.table(clust_enr_res_global_expr$fdrq, file="cluster_comparison/clust_enr_res_glob_expr_fdrq.txt", row.names = T, col.names = NA, sep="\t")
 	
 	#clust_chi_res <- cluster_chisq(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
 	
@@ -128,7 +133,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	
 	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
 	pal <- rainbow(length(levels(features_by_cells@meta.data$cnv)))
-	plot_umap(features_by_cells, "umap_features_cnv_clusters.jpg", color_by="cnv", pal = pal)
+	plot_umap(features_by_cells, "clusters/umap_features_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	#add initial clusters information in features_by_cells meta.data
 	features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
