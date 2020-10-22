@@ -4,11 +4,7 @@
 \alias{merge_matrix}
 \title{merge_matrix}
 \usage{
-merge_matrix(
-  signatures_by_cells = NULL,
-  expr_score = NULL,
-  output_landscent = NULL
-)
+merge_matrix(feature_list = NULL)
 }
 \arguments{
 \item{signatures_by_cells}{matrix, signatures-by-cells input}

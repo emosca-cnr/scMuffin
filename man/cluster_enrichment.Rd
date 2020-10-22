@@ -4,7 +4,7 @@
 \alias{cluster_enrichment}
 \title{Calculate cluster enrichment}
 \usage{
-cluster_enrichment(features_by_cells, cell_clusters, n_top = 3, dir_out = "./")
+cluster_enrichment(features_by_cells, cell_clusters)
 }
 \arguments{
 \item{features_by_cells}{matrix, features by cells matrix}

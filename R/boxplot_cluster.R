@@ -31,7 +31,7 @@ boxplot_cluster <- function(features_by_cells, cell_clusters, n_top=3, dir_out="
 	#boxplot for each cluster
 	for(cl in 1:ncol(mat)){
 		
-		grDevices::jpeg(paste0(dir_out, "cluster_", colnames(mat)[cl],".jpg"), width=180, height=180, units="mm", res=300)
+		grDevices::jpeg(paste0(dir_out, "/cluster_", colnames(mat)[cl],".jpg"), width=180, height=180, units="mm", res=300)
 		par(mar = c(10, 4, 2, 1))
 		
 		#distribution of all cells by feature
