@@ -12,9 +12,9 @@ calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
 		GTEx_difference <- gtex_mean_final-gbc_mean 
 	
 		new_a <- as.data.frame(genes_by_cells)
-		new_b <- as.data.frame(gtex_mean_final)
+		new_b <- as.data.frame(GTEx_difference)
 	
-		merged_data <- merge(new_a,new_b["gtex_mean_final"],by="row.names",all.x=TRUE)
+		merged_data <- merge(new_a,new_b,by="row.names",all.x=TRUE)
 	
 		rownames(merged_data) <- merged_data$Row.names
 		merged_data$Row.names <- NULL
