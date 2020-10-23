@@ -2,8 +2,9 @@
 
 export(boxplot_cluster)
 export(calculate_CNV)
+export(cluster_chisq)
 export(cluster_comparison)
-export(cluster_enrichment)
+export(cluster_gsea)
 export(exp_rate)
 export(gene_set_score)
 export(gene_set_score_in_clusters)

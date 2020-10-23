@@ -1,4 +1,4 @@
-#' Calculate cluster enrichment
+#' Calculate cluster enrichment by gsea approach
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param features_by_cells matrix, features by cells matrix
@@ -8,17 +8,17 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_enrichment <- function(features_by_cells, cell_clusters){
+cluster_gsea <- function(features_by_cells, cell_clusters){
 	
- #t-test: for each feature in each cluster
-	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells), dimnames = list(rownames(features_by_cells), levels(cell_clusters)))
-	for(i in 1:nrow(mat)){
-		for(j in 1:ncol(mat)){
-			mat[i, j] <- t.test(features_by_cells[i, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], features_by_cells[i, !colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], alternative = "g")$p.value
-		}
-	}
+#  #t-test: for each feature in each cluster
+# 	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells), dimnames = list(rownames(features_by_cells), levels(cell_clusters)))
+# 	for(i in 1:nrow(mat)){
+# 		for(j in 1:ncol(mat)){
+# 			mat[i, j] <- t.test(features_by_cells[i, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], features_by_cells[i, !colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], alternative = "g")$p.value
+# 		}
+# 	}
 	
-	mat <- apply(mat, 2, p.adjust, method="fdr")
+	# mat <- apply(mat, 2, p.adjust, method="fdr")
 	
 	#GSEA process on features-by-cells
 	gsl <- lapply(split(cell_clusters, cell_clusters), function(x) names(x))
@@ -27,6 +27,6 @@ cluster_enrichment <- function(features_by_cells, cell_clusters){
 	nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
 	fdrq_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$FDRq, dimnames = list(x$id))))
 	
-	return(list(ttestp=mat, nes=nes_table, fdrq=fdrq_table))
+	return(list(nes=nes_table, fdrq=fdrq_table))
 	
 }
