@@ -6,7 +6,7 @@ calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
 	# ****************************************************************
 	if (!is.null(reference_vector)) {
 		cat("Adding reference vector...\n")
-		genes_by_cells <- GetAssayData(genes_by_cells)
+		#genes_by_cells <- GetAssayData(genes_by_cells)
 		gbc_mean <- apply(genes_by_cells, 1, mean)
 		gtex_mean_final <-apply(reference_vector, 1, mean)
 		GTEx_difference <- gtex_mean_final-gbc_mean 
