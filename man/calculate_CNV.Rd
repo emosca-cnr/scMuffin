@@ -6,6 +6,11 @@
 \usage{
 calculate_CNV(genes_by_cells, reference_vector = NULL, mc.cores = 2)
 }
+\arguments{
+\item{reference_vector}{NULL. It is possible to add a reference vector, downloaded from GTEx portal.}
+
+\item{genes_by_cell}{Preprocessed Seurat object}
+}
 \description{
 Calculate CNV
 }

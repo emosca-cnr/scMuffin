@@ -8,7 +8,7 @@ calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
 		cat("Adding reference vector...\n")
 		genes_by_cells <- GetAssayData(data)
 		gbc_mean <- apply(genes_by_cells, 1, mean)
-		gtex_mean_final <-apply(GTEx_norm, 1, mean)
+		gtex_mean_final <-apply(reference_vector, 1, mean)
 		GTEx_difference <- gtex_mean_final-gbc_mean 
 	
 		new_a <- as.data.frame(genes_by_cells)
