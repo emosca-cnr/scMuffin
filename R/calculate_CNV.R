@@ -6,19 +6,24 @@ calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
 	# ****************************************************************
 	if (!is.null(reference_vector)) {
 		cat("Adding reference vector...\n")
-		#genes_by_cells <- GetAssayData(genes_by_cells)
+		#genes_by_cells <- GetAssayData(data)
 		gbc_mean <- apply(genes_by_cells, 1, mean)
 		gtex_mean_final <-apply(reference_vector, 1, mean)
-		GTEx_difference <- gtex_mean_final-gbc_mean 
-	
-		new_a <- as.data.frame(genes_by_cells)
-		new_b <- as.data.frame(GTEx_difference)
-	
-		merged_data <- merge(new_a,new_b,by="row.names",all.x=TRUE)
-	
-		rownames(merged_data) <- merged_data$Row.names
-		merged_data$Row.names <- NULL
-		genes_by_cells <- merged_data
+		# matrice + media
+		merged_gbc_mean <- cbind(genes_by_cells, gbc_mean)
+		# trasforma in df
+		new_gbc <- as.data.frame(merged_gbc_mean)
+		new_gtex <- as.data.frame(gtex_mean_final)
+		all_merged <- merge(new_gbc, new_gtex, by="row.names",all.x=TRUE)
+		all_merged$difference <- all_merged$gtex_mean_final - all_merged$gbc_mean
+		all_merged$gtex_mean_final <- NULL
+		all_merged$gbc_mean <- NULL
+		
+		rownames(all_merged) <- all_merged$Row.names
+		all_merged$Row.names <- NULL
+		
+		all_merged[is.na(all_merged)] <- 0
+		genes_by_cells <- all_merged
 		
 	}
 	# ***************************************************************
