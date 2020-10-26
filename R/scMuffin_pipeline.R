@@ -34,7 +34,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
 	
 	#output
-	heatmap_signatures(SC_signatures_by_cluster_matrix)
+	heatmap_signatures(SC_signatures_by_cluster_matrix, file="signatures/heatmap_signatures.jpg")
 	write.table(SC_signatures_by_cluster_matrix, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
 	
 	
