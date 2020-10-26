@@ -9,7 +9,7 @@
 #' @import graphics
 #' @export
 
-heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, scale_cells=T) {
+heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NULL, n_colors=11, scale_cells=T, reference=NULL) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
 	ans <- NULL
@@ -39,9 +39,21 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 		
 	clusters <- seu_obj@active.ident
 	rm(seu_obj)
-	
-	chr_merged <- chr_merged[, order(clusters)]
+
 	ans <- clusters
+	
+	clusters_ordered <- clusters[order(clusters)] #re-order columns by cluster
+	chr_merged <- chr_merged[, match(names(clusters_ordered), colnames(chr_merged))]
+	
+	if(!is.null(reference)){
+		ref_cluster <- clusters_ordered[names(clusters_ordered) == reference] #cluster in which the reference occurs
+		cat("Reference cluster:", as.character(ref_cluster), "\n")
+		cat("Subtracting reference cluster averaage from CNV profiles...\n")
+		
+		#update the CNV Matrix, subtracting the average of the reference cluster
+		ref_cluster_avg <- rowMeans(chr_merged[, clusters_ordered==ref_cluster])
+		chr_merged <- apply(chr_merged, 2, function(x) x-ref_cluster_avg)
+	}
 	
 	X <- rotate(chr_merged)
 	#X <- log2(X)
@@ -78,11 +90,20 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 	U <- par("usr")
 	abline(h=seq(U[4], U[3], length.out = nrow(chr_merged)+1)[ngenes_chrom_cumsum+1])
 	
-	clusters_ordered <- as.numeric(ans[match(colnames(chr_merged), names(ans))])
+	clusters_ordered <- as.numeric(clusters_ordered)
 	clust_col_sep <- c(which(clusters_ordered[2:length(clusters_ordered)] - clusters_ordered[1:(length(clusters_ordered)-1)]!=0), length(clusters_ordered)) 
 	abline(v=seq(U[1], U[2], length.out = ncol(chr_merged)+1)[clust_col_sep+1]) 	
 	
-	axis(1, xx[clust_col_sep], ans[match(colnames(chr_merged), names(ans))][clust_col_sep], las=2, cex=0.2)
+	x_lab <- ans[match(colnames(chr_merged), names(ans))]
+	axis(1, xx[clust_col_sep], x_lab[clust_col_sep], cex=0.2)
+	
+	if(!is.null(reference)){
+		ref_cluster_idx <- which(x_lab[clust_col_sep] == ref_cluster) #cluster idx
+		
+		axis(3, xx[which(rownames(X) == reference)], "R", cex=0.5, font=2)
+		axis(1, xx[clust_col_sep][ref_cluster_idx], x_lab[clust_col_sep][ref_cluster_idx], cex=0.2, font=2)
+		
+	}
 	
 	# new legend
 	par(mar=c(0, 0, 0, 0))
