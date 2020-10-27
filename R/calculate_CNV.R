@@ -7,7 +7,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
 	
 	#centering genes-by-cells data
 	gbc_mean <- rowMeans(genes_by_cells)
-	genes_by_cells <- apply(genes_by_cells, 2, function(x) x - gbc_mean)
+	genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
 	
 	# ****************************************************************
 	if (!is.null(reference)) {

@@ -8,6 +8,13 @@
 scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2, reference=NULL){
 	
 	
+	dir.create("clusters")
+	
+	#### Visual comparison between initial and final clusters ###
+	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
+	plot_umap(genes_by_cells, "clusters/umap_by_gene_expression.jpg", pal = pal)
+	
+	
 	##################	SIGNATURES #################
 	cat("Calcuting gene signature scores...\n")
 	
@@ -38,6 +45,29 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	write.table(SC_signatures_by_cluster_matrix, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
 	
 	
+
+	##################	EXPRESSION RATE   ##################	
+	exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
+	dir.create("expr_score")
+	save(exp_rate_score, file="expr_score/exp_rate_score.RData", compress = "bzip2")
+	
+
+	##################	CNV @Valentina   ##################	
+	
+	cnv_res <- calculate_CNV(as.data.frame(GetAssayData(genes_by_cells)), mc.cores = mc.cores, reference = reference)
+	
+	ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
+	cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
+	
+	dir.create("cnv")
+	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom, file = "cnv/heatmap_CNV.jpg", reference = "reference")
+	save(cnv_res, heatmap_CNV_clusters, file="cnv/cnv_res.RData", compress = "bzip2")
+	
+	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
+	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
+	plot_umap(genes_by_cells, "clusters/umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
+	
+	
 	##################	Signalling entropy rate (SR) @Noemi 	  ##################	
 	##################	Potency states (LandScent): labels @Noemi 	  ##################	
 	##################	Diffusion pseudotime (DPT) (Destiny): @Noemi   ##################	
@@ -47,28 +77,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	
 	dir.create("landscent")
 	save(output_landscent, file="landscent/output_landscent.RData", compress = "bzip2")
-	
-	
-	
-	##################	EXPRESSION RATE   ##################	
-	exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
-	dir.create("expr_score")
-	save(exp_rate_score, file="expr_score/exp_rate_score.RData", compress = "bzip2")
-	
-	##################	Cell cycle state   ##################	
-	
-	
-	##################	CNV @Valentina   ##################	
-	
-	cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data), mc.cores = mc.cores, reference = reference)
-	
-	ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
-	cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
-	
-	dir.create("cnv")
-	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom, file = "cnv/heatmap_CNV.jpg", reference = "reference")
-	save(cnv_res, heatmap_CNV_clusters, file="cnv/cnv_res.RData", compress = "bzip2")
-	
 	
 	##################	merge everithing   ##################	
 	feature_list <- list(
@@ -106,19 +114,9 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	write.table(clust_enr_res_global_expr$nes, file="cluster_comparison/clust_enr_res_glob_expr_nes.txt", row.names = T, col.names = NA, sep="\t")
 	write.table(clust_enr_res_global_expr$fdrq, file="cluster_comparison/clust_enr_res_glob_expr_fdrq.txt", row.names = T, col.names = NA, sep="\t")
 	
-	#clust_chi_res <- cluster_chisq(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
-	
 	heatmap_cluster_enrichment(clust_enr_res$nes, clust_enr_res$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_features.jpg")
 	heatmap_cluster_enrichment(clust_enr_res_global_expr$nes, clust_enr_res_global_expr$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_glob_expr.jpg", cex.axis = 0.6)
 	
-	
-	#### FINAL OUTPUTS ###
-	
-	dir.create("clusters")
-	
-	#### Visual comparison between initial and final clusters ###
-	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
-	plot_umap(genes_by_cells, "clusters/umap_by_gene_expression.jpg", pal = pal)
 	
 	pal <- rainbow(length(levels(features_by_cells@active.ident)))
 	plot_umap(features_by_cells, "clusters/umap_by_features.jpg", pal = pal)
@@ -128,9 +126,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	plot_umap_colored_features(genes_by_cells, features_by_cells, dir="clusters") 
 	
 	#Visualization of CNV on gene expression clusters
-	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
-	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
-	plot_umap(genes_by_cells, "clusters/umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
 	pal <- rainbow(length(levels(features_by_cells@meta.data$cnv)))
@@ -153,6 +148,5 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	#BOXPLOT feature in clusters
 	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_genes")
 	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), features_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_features")
-	
 	
 }
