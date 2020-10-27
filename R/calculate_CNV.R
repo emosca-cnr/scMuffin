@@ -3,28 +3,29 @@
 #' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
 #' @export
 calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
+	
+	
+	#centering genes-by-cells data
+	gbc_mean <- rowMeans(genes_by_cells)
+	genes_by_cells <- apply(genes_by_cells, 2, function(x) x - gbc_mean)
+	
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
-		#genes_by_cells <- GetAssayData(data)
-		gbc_mean <- apply(genes_by_cells, 1, mean)
-		gtex_mean_final <-apply(reference, 1, mean)
-		# matrice + media
-		merged_gbc_mean <- cbind(genes_by_cells, gbc_mean)
-		# trasforma in df
-		new_gbc <- as.data.frame(merged_gbc_mean)
-		new_gtex <- as.data.frame(gtex_mean_final)
-		all_merged <- merge(new_gbc, new_gtex, by="row.names",all.x=TRUE)
-		all_merged$reference <- all_merged$gtex_mean_final - all_merged$gbc_mean
-		all_merged$gtex_mean_final <- NULL
-		all_merged$gbc_mean <- NULL
 		
-		rownames(all_merged) <- all_merged$Row.names
-		all_merged$Row.names <- NULL
+		genes_by_cells$gbc_mean <- gbc_mean
 		
-		all_merged[is.na(all_merged)] <- 0
-		genes_by_cells <- all_merged
+		colnames(reference) <- "reference"
+		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", all.x=TRUE, sort=F)
 		
+		genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
+		genes_by_cells$gbc_mean <- NULL
+		
+		rownames(genes_by_cells) <- genes_by_cells$Row.names
+		genes_by_cells$Row.names <- NULL
+		
+		genes_by_cells[is.na(genes_by_cells)] <- 0
+
 	}
 	# ***************************************************************
 
