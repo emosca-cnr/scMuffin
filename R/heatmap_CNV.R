@@ -45,10 +45,10 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 	clusters_ordered <- clusters[order(clusters)] #re-order columns by cluster
 	chr_merged <- chr_merged[, match(names(clusters_ordered), colnames(chr_merged))]
 	
-	if(!is.null(reference)){
+	if(!is.null(reference) & any(colnames(chr_merged) == reference)){
 		ref_cluster <- clusters_ordered[names(clusters_ordered) == reference] #cluster in which the reference occurs
 		cat("Reference cluster:", as.character(ref_cluster), "\n")
-		cat("Subtracting reference cluster averaage from CNV profiles...\n")
+		cat("Subtracting reference cluster average from CNV profiles...\n")
 		
 		#update the CNV Matrix, subtracting the average of the reference cluster
 		ref_cluster_avg <- rowMeans(chr_merged[, clusters_ordered==ref_cluster])

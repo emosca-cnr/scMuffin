@@ -1,21 +1,21 @@
 #' Calculate CNV
 #' @param genes_by_cell Preprocessed Seurat object 
-#' @param reference_vector NULL. It is possible to add a reference vector, downloaded from GTEx portal.
+#' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
 #' @export
-calculate_CNV <- function(genes_by_cells, reference_vector=NULL, mc.cores=2) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
 	# ****************************************************************
-	if (!is.null(reference_vector)) {
+	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
 		#genes_by_cells <- GetAssayData(data)
 		gbc_mean <- apply(genes_by_cells, 1, mean)
-		gtex_mean_final <-apply(reference_vector, 1, mean)
+		gtex_mean_final <-apply(reference, 1, mean)
 		# matrice + media
 		merged_gbc_mean <- cbind(genes_by_cells, gbc_mean)
 		# trasforma in df
 		new_gbc <- as.data.frame(merged_gbc_mean)
 		new_gtex <- as.data.frame(gtex_mean_final)
 		all_merged <- merge(new_gbc, new_gtex, by="row.names",all.x=TRUE)
-		all_merged$difference <- all_merged$gtex_mean_final - all_merged$gbc_mean
+		all_merged$reference <- all_merged$gtex_mean_final - all_merged$gbc_mean
 		all_merged$gtex_mean_final <- NULL
 		all_merged$gbc_mean <- NULL
 		

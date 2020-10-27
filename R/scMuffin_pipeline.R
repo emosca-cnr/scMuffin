@@ -60,13 +60,13 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	
 	##################	CNV @Valentina   ##################	
 	
-	cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data), mc.cores = mc.cores)
+	cnv_res <- calculate_CNV(as.matrix(genes_by_cells@assays$RNA@data), mc.cores = mc.cores, reference = reference)
 	
 	ngenes_chrom <- unlist(lapply(cnv_res, nrow)) # number of genes per chromosome
 	cnv_res <- preprocess_for_heatmap_CNV(cnv_res)
 	
 	dir.create("cnv")
-	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom, file = "cnv/heatmap_CNV.jpg", reference = reference)
+	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom, file = "cnv/heatmap_CNV.jpg", reference = "reference")
 	save(cnv_res, heatmap_CNV_clusters, file="cnv/cnv_res.RData", compress = "bzip2")
 	
 	
