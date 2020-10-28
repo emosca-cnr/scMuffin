@@ -137,11 +137,11 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	plot_umap(features_by_cells, "clusters/umap_features_initial_clusters.jpg", color_by="initial_clusters", pal = pal)
 	
 	#potency state plot
-	genes_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))]
+	genes_by_cells@meta.data$ps <- factor(output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))])
 	pal <- rainbow(length(levels(genes_by_cells@meta.data$ps)))
 	plot_umap(genes_by_cells, "clusters/umap_genes_ps_clusters.jpg", color_by="ps", pal = pal)
 	
-	features_by_cells@meta.data$ps <- output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))]
+	features_by_cells@meta.data$ps <- factor(output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))])
 	pal <- rainbow(length(levels(features_by_cells@meta.data$ps)))
 	plot_umap(features_by_cells, "clusters/umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
 	
