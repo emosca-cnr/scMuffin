@@ -14,7 +14,8 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Depends: 
-    R (>= 3.5.0)
+    R (>= 3.5.0),
+    monocle
 Imports:
     graphics,
     parallel,
@@ -26,5 +27,4 @@ Imports:
     Seurat,
     stats,
     utils,
-    monocle,
     DDRTree

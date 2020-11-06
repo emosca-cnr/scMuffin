@@ -1,7 +1,7 @@
 #' monocle trajectory
 #' 
 #' @export
-#' @import monocle DDRTree DESeq2
+#' @import Seurat monocle DESeq2
 
 monocle_tree <- function(genes_by_cells, root=NULL){
 	
@@ -20,7 +20,7 @@ monocle_tree <- function(genes_by_cells, root=NULL){
 		
 	}
 
-	cat("recucing dimensions...\n")
+	cat("reducing dimensions...\n")
 	gbc_monocle <- monocle::reduceDimension(gbc_monocle, norm_method = "none", pseudo_expr = 0, scaling = F, relative_expr = F)
 	
 	cat("ordering cells...\n")
