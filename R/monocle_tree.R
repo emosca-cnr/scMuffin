@@ -1,16 +1,36 @@
-#' monocle
+#' monocle trajectory
 #' 
 #' @export
-#' @import monocle
+#' @import monocle DDRTree DESeq2
 
 monocle_tree <- function(genes_by_cells, root=NULL){
 	
+	cat("creating monocle cell data object...\n")
+	if(class(genes_by_cells) =="Seurat"){
+		
+		cat("estimating size and dispersions...\n")
+		gbc_monocle <- Seurat::as.CellDataSet(genes_by_cells)
+		gbc_monocle <- DESeq2::estimateSizeFactors(gbc_monocle)
+		gbc_monocle <- DESeq2::estimateDispersions(gbc_monocle)
 	
-	gbc_monocle <- as.cell_data_set(genes_by_cells)
-	gbc_monocle <- monocle::reduceDimension(gbc_monocle, norm_method = "none")
-	gbc_monocle <- monocle::clusterCells(gbc_monocle, reduction_method = "UMAP")
-	gbc_monocle <- monocle::learn_graph(gbc_monocle, use_partition = TRUE)
-	gbc_monocle <- monocle::order_cells(gbc_monocle, reduction_method = "UMAP", root_cells = root)
+	}else{
+		
+		fd <- new("AnnotatedDataFrame", data = data.frame(gene_short_name=rownames(genes_by_cells), row.names = rownames(genes_by_cells), stringsAsFactors = F))
+		gbc_monocle <- monocle::newCellDataSet(genes_by_cells, featureData = fd, expressionFamily = VGAM::uninormal())
+		
+	}
+
+	cat("recucing dimensions...\n")
+	gbc_monocle <- monocle::reduceDimension(gbc_monocle, norm_method = "none", pseudo_expr = 0, scaling = F, relative_expr = F)
+	
+	cat("ordering cells...\n")
+	gbc_monocle <- monocle::orderCells(gbc_monocle)
+	
+	if(!is.null(root)){
+		cat("re-ordering cells by root ", root, "...\n")
+		root_state <- gbc_monocle@phenoData@data$State[rownames(gbc_monocle@phenoData@data) == root]
+		gbc_monocle <- monocle::orderCells(gbc_monocle, root_state = root_state)
+	}
 	
 	return(gbc_monocle)
 	

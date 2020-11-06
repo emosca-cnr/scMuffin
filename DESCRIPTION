@@ -25,4 +25,6 @@ Imports:
     destiny,
     Seurat,
     stats,
-    utils
+    utils,
+    monocle,
+    DDRTree
