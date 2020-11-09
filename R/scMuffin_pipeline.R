@@ -5,7 +5,7 @@
 #' @importFrom utils write.table
 #' @export
 
-scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2, reference=NULL){
+scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=NULL, mc.cores=2, reference=NULL){
 	
 	
 	dir.create("clusters")
@@ -14,6 +14,21 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
 	plot_umap(genes_by_cells, "clusters/umap_by_gene_expression.jpg", pal = pal)
 	
+	################# GENE SETS FOR CLUSTERING #################
+	if(!is.null(gene_sets)){
+		
+		dir.create("gene_sets_clusters")
+		gene_sets_clusters <- vector("list", length(gene_sets))
+		for(i in 1:length(gene_sets)){
+			res <- cluster_by_gs(genes_by_cells, gs = gene_sets[[i]])
+			gene_sets_clusters[[i]] <- res$seurat_clusters
+			plot_umap(res, file = paste0("gene_sets_clusters/umap_", names(genes_by_cells)[i], ".jpg"), color_by="seurat_clusters", pal=rainbow(length(levels(res$seurat_clusters))))
+			
+			genes_by_cells$gene_set <- res$seurat_clusters
+			plot_umap(genes_by_cells, file = paste0("gene_sets_clusters/umap_global_color_by_", names(genes_by_cells)[i], ".jpg"), color_by="gene_set", pal=rainbow(length(levels(genes_by_cells$gene_set))))
+			
+		}
+	}
 	
 	##################	SIGNATURES #################
 	cat("Calcuting gene signature scores...\n")
@@ -25,13 +40,12 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	write.table(SC_signatures_by_cluster_matrix, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
 	
 	
-
 	##################	EXPRESSION RATE   ##################	
 	exp_rate_score <- exp_rate(as.matrix(genes_by_cells@assays$RNA@counts))
 	dir.create("expr_score")
 	save(exp_rate_score, file="expr_score/exp_rate_score.RData", compress = "bzip2")
 	
-
+	
 	##################	CNV @Valentina   ##################	
 	
 	cnv_res <- calculate_CNV(as.data.frame(GetAssayData(genes_by_cells)), mc.cores = mc.cores, reference = reference)
@@ -86,6 +100,10 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 		data.frame(id=colnames(mon_res), state=mon_res$State, pt=mon_res$Pseudotime, stringsAsFactors = F),
 		data.frame(id=colnames(mon_res_cnv), state_cnv=mon_res_cnv$State, pt_cnv=mon_res_cnv$Pseudotime, stringsAsFactors = F)
 	)
+	
+	if(!is.null(gene_sets)){
+		feature_list <- list(feature_list, lapply(gene_sets_clusters, function(x) data.frame(id=colnames(genes_by_cells), x, stringsAsFactors = F)))
+	}
 	
 	cells_by_features_df <- merge_matrix(feature_list)
 	save(cells_by_features_df, file="features/cells_by_features_df.RData", compress = "bzip2")
@@ -146,6 +164,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	features_by_cells@meta.data$ps <- factor(output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))])
 	pal <- rainbow(length(levels(features_by_cells@meta.data$ps)))
 	plot_umap(features_by_cells, "clusters/umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
+	
 	
 	#BOXPLOT feature in clusters
 	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_genes")

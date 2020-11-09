@@ -7,6 +7,7 @@
 scMuffin_pipeline(
   genes_by_cells,
   custom_signatures = NULL,
+  gene_sets = NULL,
   mc.cores = 2,
   reference = NULL
 )
