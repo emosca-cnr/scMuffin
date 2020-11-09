@@ -88,6 +88,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	)
 	
 	cells_by_features_df <- merge_matrix(feature_list)
+	save(cells_by_features_df, file="features/cells_by_features_df.RData", compress = "bzip2")
 	
 	feature_type <- unlist(lapply(cells_by_features_df, class))
 	
