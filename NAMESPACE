@@ -2,6 +2,7 @@
 
 export(boxplot_cluster)
 export(calculate_CNV)
+export(calculate_signatures)
 export(cluster_chisq)
 export(cluster_comparison)
 export(cluster_gsea)

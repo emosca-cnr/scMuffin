@@ -18,27 +18,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	##################	SIGNATURES #################
 	cat("Calcuting gene signature scores...\n")
 	
-	if(!is.null(custom_signatures)){
-		signatures <- c(signatures, custom_signatures)
-	}
-	cat("# of signatures: ", length(signatures), "\n")
-	
-	#dataset bins
-	data_bins <- sc_data_bin(as.matrix(GetAssayData(genes_by_cells)), nbins = 25, use.log = TRUE)
-	
-	#signatures-by-cell matrix
-	res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=100, nmark_min = 5, ncells_min = 5), mc.cores = mc.cores)
-	
-	SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
-	
-	dir.create("signatures")
-	save(SC_signatures_by_cell_matrix, file="signatures/SC_signatures_by_cell_matrix.RData", compress = "bzip2")
-	
-	#gene-set score per cluster list
-	res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
-	
-	#signatures-by-clusters matrix
-	SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
+	SC_signatures_by_cluster_matrix <- calculate_signatures(genes_by_cells, custom_signatures=custom_signatures, mc.cores=mc.cores)
 	
 	#output
 	heatmap_signatures(SC_signatures_by_cluster_matrix, file="signatures/heatmap_signatures.jpg")
@@ -67,7 +47,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
 	plot_umap(genes_by_cells, "clusters/umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
-	
 	##################	Signalling entropy rate (SR) @Noemi 	  ##################	
 	##################	Potency states (LandScent): labels @Noemi 	  ##################	
 	##################	Diffusion pseudotime (DPT) (Destiny): @Noemi   ##################	
@@ -78,12 +57,34 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2
 	dir.create("landscent")
 	save(output_landscent, file="landscent/output_landscent.RData", compress = "bzip2")
 	
+	################## Monocle ###########
+	cat("monocle...\n")
+	mon_res <- monocle_tree(genes_by_cells)
+	dir.create("monocle")
+	save(mon_res, file="monocle/mon_res.RData", compress="bzip2")
+	
+	jpeg("monocle/traj.jpg", width = 180, height = 180, res=300, units="mm")
+	monocle::plot_cell_trajectory(mon_res)
+	dev.off()
+	
+	cat("monocle cnv...\n")
+	mon_res_cnv <- monocle_tree(cnv_res)
+	dir.create("monocle")
+	save(mon_res_cnv, file="monocle/mon_res_cnv.RData", compress="bzip2")
+	
+	jpeg("monocle/traj_cnv.jpg", width = 180, height = 180, res=300, units="mm")
+	monocle::plot_cell_trajectory(mon_res_cnv)
+	dev.off()
+	
+	
 	##################	merge everithing   ##################	
 	feature_list <- list(
 		data.frame(id=colnames(SC_signatures_by_cell_matrix), t(SC_signatures_by_cell_matrix), stringsAsFactors = F),
 		data.frame(id=names(exp_rate_score), expr=exp_rate_score, stringsAsFactors = F),
 		data.frame(id=rownames(output_landscent), output_landscent, stringsAsFactors = F),
-		data.frame(id=names(heatmap_CNV_clusters), cnv=heatmap_CNV_clusters, stringsAsFactors = F)
+		data.frame(id=names(heatmap_CNV_clusters), cnv=heatmap_CNV_clusters, stringsAsFactors = F),
+		data.frame(id=colnames(mon_res), state=mon_res$State, pt=mon_res$Pseudotime, stringsAsFactors = F),
+		data.frame(id=colnames(mon_res_cnv), state_cnv=mon_res_cnv$State, pt_cnv=mon_res_cnv$Pseudotime, stringsAsFactors = F)
 	)
 	
 	cells_by_features_df <- merge_matrix(feature_list)
