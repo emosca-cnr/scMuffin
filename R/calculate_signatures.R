@@ -9,6 +9,7 @@ calculate_signatures <- function(genes_by_cells, custom_signatures=NULL, mc.core
 	if(!is.null(custom_signatures)){
 		signatures <- c(signatures, custom_signatures)
 	}
+	names(signatures) <- paste0("SIG_", names(signatures))
 	cat("# of signatures: ", length(signatures), "\n")
 	
 	#dataset bins

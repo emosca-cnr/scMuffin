@@ -9,7 +9,8 @@ scMuffin_pipeline(
   custom_signatures = NULL,
   gene_sets = NULL,
   mc.cores = 2,
-  reference = NULL
+  reference = NULL,
+  features_for_reclustering = c("SIG")
 )
 }
 \arguments{

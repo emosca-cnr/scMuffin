@@ -5,29 +5,20 @@
 #' @importFrom utils write.table
 #' @export
 
-scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=NULL, mc.cores=2, reference=NULL){
+scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=NULL, mc.cores=2, reference=NULL, features_for_reclustering=c("SIG")){
 	
 	
-	dir.create("clusters")
-	
-	#### Visual comparison between initial and final clusters ###
+	#### global clusters ###
+	dir.create("expr_clusters")
 	pal <- rainbow(length(levels(genes_by_cells@active.ident)))
-	plot_umap(genes_by_cells, "clusters/umap_by_gene_expression.jpg", pal = pal)
+	plot_umap(genes_by_cells, "expr_clusters/umap_expr.jpg", pal = pal)
 	
 	################# GENE SETS FOR CLUSTERING #################
 	if(!is.null(gene_sets)){
 		
 		dir.create("gene_sets_clusters")
-		gene_sets_clusters <- vector("list", length(gene_sets))
-		for(i in 1:length(gene_sets)){
-			res <- cluster_by_gs(genes_by_cells, gs = gene_sets[[i]])
-			gene_sets_clusters[[i]] <- res$seurat_clusters
-			plot_umap(res, file = paste0("gene_sets_clusters/umap_", names(genes_by_cells)[i], ".jpg"), color_by="seurat_clusters", pal=rainbow(length(levels(res$seurat_clusters))))
-			
-			genes_by_cells$gene_set <- res$seurat_clusters
-			plot_umap(genes_by_cells, file = paste0("gene_sets_clusters/umap_global_color_by_", names(genes_by_cells)[i], ".jpg"), color_by="gene_set", pal=rainbow(length(levels(genes_by_cells$gene_set))))
-			
-		}
+		gene_sets_clusters <- calc_cluster_by_gs(genes_by_cells, gene_sets)
+		
 	}
 	
 	##################	SIGNATURES #################
@@ -56,10 +47,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	dir.create("cnv")
 	heatmap_CNV_clusters <- heatmap_CNV(cnv_res, ngenes_chrom, file = "cnv/heatmap_CNV.jpg", reference = "reference")
 	save(cnv_res, heatmap_CNV_clusters, file="cnv/cnv_res.RData", compress = "bzip2")
-	
-	genes_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(genes_by_cells@meta.data), names(heatmap_CNV_clusters))]
-	pal <- rainbow(length(levels(genes_by_cells@meta.data$cnv)))
-	plot_umap(genes_by_cells, "clusters/umap_genes_cnv_clusters.jpg", color_by="cnv", pal = pal)
 	
 	##################	Signalling entropy rate (SR) @Noemi 	  ##################	
 	##################	Potency states (LandScent): labels @Noemi 	  ##################	
@@ -90,8 +77,10 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	monocle::plot_cell_trajectory(mon_res_cnv)
 	dev.off()
 	
-	
+
 	##################	merge everithing   ##################	
+	dir.create("features")
+	
 	feature_list <- list(
 		data.frame(id=colnames(SC_signatures_by_cell_matrix), t(SC_signatures_by_cell_matrix), stringsAsFactors = F),
 		data.frame(id=names(exp_rate_score), expr=exp_rate_score, stringsAsFactors = F),
@@ -99,75 +88,57 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 		data.frame(id=names(heatmap_CNV_clusters), cnv=heatmap_CNV_clusters, stringsAsFactors = F),
 		data.frame(id=colnames(mon_res), state=mon_res$State, pt=mon_res$Pseudotime, stringsAsFactors = F),
 		data.frame(id=colnames(mon_res_cnv), state_cnv=mon_res_cnv$State, pt_cnv=mon_res_cnv$Pseudotime, stringsAsFactors = F)
+		#data.frame(id=colnames(genes_by_cells), expr_clusters=genes_by_cells@active.ident, stringsAsFactors = F)
 	)
 	
 	if(!is.null(gene_sets)){
-		feature_list <- list(feature_list, lapply(gene_sets_clusters, function(x) data.frame(id=colnames(genes_by_cells), x, stringsAsFactors = F)))
+		gene_sets_clusters <- lapply(gene_sets_clusters, function(x) data.frame(id=colnames(genes_by_cells), x, stringsAsFactors = F))
+		for(i in 1:length(temp)){
+			colnames(gene_sets_clusters) <- names(gene_sets_clusters)[i]
+		}
+		feature_list <- list(feature_list, gene_sets_clusters)
 	}
 	
 	cells_by_features_df <- merge_matrix(feature_list)
-	save(cells_by_features_df, file="features/cells_by_features_df.RData", compress = "bzip2")
 	
-	feature_type <- unlist(lapply(cells_by_features_df, class))
+	# RE-CLUSTERING on the basis of the features
+	reclust_features <- sort(unique(unlist(lapply(features_for_reclustering, function(x) which(grepl(x, colnames(cells_by_features_df)))))))
+	cat("reclustering on the basis of")
+	print(colnames(cells_by_features_df)[reclust_features])
 	
-	feature_corr <- cor(as.matrix(cells_by_features_df[, feature_type == "numeric"]), method="spearman")
-	
-	dir.create("features")
-	heatmap_features_corr(feature_corr, file = "features/heatmap_corr.jpg")
-	
-	##################	re-clustering   ##################	
-	features_by_cells <- re_clustering(t(as.matrix(cells_by_features_df[, feature_type == "numeric"])))
+	features_by_cells <- cells_by_features_df[, reclust_features]
+	features_by_cells[is.na(features_by_cells)] <- 0
+	features_by_cells <- re_clustering(t(as.matrix(features_by_cells)), n_comp = 2)
 	save(features_by_cells, file="features/features_by_cells.RData", compress = "bzip2")
 	
-	dendrogram_genes <- as.dendrogram(BuildClusterTree(genes_by_cells, reorder = T, features = rownames(genes_by_cells))@tools$BuildClusterTree)
-	dendrogram_features <- as.dendrogram(BuildClusterTree(features_by_cells, reorder = T, features = rownames(features_by_cells), slot = "scale.data")@tools$BuildClusterTree)
+	#adding the reclustering info
+	cells_by_features_df$feature_clusters <- features_by_cells@active.ident[match(rownames(cells_by_features_df), colnames(features_by_cells))]
 	
-	clust_comp_matrix <- cluster_comparison(genes_by_cells@active.ident, features_by_cells@active.ident, dendrogram_genes, dendrogram_features)
-	dir.create("cluster_comparison")
-	plot_cluster_comparison(clust_comp_matrix$freq, dend_row = dendrogram_genes, dend_col = dendrogram_features, file = "cluster_comparison/heatmpa_cluster_comparison.jpg")
+	save(cells_by_features_df, file="features/cells_by_features_df.RData", compress = "bzip2")
 	
-	clust_enr_res <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), features_by_cells@active.ident)
-	write.table(clust_enr_res$nes, file="cluster_comparison/clust_enr_res_nes.txt", row.names = T, col.names = NA, sep="\t")
-	write.table(clust_enr_res$fdrq, file="cluster_comparison/clust_enr_res_fdrq.txt", row.names = T, col.names = NA, sep="\t")
+	####PLOT UMAP BY EXPRESSION COLORED BY EVERY FEATURE
+	plot_umap_expr_features(seurat_object, cells_by_features_df, dir="expr_clusters/")
 	
-	clust_enr_res_global_expr <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), genes_by_cells@active.ident)
-	write.table(clust_enr_res_global_expr$nes, file="cluster_comparison/clust_enr_res_glob_expr_nes.txt", row.names = T, col.names = NA, sep="\t")
-	write.table(clust_enr_res_global_expr$fdrq, file="cluster_comparison/clust_enr_res_glob_expr_fdrq.txt", row.names = T, col.names = NA, sep="\t")
+	####PLOT UMAP BY FEATURES COLORED BY EVERY FEATURE
+	plot_umap_expr_features(features_by_cells, cells_by_features_df, dir="features/")
+
 	
-	heatmap_cluster_enrichment(clust_enr_res$nes, clust_enr_res$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_features.jpg")
-	heatmap_cluster_enrichment(clust_enr_res_global_expr$nes, clust_enr_res_global_expr$fdrq, file = "cluster_comparison/heatmap_cluster_enrichment_glob_expr.jpg", cex.axis = 0.6)
+	#ESTABLISH FEATURE TYPES
+	feature_type <- unlist(lapply(cells_by_features_df, class))
 	
+	##QUANTITATIVE feature correlation
+	feature_corr <- cor(as.matrix(cells_by_features_df[, feature_type == "numeric"]), method="spearman")
+	heatmap_features_corr(feature_corr, file = "features/heatmap_corr.jpg")
 	
-	pal <- rainbow(length(levels(features_by_cells@active.ident)))
-	plot_umap(features_by_cells, "clusters/umap_by_features.jpg", pal = pal)
+	#trend of quantitative features in expression clusteres
+	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplots_quantitative_features")
 	
-	
-	### COLOR BY FEATURE
-	plot_umap_colored_features(genes_by_cells, features_by_cells, dir="clusters") 
-	
-	#Visualization of CNV on gene expression clusters
-	
-	features_by_cells@meta.data$cnv <- heatmap_CNV_clusters[match(rownames(features_by_cells@meta.data), names(heatmap_CNV_clusters))]
-	pal <- rainbow(length(levels(features_by_cells@meta.data$cnv)))
-	plot_umap(features_by_cells, "clusters/umap_features_cnv_clusters.jpg", color_by="cnv", pal = pal)
-	
-	#add initial clusters information in features_by_cells meta.data
-	features_by_cells@meta.data$initial_clusters <- genes_by_cells@active.ident[match(rownames(features_by_cells@meta.data), names(genes_by_cells@active.ident))]
-	pal <- rainbow(length(levels(features_by_cells@meta.data$initial_clusters)))
-	plot_umap(features_by_cells, "clusters/umap_features_initial_clusters.jpg", color_by="initial_clusters", pal = pal)
-	
-	#potency state plot
-	genes_by_cells@meta.data$ps <- factor(output_landscent$PS[match(rownames(genes_by_cells@meta.data), rownames(output_landscent))])
-	pal <- rainbow(length(levels(genes_by_cells@meta.data$ps)))
-	plot_umap(genes_by_cells, "clusters/umap_genes_ps_clusters.jpg", color_by="ps", pal = pal)
-	
-	features_by_cells@meta.data$ps <- factor(output_landscent$PS[match(rownames(features_by_cells@meta.data), rownames(output_landscent))])
-	pal <- rainbow(length(levels(features_by_cells@meta.data$ps)))
-	plot_umap(features_by_cells, "clusters/umap_features_ps_clusters.jpg", color_by="ps", pal = pal)
-	
-	
-	#BOXPLOT feature in clusters
-	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_genes")
-	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), features_by_cells@active.ident, dir_out = "clusters/boxplot_cluster_by_features")
+	##QUALITATIVE
+	feature_overlap <- table(cells_by_features_df[, feature_type != "numeric"])
+	print(feature_overlap)
+	feature_overlap <- as.data.frame(feature_overlap)
+	feature_overlap <- feature_overlap[order(-feature_overlap$Freq), ]
+	feature_overlap <- feature_overlap[feature_overlap$Freq > 0, ]
+	write.table(feature_overlap, file="features/qualitative_features_overlap.txt", row.names = T, col.names = NA, sep="\t")
 	
 }
