@@ -20,15 +20,12 @@ calculate_signatures <- function(genes_by_cells, custom_signatures=NULL, mc.core
 	
 	SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
 	
-	dir.create("signatures")
-	save(SC_signatures_by_cell_matrix, file="signatures/SC_signatures_by_cell_matrix.RData", compress = "bzip2")
-	
 	#gene-set score per cluster list
 	res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, genes_by_cells@active.ident, ncells_min = 5))
 	
 	#signatures-by-clusters matrix
 	SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
 	
-	return(SC_signatures_by_cluster_matrix)
+	return(list(signatures_by_cells=SC_signatures_by_cell_matrix, signatures_by_clusters=SC_signatures_by_cluster_matrix))
 	
 }

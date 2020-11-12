@@ -24,11 +24,14 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	##################	SIGNATURES #################
 	cat("Calcuting gene signature scores...\n")
 	
-	SC_signatures_by_cluster_matrix <- calculate_signatures(genes_by_cells, custom_signatures=custom_signatures, mc.cores=mc.cores)
+	res_signatures <- calculate_signatures(genes_by_cells, custom_signatures=custom_signatures, mc.cores=mc.cores)
+
+	dir.create("signatures")
+	save(res_signatures$signatures_by_cells, file="signatures/signatures_by_cells.RData", compress = "bzip2")
 	
 	#output
-	heatmap_signatures(SC_signatures_by_cluster_matrix, file="signatures/heatmap_signatures.jpg")
-	write.table(SC_signatures_by_cluster_matrix, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
+	heatmap_signatures(res_signatures$signatures_by_clusters, file="signatures/heatmap_signatures.jpg")
+	write.table(res_signatures$signatures_by_clusters, file="signatures/signatures_by_clusters.txt", sep = "\t", row.names = T, col.names = NA)
 	
 	
 	##################	EXPRESSION RATE   ##################	
@@ -60,8 +63,9 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	
 	################## Monocle ###########
 	cat("monocle...\n")
-	mon_res <- monocle_tree(genes_by_cells)
 	dir.create("monocle")
+
+	mon_res <- monocle_tree(genes_by_cells)
 	save(mon_res, file="monocle/mon_res.RData", compress="bzip2")
 	
 	jpeg("monocle/traj.jpg", width = 180, height = 180, res=300, units="mm")
@@ -70,7 +74,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	
 	cat("monocle cnv...\n")
 	mon_res_cnv <- monocle_tree(cnv_res)
-	dir.create("monocle")
 	save(mon_res_cnv, file="monocle/mon_res_cnv.RData", compress="bzip2")
 	
 	jpeg("monocle/traj_cnv.jpg", width = 180, height = 180, res=300, units="mm")
@@ -82,7 +85,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	dir.create("features")
 	
 	feature_list <- list(
-		data.frame(id=colnames(SC_signatures_by_cell_matrix), t(SC_signatures_by_cell_matrix), stringsAsFactors = F),
+		data.frame(id=colnames(res_signatures$signatures_by_cells), t(res_signatures$signatures_by_cells), stringsAsFactors = F),
 		data.frame(id=names(exp_rate_score), expr=exp_rate_score, stringsAsFactors = F),
 		data.frame(id=rownames(output_landscent), output_landscent, stringsAsFactors = F),
 		data.frame(id=names(heatmap_CNV_clusters), cnv=heatmap_CNV_clusters, stringsAsFactors = F),
@@ -139,6 +142,6 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	feature_overlap <- as.data.frame(feature_overlap)
 	feature_overlap <- feature_overlap[order(-feature_overlap$Freq), ]
 	feature_overlap <- feature_overlap[feature_overlap$Freq > 0, ]
-	write.table(feature_overlap, file="features/qualitative_features_overlap.txt", row.names = T, col.names = NA, sep="\t")
+	write.table(feature_overlap, file="features/qualitative_features_overlap.txt", row.names = F, sep="\t")
 	
 }

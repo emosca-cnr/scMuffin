@@ -34,7 +34,7 @@ plot_umap_expr_features <- function(seurat_object, cells_by_features, dir="./"){
 		}
 		
 		#UMAP by genes, colored by feature
-		plot_umap(seurat_object, paste0(dir, "/umap_by_expr_col_by_", colnames(cells_by_features)[i],".jpg"), color_by="feature", pal=pal)
+		plot_umap(seurat_object, paste0(dir, "/umap_col_by_", colnames(cells_by_features)[i],".jpg"), color_by="feature", pal=pal)
 		
 	}
 	
