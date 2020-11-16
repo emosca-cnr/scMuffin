@@ -4,12 +4,12 @@
 \alias{cluster_chisq}
 \title{Calculate cluster enrichment by chi squared}
 \usage{
-cluster_chisq(features_by_cells, cell_clusters)
+cluster_chisq(cells_by_features, cell_clusters)
 }
 \arguments{
-\item{features_by_cells}{matrix, features by cells matrix}
-
 \item{cell_clusters}{array with cell values named by their cluster ID}
+
+\item{features_by_cells}{matrix, features by cells matrix}
 
 \item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
 

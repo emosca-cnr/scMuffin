@@ -144,4 +144,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	feature_overlap <- feature_overlap[feature_overlap$Freq > 0, ]
 	write.table(feature_overlap, file="features/qualitative_features_overlap.txt", row.names = F, sep="\t")
 	
+	#trend of quantitative features in expression clusteres
+	#dotplot_cluster(cells_by_features, genes_by_cells@active.ident, dir_out = "clusters/dotplots_qualitative_features", n_top = 2)
+	
 }
