@@ -104,7 +104,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	
 	cells_by_features_df <- merge_matrix(feature_list)
 	
-	# RE-CLUSTERING on the basis of the features
+	# features
 	reclust_features <- sort(unique(unlist(lapply(features_for_reclustering, function(x) which(grepl(x, colnames(cells_by_features_df)))))))
 	cat("reclustering on the basis of")
 	print(colnames(cells_by_features_df)[reclust_features])
@@ -122,10 +122,7 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	####PLOT UMAP BY EXPRESSION COLORED BY EVERY FEATURE
 	plot_umap_expr_features(seurat_object, cells_by_features_df, dir="expr_clusters/")
 	
-	####PLOT UMAP BY FEATURES COLORED BY EVERY FEATURE
-	plot_umap_expr_features(features_by_cells, cells_by_features_df, dir="features/")
 
-	
 	#ESTABLISH FEATURE TYPES
 	feature_type <- unlist(lapply(cells_by_features_df, class))
 	
@@ -133,18 +130,59 @@ scMuffin_pipeline <- function(genes_by_cells, custom_signatures=NULL, gene_sets=
 	feature_corr <- cor(as.matrix(cells_by_features_df[, feature_type == "numeric"]), method="spearman")
 	heatmap_features_corr(feature_corr, file = "features/heatmap_corr.jpg")
 	
-	#trend of quantitative features in expression clusteres
-	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident, dir_out = "clusters/boxplots_quantitative_features")
+	##QUALITATIVE FEATURES ACROSS GLOBAL EXPRESSION CLUSTERS
+	cat("Enrichment of quantitative features across clusters")
+	temp <- cluster_gsea(as.matrix(GetAssayData(features_by_cells)), genes_by_cells@active.ident[match(colnames(features_by_cells), names(genes_by_cells@active.ident))])
+	write.table(temp$nes, file = paste0("expr_clusters/cluster_nes.txt"), row.names = T, col.names = NA, sep="\t")
+	write.table(temp$fdrq, file = paste0("expr_clusters/cluster_nes_fdrq.txt"), row.names = T, col.names = NA, sep="\t")
+
+	temp$fdrq[temp$nes<0] <- 1
+	top_features <- lapply(split(temp$fdrq, rownames(temp$fdrq)), function(x) colnames(temp$fdrq)[rank(x) <= 3 & x < 0.05])
+	dir.create("expr_clusters/boxplots_quantitative_features")
+	boxplot_cluster(GetAssayData(features_by_cells, slot = "scale.data"), genes_by_cells@active.ident[match(colnames(features_by_cells), names(genes_by_cells@active.ident))], top_features = top_features, dir_out = "expr_clusters/boxplots_quantitative_features")
+
 	
-	##QUALITATIVE
-	feature_overlap <- table(cells_by_features_df[, feature_type != "numeric"])
-	print(feature_overlap)
-	feature_overlap <- as.data.frame(feature_overlap)
-	feature_overlap <- feature_overlap[order(-feature_overlap$Freq), ]
-	feature_overlap <- feature_overlap[feature_overlap$Freq > 0, ]
-	write.table(feature_overlap, file="features/qualitative_features_overlap.txt", row.names = F, sep="\t")
+	##QUALITATIVE FEATURES ACROSS GLOBAL EXPRESSION CLUSTERS
+	res_chisq <- cluster_chisq(cells_by_features_df[, feature_type != "numeric"], cell_clusters = genes_by_cells@active.ident[match(rownames(cells_by_features_df), names(genes_by_cells@active.ident))])
+	top_features <- lapply(split(t(res_chisq$fdr), colnames(res_chisq$fdr)), function(x) rownames(res_chisq$fdr)[rank(x) <= 2 & x < 0.05])
+
+	dotplot_cluster(cells_by_features_df[, fact_columns], genes_by_cells@active.ident[match(rownames(cells_by_features_df), names(genes_by_cells@active.ident))], dir_out = "expr_clusters/dotplots_qualitative_features", top_features = top_features, cont_tables = res_chisq$ct)
+
+	write.table(res_chisq$fdr, file = "expr_clusters/cluster_chisq.txt", row.names = T, col.names = NA, sep="\t")
+	for(i in 1:nrow(res_chisq$fdr)){
+		for(j in 1:ncol(res_chisq$fdr)){
+			n <- (i-1)*ncol(res_chisq$fdr)+j
+			write.table(res_chisq$ct[[n]], file = paste0("expr_clusters/cluster_ct_", rownames(res_chisq$fdr)[i], "_", colnames(res_chisq$fdr)[j], "_hisq.txt"), row.names = T, col.names = NA, sep="\t")
+		}
+	}
 	
-	#trend of quantitative features in expression clusteres
-	#dotplot_cluster(cells_by_features, genes_by_cells@active.ident, dir_out = "clusters/dotplots_qualitative_features", n_top = 2)
+	#####features-by-clustering
+	clusterings <- split(t(cells_by_features_df[, feature_type != "numeric"]), colnames(cells_by_features_df)[feature_type != "numeric"])
+	for(i in 1:length(clusterings)){
+		clusterings[[i]] <- array(paste0(names(clusterings)[i], "_", clusterings[[i]]), dimnames = list(rownames(cells_by_features_df)))
+	}
+	clusterings$glob_expr <- genes_by_cells$seurat_clusters
+	
+	cluster_gsea_res_nes <- clusterings
+	cluster_gsea_res_fdr <- clusterings
+	res_signatures$signatures_by_cells[is.na(res_signatures$signatures_by_cells)] <- 0
+	for(i in 1:length(clusterings)){
+		cat(i)
+		#cluster_gsea_res_nes[[i]] <- cluster_gsea(res_signatures$signatures_by_cells, clusterings[[i]])
+		#cluster_gsea_res_nes[[i]] <- lapply(cluster_gsea_res_nes[[i]], function(x) data.frame(ID=colnames(x), t(x), stringsAsFactors = F))
+		cluster_gsea_res_fdr[[i]] <- cluster_gsea_res_nes[[i]]$fdrq
+		cluster_gsea_res_nes[[i]] <- cluster_gsea_res_nes[[i]]$nes
+	}
+	
+	cluster_gsea_res_nes_merged <- Reduce(merge, cluster_gsea_res_nes)
+	rownames(cluster_gsea_res_nes_merged) <- cluster_gsea_res_nes_merged$ID
+	cluster_gsea_res_nes_merged$ID <- NULL
+	
+	cluster_gsea_res_fdr_merged <- Reduce(merge, cluster_gsea_res_fdr)
+	rownames(cluster_gsea_res_fdr_merged) <- cluster_gsea_res_fdr_merged$ID
+	cluster_gsea_res_fdr_merged$ID <- NULL
+	
+	save(cluster_gsea_res_nes_merged, cluster_gsea_res_fdr_merged, file="features/features_by_clusterings.RData", compress = "bzip2")
+	
 	
 }
