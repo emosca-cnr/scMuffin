@@ -4,6 +4,7 @@
 #' @export
 calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
 	
+	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
 	#centering genes-by-cells data
 	gbc_mean <- rowMeans(genes_by_cells)

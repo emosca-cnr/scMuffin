@@ -20,6 +20,7 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 	
 	ngenes_chrom_cumsum <- cumsum(ngenes_chrom)
 	
+	#scale by column...
 	if(scale_cells){
 		temp <- apply(chr_merged, 2, scale)
 		rownames(temp) <- rownames(chr_merged)
@@ -27,6 +28,7 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 		rm(temp)
 	}
 	
+	#clustering
 	seu_obj <- CreateSeuratObject(counts = chr_merged, min.cells = 0, min.features = 0)
 	all.genes <- rownames(seu_obj)
 	
@@ -42,15 +44,18 @@ heatmap_CNV <- function(chr_merged, ngenes_chrom, file="heatmap_CNV.jpg", pal=NU
 
 	ans <- clusters
 	
+	#order clusters
 	clusters_ordered <- clusters[order(clusters)] #re-order columns by cluster
+	#order the matrix by clusters
 	chr_merged <- chr_merged[, match(names(clusters_ordered), colnames(chr_merged))]
 	
+	#find the cluster where the reference appears
 	if(!is.null(reference) & any(colnames(chr_merged) == reference)){
 		ref_cluster <- clusters_ordered[names(clusters_ordered) == reference] #cluster in which the reference occurs
 		cat("Reference cluster:", as.character(ref_cluster), "\n")
 		cat("Subtracting reference cluster average from CNV profiles...\n")
 		
-		#update the CNV Matrix, subtracting the average of the reference cluster
+		#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles
 		ref_cluster_avg <- rowMeans(chr_merged[, clusters_ordered==ref_cluster])
 		chr_merged <- apply(chr_merged, 2, function(x) x-ref_cluster_avg)
 	}
