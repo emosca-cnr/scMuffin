@@ -28,6 +28,9 @@ es <- function(idx, x, le=F){
     if(le){
       tags <- 0
       list_top <- 0
+      tags_perc <- 0
+      list_top_perc <- 0
+      lead_edge_subset <- ""
     }
 
   }else{

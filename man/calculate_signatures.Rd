@@ -4,7 +4,12 @@
 \alias{calculate_signatures}
 \title{calculate signatures}
 \usage{
-calculate_signatures(genes_by_cells, custom_signatures = NULL, mc.cores = 2)
+calculate_signatures(
+  genes_by_cells,
+  custom_signatures = NULL,
+  mc.cores = 2,
+  cell_clusters = NULL
+)
 }
 \description{
 calculate signatures
