@@ -9,7 +9,7 @@
 #' @importFrom dendextend color_branches
 #' @export
 
-heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jpg", pal=NULL, n_colors=11, seurat_dendrogram=NULL, width=180, height=180, res=300, cex.axis=0.3) {
+heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jpg", pal=NULL, n_colors=11, seurat_dendrogram=NULL, width=180, height=180, res=300, cex.axis=0.3, fdr_cutoff=0.05) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
 	
@@ -84,7 +84,7 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	for(i in 1:nrow(X)){ #xx
 		for(j in 1:ncol(X)){ #yy
 			
-			if(Y[i, j] < 0.05 & X[i, j] > 0){ #significant and positive nes
+			if(Y[i, j] < fdr_cutoff & X[i, j] > 0){ #significant and positive nes
 				points(xx[i], yy[j], pch="*", cex=2, lwd=2, col="pink")
 			}
 			
