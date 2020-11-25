@@ -8,7 +8,12 @@ calculate_signatures(
   genes_by_cells,
   custom_signatures = NULL,
   mc.cores = 2,
-  cell_clusters = NULL
+  cell_clusters = NULL,
+  nbins = 25,
+  nmark_min = 5,
+  ncells_min = 5,
+  k = 100,
+  kmin = 50
 )
 }
 \description{

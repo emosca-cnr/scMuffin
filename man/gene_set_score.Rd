@@ -11,6 +11,7 @@ gene_set_score(
   nmark_min = 5,
   ncells_min = 5,
   k = 100,
+  kmin = 50,
   verbose = F
 )
 }

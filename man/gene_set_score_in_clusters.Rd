@@ -7,23 +7,12 @@
 gene_set_score_in_clusters(
   score_table,
   cell_clusters,
-  nmark_min = 5,
   ncells_min = 5,
-  bins = NULL,
-  k = 100,
   alt = "g",
   test = "t"
 )
 }
 \arguments{
-\item{nmark_min}{min number of cells}
-
-\item{ncells_min}{min number of cells}
-
-\item{bins}{data bins}
-
-\item{k}{number of permutations}
-
 \item{alt}{alterative}
 
 \item{test}{type of test}
@@ -33,8 +22,6 @@ gene_set_score_in_clusters(
 \item{seurat_object_data}{control data}
 
 \item{seurat_object_ident}{min number of markers}
-
-\item{perc}{min percentage of gene set}
 }
 \description{
 gene_set_score_in_clusters

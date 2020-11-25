@@ -2,24 +2,19 @@
 #' @param current_gene_set real data
 #' @param seurat_object_data control data
 #' @param seurat_object_ident min number of markers
-#' @param nmark_min min number of cells
-#' @param perc min percentage of gene set
-#' @param ncells_min min number of cells
-#' @param bins data bins
-#' @param k number of permutations
 #' @param alt alterative
 #' @param test type of test
 #' @import stats
 #' @export
 
-gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, ncells_min = 5, bins = NULL, k=100, alt="g", test="t"){
+gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t"){
 	
 	clusters <- unique(cell_clusters)
 	
 	score_table_clusters <- merge(data.frame(cluster=cell_clusters, stringsAsFactors = F), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
 	colnames(score_table_clusters)[1:2] <- c("cell", "cluster")
 	
-	score_table_clusters$filter <- score_table_clusters$nmark_min & !is.na(score_table_clusters$avg_control)
+	score_table_clusters$filter <- score_table_clusters$nmark_min & score_table_clusters$null_ok
 	score_table_clusters <- score_table_clusters[score_table_clusters$filter, ]
 	
 	if(nrow(score_table_clusters)>= ncells_min){ 
@@ -29,7 +24,6 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, 
 		cells=tapply(score_table_clusters$nmark_min, score_table_clusters$cluster, sum),
 		med_case=tapply(score_table_clusters$case, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
 		med_control=tapply(score_table_clusters$avg_control, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
-		med_case_z=tapply(score_table_clusters$case.z, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
 		stringsAsFactors = F
 	) #median cell score for markers(i) in each cell cluster
 	
@@ -65,19 +59,19 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, nmark_min=5, 
 	cluster_scores <- merge(cluster_scores, res_stat, by=0)
 	cluster_scores <- merge(cluster_scores, res_p, by.x=1, by.y=0)
 	
-	colnames(cluster_scores)[c(1, 7, 8)] <- c("cluster", "stat", "p")
+	colnames(cluster_scores)[c(1, 6, 7)] <- c("cluster", "stat", "p")
 	cluster_scores$fdr <- p.adjust(cluster_scores$p, method = "fdr")
 	
 	#missing values to 0
 	if(!all(clusters %in% cluster_scores$cluster)){
 		clusters_missing <- clusters[!clusters %in% cluster_scores$cluster]
-		cluster_scores <- rbind(cluster_scores, data.frame(cluster=clusters_missing, cells=NA, med_case=NA, med_control=NA, med_case_z=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F))
+		cluster_scores <- rbind(cluster_scores, data.frame(cluster=clusters_missing, cells=NA, med_case=NA, med_control=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F))
 		
 	}
 	
 	}else{
 		warning("not enough cells in any cluster")
-		cluster_scores <- data.frame(cluster=clusters, cells=NA, med_case=NA, med_control=NA, med_case_z=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F)
+		cluster_scores <- data.frame(cluster=clusters, cells=NA, med_case=NA, med_control=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F)
 	}
 	
 	return(cluster_scores)
