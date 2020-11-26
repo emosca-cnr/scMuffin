@@ -9,7 +9,8 @@ gene_set_score_in_clusters(
   cell_clusters,
   ncells_min = 5,
   alt = "g",
-  test = "t"
+  test = "t",
+  null_model = TRUE
 )
 }
 \arguments{

@@ -12,7 +12,8 @@ gene_set_score(
   ncells_min = 5,
   k = 100,
   kmin = 50,
-  verbose = F
+  verbose = F,
+  null_model = TRUE
 )
 }
 \arguments{

@@ -13,7 +13,9 @@ calculate_signatures(
   nmark_min = 5,
   ncells_min = 5,
   k = 100,
-  kmin = 50
+  kmin = 50,
+  score_type = c("relative", "mean"),
+  null_model = TRUE
 )
 }
 \description{

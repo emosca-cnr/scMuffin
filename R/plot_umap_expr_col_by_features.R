@@ -17,7 +17,7 @@ plot_umap_expr_features <- function(seurat_object, cells_by_features, dir="./"){
 				
 				feature_breaks <- c(seq(min(feature_data), -0.1, length.out = 5), 0, seq(0.1, max(feature_data), length.out = 6))
 				seurat_object@meta.data$feature <- cut(feature_data, breaks = feature_breaks)
-				pal <- brewer.pal(11, "RdYlBu")
+				pal <- rev(brewer.pal(11, "RdYlBu"))
 				
 			}else{
 				
