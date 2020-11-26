@@ -4,7 +4,7 @@
 \alias{CNV}
 \title{CNV}
 \usage{
-CNV(x)
+CNV(x, wnd_size = 100)
 }
 \arguments{
 \item{x}{list of dataframes retrieved by 'preprocess_object_for_cnv'.}

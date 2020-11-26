@@ -5,24 +5,29 @@
 #' @author Valentina Nale
 
 
-CNV <- function(x) {
+CNV <- function(x, wnd_size=100) {
 	
 	N <- length(x)
 	
 	Ek <- c()
+
+	wnd_half <- wnd_size/2	
 	
 	# first check: length
-	if (N<101) {
+	if (N<(wnd_size+1)) {
 		stop('The number of gene is not sufficient to compute CNV')
 	} else {
-		symbol_names <- names(x)[51:(N-51)]
-		for (i in 51:(N-51)) {
-			val <- mean(x[(i-50):(i+50)])
+		symbol_names <- names(x)[(wnd_half+1):(N-(wnd_half+1))]
+		x[x==0] <- NA
+		for (i in (wnd_half+1):(N-(wnd_half+1))) {
+			val <- mean(x[(i-wnd_half):(i+wnd_half)], na.rm=T)
 			Ek <- c(Ek, val)
-			Ek <<- Ek
+#			Ek <<- Ek
 		}
 	}
 	names(Ek)<-symbol_names
+	Ek[is.nan(Ek)] <- 0
+	
 	return(Ek)
 }
 
