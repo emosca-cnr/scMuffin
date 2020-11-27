@@ -39,7 +39,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	ans <- ans[match(temp, names(ans))]
 	
 	#exclude chrom with <100 genes
-	ans <- ans[unlist(lapply(ans, nrow)) > 100]
+	ans <- ans[unlist(lapply(ans, nrow)) > wnd_size]
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")

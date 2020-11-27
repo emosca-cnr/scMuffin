@@ -1,7 +1,7 @@
 #' calculate_signatures_clusters
 #'
 #'
-#'
+#' @export
 
 calculate_signatures_clusters <- function(sign_list, cell_clusters=cell_clusters, ncells_min = 5, null_model = TRUE){
 	
