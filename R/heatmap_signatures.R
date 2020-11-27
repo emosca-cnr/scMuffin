@@ -9,7 +9,7 @@
 #' @importFrom dendextend color_branches
 #' @export
 
-heatmap_signatures <- function(X, file="heatmap_signatures.jpg", pal=NULL, n_colors=11, seurat_dendrogram=NULL, width=180, height=180, res=300, cex.axis=0.3) {
+heatmap_signatures <- function(X, file="heatmap_signatures.jpg", pal=NULL, n_colors=11, seurat_dendrogram=NULL, width=180, height=180, res=300, cex.axis=0.3, scale_rows=FALSE) {
 	
 	rotate <- function(x) t(apply(x, 2, rev)) # rotate +90
 	
@@ -18,6 +18,15 @@ heatmap_signatures <- function(X, file="heatmap_signatures.jpg", pal=NULL, n_col
 	}
 	
 
+	if(scale_rows){
+		temp <- t(apply(X, 1, scale))
+		rownames(temp) <- rownames(X)
+		colnames(temp) <- colnames(X)
+		X <- temp
+		rm(temp)
+		X[is.nan(X)] <- 0
+	}
+	
 	#cells clustering
 	if(!is.null(seurat_dendrogram)){
 		hc_col <- seurat_dendrogram
