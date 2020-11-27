@@ -4,7 +4,7 @@
 \alias{calculate_CNV}
 \title{Calculate CNV}
 \usage{
-calculate_CNV(genes_by_cells, reference = NULL, mc.cores = 2)
+calculate_CNV(genes_by_cells, reference = NULL, mc.cores = 2, wnd_size = 100)
 }
 \arguments{
 \item{reference}{NULL. It is possible to add a reference vector, downloaded from GTEx portal.}

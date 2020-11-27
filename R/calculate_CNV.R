@@ -2,7 +2,7 @@
 #' @param genes_by_cell Preprocessed Seurat object 
 #' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
 #' @export
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100) {
 	
 	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
@@ -43,7 +43,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2) {
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")
-	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y)), mc.cores = mc.cores)
+	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y, wnd_size=wnd_size)), mc.cores = mc.cores)
 
 	#merge chromosomes into a unique table
 	#ans <- do.call(rbind, ans)

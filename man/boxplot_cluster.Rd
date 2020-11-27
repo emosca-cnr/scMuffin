@@ -8,7 +8,8 @@ boxplot_cluster(
   features_by_cells,
   cell_clusters,
   top_features = NULL,
-  dir_out = "./"
+  dir_out = "./",
+  only_top = TRUE
 )
 }
 \arguments{

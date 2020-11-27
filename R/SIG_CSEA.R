@@ -1,3 +1,3 @@
 #' signatures
 #' CancerSEA functional states
-"signatures"
+"SIG_CSEA"

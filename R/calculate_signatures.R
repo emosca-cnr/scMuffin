@@ -4,22 +4,15 @@
 #' @export
 #' @import Seurat parallel
 
-calculate_signatures <- function(genes_by_cells, custom_signatures=NULL, mc.cores=2, cell_clusters=NULL, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE){
+calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE){
 	
 	score_type <- score_type[1]
-	if(!is.null(custom_signatures)){
-		signatures <- c(signatures, custom_signatures)
-	}
+#	if(!is.null(custom_signatures)){
+#		signatures <- c(signatures, custom_signatures)
+#	}
 	#names(signatures) <- paste0("SIG_", names(signatures))
+	print(names(signatures))
 	cat("# of signatures: ", length(signatures), "\n")
-	
-	if(is.null(cell_clusters)){
-		cell_clusters <- genes_by_cells@active.ident
-	}
-	cell_clusters <- cell_clusters[match(colnames(genes_by_cells), names(cell_clusters))]
-	
-	cat("Clusters...\n")
-	print(table(cell_clusters))
 	
 	
 	#dataset bins
@@ -35,14 +28,6 @@ calculate_signatures <- function(genes_by_cells, custom_signatures=NULL, mc.core
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$case, dimnames = list(rownames(x))))))
 	}
 	
-	#gene-set score per cluster list
-	#res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res$score_table, cell_clusters=cell_clusters, ncells_min = ncells_min))
-	res_signatures_clusters <- lapply(res_signatures, function(i_marker_res) gene_set_score_in_clusters(i_marker_res, cell_clusters=cell_clusters, ncells_min = ncells_min, null_model = null_model))
-	
-	
-	#signatures-by-clusters matrix
-	SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
-	
-	return(list(signatures_by_cells=SC_signatures_by_cell_matrix, signatures_by_clusters=SC_signatures_by_cluster_matrix, full=res_signatures))
+	return(list(signatures_by_cells=SC_signatures_by_cell_matrix, full=res_signatures))
 	
 }

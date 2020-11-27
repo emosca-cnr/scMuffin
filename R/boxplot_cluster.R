@@ -10,7 +10,7 @@
 #' @export
 #' @author Noemi Di Nanni
 
-boxplot_cluster <- function(features_by_cells, cell_clusters, top_features=NULL, dir_out="./"){
+boxplot_cluster <- function(features_by_cells, cell_clusters, top_features=NULL, dir_out="./", only_top=TRUE){
 	
 	
 #  #t-test: for each feature in each cluster
@@ -28,6 +28,11 @@ boxplot_cluster <- function(features_by_cells, cell_clusters, top_features=NULL,
 	
 	#dir.create(dir_out, showWarnings = F, recursive = T)
 	#write.table(mat, file = paste0(dir_out, "/cluster_quantitative_stats.txt"), row.names = T, col,col.names = NA, sep="\t")
+	
+	
+	if(only_top){
+		features_by_cells <- features_by_cells[rownames(features_by_cells) %in% unique(unlist(top_features)), ]
+	}
 	
 	cell_clusters_set <- levels(cell_clusters)
 	

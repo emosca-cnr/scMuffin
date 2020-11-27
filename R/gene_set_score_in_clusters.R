@@ -11,7 +11,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 	
 	clusters <- unique(cell_clusters)
 	
-	score_table_clusters <- merge(data.frame(cluster=cell_clusters, stringsAsFactors = F), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
+	score_table_clusters <- merge(data.frame(cluster=cell_clusters, stringsAsFactors = F, row.names = names(cell_clusters)), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
 	colnames(score_table_clusters)[1:2] <- c("cell", "cluster")
 	
 	if(null_model){
