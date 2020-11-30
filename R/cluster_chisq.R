@@ -28,8 +28,9 @@ cluster_chisq <- function(cells_by_features, cell_clusters){
 			n<-n+1
 		}
 	}
-	
-	mat <- apply(mat, 2, p.adjust, method="fdr")
+	if(nrow(mat) > 1){
+		mat <- apply(mat, 2, p.adjust, method="fdr")
+	}
 	
 	return(list(fdr=mat, ct=cont_tables))
 	
