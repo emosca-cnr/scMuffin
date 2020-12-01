@@ -6,7 +6,7 @@
 \title{signatures
 SIG_CM_normal_ss}
 \format{
-An object of class \code{list} of length 431.
+An object of class \code{list} of length 186.
 }
 \usage{
 SIG_CM_normal_ss
