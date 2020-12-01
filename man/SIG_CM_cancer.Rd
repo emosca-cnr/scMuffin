@@ -6,7 +6,7 @@
 \title{signatures
 SIG_CM_cancer}
 \format{
-An object of class \code{list} of length 278.
+An object of class \code{list} of length 341.
 }
 \usage{
 SIG_CM_cancer
