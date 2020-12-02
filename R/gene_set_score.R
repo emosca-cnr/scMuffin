@@ -106,7 +106,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 		}else{
 			
 			warning("cannot calcolate gene set score for at least ", ncells_min, " cells\n")
-			res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, case.NA=NA, avg_control=NA, avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
+			res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, case.NA=NA, avg_control=NA, avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
 			
 		}
 		
