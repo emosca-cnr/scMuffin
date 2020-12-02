@@ -2,9 +2,20 @@
 #' @param genes_by_cell Preprocessed Seurat object 
 #' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
 #' @export
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=2000, min_cells=100) {
 	
 	genes_by_cells[is.na(genes_by_cells)] <- 0
+	
+	cat("Filtering")
+	idx_keep <- rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
+	print(table(idx_keep))
+	genes_by_cells <- genes_by_cells[idx_keep, ]
+	
+	idx_keep <- colSums(genes_by_cells !=0) >= min(min_genes, nrow(genes_by_cells))
+	print(table(idx_keep))
+	genes_by_cells <- genes_by_cells[, idx_keep]
+	print("size after filtering")
+	print(dim(genes_by_cells))
 	
 	#centering genes-by-cells data
 	gbc_mean <- rowMeans(genes_by_cells)
