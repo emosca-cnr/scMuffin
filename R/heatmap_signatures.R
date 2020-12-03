@@ -53,7 +53,7 @@ heatmap_signatures <- function(X, file="heatmap_signatures.jpg", pal=NULL, n_col
 	#clust_row <- clust_row[match(rownames(X), names(clust_row))]
 	#clust_row_sep <- which(clust_row[2:length(clust_row)] - clust_row[1:(length(clust_row)-1)]!=0)
 	#dend_row <- dendextend::color_branches(as.dendrogram(hc_row), k = 5)
-	dend_row <- as.dendrogram(dend_row)
+	dend_row <- as.dendrogram(hc_row)
 	
 	#rotation
 	X <- rotate(X)

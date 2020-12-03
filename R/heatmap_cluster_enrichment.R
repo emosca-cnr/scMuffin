@@ -44,7 +44,7 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	#clust_row <- clust_row[match(rownames(X), names(clust_row))]
 	#clust_row_sep <- which(clust_row[2:length(clust_row)] - clust_row[1:(length(clust_row)-1)]!=0)
 	#dend_row <- dendextend::color_branches(as.dendrogram(hc_row), k = 5)
-	dend_col <- as.dendrogram(hc_col)
+	dend_row <- as.dendrogram(hc_row)
 	
 	#rotation
 	X <- rotate(X)
