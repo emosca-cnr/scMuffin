@@ -6,20 +6,11 @@
 monocle_tree <- function(genes_by_cells, root=NULL){
 	
 	cat("creating monocle cell data object...\n")
-	if(class(genes_by_cells) =="Seurat"){
-		
-		cat("estimating size and dispersions...\n")
-		gbc_monocle <- Seurat::as.CellDataSet(genes_by_cells)
-		gbc_monocle <- DESeq2::estimateSizeFactors(gbc_monocle)
-		gbc_monocle <- DESeq2::estimateDispersions(gbc_monocle)
 	
-	}else{
-		
-		fd <- new("AnnotatedDataFrame", data = data.frame(gene_short_name=rownames(genes_by_cells), row.names = rownames(genes_by_cells), stringsAsFactors = F))
-		gbc_monocle <- monocle::newCellDataSet(genes_by_cells, featureData = fd, expressionFamily = VGAM::uninormal())
-		
-	}
-
+	fd <- new("AnnotatedDataFrame", data = data.frame(gene_short_name=rownames(genes_by_cells), row.names = rownames(genes_by_cells), stringsAsFactors = F))
+	gbc_monocle <- monocle::newCellDataSet(genes_by_cells, featureData = fd, expressionFamily = VGAM::uninormal())
+	
+	
 	cat("reducing dimensions...\n")
 	gbc_monocle <- monocle::reduceDimension(gbc_monocle, norm_method = "none", pseudo_expr = 0, scaling = F, relative_expr = F)
 	

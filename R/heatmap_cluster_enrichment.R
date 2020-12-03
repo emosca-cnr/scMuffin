@@ -6,7 +6,7 @@
 #' @usage heatmap_CNV(chr_merged)
 #' @author Ettore Mosca
 #' @import RColorBrewer graphics
-#' @importFrom dendextend color_branches
+## @importFrom dendextend color_branches
 #' @export
 
 heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jpg", pal=NULL, n_colors=11, seurat_dendrogram=NULL, width=180, height=180, res=300, cex.axis=0.3, fdr_cutoff=0.05) {
@@ -37,12 +37,14 @@ heatmap_cluster_enrichment <- function(X, Y, file="heatmap_cluster_enrichment.jp
 	clust_col <- cutree(hc_col, 7)
 	clust_col <- clust_col[match(colnames(X), names(clust_col))]
 	clust_col_sep <- which(clust_col[2:length(clust_col)] - clust_col[1:(length(clust_col)-1)]!=0)
-	dend_col <- dendextend::color_branches(as.dendrogram(hc_col), k = 7)
+	#dend_col <- dendextend::color_branches(as.dendrogram(hc_col), k = 7)
+	dend_col <- as.dendrogram(hc_col)
 	
 	clust_row <- cutree(hc_row, 5)
 	clust_row <- clust_row[match(rownames(X), names(clust_row))]
 	clust_row_sep <- which(clust_row[2:length(clust_row)] - clust_row[1:(length(clust_row)-1)]!=0)
-	dend_row <- dendextend::color_branches(as.dendrogram(hc_row), k = 5)
+	#dend_row <- dendextend::color_branches(as.dendrogram(hc_row), k = 5)
+	dend_col <- as.dendrogram(hc_col)
 	
 	#rotation
 	X <- rotate(X)
