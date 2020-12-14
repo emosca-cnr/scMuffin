@@ -9,7 +9,7 @@ CNV <- function(x, wnd_size=100) {
 	
 	N <- length(x)
 	
-	Ek <- c()
+	Ek <- numeric()
 	
 	wnd_half <- wnd_size/2	
 	

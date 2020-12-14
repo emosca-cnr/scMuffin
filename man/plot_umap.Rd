@@ -4,7 +4,13 @@
 \alias{plot_umap}
 \title{plot_umap}
 \usage{
-plot_umap(seurat_object, file = "umap.jpg", color_by = "ident", pal = NULL)
+plot_umap(
+  seurat_object,
+  file = "umap.jpg",
+  color_by = "ident",
+  pal = NULL,
+  labels = NULL
+)
 }
 \arguments{
 \item{seurat_object}{seurat object, object with saved dimension reduction components}

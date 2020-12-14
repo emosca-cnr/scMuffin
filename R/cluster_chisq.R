@@ -8,30 +8,58 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_chisq <- function(cells_by_features, cell_clusters){
+cluster_chisq <- function(cells_by_features, cell_clusters, fdr=0.05, top=2){
 	
 
 	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = ncol(cells_by_features), dimnames = list(colnames(cells_by_features), levels(cell_clusters)))
-	cont_tables <- vector("list", nrow(mat)*ncol(mat))
+	top_states <- mat
+	res_tables <- vector("list", nrow(mat)*ncol(mat))
 	n<-1
+	res_tables_names <- c()
 	for(i in 1:nrow(mat)){
 		for(j in 1:ncol(mat)){
 			
+			res_tables_names <- c(res_tables_names, paste0(c(rownames(mat)[i], colnames(mat)[j]), collapse = "_"))
+			
+			feature_data <- factor(cells_by_features[, i])
 			cells_cluster <- rownames(cells_by_features) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]
-			cont_tables[[n]] <- table(cells_by_features[cells_cluster, i])
-			
 			cells_other_clusters <- !rownames(cells_by_features) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]
-			cont_tables[[n]] <- rbind(clust=cont_tables[[n]], other=table(cells_by_features[cells_other_clusters, i]))
 			
-			#cont_tables[[n]] <- t(apply(cont_tables[[n]], 1, function(x) x/sum(x)))
-			mat[i, j] <- chisq.test(cont_tables[[n]])$p.value
+			res_tables[[n]] <- table(feature_data[cells_cluster])
+			
+			table_other <- table(feature_data[cells_other_clusters])
+			p_other <- table_other / sum(table_other)
+			
+			res_tables[[n]] <- chisq.test(res_tables[[n]], p = p_other)
+			
+			res_tables[[n]]$expected_orig <- table_other
+			res_tables[[n]]$contrib <- res_tables[[n]]$residuals^2 / res_tables[[n]]$statistic
+			
+			mat[i, j] <- res_tables[[n]]$p.value
+			top_states[i, j] <- names(res_tables[[n]]$contrib)[which.max(res_tables[[n]]$contrib)]
 			n<-n+1
 		}
 	}
+	names(res_tables) <- res_tables_names
+	
 	if(nrow(mat) > 1){
 		mat <- apply(mat, 2, p.adjust, method="fdr")
 	}
 	
-	return(list(fdr=mat, ct=cont_tables))
+	top_features <- vector("list", ncol(mat))
+	for(i in 1:length(top_features)){
+		top_features[[i]] <- character()
+		temp_top <- which(mat[, i] < fdr & rank(mat[, i] ) <= top)
+		if(any(temp_top)){
+			for(j in 1:length(temp_top)){
+				curr_feat <- rownames(mat)[temp_top[j]]
+				top_features[[i]] <- c(top_features[[i]], paste0(c(curr_feat, top_states[temp_top[j], i]), collapse="_"))
+			}
+		}
+		names(top_features) <- colnames(mat)
+		
+	}
+	
+	return(list(fdr=mat, ct=res_tables, top_states=top_states, top_features=top_features))
 	
 }

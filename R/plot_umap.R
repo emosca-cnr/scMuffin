@@ -8,7 +8,7 @@
 #' @import Seurat graphics
 #' @export
 #' 
-plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident", pal=NULL){
+plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident", pal=NULL, labels=NULL){
 
 	data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", color_by))
 
@@ -22,6 +22,15 @@ plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident", pal=NULL
 	layout(matrix(c(1, 2), nrow = 1), widths = c(0.85, 0.15))
 	#plot(data_plot$UMAP_1, data_plot$UMAP_2, pch=16, col=rainbow(length(col_levels))[as.numeric(data_plot[, 3])], cex=0.4, xlab="UMAP1", ylab = "UMAP2")
 	plot(data_plot$UMAP_1, data_plot$UMAP_2, pch=16, col=pal[as.numeric(data_plot[, 3])], cex=0.4, xlab="UMAP1", ylab = "UMAP2")
+	
+	if(!is.null(labels)){
+		labels <- lapply(labels, function(x) paste0(sort(x), collapse = "\n"))
+		cluster_xy <- split(data_plot[, 1:2], data_plot[, 3])
+		cluster_xy <- do.call(rbind, lapply(cluster_xy, colMeans))
+		for(i in 1:nrow(cluster_xy)){
+			text(cluster_xy[i, 1], cluster_xy[i, 2], labels[names(labels) == rownames(cluster_xy)[i]][[1]], cex=0.5, font=2)
+		}
+	}
 	
 	par(mar=c(0, 0, 0, 1))
 	plot.new()

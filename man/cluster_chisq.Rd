@@ -4,7 +4,7 @@
 \alias{cluster_chisq}
 \title{Calculate cluster enrichment by chi squared}
 \usage{
-cluster_chisq(cells_by_features, cell_clusters)
+cluster_chisq(cells_by_features, cell_clusters, fdr = 0.05, top = 2)
 }
 \arguments{
 \item{cell_clusters}{array with cell values named by their cluster ID}
