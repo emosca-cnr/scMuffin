@@ -2,12 +2,14 @@
 #' 
 #' @export
 #' @import Seurat monocle DESeq2
+#' @importFrom methods new
+#' @importFrom VGAM uninormal
 
 monocle_tree <- function(genes_by_cells, root=NULL){
 	
 	cat("creating monocle cell data object...\n")
 	
-	fd <- new("AnnotatedDataFrame", data = data.frame(gene_short_name=rownames(genes_by_cells), row.names = rownames(genes_by_cells), stringsAsFactors = F))
+	fd <- methods::new("AnnotatedDataFrame", data = data.frame(gene_short_name=rownames(genes_by_cells), row.names = rownames(genes_by_cells), stringsAsFactors = F))
 	gbc_monocle <- monocle::newCellDataSet(genes_by_cells, featureData = fd, expressionFamily = VGAM::uninormal())
 	
 	

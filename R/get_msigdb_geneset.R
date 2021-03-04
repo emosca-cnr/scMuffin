@@ -7,7 +7,7 @@
 #' @export
 
 get_msigdb_geneset <- function(species, category=NULL, subcategory=NULL, type="gene_symbol") {
-  msig <- msigdbr(species = species, category = category, subcategory = subcategory)
+  msig <- msigdbr::msigdbr(species = species, category = category, subcategory = subcategory)
   if(type=="gene_symbol") {
     msig_list <- split(x=msig$gene_symbol, f = msig$gs_name)
   } else if (type == "entrez_gene") {

@@ -26,4 +26,8 @@ Imports:
     destiny,
     Seurat,
     stats,
-    utils
+    utils,
+    DESeq2,
+    msigdbr,
+    methods
+
