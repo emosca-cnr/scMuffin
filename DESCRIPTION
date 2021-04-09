@@ -1,6 +1,6 @@
 Package: scMuffin
 Title: What the Package Does (One Line, Title Case)
-Version: 0.13
+Version: 0.15
 Authors@R: 
     person(given = "First",
            family = "Last",
@@ -29,5 +29,9 @@ Imports:
     utils,
     DESeq2,
     msigdbr,
-    methods
-
+    methods,
+    cluster,
+    ComplexHeatmap,
+    VGAM,
+    dendsort,
+    grDevices

@@ -8,22 +8,24 @@
 #' @import Seurat graphics
 #' @export
 #' 
-plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident", pal=NULL, labels=NULL){
-
-	data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", color_by))
-
-	col_levels <- levels(factor(data_plot[, 3], levels=sort(unique(data_plot[, 3]))))
-		
+plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, ...){
+	
 	jpeg(file, width=180, height=180, units="mm", res=300)
-
+	
 	par(mar=c(3, 3, 3, 1))
 	par(mgp=c(2, 0.7, 0))
 	
-	layout(matrix(c(1, 2), nrow = 1), widths = c(0.85, 0.15))
-	#plot(data_plot$UMAP_1, data_plot$UMAP_2, pch=16, col=rainbow(length(col_levels))[as.numeric(data_plot[, 3])], cex=0.4, xlab="UMAP1", ylab = "UMAP2")
-	plot(data_plot$UMAP_1, data_plot$UMAP_2, pch=16, col=pal[as.numeric(data_plot[, 3])], cex=0.4, xlab="UMAP1", ylab = "UMAP2")
+	if(feature_plot){
+		res <- FeaturePlot(seurat_object, features = group.by, ...)
+	}else{
+		res <- Seurat::DimPlot(seurat_object, group.by=group.by, ...)
+	}
+	plot(res)
 	
 	if(!is.null(labels)){
+		
+		data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", group.by))
+		
 		labels <- lapply(labels, function(x) paste0(sort(x), collapse = "\n"))
 		cluster_xy <- split(data_plot[, 1:2], data_plot[, 3])
 		cluster_xy <- do.call(rbind, lapply(cluster_xy, colMeans))
@@ -31,10 +33,6 @@ plot_umap <- function(seurat_object, file="umap.jpg", color_by="ident", pal=NULL
 			text(cluster_xy[i, 1], cluster_xy[i, 2], labels[names(labels) == rownames(cluster_xy)[i]][[1]], cex=0.5, font=2)
 		}
 	}
-	
-	par(mar=c(0, 0, 0, 1))
-	plot.new()
-	legend("center", col_levels, col=pal, pch=16, bty="n", cex=0.6)
 	
 	
 	dev.off()

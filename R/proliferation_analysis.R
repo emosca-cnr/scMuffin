@@ -1,10 +1,14 @@
 #' cell cycle - merge the two Tirosh signatures for proliferation analysis
 #'
+#' @importFrom utils data
 #' @export
 
 proliferation_analysis <- function(genes_by_cells, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE){
 	
+	data("SIG_Tirosh", envir=environment())
 	score_type <- score_type[1]
+	
+	SIG_Tirosh <- lapply(SIG_Tirosh, function(x) lapply(x, function(y) unique(y[y %in% rownames(genes_by_cells)])))
 	
 	tirosh <- calculate_signatures(genes_by_cells, signatures=SIG_Tirosh, mc.cores=mc.cores, nbins=nbins, nmark_min = nmark_min, ncells_min = ncells_min, k=k, kmin=kmin, score_type=score_type, null_model=null_model)
 	

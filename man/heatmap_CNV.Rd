@@ -4,10 +4,10 @@
 \alias{heatmap_CNV}
 \title{heatmap_CNV}
 \usage{
-heatmap_CNV(chr_merged)
+heatmap_CNV(cnv)
 }
 \arguments{
-\item{chr_merged}{...}
+\item{cnv}{...}
 
 \item{list_ncol_chr}{...}
 }

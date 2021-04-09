@@ -4,12 +4,19 @@
 \alias{plot_umap_colored_features}
 \title{plot_umap_colored_features}
 \usage{
-plot_umap_colored_features(seurat_object, features_by_cells, dir = "./")
+plot_umap_colored_features(
+  seurat_object,
+  features,
+  dir = "./",
+  scale_feature = TRUE,
+  feature_breaks = NULL,
+  ...
+)
 }
 \arguments{
 \item{seurat_object}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
-\item{features_by_cells}{matrix, features by cells matrix}
+\item{features}{matrix, features by cells matrix}
 
 \item{n_colors}{numeric, number of colors to be used}
 }

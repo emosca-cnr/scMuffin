@@ -5,19 +5,25 @@
 \title{Boxplot clusters}
 \usage{
 boxplot_cluster(
-  features_by_cells,
-  cell_clusters,
-  top_features = NULL,
+  features = NULL,
+  cell_clusters = NULL,
+  cluster_enrichment = NULL,
   dir_out = "./",
-  only_top = TRUE
+  only_top = 10,
+  criterion = "fdr",
+  fdr_threshold = NULL,
+  only_pos_nes = TRUE,
+  ...
 )
 }
 \arguments{
-\item{features_by_cells}{matrix, features by cells matrix}
-
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
 \item{dir_out}{string, output directory}
+
+\item{...}{passed to axis()}
+
+\item{cells_by_features}{matrix, features by cells matrix}
 
 \item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
 }

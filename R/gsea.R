@@ -120,6 +120,7 @@ gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
     fdrq <- sapply(nes[, 1], function(x) ifelse(x>0, sum(all_nes >= x) / n_nes_pos, sum(all_nes <= x) / n_nes_neg))
     fdrq <- fdrq / sapply(nes[, 1], function(x) ifelse(x>0, sum(nes[, 1] >= x) / n_real_nes_pos, sum(nes[, 1] <= x) / n_real_nes_neg))
     rm(all_nes)
+    fdrq[fdrq>1] <- 1
 
     #out table
     out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=p.adjust(p_val, method='fdr'), nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)

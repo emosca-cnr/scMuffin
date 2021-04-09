@@ -4,7 +4,7 @@
 \alias{calc_cluster_by_gs}
 \title{calc_cluster_by_gs}
 \usage{
-calc_cluster_by_gs(genes_by_cells, gene_sets)
+calc_cluster_by_gs(genes_by_cells, gene_sets, out_dir = "./")
 }
 \description{
 calc_cluster_by_gs

@@ -9,8 +9,10 @@ calculate_CNV(
   reference = NULL,
   mc.cores = 2,
   wnd_size = 100,
-  min_genes = 2000,
-  min_cells = 100
+  min_genes = 1000,
+  min_cells = 100,
+  scale_cells = TRUE,
+  na.rm = FALSE
 )
 }
 \arguments{

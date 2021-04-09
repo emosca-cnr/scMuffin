@@ -1,76 +1,104 @@
 #' Boxplot clusters 
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-#' @param features_by_cells matrix, features by cells matrix
+#' @param cells_by_features matrix, features by cells matrix
 #' @param cell_clusters array with cell values named by their cluster ID
 #' @param n_top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
 #' @param dir_out string, output directory
+#' @param ... passed to axis()
 #' @importFrom grDevices jpeg
 #' @import graphics
 #' @export
 #' @author Noemi Di Nanni
 
-boxplot_cluster <- function(features_by_cells, cell_clusters, top_features=NULL, dir_out="./", only_top=TRUE){
+boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichment=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, ...){
 	
-	
-#  #t-test: for each feature in each cluster
-# 	mat <- matrix(0, ncol = length(levels(cell_clusters)), nrow = nrow(features_by_cells), dimnames = list(rownames(features_by_cells), levels(cell_clusters)))
-# 	for(i in 1:nrow(mat)){
-# 		for(j in 1:ncol(mat)){
-# 			mat[i, j] <- t.test(features_by_cells[i, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], features_by_cells[i, !colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == colnames(mat)[j]]], alternative = "g")$p.value
-# 		}
-# 	}
-# 	
-# 	mat <- apply(mat, 2, p.adjust, method="fdr")
-# 	
-# 	#top 3 features of each cluster
-# 	top_clusters <- lapply(split(data.frame(t(mat)), colnames(mat)), function(x) rownames(mat)[rank(x) <= n_top])
-	
-	#dir.create(dir_out, showWarnings = F, recursive = T)
-	#write.table(mat, file = paste0(dir_out, "/cluster_quantitative_stats.txt"), row.names = T, col,col.names = NA, sep="\t")
-	
-	
-	if(only_top){
-		features_by_cells <- features_by_cells[rownames(features_by_cells) %in% unique(unlist(top_features)), ]
+	if(!dir.exists(dir_out)){
+		dir.create(dir_out)
 	}
+	
+	cells_by_features <- as.matrix(features$df)
+	cells_by_features[is.na(cells_by_features)] <- 0
+	cells_by_features <- 	cells_by_features[, colSums(abs(cells_by_features))>0]
+	
+	cells_by_features <- apply(cells_by_features, 2, scale)
+	rownames(cells_by_features) <- rownames(as.matrix(features$df))
 	
 	cell_clusters_set <- levels(cell_clusters)
 	
+	if(only_pos_nes){
+		cluster_enrichment$fdrq[cluster_enrichment$nes < 0] <- 1
+		cluster_enrichment$nes[cluster_enrichment$nes < 0] <- 0
+	}
+	
 	#boxplot for each cluster
 	for(cl in 1:length(cell_clusters_set)){
+		#cat(cl)
 		
-		grDevices::jpeg(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".jpg"), width=180, height=180, units="mm", res=300)
-		par(mar = c(10, 4, 2, 1))
+		top_features <- list(
+			fdr=cluster_enrichment$fdrq[rownames(cluster_enrichment$fdrq)==cell_clusters_set[cl], ],
+			nes=cluster_enrichment$nes[rownames(cluster_enrichment$nes)==cell_clusters_set[cl], ]
+		)
 		
 		#distribution of all cells by feature
-		#feature data of the cluster
-		data_clust <- as.data.frame(t(features_by_cells[, colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == cell_clusters_set[cl]]]))
-		#feature data other clusters
-		data_no_clust <- as.data.frame(t(features_by_cells[, ! colnames(features_by_cells) %in% names(cell_clusters)[cell_clusters == cell_clusters_set[cl]]]))
-
-		#boxplots of the cluster
-		data_clust_at <- seq(1, nrow(features_by_cells)*2, by = 2)
-		boxplot(data_clust, at = data_clust_at , las=2, main = paste0("Cluster ", cell_clusters_set[cl]), xaxt = "n", pch=16, outline = F, ylim=c(min(features_by_cells), max(features_by_cells)))
-		for(i in 1:nrow(features_by_cells)){
-			col <- "pink"
-			if(!is.null(top_features)){
-				if(rownames(features_by_cells)[i] %in% unlist(top_features[names(top_features) == cell_clusters_set[cl]])){
-					col <- "red"
-				}
+		if(criterion=="fdr"){
+			top_features$fdr <- sort(top_features$fdr)
+			top_features$nes <- top_features$nes[match(names(top_features$fdr), names(top_features$nes))]
+			if(!is.null(fdr_threshold)){
+				idx <- top_features$fdr < fdr_threshold
+				top_features$fdr <- top_features$fdr[idx]
+				top_features$nes <- top_features$nes[idx]
+			}
+		}else{
+			top_features$nes <- sort(abs(top_features$nes[rownames(top_features$nes)==cell_clusters_set[cl], ]), decreasing = T)
+			top_features$fdr <- top_features$fdr[match(names(top_features$nes), names(top_features$fdr))]
+		}
+		
+		if(length(top_features$nes)>0){
+			
+			top_features <- lapply(top_features, function(x) x[1:min(only_top, length(x))])
+			
+			cbf_cl <- cells_by_features[, match(names(top_features$fdr), colnames(cells_by_features)), drop=FALSE]
+			
+			
+			grDevices::jpeg(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".jpg"), width=200, height=180, units="mm", res=300)
+			layout(matrix(c(1, 2, 3), nrow = 1, byrow = F), widths = c(0.6, 0.2, 0.2))
+			
+			par(mar = c(4, 10, 2, 1))
+			
+			#feature data of the cluster
+			cl_cells_idx <- rownames(cbf_cl) %in% names(cell_clusters)[cell_clusters == cell_clusters_set[cl]]
+			data_clust <- cbf_cl[cl_cells_idx, , drop=FALSE]
+			
+			#feature data other clusters
+			data_no_clust <- cbf_cl[!cl_cells_idx, , drop=FALSE]
+			
+			
+			data_clust_at <- rev(seq(2, ncol(cbf_cl)*2, by = 2))
+			data_no_clust_at <- rev(seq(1, ncol(cbf_cl)*2, by = 2))
+			
+			#boxplots of the cluster
+			boxplot(data_clust, at = data_clust_at , las=1, main = paste0("Cluster ", cell_clusters_set[cl]), yaxt = "n", pch=16, outline = F, ylim=c(min(cbf_cl), max(cbf_cl)), xlim=c(0.5, max(data_clust_at)+.5), horizontal=TRUE)
+			abline(v=0, lty=2)
+			for(i in 1:ncol(cbf_cl)){
+				col <- "red"
+				points(data_clust[, i], jitter(rep(data_clust_at[i], nrow(data_clust)), amount=0.3), col=adjustcolor(col, 0.8), pch=16, cex=0.3)
 			}
 			
-			points(jitter(rep(data_clust_at[i], nrow(data_clust)), amount=0.3), data_clust[, i], col=adjustcolor(col, 0.4), pch=16, cex=0.3)
+			#boxplots of other clusters
+			boxplot(data_no_clust, at = data_no_clust_at, las=1, main = paste0("Cluster ", cell_clusters_set[cl]), yaxt = "n", pch=16, add = T, outline = F, horizontal=TRUE)
+			for(i in 1:ncol(cbf_cl)){
+				points(data_no_clust[, i], jitter(rep(data_no_clust_at[i], nrow(data_no_clust)), amount=0.3), col=adjustcolor("darkgray", 0.8), pch=16, cex=0.3)
+			}
+			
+			axis(2, data_clust_at, colnames(data_no_clust), las=2, ...)
+			
+			par(mar = c(4, 1, 2, 1))
+			barplot(rev((top_features$nes)), horiz = T, names.arg = "", main = "NES")
+			
+			barplot(rev(-log10(top_features$fdr)), horiz = T, names.arg = "", main = "FDR")
+			
+			dev.off()
 		}
-		
-		#boxplots of other clusters
-		data_no_clust_at <- seq(2, nrow(features_by_cells)*2, by = 2)
-		boxplot(data_no_clust, at = seq(2, nrow(features_by_cells)*2, by = 2), las=2, main = paste0("Cluster ", cell_clusters_set[cl]), xaxt = "n", pch=16, add = T, outline = F)
-		for(i in 1:nrow(features_by_cells)){
-			points(jitter(rep(data_no_clust_at[i], nrow(data_no_clust)), amount=0.3), data_no_clust[, i], col=adjustcolor("darkgray", 0.4), pch=16, cex=0.3)
-		}
-		
-		axis(1, data_clust_at, rownames(features_by_cells), las=2, cex=0.5)
-	
-		dev.off()
 	}
 }

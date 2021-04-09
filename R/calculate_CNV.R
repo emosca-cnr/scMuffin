@@ -2,7 +2,7 @@
 #' @param genes_by_cell Preprocessed Seurat object 
 #' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
 #' @export
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=2000, min_cells=100) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, scale_cells=TRUE, na.rm=FALSE) {
 	
 	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
@@ -28,7 +28,9 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		genes_by_cells$gbc_mean <- gbc_mean
 		
 		colnames(reference) <- "reference"
-		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", all.x=TRUE, sort=F)
+		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", sort=F)
+		print("size after merging")
+		print(dim(genes_by_cells))
 		
 		genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
 		genes_by_cells$gbc_mean <- NULL
@@ -54,10 +56,22 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")
-	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y, wnd_size=wnd_size)), mc.cores = mc.cores)
+	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y, wnd_size=wnd_size, genes=rownames(x), na.rm = na.rm)), mc.cores = mc.cores)
 
-	#merge chromosomes into a unique table
-	#ans <- do.call(rbind, ans)
+	#merging chromosomes
+	for(i in 1:length(ans)){
+		#ans[[i]] <- as.data.frame(ans[[i]])
+		rownames(ans[[i]]) <- paste0("chr", names(ans)[i], "_", rownames(ans[[i]]))
+	} 
+	
+	ans <- do.call(rbind, ans)
+	
+	if(scale_cells){
+		temp <- apply(ans, 2, scale)
+		rownames(temp) <- rownames(ans)
+		ans <- temp
+		rm(temp)
+	}
 	
 	return(ans)
 }

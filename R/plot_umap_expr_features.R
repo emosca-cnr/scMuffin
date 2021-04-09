@@ -8,6 +8,10 @@
 
 plot_umap_expr_features <- function(seurat_object, cells_by_features, dir="./"){
 	
+	if(!dir.exists(dir)){
+		dir.create(dir)
+	}
+	
 	for(i in 1:ncol(cells_by_features)){
 		feature_data <- cells_by_features[match(colnames(seurat_object), rownames(cells_by_features)), i]
 		

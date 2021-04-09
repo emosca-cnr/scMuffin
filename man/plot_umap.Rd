@@ -7,9 +7,10 @@
 plot_umap(
   seurat_object,
   file = "umap.jpg",
-  color_by = "ident",
-  pal = NULL,
-  labels = NULL
+  labels = NULL,
+  group.by = NULL,
+  feature_plot = FALSE,
+  ...
 )
 }
 \arguments{
