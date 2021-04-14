@@ -9,9 +9,13 @@
 
 gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t", null_model=TRUE){
 	
-	clusters <- unique(cell_clusters)
+	if(!is.factor(cell_clusters)){
+		cell_clusters <- as.factor(cell_clusters)
+	}
 	
-	score_table_clusters <- merge(data.frame(cluster=cell_clusters, stringsAsFactors = F, row.names = names(cell_clusters)), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
+	clusters <- levels(cell_clusters)
+	
+	score_table_clusters <- merge(data.frame(cluster=as.character(cell_clusters), stringsAsFactors = F, row.names = names(cell_clusters)), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
 	colnames(score_table_clusters)[1:2] <- c("cell", "cluster")
 	
 	if(null_model){
@@ -96,6 +100,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 		cluster_scores <- data.frame(cluster=clusters, cells=NA, med_case=NA, med_control=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F)
 	}
 	
+	cluster_scores <- cluster_scores[match(clusters, cluster_scores$cluster), ]
 	return(cluster_scores)
 	
 }

@@ -7,7 +7,7 @@
 #' @importFrom utils write.table
 
 
-plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, out_dir="./", ...){
+plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, out_dir="./", remove_null_features=FALSE, ...){
 	
 	
 	if(!is.null(significance_matrix)){
@@ -37,8 +37,11 @@ plot_heatmap_features_by_clusters <- function(features_by_clusters, significance
 		}
 		
 		X[is.na(X)] <- 0
-		X <- X[rowSums(abs(X))>0, ]
-		print(dim(X))
+		if(remove_null_features){
+			X <- X[rowSums(abs(X))>0, ]
+			print(dim(X))
+		}
+		
 		
 		if(nrow(X)>0){
 			

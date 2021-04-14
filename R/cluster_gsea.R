@@ -13,7 +13,11 @@ cluster_gsea <- function(features, cell_clusters, min.cells=100){
 
 	X <- as.matrix(features$df)
 	X[is.na(X)] <- 0
-	X <- X[, colSums(X!=0) > min.cells]
+	
+	idx_out <- colSums(X!=0) < min.cells
+	names_idx_out <- colnames(X)[idx_out]
+	
+	X <- X[, !idx_out]
 	if(nrow(X)<1){
 		stop("not enough cells with values\n")
 	}
@@ -23,7 +27,16 @@ cluster_gsea <- function(features, cell_clusters, min.cells=100){
 	gsea_res <- gsea(X, gsl, mc_cores_perm = 2, ord.mode = rep(-1, ncol(X)), k = 99)
 	
 	nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
+	if(any(idx_out)){
+		nes_table <- cbind(nes_table, matrix(0, nrow = nrow(nes_table), ncol = length(names_idx_out), dimnames = list(rownames(nes_table), names_idx_out)))
+	}
+	nes_table <- nes_table[, match(colnames(features$df), colnames(nes_table)), drop=F]
+	
 	fdrq_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$FDRq, dimnames = list(x$id))))
+	if(any(idx_out)){
+		fdrq_table <- cbind(fdrq_table, matrix(1, nrow = nrow(fdrq_table), ncol = length(names_idx_out), dimnames = list(rownames(fdrq_table), names_idx_out)))
+	}
+	fdrq_table <- fdrq_table[, match(colnames(features$df), colnames(fdrq_table)), drop=F]
 	
 	return(list(nes=nes_table, fdrq=fdrq_table))
 	

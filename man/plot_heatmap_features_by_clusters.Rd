@@ -11,6 +11,7 @@ plot_heatmap_features_by_clusters(
   ntop = 10,
   onlyUp = TRUE,
   out_dir = "./",
+  remove_null_features = FALSE,
   ...
 )
 }
