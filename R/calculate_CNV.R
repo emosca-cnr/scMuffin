@@ -51,8 +51,13 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 			#genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
 			#genes_by_cells$gbc_mean <- NULL
 			
-			gbc_mean <- rowMeans(genes_by_cells)
-			genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+			#gbc_mean <- rowMeans(genes_by_cells)
+			#genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+			
+			temp <- t(apply(genes_by_cells, 1, scale, scale=F))
+			colnames(temp) <- colnames(genes_by_cells)
+			genes_by_cells <- temp
+			rm(temp)
 			
 		}
 
