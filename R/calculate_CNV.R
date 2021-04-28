@@ -25,34 +25,37 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	print(dim(genes_by_cells))
 	
 	#centering genes-by-cells data
-	if(center_genes){
-		gbc_mean <- rowMeans(genes_by_cells)
-		genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
-	}
+	#if(center_genes){
+	#	gbc_mean <- rowMeans(genes_by_cells)
+	#	genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+	#}
 
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
 		
 		
-		if(center_genes){
-			genes_by_cells$gbc_mean <- gbc_mean
-		}
+		#if(center_genes){
+		#	genes_by_cells$gbc_mean <- gbc_mean
+		#}
 		
 		colnames(reference) <- "reference"
 		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", sort=F)
+		rownames(genes_by_cells) <- genes_by_cells$Row.names
+		genes_by_cells$Row.names <- NULL
+		
 		print("size after merging")
 		print(dim(genes_by_cells))
 		
 		if(center_genes){
-			genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
-			genes_by_cells$gbc_mean <- NULL
+			#genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
+			#genes_by_cells$gbc_mean <- NULL
+			
+			gbc_mean <- rowMeans(genes_by_cells)
+			genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+			
 		}
-		
-		
-		rownames(genes_by_cells) <- genes_by_cells$Row.names
-		genes_by_cells$Row.names <- NULL
-		
+
 		genes_by_cells[is.na(genes_by_cells)] <- 0
 
 	}

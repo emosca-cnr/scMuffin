@@ -3,10 +3,10 @@
 #' @param plot_score NULL. Set as TRUE it return a plot.
 #' @export
 
-score_cnv <- function(cnv_res, plot_score=NULL) {
+score_cnv <- function(cnv_res, plot_score=FALSE) {
   
-  X <- apply(cnv_res, 2, scale, scale=FALSE)
-  
+	X <- cnv_res
+	
   #### 1) sum of squares of CNV
   cs <- colSums(X^2)
 
@@ -14,14 +14,14 @@ score_cnv <- function(cnv_res, plot_score=NULL) {
 
   top10 <- quantile(cs, probs=0.9)
   cs_filt <- names(cs[cs>top10])
-  cnv_avg_top10 <- rowMeans(X[, colnames(X) %in% c_filt])
+  cnv_avg_top10 <- rowMeans(X[, colnames(X) %in% cs_filt])
 
 
   corr <- cor(cnv_res, cnv_avg_top10, method = "pearson")
   
   res_corr <- as.data.frame(corr)
   res_cs <- as.data.frame(cs)
-  res <- merge(res_corr, res_cs, by=0, all=TRUE)
+  res <- merge(res_cs, res_corr, by=0, all=TRUE)
   rownames(res) <- res$Row.names
   res$Row.names <- NULL
   names(res)[names(res) == "V1"] <- "CNV_R"
