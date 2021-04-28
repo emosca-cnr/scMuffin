@@ -1,8 +1,15 @@
 #' Calculate CNV
-#' @param genes_by_cell Preprocessed Seurat object 
-#' @param reference NULL. It is possible to add a reference vector, downloaded from GTEx portal.
+#' @param genes_by_cell genes-by-cells data.frame 
+#' @param reference one-column data.frame with a reference expression profile; rownames must match those of genes_by_cell;
+#' @param mc.cores number of cores;
+#' @param wnd_size number of adjacent genes considered;
+#' @param min_genes minimun number of genes expressed in a cell;
+#' @param min_cells minimum numbver of cells in which a gene must be expressed;
+#' @param expr_lim min and max values of relative expression; if FALSE this constraints will not be used
+#' @param scale_cells whether to scale cells
+#' @param na.rm whether to remove 0 values in CNV estimation
 #' @export
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, scale_cells=TRUE, na.rm=FALSE) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=c(-3, 3), scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
 	
 	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
@@ -18,22 +25,30 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	print(dim(genes_by_cells))
 	
 	#centering genes-by-cells data
-	gbc_mean <- rowMeans(genes_by_cells)
-	genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
-	
+	if(center_genes){
+		gbc_mean <- rowMeans(genes_by_cells)
+		genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+	}
+
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
 		
-		genes_by_cells$gbc_mean <- gbc_mean
+		
+		if(center_genes){
+			genes_by_cells$gbc_mean <- gbc_mean
+		}
 		
 		colnames(reference) <- "reference"
 		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", sort=F)
 		print("size after merging")
 		print(dim(genes_by_cells))
 		
-		genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
-		genes_by_cells$gbc_mean <- NULL
+		if(center_genes){
+			genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
+			genes_by_cells$gbc_mean <- NULL
+		}
+		
 		
 		rownames(genes_by_cells) <- genes_by_cells$Row.names
 		genes_by_cells$Row.names <- NULL
@@ -41,6 +56,16 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		genes_by_cells[is.na(genes_by_cells)] <- 0
 
 	}
+	
+	#constraints over relative expression Tirosh et al.
+	if(length(expr_lim)==2){
+		cat("applying relative expression limits\n")
+		cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
+		genes_by_cells[genes_by_cells < expr_lim[1]] <- expr_lim[1]
+		genes_by_cells[genes_by_cells > expr_lim[2]] <- expr_lim[2]
+		cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
+	}
+	
 	# ***************************************************************
 
 	cat("Preprocess object to calculate CNV...\n")	
@@ -51,12 +76,17 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	
 	ans <- ans[match(temp, names(ans))]
 	
-	#exclude chrom with <100 genes
+	#exclude chrom with < wnd_size genes
 	ans <- ans[unlist(lapply(ans, nrow)) > wnd_size]
+	
+	for(i in 1:length(ans)){
+		rownames(ans[[i]]) <- paste(rownames(ans[[i]]), ans[[i]]$pos, sep="_")
+		ans[[i]] <- ans[[i]][, -c(1:3)]
+	}
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")
-	ans <- mclapply(ans, function(x) apply(x[, 4:dim(x)[2]], 2, function(y) CNV(y, wnd_size=wnd_size, genes=rownames(x), na.rm = na.rm)), mc.cores = mc.cores)
+	ans <- mclapply(ans, function(x) apply(x, 2, function(y) CNV(setNames(y, rownames(x)), wnd_size=wnd_size, na.rm = na.rm)), mc.cores = mc.cores)
 
 	#merging chromosomes
 	for(i in 1:length(ans)){
@@ -67,7 +97,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	ans <- do.call(rbind, ans)
 	
 	if(scale_cells){
-		temp <- apply(ans, 2, scale)
+		temp <- apply(ans, 2, scale, scale=F)
 		rownames(temp) <- rownames(ans)
 		ans <- temp
 		rm(temp)

@@ -10,6 +10,7 @@ cluster_by_features(
   cnv = FALSE,
   plot_umap = FALSE,
   out_dir = "./",
+  scale_features = TRUE,
   ...
 )
 }

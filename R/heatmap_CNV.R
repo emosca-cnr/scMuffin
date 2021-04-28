@@ -8,22 +8,22 @@
 #' @import ComplexHeatmap grDevices grid
 #' @export
 
-heatmap_CNV <- function(cnv, cnv_clusters, file="heatmap_CNV.jpg", reference=NULL, ...) {
+heatmap_CNV <- function(cnv, cnv_clustering, ref_cluster=NULL, file="heatmap_CNV.jpg", ...) {
 	
 	cnv_clustering$clusters <- cnv_clustering$clusters[order(cnv_clustering$clusters)]
 	cnv <- cnv[, match(names(cnv_clustering$clusters), colnames(cnv))]
-	
-	#find the cluster where the reference appears
-	if(!is.null(reference) & any(colnames(cnv) == reference)){
-
-		ref_cluster <- cnv_clustering$clusters[names(cnv_clustering$clusters) == reference] #cluster in which the reference occurs
-		cat("Reference cluster:", as.character(ref_cluster), "\n")
-		cat("Subtracting reference cluster average from CNV profiles...\n")
-		
-		#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles
-		ref_cluster_avg <- rowMeans(cnv[, cnv_clustering$clusters==ref_cluster])
-		cnv <- apply(cnv, 2, function(x) x-ref_cluster_avg)
-	}
+	# 
+	# #find the cluster where the reference appears
+	# if(!is.null(reference) & any(colnames(cnv) == reference)){
+	# 
+	# 	ref_cluster <- cnv_clustering$clusters[names(cnv_clustering$clusters) == reference] #cluster in which the reference occurs
+	# 	cat("Reference cluster:", as.character(ref_cluster), "\n")
+	# 	cat("Subtracting reference cluster average from CNV profiles...\n")
+	# 	
+	# 	#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles
+	# 	ref_cluster_avg <- rowMeans(cnv[, cnv_clustering$clusters==ref_cluster])
+	# 	cnv <- apply(cnv, 2, function(x) x-ref_cluster_avg)
+	# }
 	
 	
 	row_chr <- gsub("(chr[^_]+)_.+", "\\1", rownames(cnv))
@@ -33,7 +33,9 @@ heatmap_CNV <- function(cnv, cnv_clusters, file="heatmap_CNV.jpg", reference=NUL
 	row_splits <- factor(rep(names(ngenes_chr), ngenes_chr), levels = unique(names(ngenes_chr)))
 	col_splits <- cnv_clustering$clusters
 	clust_color <- rep("black", length(levels(cnv_clustering$clusters)))
-	clust_color[levels(cnv_clustering$clusters)==ref_cluster] <- "red"
+	if(!is.null(ref_cluster)){
+		clust_color[levels(cnv_clustering$clusters)==ref_cluster] <- "red"
+	}
 	column_title_gp <- grid::gpar(col = clust_color)
 	
 	max_abs <- max(abs(cnv), na.rm = T)

@@ -4,7 +4,7 @@
 \alias{CNV}
 \title{CNV}
 \usage{
-CNV(x, wnd_size = 100, na.rm = FALSE, genes = NULL)
+CNV(x, wnd_size = 100, na.rm = FALSE)
 }
 \arguments{
 \item{x}{list of dataframes retrieved by 'preprocess_object_for_cnv'.}

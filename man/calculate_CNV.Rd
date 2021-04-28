@@ -11,14 +11,30 @@ calculate_CNV(
   wnd_size = 100,
   min_genes = 1000,
   min_cells = 100,
+  expr_lim = c(-3, 3),
   scale_cells = TRUE,
-  na.rm = FALSE
+  na.rm = FALSE,
+  center_genes = FALSE
 )
 }
 \arguments{
-\item{reference}{NULL. It is possible to add a reference vector, downloaded from GTEx portal.}
+\item{reference}{one-column data.frame with a reference expression profile; rownames must match those of genes_by_cell;}
 
-\item{genes_by_cell}{Preprocessed Seurat object}
+\item{mc.cores}{number of cores;}
+
+\item{wnd_size}{number of adjacent genes considered;}
+
+\item{min_genes}{minimun number of genes expressed in a cell;}
+
+\item{min_cells}{minimum numbver of cells in which a gene must be expressed;}
+
+\item{expr_lim}{min and max values of relative expression; if FALSE this constraints will not be used}
+
+\item{scale_cells}{whether to scale cells}
+
+\item{na.rm}{whether to remove 0 values in CNV estimation}
+
+\item{genes_by_cell}{genes-by-cells data.frame}
 }
 \description{
 Calculate CNV
