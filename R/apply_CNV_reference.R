@@ -13,15 +13,30 @@ apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="refere
 	#cnv <- cnv[, match(names(cnv_clustering$clusters), colnames(cnv))]
 	
 	#find the cluster where the reference appears
-	if(is.null(reference) | !any(colnames(cnv) == reference)){
+	if(is.null(reference) | !any(colnames(cnv) %in% reference)){
 		stop("can't find the refence\n")
 	}
 	
-	ref_cluster <- cnv_clustering$clusters[names(cnv_clustering$clusters) == reference] #cluster in which the reference occurs
-	idx_ref_cells <- which(colnames(cnv) %in% names(cnv_clustering$clusters)[cnv_clustering$clusters==ref_cluster])
+	ref_cluster <- NULL
+	if(!is.null(cnv_clustering)){
+		
+		ref_cluster <- cnv_clustering$clusters[names(cnv_clustering$clusters) == reference] #cluster in which the reference occurs
+		idx_ref_cells <- which(colnames(cnv) %in% names(cnv_clustering$clusters)[cnv_clustering$clusters==ref_cluster])
+		
+		cat("Reference cluster:", as.character(ref_cluster), "\n")
+		
+	}
 	
-	cat("Reference cluster:", as.character(ref_cluster), "\n")
-	cat("Subtracting reference cluster average from CNV profiles...\n")
+	if(length(reference) > 1){
+		
+		idx_ref_cells <- which(colnames(cnv) %in% reference)
+		
+		cat("Reference cells:", length(idx_ref_cells), "\n")
+		
+	}
+	
+	
+	cat("Subtracting reference cells average from CNV profiles...\n")
 	
 	#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles
 	if(method=="mean"){
@@ -34,7 +49,7 @@ apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="refere
 		
 		#ref_cluster_min <- rowMin(cnv[, idx_ref_cells])
 		#ref_cluster_max <- rowMax(cnv[, idx_ref_cells])
-
+		
 		ref_cluster_min <- t(apply(cnv[, idx_ref_cells], 1, function(x) boxplot.stats(x)$stats[c(1,5)])) #lo whisker and high whisker
 		ref_cluster_max <- ref_cluster_min[, 2]
 		ref_cluster_min <- ref_cluster_min[, 1]

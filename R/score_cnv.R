@@ -17,7 +17,7 @@ score_cnv <- function(cnv_res, plot_score=FALSE) {
   cnv_avg_top10 <- rowMeans(X[, colnames(X) %in% cs_filt])
 
 
-  corr <- cor(cnv_res, cnv_avg_top10, method = "pearson")
+  corr <- cor(cnv_res, cnv_avg_top10, method = "spearman")
   
   res_corr <- as.data.frame(corr)
   res_cs <- as.data.frame(cs)

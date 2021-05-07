@@ -29,7 +29,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	#	gbc_mean <- rowMeans(genes_by_cells)
 	#	genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
 	#}
-
+	
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
@@ -47,22 +47,24 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		print("size after merging")
 		print(dim(genes_by_cells))
 		
-		if(center_genes){
-			#genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
-			#genes_by_cells$gbc_mean <- NULL
-			
-			#gbc_mean <- rowMeans(genes_by_cells)
-			#genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
-			
-			temp <- t(apply(genes_by_cells, 1, scale, scale=F))
-			colnames(temp) <- colnames(genes_by_cells)
-			genes_by_cells <- temp
-			rm(temp)
-			
-		}
-
 		genes_by_cells[is.na(genes_by_cells)] <- 0
-
+		
+	}
+	
+	if(center_genes){
+		print("centering genes")
+		
+		#genes_by_cells$reference <- genes_by_cells$reference - genes_by_cells$gbc_mean
+		#genes_by_cells$gbc_mean <- NULL
+		
+		#gbc_mean <- rowMeans(genes_by_cells)
+		#genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
+		
+		temp <- t(apply(genes_by_cells, 1, scale, scale=F))
+		colnames(temp) <- colnames(genes_by_cells)
+		genes_by_cells <- temp
+		rm(temp)
+		
 	}
 	
 	#constraints over relative expression Tirosh et al.
@@ -75,7 +77,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	}
 	
 	# ***************************************************************
-
+	
 	cat("Preprocess object to calculate CNV...\n")	
 	ans <- preprocess_object_for_CNV(genes_by_cells)
 	
@@ -95,7 +97,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	#calculate CNV
 	cat("Calculating CNV...\n")
 	ans <- mclapply(ans, function(x) apply(x, 2, function(y) CNV(setNames(y, rownames(x)), wnd_size=wnd_size, na.rm = na.rm)), mc.cores = mc.cores)
-
+	
 	#merging chromosomes
 	for(i in 1:length(ans)){
 		#ans[[i]] <- as.data.frame(ans[[i]])
