@@ -4,7 +4,7 @@
 #' @export
 #' @import Seurat parallel
 
-calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE){
+calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE){
 	
 	score_type <- score_type[1]
 	#	if(!is.null(custom_signatures)){
@@ -32,7 +32,7 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 		
 	}else{
 		
-		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin), mc.cores = mc.cores)
+		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
 		
 	}
 	

@@ -12,7 +12,7 @@
 #' @export
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
-gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=F, null_model=TRUE){
+gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE){
 	
 	if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
 		stop("not enough genes in gene set, please consider only gene set with enough number of genes\n")
@@ -23,6 +23,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 		
 		if(null_model){
 			control_set_data <- sc_create_null(genes_by_cells, bins = bins, gene_set = gene_set, k = k)
+			cat("nulls obtained: ", length(control_set_data), "\n")
 			for(i in 1:length(control_set_data)){
 				control_set_data[[i]][control_set_data[[i]]==0] <- NA
 			}
@@ -70,8 +71,12 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 				print(table(gene_set_ok_in_nulls[gene_set_ok_in_nulls>0]))
 			}
 			
+			if(max(gene_set_ok_in_nulls) < kmin){
+				cat("kmin", kmin, "; found, ", max(gene_set_ok_in_nulls), "\n")
+				cat("Consider reducing kmin\n")
+			}
 			#null_ok <- gene_set_ok_in_nulls > (ncol(vect_selected)-1)*0.9 #nubmer of cells that have a sufficient number of available permutations
-			null_ok <- gene_set_ok_in_nulls > kmin
+			null_ok <- gene_set_ok_in_nulls >= kmin
 			
 			
 			if(sum(vect_selected[, 1]) >= ncells_min){
