@@ -5,7 +5,7 @@
 \title{prepare_signatures collected from various sources}
 \usage{
 prepare_signatures(
-  signature_sources,
+  signature_sources = NULL,
   custom_signatures = NULL,
   CM_tissues = NULL,
   PNDB_tissues = NULL,
