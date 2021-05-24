@@ -14,7 +14,8 @@ calculate_signatures(
   k = 100,
   kmin = 50,
   score_type = c("relative", "mean"),
-  null_model = TRUE
+  null_model = TRUE,
+  verbose = TRUE
 )
 }
 \description{
