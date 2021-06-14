@@ -4,7 +4,7 @@
 assess_cluster_enrichment <- function(features, clusterings, meta_clusters=FALSE, write_output=TRUE, out_dir="./"){
 	
 	if(!dir.exists(out_dir)){
-		dir.create(out_dir)
+		dir.create(out_dir, recursive=TRUE)
 	}
 	if(meta_clusters){
 		

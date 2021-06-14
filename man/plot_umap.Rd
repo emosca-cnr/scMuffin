@@ -10,6 +10,8 @@ plot_umap(
   labels = NULL,
   group.by = NULL,
   feature_plot = FALSE,
+  lab_size = 1,
+  lab_color = "black",
   ...
 )
 }

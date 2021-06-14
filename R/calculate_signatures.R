@@ -28,15 +28,15 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 		#		res_signatures[[i]] <- gene_set_score(signatures[[i]], genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin)
 		#	}
 		
-		res_signatures <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin))
+		res_signatures <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose))
 		
 	}else{
 		
 		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
 		
 	}
-	
-	#SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$score_table$avg_delta_score, dimnames = list(rownames(x$score_table))))))
+	cat("assembling signatures_by_cells matrix...")
+
 	if(score_type == "relative"){
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$avg_delta_score, dimnames = list(rownames(x))))))
 	}else{

@@ -33,4 +33,6 @@ Imports:
     ComplexHeatmap,
     VGAM,
     dendsort,
-    grDevices
+    grDevices,
+    ggplot2
+

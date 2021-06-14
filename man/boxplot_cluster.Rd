@@ -13,6 +13,7 @@ boxplot_cluster(
   criterion = "fdr",
   fdr_threshold = NULL,
   only_pos_nes = TRUE,
+  do_scale_features = FALSE,
   ...
 )
 }
@@ -29,7 +30,4 @@ boxplot_cluster(
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-}
-\author{
-Noemi Di Nanni
 }

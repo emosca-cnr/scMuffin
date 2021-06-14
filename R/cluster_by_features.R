@@ -21,6 +21,8 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 		features_by_cells[is.na(features_by_cells)] <- 0
 	}
 	
+	n_comp <- min(n_comp, nrow(features_by_cells))
+	
 	features_by_cells <- CreateSeuratObject(counts = features_by_cells, min.cells = 0, min.features = 0)
 	all.genes <- rownames(features_by_cells)
 	#scale data

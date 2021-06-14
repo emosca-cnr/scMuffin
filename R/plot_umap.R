@@ -5,10 +5,10 @@
 #' @param file string, file name output
 #' @param color_by string, specification of a feature to colour by (e.g. cluster ID)
 #' 
-#' @import Seurat graphics
+#' @import Seurat graphics ggplot2
 #' @export
 #' 
-plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, ...){
+plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", ...){
 	
 	jpeg(file, width=180, height=180, units="mm", res=300)
 	
@@ -20,18 +20,21 @@ plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL
 	}else{
 		res <- Seurat::DimPlot(seurat_object, group.by=group.by, ...)
 	}
-	plot(res)
 	
 	if(!is.null(labels)){
 		
 		data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", group.by))
 		
-		labels <- lapply(labels, function(x) paste0(sort(x), collapse = "\n"))
+		#labels <- lapply(labels, function(x) paste0(sort(x), collapse = "\n")) #remove sort
+		labels <- lapply(labels, function(x) paste0(x, collapse = "\n")) #remove sort
 		cluster_xy <- split(data_plot[, 1:2], data_plot[, 3])
 		cluster_xy <- do.call(rbind, lapply(cluster_xy, colMeans))
-		for(i in 1:nrow(cluster_xy)){
-			text(cluster_xy[i, 1], cluster_xy[i, 2], labels[names(labels) == rownames(cluster_xy)[i]][[1]], cex=0.5, font=2)
-		}
+		#for(i in 1:nrow(cluster_xy)){
+		#	text(cluster_xy[i, 1], cluster_xy[i, 2], labels[names(labels) == rownames(cluster_xy)[i]][[1]], cex=0.5, font=2)
+		#}
+		plot(res + ggplot2::annotate(geom="text", x=cluster_xy[, 1], y=cluster_xy[, 2], label=labels, color=lab_color, size=lab_size))
+	}else{
+		plot(res)
 	}
 	
 	

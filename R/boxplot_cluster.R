@@ -9,20 +9,21 @@
 #' @importFrom grDevices jpeg
 #' @import graphics
 #' @export
-#' @author Noemi Di Nanni
 
-boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichment=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, ...){
+boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichment=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, do_scale_features=FALSE, ...){
 	
 	if(!dir.exists(dir_out)){
-		dir.create(dir_out)
+		dir.create(dir_out, recursive = TRUE)
 	}
 	
 	cells_by_features <- as.matrix(features$df)
 	cells_by_features[is.na(cells_by_features)] <- 0
 	cells_by_features <- 	cells_by_features[, colSums(abs(cells_by_features))>0]
 	
-	cells_by_features <- apply(cells_by_features, 2, scale)
-	rownames(cells_by_features) <- rownames(as.matrix(features$df))
+	if(do_scale_features){
+		cells_by_features <- apply(cells_by_features, 2, scale)
+		rownames(cells_by_features) <- rownames(as.matrix(features$df))
+	}
 	
 	cell_clusters_set <- levels(cell_clusters)
 	
@@ -32,8 +33,13 @@ boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichmen
 	}
 	
 	#boxplot for each cluster
+	ans <- vector("list", length(cell_clusters_set))
+	names(ans) <- cell_clusters_set
+	
 	for(cl in 1:length(cell_clusters_set)){
 		#cat(cl)
+		
+		top_features_ans <- NA
 		
 		top_features <- list(
 			fdr=cluster_enrichment$fdrq[rownames(cluster_enrichment$fdrq)==cell_clusters_set[cl], ],
@@ -55,6 +61,8 @@ boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichmen
 		}
 		
 		if(length(top_features$nes)>0){
+			
+			top_features_ans <- names(top_features$fdr)
 			
 			top_features <- lapply(top_features, function(x) x[1:min(only_top, length(x))])
 			
@@ -99,6 +107,12 @@ boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichmen
 			barplot(rev(-log10(top_features$fdr)), horiz = T, names.arg = "", main = "FDR")
 			
 			dev.off()
+			
+			
 		}
+		
+		ans[[cl]] <- top_features_ans
 	}
+	
+	return(ans)
 }

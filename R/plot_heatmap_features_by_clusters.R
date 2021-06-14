@@ -9,6 +9,9 @@
 
 plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, out_dir="./", remove_null_features=FALSE, ...){
 	
+	if(!dir.exists(out_dir)){
+		dir.create(out_dir, recursive = TRUE)
+	}
 	
 	if(!is.null(significance_matrix)){
 		cell_fun_asterisk <- function(j, i, x, y, w, h, fill) {
