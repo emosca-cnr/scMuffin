@@ -1,3 +1,5 @@
+version 0.17
+- removed error arising in CNV calculation for chromosomes with just 1 window available
 version 0.16
 - CNV estimation update
 version 0.15

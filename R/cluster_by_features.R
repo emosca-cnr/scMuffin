@@ -21,7 +21,6 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 		features_by_cells[is.na(features_by_cells)] <- 0
 	}
 	
-	n_comp <- min(n_comp, nrow(features_by_cells))
 	
 	features_by_cells <- CreateSeuratObject(counts = features_by_cells, min.cells = 0, min.features = 0)
 	all.genes <- rownames(features_by_cells)
@@ -31,6 +30,8 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 	}
 	
 	features_by_cells <- RunPCA(features_by_cells, features = all.genes)
+	
+	n_comp <- min(n_comp, ncol(features_by_cells@reductions$pca))
 	
 	features_by_cells <- FindNeighbors(features_by_cells, dims = 1:n_comp)
 	features_by_cells <- FindClusters(features_by_cells)

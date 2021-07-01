@@ -33,6 +33,8 @@ CNV <- function(x, wnd_size=100, na.rm=FALSE) {
 	names(Ek)<-Ek_names
 	Ek[is.nan(Ek)] <- 0
 	
+	#Ek <- matrix(Ek, nrow = 1, dimnames = list(NULL, names(Ek)))
+	
 	return(Ek)
 }
 

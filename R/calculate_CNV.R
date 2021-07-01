@@ -100,7 +100,9 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	
 	#merging chromosomes
 	for(i in 1:length(ans)){
-		#ans[[i]] <- as.data.frame(ans[[i]])
+		if(!is.matrix(ans[[i]])){
+			ans[[i]] <- matrix(ans[[i]], nrow = 1)
+		}
 		rownames(ans[[i]]) <- paste0("chr", names(ans)[i], "_", rownames(ans[[i]]))
 	} 
 	
