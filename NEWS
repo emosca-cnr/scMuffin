@@ -1,3 +1,5 @@
+version 0.18
+- fixed issues in cluster by gene sets and significance in plot_heatmap_features_by_clusters
 version 0.17
 - removed error arising in CNV calculation for chromosomes with just 1 window available
 version 0.16

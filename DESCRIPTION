@@ -1,6 +1,6 @@
 Package: scMuffin
 Title: What the Package Does (One Line, Title Case)
-Version: 0.17
+Version: 0.18
 Authors@R: 
     person(given = "First",
            family = "Last",

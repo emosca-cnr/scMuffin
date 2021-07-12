@@ -15,7 +15,7 @@ calc_cluster_by_gs <- function(genes_by_cells, gene_sets, out_dir="./"){
 		
 		res <- cluster_by_gs(genes_by_cells, gs = gene_sets[[i]])
 		gene_sets_clusters[[i]] <- res$seurat_clusters
-		plot_umap(res, file = paste0(out_dir, "/umap_", names(gene_sets)[i], ".jpg"), color_by="seurat_clusters", pal=rainbow(length(levels(res$seurat_clusters))))
+		plot_umap(res, file = paste0(out_dir, "/umap_", names(gene_sets)[i], ".jpg"), group.by="seurat_clusters")
 		
 	}
 	

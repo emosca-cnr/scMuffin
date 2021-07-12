@@ -61,6 +61,10 @@ plot_heatmap_features_by_clusters <- function(features_by_clusters, significance
 			
 			if(!is.null(significance_matrix)){
 				sig_mat <- significance_matrix[[i]]
+				sig_mat <- sig_mat[match(rownames(X), rownames(sig_mat)), match(colnames(X), colnames(sig_mat))]
+				if(onlyUp){
+					sig_mat[!X>0] <- 1
+				}
 			}
 			
 			grDevices::jpeg(paste0(out_dir, "/heatmap_", names(features_by_clusters)[i], ".jpg"), width = 180, height = 180, res=300, units="mm")
