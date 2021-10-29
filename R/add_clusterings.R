@@ -1,5 +1,7 @@
-#' Add feature
-#'
+#' Adds a clustering to the clustering list
+#' @param clusterings clustering list
+#' @param cell_id vector of cell identifiers
+#' @param values vector or data.frame with clustering labels
 #' @export
 
 add_clusterings <- function(clusterings=NULL, cell_id=NULL, values=NULL){

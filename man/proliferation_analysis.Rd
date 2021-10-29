@@ -16,6 +16,27 @@ proliferation_analysis(
   null_model = TRUE
 )
 }
+\arguments{
+\item{genes_by_cells}{Seurat object}
+
+\item{mc.cores}{number of cores}
+
+\item{nbins}{number of bins to split the distribution of average gene expression}
+
+\item{nmark_min}{numner of minimum markers that are required for the succesful calculation of a signature}
+
+\item{ncells_min}{numner of minimum cells in which a gene set has to be succesfully calculated}
+
+\item{k}{number of permutations}
+
+\item{kmin}{minimum number of permutations; due to missing values it is hard to ensure that a signature can be compared to k permutations in every cell}
+
+\item{score_type}{type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression}
+
+\item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
+
+\item{verbose}{verbosity}
+}
 \description{
 cell cycle - merge the two Tirosh signatures for proliferation analysis
 }

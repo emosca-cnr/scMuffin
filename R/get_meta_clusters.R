@@ -1,4 +1,6 @@
 #' Get cells in each meta cluster
+#' @param  cl_list cluterings list
+#' @param meta_clusters meta clusters
 #' @export
 #' @importFrom stats setNames
 #' 

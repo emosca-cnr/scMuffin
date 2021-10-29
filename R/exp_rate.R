@@ -1,9 +1,8 @@
 #' Expression_rate
 #' number of expressed genes by sum of their counts
-#' 
 #' Ratio between the number of expressed genes and the total number of reads
 #' @param genes_by_cells count matrix
-#' @param min_counts min_counts
+#' @param min_counts minimin number of counts
 #' @return expRate_vect vector with expression rate for each cell
 #' @export
 

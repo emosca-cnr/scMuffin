@@ -3,18 +3,21 @@
 \name{exp_rate}
 \alias{exp_rate}
 \title{Expression_rate
-number of expressed genes by sum of their counts}
+number of expressed genes by sum of their counts
+Ratio between the number of expressed genes and the total number of reads}
 \usage{
 exp_rate(genes_by_cells, min_counts = 5)
 }
 \arguments{
 \item{genes_by_cells}{count matrix}
 
-\item{min_counts}{min_counts}
+\item{min_counts}{minimin number of counts}
 }
 \value{
 expRate_vect vector with expression rate for each cell
 }
 \description{
+Expression_rate
+number of expressed genes by sum of their counts
 Ratio between the number of expressed genes and the total number of reads
 }

@@ -9,7 +9,7 @@ plot_umap_expr_features(seurat_object, cells_by_features, dir = "./")
 \arguments{
 \item{seurat_object}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
-\item{features_matrix}{matrix, features by cells matrix}
+\item{cells_by_features}{matrix, cells by features}
 }
 \description{
 Generate a UMAP visualization colored by feature distributions

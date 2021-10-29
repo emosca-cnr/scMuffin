@@ -7,11 +7,11 @@
 sc_create_null(seurat_data, bins, gene_set, k = 100)
 }
 \arguments{
-\item{seurat_data}{seurat data object}
+\item{seurat_data}{genes-by-cells matrix}
 
-\item{bins}{bins}
+\item{bins}{bins of genes}
 
-\item{gene_set}{genes}
+\item{gene_set}{a vector of genes}
 
 \item{k}{number of permutations}
 }

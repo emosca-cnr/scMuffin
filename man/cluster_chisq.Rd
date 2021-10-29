@@ -9,6 +9,8 @@ cluster_chisq(cells_by_features, cell_clusters, fdr = 0.05, top = 2)
 \arguments{
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
+\item{fdr}{fdr threshold, default at 0.05}
+
 \item{features_by_cells}{matrix, features by cells matrix}
 
 \item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}

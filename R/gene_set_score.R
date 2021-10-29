@@ -4,6 +4,9 @@
 #' @param nmark_min min number of markers
 #' @param ncells_min min number of cells
 #' @param k number of random gene set to be considered
+#' @param kmin minimim number of k
+#' @param verbose verbosity
+#' @param null_model boolean, whether to use the permutations or not
 #' @return list with
 #'    score_table: data frame with gene set score for each cell
 #'    permutations: list with the permutations

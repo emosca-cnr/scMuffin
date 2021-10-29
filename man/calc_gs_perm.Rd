@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_gs_perm.R
 \name{calc_gs_perm}
 \alias{calc_gs_perm}
-\title{Internal function of pathtools}
+\title{Calculate permutations}
 \usage{
 calc_gs_perm(rll, perm, gs)
 }
@@ -14,5 +14,5 @@ calc_gs_perm(rll, perm, gs)
 \item{gs}{gene set}
 }
 \description{
-Internal function of pathtools
+Calculate permutations
 }

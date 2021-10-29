@@ -6,6 +6,9 @@
 \usage{
 merge_clusterings_enrichment(clust_enrich)
 }
+\arguments{
+\item{clust_enrich}{list of cluster enrichments}
+}
 \description{
 merge_clusterings_enrichment
 }

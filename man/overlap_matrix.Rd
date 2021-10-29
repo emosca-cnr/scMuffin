@@ -2,10 +2,13 @@
 % Please edit documentation in R/overlap_matrix.R
 \name{overlap_matrix}
 \alias{overlap_matrix}
-\title{Calculate the overlap coefficient between two sets}
+\title{Calculate the overlap coefficient between n sets}
 \usage{
 overlap_matrix(x)
 }
+\arguments{
+\item{x}{list of item sets}
+}
 \description{
-Calculate the overlap coefficient between two sets
+Calculate the overlap coefficient between n sets
 }

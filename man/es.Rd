@@ -10,6 +10,8 @@ es(idx, x, le = F)
 \item{idx}{vector of indices a subset of elements of x}
 
 \item{x}{named vector, ranked list}
+
+\item{le}{leading edge information}
 }
 \value{
 enrichment score

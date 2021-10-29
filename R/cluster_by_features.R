@@ -3,7 +3,11 @@
 #' Clustering of the features_by_cell matrix
 #' @param features_by_cells matrix, features by cells matrix 
 #' @param n_comp numeric, Dimensions of reduction to use as input
-#' @param cnv TRUE/FALSE set it to TRUE for clustering CNV results 
+#' @param cnv TRUE/FALSE set it to TRUE for clustering CNV results
+#' @param plot_umap whether to plot the UMAP
+#' @param out_dir output directory
+#' @param scale_features whether to scale features
+#' @param ... arguments passed to Seurat::DimPlot
 #' @return features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix
 #' @import Seurat
 #' @export

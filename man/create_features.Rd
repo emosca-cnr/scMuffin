@@ -6,6 +6,11 @@
 \usage{
 create_features(cell_id = NULL, values = NULL)
 }
+\arguments{
+\item{cell_id}{vector of cell id}
+
+\item{values}{vector of values}
+}
 \description{
 Create feature list
 }

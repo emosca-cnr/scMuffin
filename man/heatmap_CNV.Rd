@@ -7,9 +7,15 @@
 heatmap_CNV(cnv)
 }
 \arguments{
-\item{cnv}{...}
+\item{cnv}{CNV matrix}
 
-\item{list_ncol_chr}{...}
+\item{cnv_clustering}{cell clustering by CNV}
+
+\item{ref_cluster}{reference cluster}
+
+\item{file}{output file}
+
+\item{...}{arguments passed to ComplexHeatmap::Heatmap}
 }
 \description{
 Plot as an heatmap the resulting data from CNV.

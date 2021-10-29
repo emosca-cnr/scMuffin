@@ -6,6 +6,11 @@
 \usage{
 get_meta_clusters(cl_list, meta_clusters)
 }
+\arguments{
+\item{cl_list}{cluterings list}
+
+\item{meta_clusters}{meta clusters}
+}
 \description{
 Get cells in each meta cluster
 }

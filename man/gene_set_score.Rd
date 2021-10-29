@@ -26,6 +26,12 @@ gene_set_score(
 \item{ncells_min}{min number of cells}
 
 \item{k}{number of random gene set to be considered}
+
+\item{kmin}{minimim number of k}
+
+\item{verbose}{verbosity}
+
+\item{null_model}{boolean, whether to use the permutations or not}
 }
 \value{
 list with

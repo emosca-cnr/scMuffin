@@ -19,6 +19,14 @@ cluster_by_features(
 
 \item{cnv}{TRUE/FALSE set it to TRUE for clustering CNV results}
 
+\item{plot_umap}{whether to plot the UMAP}
+
+\item{out_dir}{output directory}
+
+\item{scale_features}{whether to scale features}
+
+\item{...}{arguments passed to Seurat::DimPlot}
+
 \item{features_by_cells}{matrix, features by cells matrix}
 }
 \value{

@@ -2,10 +2,17 @@
 % Please edit documentation in R/add_clusterings.R
 \name{add_clusterings}
 \alias{add_clusterings}
-\title{Add feature}
+\title{Adds a clustering to the clustering list}
 \usage{
 add_clusterings(clusterings = NULL, cell_id = NULL, values = NULL)
 }
+\arguments{
+\item{clusterings}{clustering list}
+
+\item{cell_id}{vector of cell identifiers}
+
+\item{values}{vector or data.frame with clustering labels}
+}
 \description{
-Add feature
+Adds a clustering to the clustering list
 }

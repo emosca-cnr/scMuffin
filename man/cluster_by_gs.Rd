@@ -6,6 +6,11 @@
 \usage{
 cluster_by_gs(genes_by_cells, gs = NULL)
 }
+\arguments{
+\item{genes_by_cells}{Seurat object}
+
+\item{gs}{vector of genes}
+}
 \description{
 cluster by n-genes
 }

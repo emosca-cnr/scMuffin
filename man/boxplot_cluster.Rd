@@ -18,15 +18,25 @@ boxplot_cluster(
 )
 }
 \arguments{
-\item{cell_clusters}{array with cell values named by their cluster ID}
+\item{features}{feature list}
 
-\item{dir_out}{string, output directory}
+\item{cell_clusters}{cell clusters}
 
-\item{...}{passed to axis()}
+\item{cluster_enrichment}{result of assess_cluster_enrichment}
 
-\item{cells_by_features}{matrix, features by cells matrix}
+\item{dir_out}{output directory}
 
-\item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
+\item{only_top}{numeric, number of features to be shown with a different color and representing the most significative features according to t-test}
+
+\item{criterion}{"fdr" to sort features by fdr}
+
+\item{fdr_threshold}{fdr threshold}
+
+\item{only_pos_nes}{whether to consider only positive enrichments}
+
+\item{do_scale_features}{whether to scale features}
+
+\item{...}{passed to axis}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

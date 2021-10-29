@@ -1,6 +1,7 @@
 #' calc_cluster_by_gs
-#'
-#'
+#' @param genes_by_cells matrix
+#' @param gene_sets list of gene sets
+#' @param out_dir output directory
 #' @export
 
 

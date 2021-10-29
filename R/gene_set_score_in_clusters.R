@@ -1,10 +1,10 @@
 #' gene_set_score_in_clusters
-#' @param current_gene_set real data
-#' @param seurat_object_data control data
-#' @param seurat_object_ident min number of markers
+#' @param score_table real data
+#' @param cell_clusters vector of cell clusters
+#' @param ncells_min minimum number of cells
 #' @param alt alterative
 #' @param test type of test
-#' @import stats
+#' @param null_model whether to use permutations or not
 #' @export
 
 gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t", null_model=TRUE){

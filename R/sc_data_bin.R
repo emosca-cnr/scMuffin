@@ -2,7 +2,7 @@
 #' 
 #' Split the input data matrix by rows into nbins
 #' 
-#' @param seurat_data seurat data object
+#' @param seurat_data genes-by-cells matrix
 #' @param nbins number of bins
 #' @param use.log use logarithm
 #' @return vector with bin id for each row

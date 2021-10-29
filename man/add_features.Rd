@@ -2,10 +2,17 @@
 % Please edit documentation in R/add_features.R
 \name{add_features}
 \alias{add_features}
-\title{Add feature}
+\title{Adds a feature to the feature list}
 \usage{
 add_features(features = NULL, cell_id = NULL, values = NULL)
 }
+\arguments{
+\item{cell_id}{vector of cell identifiers}
+
+\item{values}{vector or data.frame with feature values}
+
+\item{clusterings}{feature list}
+}
 \description{
-Add feature
+Adds a feature to the feature list
 }

@@ -1,5 +1,8 @@
 #' cluster_comparison
-#' 
+#' @param cl1 x
+#' @param cl2 x
+#' @param ctree1 x
+#' @param ctree2 x
 #' 
 #' @export
 

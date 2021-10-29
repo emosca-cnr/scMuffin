@@ -1,7 +1,7 @@
 #' sc_create_null
-#' @param seurat_data seurat data object
-#' @param bins bins
-#' @param gene_set genes
+#' @param seurat_data genes-by-cells matrix
+#' @param bins bins of genes
+#' @param gene_set a vector of genes
 #' @param k number of permutations
 #' @author Ettore Mosca
 #' @export

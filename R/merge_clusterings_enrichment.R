@@ -1,4 +1,5 @@
 #' merge_clusterings_enrichment
+#' @param clust_enrich list of cluster enrichments
 #' @export
 
 merge_clusterings_enrichment <- function(clust_enrich){

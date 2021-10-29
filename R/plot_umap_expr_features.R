@@ -2,7 +2,7 @@
 #'
 #' Generate a UMAP visualization colored by feature distributions 
 #' @param seurat_object seurat object, object with saved dimension reduction components calculate on genes by cells matrix
-#' @param features_matrix matrix, features by cells matrix
+#' @param cells_by_features matrix, cells by features
 #' @import RColorBrewer
 #' @export
 

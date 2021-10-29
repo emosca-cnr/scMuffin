@@ -7,7 +7,7 @@
 sc_data_bin(seurat_data, nbins = 25, use.log = TRUE)
 }
 \arguments{
-\item{seurat_data}{seurat data object}
+\item{seurat_data}{genes-by-cells matrix}
 
 \item{nbins}{number of bins}
 

@@ -12,6 +12,17 @@ assess_cluster_enrichment(
   out_dir = "./"
 )
 }
+\arguments{
+\item{features}{feature list}
+
+\item{clusterings}{clustering list}
+
+\item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
+
+\item{write_output}{boolean, TRUE to write the output in the output dir}
+
+\item{out_dir}{output dir}
+}
 \description{
 assess_cluster_enrichment
 }

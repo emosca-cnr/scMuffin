@@ -1,5 +1,7 @@
 #' CNV
 #' @param x list of dataframes retrieved by 'preprocess_object_for_cnv'.
+#' @param wnd_size number of adjacent genes to consider
+#' @param na.rm whether to remove genes that have missing value of expression or not.
 #' @description Function to be used in calculate_CNV. 
 #' @references "Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al., Supplementary materials
 #' @author Valentina Nale

@@ -6,6 +6,13 @@
 \usage{
 calc_cluster_by_gs(genes_by_cells, gene_sets, out_dir = "./")
 }
+\arguments{
+\item{genes_by_cells}{matrix}
+
+\item{gene_sets}{list of gene sets}
+
+\item{out_dir}{output directory}
+}
 \description{
 calc_cluster_by_gs
 }

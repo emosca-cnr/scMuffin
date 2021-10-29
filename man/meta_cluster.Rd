@@ -10,6 +10,8 @@ meta_cluster(overlap_mat, n_step = 11, max_clust = 10)
 \item{overlap_mat}{Overlap matrix as obtained form overlap_matrix() function}
 
 \item{n_step}{number used to divide hclust dendrogram height to obtain cut values to calculate silhouette}
+
+\item{max_clust}{maximum number of clusters}
 }
 \description{
 Returns meta-clusters obtained by using hierarchical clustering

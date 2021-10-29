@@ -6,6 +6,15 @@
 \usage{
 cluster_comparison(cl1, cl2, ctree1, ctree2)
 }
+\arguments{
+\item{cl1}{x}
+
+\item{cl2}{x}
+
+\item{ctree1}{x}
+
+\item{ctree2}{x}
+}
 \description{
 cluster_comparison
 }

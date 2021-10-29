@@ -1,5 +1,5 @@
 #' preprocess_for_heatmap
-#' @param result_cnv ...
+#' @param result_cnv object resulting from CNV analyiss
 #' @description Bind chromosomes together as a matrix. 
 #' @usage preprocess_for_heatmap(result_cnv)
 #' @return A matrix to be used by the function heatmap_CNV.

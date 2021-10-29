@@ -2,10 +2,15 @@
 % Please edit documentation in R/create_clusterings.R
 \name{create_clusterings}
 \alias{create_clusterings}
-\title{Create feature list}
+\title{Create clustering list}
 \usage{
 create_clusterings(cell_id = NULL, values = NULL)
 }
+\arguments{
+\item{cell_id}{vector of cell id}
+
+\item{values}{vector of values}
+}
 \description{
-Create feature list
+Create clustering list
 }

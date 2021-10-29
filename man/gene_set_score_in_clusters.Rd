@@ -14,15 +14,17 @@ gene_set_score_in_clusters(
 )
 }
 \arguments{
+\item{score_table}{real data}
+
+\item{cell_clusters}{vector of cell clusters}
+
+\item{ncells_min}{minimum number of cells}
+
 \item{alt}{alterative}
 
 \item{test}{type of test}
 
-\item{current_gene_set}{real data}
-
-\item{seurat_object_data}{control data}
-
-\item{seurat_object_ident}{min number of markers}
+\item{null_model}{whether to use permutations or not}
 }
 \description{
 gene_set_score_in_clusters

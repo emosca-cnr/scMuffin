@@ -6,6 +6,9 @@
 \usage{
 clusterings_to_list(clusterings)
 }
+\arguments{
+\item{clusterings}{clusterings object}
+}
 \description{
 clusterings_to_list
 }

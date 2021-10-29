@@ -1,5 +1,6 @@
 #' cluster by n-genes
-#' 
+#' @param genes_by_cells Seurat object
+#' @param gs vector of genes
 #' @export
 
 cluster_by_gs <- function(genes_by_cells, gs=NULL){

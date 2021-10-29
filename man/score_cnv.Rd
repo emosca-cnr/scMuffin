@@ -9,7 +9,7 @@ score_cnv(cnv_res, plot_score = FALSE)
 \arguments{
 \item{cnv_res}{Object resulting from calculate_cnv function}
 
-\item{plot_score}{NULL. Set as TRUE it return a plot.}
+\item{plot_score}{boolean, whether to plot or not}
 }
 \description{
 Score CNV

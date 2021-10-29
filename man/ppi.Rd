@@ -6,7 +6,7 @@
 \title{ppi
 This human protein-protein interaction network is derived from LandSCENT net17Jan16.m, which was collected Pathway Commons (www.pathwaycommons.org) (version Jan. 2016).}
 \format{
-An object of class \code{matrix} with 11751 rows and 11751 columns.
+An object of class \code{matrix} (inherits from \code{array}) with 11751 rows and 11751 columns.
 }
 \usage{
 ppi

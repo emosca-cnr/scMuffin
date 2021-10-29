@@ -4,6 +4,7 @@
 #' @param features_by_cells matrix, features by cells matrix
 #' @param cell_clusters array with cell values named by their cluster ID
 #' @param n_top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
+#' @param fdr fdr threshold, default at 0.05
 #' @param dir_out string, output directory
 #' @export
 #' @author Ettore Mosca

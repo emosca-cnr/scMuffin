@@ -1,11 +1,16 @@
 #' Boxplot clusters 
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-#' @param cells_by_features matrix, features by cells matrix
-#' @param cell_clusters array with cell values named by their cluster ID
-#' @param n_top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
-#' @param dir_out string, output directory
-#' @param ... passed to axis()
+#' @param features feature list
+#' @param cell_clusters cell clusters
+#' @param cluster_enrichment result of assess_cluster_enrichment
+#' @param only_top numeric, number of features to be shown with a different color and representing the most significative features according to t-test
+#' @param criterion "fdr" to sort features by fdr
+#' @param fdr_threshold fdr threshold
+#' @param only_pos_nes whether to consider only positive enrichments
+#' @param do_scale_features whether to scale features
+#' @param dir_out output directory
+#' @param ... passed to axis
 #' @importFrom grDevices jpeg
 #' @import graphics
 #' @export

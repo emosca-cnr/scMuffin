@@ -1,4 +1,9 @@
 #' assess_cluster_enrichment
+#' @param features feature list
+#' @param clusterings clustering list
+#' @param meta_clusters boolean, TRUE if the assessment involves meta clusters
+#' @param write_output boolean, TRUE to write the output in the output dir
+#' @param out_dir output dir
 #' @export
 #' @importFrom utils write.table
 assess_cluster_enrichment <- function(features, clusterings, meta_clusters=FALSE, write_output=TRUE, out_dir="./"){

@@ -1,3 +1,5 @@
+version 0.19
+- fixed minor issues and every function is documented
 version 0.18
 - fixed issues in cluster by gene sets and significance in plot_heatmap_features_by_clusters
 version 0.17

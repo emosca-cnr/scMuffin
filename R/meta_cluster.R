@@ -1,6 +1,7 @@
 #' Returns meta-clusters obtained by using hierarchical clustering
 #' @param overlap_mat Overlap matrix as obtained form overlap_matrix() function
 #' @param n_step number used to divide hclust dendrogram height to obtain cut values to calculate silhouette
+#' @param max_clust maximum number of clusters
 #' @import cluster
 #' @export
 

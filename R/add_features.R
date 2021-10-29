@@ -1,5 +1,7 @@
-#' Add feature
-#'
+#' Adds a feature to the feature list
+#' @param clusterings feature list
+#' @param cell_id vector of cell identifiers
+#' @param values vector or data.frame with feature values
 #' @export
 
 add_features <- function(features=NULL, cell_id=NULL, values=NULL){

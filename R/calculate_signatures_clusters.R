@@ -1,5 +1,8 @@
 #' calculate_signatures_clusters
-#'
+#' @param sign_list list of gene signature lists
+#' @param cell_clusters cell cluster labels
+#' @param ncells_min min number of cells required for the clculation of the average signature in the cluster
+#' @param null_model TRUE to consider the permutations
 #'
 #' @export
 

@@ -9,11 +9,9 @@ cluster_gsea(features, cell_clusters, min.cells = 100)
 \arguments{
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
+\item{min.cells}{minimum number of cells}
+
 \item{features_by_cells}{matrix, features by cells matrix}
-
-\item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
-
-\item{dir_out}{string, output directory}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

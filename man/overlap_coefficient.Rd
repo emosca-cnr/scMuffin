@@ -6,6 +6,11 @@
 \usage{
 overlap_coefficient(x, y)
 }
+\arguments{
+\item{x}{vector of items}
+
+\item{y}{vector of items}
+}
 \description{
 Calculate the overlap coefficient between two sets
 }

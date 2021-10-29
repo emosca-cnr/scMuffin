@@ -1,6 +1,9 @@
 #' heatmap_CNV
-#' @param cnv ...
-#' @param list_ncol_chr ...
+#' @param cnv CNV matrix
+#' @param cnv_clustering cell clustering by CNV
+#' @param ref_cluster reference cluster
+#' @param file output file
+#' @param ... arguments passed to ComplexHeatmap::Heatmap
 #' @description Plot as an heatmap the resulting data from CNV. 
 #' @details Preprocessing with 'preprocess_for_heatmap' needed. 
 #' @usage heatmap_CNV(cnv)

@@ -1,4 +1,5 @@
-#' Calculate the overlap coefficient between two sets
+#' Calculate the overlap coefficient between n sets
+#' @param x list of item sets
 #' @export
 overlap_matrix <- function(x){
 	

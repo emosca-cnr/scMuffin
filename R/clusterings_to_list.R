@@ -1,4 +1,5 @@
 #' clusterings_to_list
+#' @param clusterings clusterings object
 #' @export
 
 clusterings_to_list <- function(clusterings){

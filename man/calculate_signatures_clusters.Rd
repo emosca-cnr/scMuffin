@@ -11,6 +11,15 @@ calculate_signatures_clusters(
   null_model = TRUE
 )
 }
+\arguments{
+\item{sign_list}{list of gene signature lists}
+
+\item{cell_clusters}{cell cluster labels}
+
+\item{ncells_min}{min number of cells required for the clculation of the average signature in the cluster}
+
+\item{null_model}{TRUE to consider the permutations}
+}
 \description{
 calculate_signatures_clusters
 }
