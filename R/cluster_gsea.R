@@ -7,10 +7,10 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_gsea <- function(features, cell_clusters, min.cells=100){
+cluster_gsea <- function(feature_values, cell_clusters, min.cells=100){
 	
 
-	X <- as.matrix(features$df)
+	X <- as.matrix(feature_values)
 	X[is.na(X)] <- 0
 	
 	idx_out <- colSums(X!=0) < min.cells
@@ -26,6 +26,7 @@ cluster_gsea <- function(features, cell_clusters, min.cells=100){
 	gsea_res <- gsea(X, gsl, mc_cores_perm = 2, ord.mode = rep(-1, ncol(X)), k = 99)
 	
 	nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
+	##add clusters excluded by gsea
 	if(any(idx_out)){
 		nes_table <- cbind(nes_table, matrix(0, nrow = nrow(nes_table), ncol = length(names_idx_out), dimnames = list(rownames(nes_table), names_idx_out)))
 	}

@@ -1,6 +1,6 @@
 Package: scMuffin
-Title: What the Package Does (One Line, Title Case)
-Version: 0.19
+Title: Single cell multi-feature analyis
+Version: 0.20
 Authors@R: 
     person(given = "First",
            family = "Last",
@@ -34,3 +34,8 @@ Imports:
     dendsort,
     grDevices,
     ggplot2
+Suggests: 
+    rmarkdown,
+    knitr,
+    BiocStyle
+VignetteBuilder: knitr

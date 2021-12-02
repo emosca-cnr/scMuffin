@@ -1,0 +1,154 @@
+---
+title: "scMuffin"
+author:
+- name: Noemi Di Nanni*
+  affiliation: CNR-ITB
+- name: Valentina Nale*
+  affiliation: CNR-ITB
+- name: Alice Chiodi
+  affiliation: CNR-ITB
+- name: Cinzia Cocola
+  affiliation: CNR-ITB
+- name: Ingrid Cifola
+  affiliation: CNR-ITB
+- name: Eleonora Piscitelli
+  affiliation: CNR-ITB
+- name: Ileana Zucchi
+  affiliation: CNR-ITB
+- name: Rolland Reinbold
+  affiliation: CNR-ITB
+- name: Luciano Milanesi
+  affiliation: CNR-ITB
+- name: Alessandra Mezzelani
+  affiliation: CNR-ITB
+- name: Paride Pelucchi*
+  affiliation: CNR-ITB
+- name: Ettore Mosca*
+  affiliation: CNR-ITB
+  email: ettore.mosca@itb.cnr.it
+package: scMuffin
+output:
+  BiocStyle::html_document:
+    toc: true
+abstract: >
+  INTRODUCTION: Single cell (SC) analysis is crucial to study the complex cellular heterogeneity of solid tumors, which is one of the main obstacles for the development of effective cancer treatments. Such tumors typically contain a mixture of cells with aberrant genomic and expression profiles affecting specific sub-populations that have a pivotal role in cancer progression, whose identification eludes bulk approaches. We present a MUlti-Features INtegrative approach for SC data analysis (scMuffin) that characterizes cell identity on the basis of multiple and complementary criteria. MATERIALS AND METHODS: Cell markers sources: CSEA, PanglaoDB. Pathways sources: NCBI Biosystems, MSigDB. Gene set expression is assessed by a fast algorithm that uses comparable control-gene sets. CNVs are estimated using adjacent genes. Lineage analysis is computed by Monocle; multipotency is assessed by LandScent. The association between the various features and cell clusters is assessed by chi-squared and enrichment-based approaches. RESULTS: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of markers for normal and tumor conditions, pathway activity, cell hierarchy, multipotency state, copy number variations and cell cycle state. Cell-level scores are used for cell cluster annotation and combined to obtain alternative cell clusters. scMuffin integrates any type of cell- or cluster-associated data, and can be used for single-cell multi-omics analyses (e.g. mutations, gene expression). As a proof-of-principle, we studied a public dataset of human gliomas. CONCLUSIONS: scMuffin combines several tools to shed light on the identity of tumors cells and spot subtle cell types. The package is available for non-commercial users at the URL https://github.com/emosca-cnr/scMuffin.
+vignette: >
+  %\VignetteIndexEntry{scMuffin}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+
+
+
+# Getting started
+
+```{r, include=TRUE, echo=FALSE, out.width="60%", fig.align = "center", fig.cap="scMuffing logo"}
+knitr::include_graphics("images/scMuffin_logo_pontillism.jpg")
+```
+
+```{r, include=TRUE, eval=FALSE}
+library(devtools)
+install_github("emosca-cnr/scMuffin", build_vignettes = TRUE)
+library(scMuffin)
+```
+
+# Cell-level quantities
+
+## Cell-level estimation of signature expression
+
+```{r, include=TRUE, eval=FALSE}
+signatures <- prepare_signatures("SIG_CSEA", genes = rownames(seu_obj), genes_min = 3)
+res_signatures <- calculate_signatures(seu_obj, signatures = signatures$SIG_CSEA)
+res_signatures_clusters <- calculate_signatures_clusters(sign_list = res_signatures$full, cell_clusters = seu_obj$seurat_clusters)
+```
+
+## CNV inference
+
+```{r, include=TRUE, eval=FALSE}
+cnv_res <- calculate_CNV(gbc, wnd_size = 100, reference = GTEx_mean)
+cnv_clustering <- cluster_by_features(cnv_res, cnv=TRUE)
+cnv_res_ref <- apply_CNV_reference(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
+cnv_res_ref <- CNV_heatmap(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
+```
+
+## The global state of the chromatin
+
+```{r, include=TRUE, eval=FALSE}
+res_chrom_state <- exp_rate(gbc, min_counts = 5)
+```
+
+where 5 is the required threshold above which a gene is considered expressed.
+
+## Cell’s  proliferation
+is a relevant indicator of cell type in solid tumors [REF]. In scMuffin, we quantify a cell's proliferation on the basis of the expression of G1/S and G2/M genes:
+```{r, include=TRUE, eval=FALSE}
+res <- proliferation_analysis(gbc)
+```
+
+## Trajectory analysis
+Diffusion maps identify differentiation trajectories. scMuffin relies on the diffusion pseudo time calculation available in the R package “destiny” [REF]:
+
+```{r, include=TRUE, eval=FALSE}
+res <- cell_trajectory_analysis(gbc)
+```
+
+# Clustering and Annotation
+
+## Assembling features and clusterings
+
+Definition of the feature object
+```{r, include=TRUE, eval=FALSE}
+feat_obj <- create_features(cell_id = colnames(res_sig$SIG_CSEA$signatures_by_cells), values = t(res_sig$SIG_CSEA$signatures_by_cells))
+feat_obj <- add_features(feat_obj, cell_id = names(res_chrom_state), values = cbind(cs=res_chrom_state))
+```
+
+Clustering by features:
+```{r, include=TRUE, eval=FALSE}
+feat_clust <- cluster_by_features(feat_obj)
+```
+
+
+Definition of the clusterig objects
+```{r, include=TRUE, eval=FALSE}
+clust_obj <- create_clusterings(cell_id = rownames(seu_obj), values = data.frame(global=seu_obj@meta.data$seurat_clusters))
+clust_obj <- add_clusterings(clust_obj, cell_id = names(clust_by_csea$clusters), values = data.frame(cancer_state=clust_by_csea$clusters)))
+```
+
+
+## Assessing clustering enrichment
+```{r, include=TRUE, eval=FALSE}
+cl_enrich <- assess_cluster_enrichment()
+```
+
+
+## Comparison of clusterings and definition of meta-clusters
+```{r, include=TRUE, eval=FALSE}
+cl_list <- clusterings_to_list(clusterings[, c("global", "GB500", "ribosomes")])
+ov_mat <- overlap_matrix(cl_list)
+meta_cl <- meta_cluster(ov_mat, n_step = 10, max_clust = 15)
+meta_cl_cell <- get_meta_clusters(cl_list, meta_cl)
+```
+
+# Visualization
+
+
+Boxplot of cluster enrichment:
+
+```{r, include=TRUE, eval=FALSE}
+top_feat_lab <- boxplot_cluster(feat_obj, cell_clusters = , cluster_enrichment = clust_enrich$global, fdr_threshold = 0.05, only_pos_nes = TRUE)
+```
+
+Plot umap labelling clusters using the enriched scores:
+```{r, include=TRUE, eval=FALSE}
+plot_umap(seu_obj, group.by = "seurat_clusters", labels=lapply(top_feat_lab, function(x) x[1:2]), lab_size=2)
+```
+
+Features-by-clusters heatmap:
+```{r, include=TRUE, eval=FALSE}
+plot_heatmap_features_by_clusters(list(feature_markers=t(clust_enrich$global$nes)), ntop = ncol(clust_enrich$global$nes))
+```
+
+plot meta clusters:
+```{r, include=TRUE, eval=FALSE}
+plot_meta_clusters(ov_mat, meta_cl)
+```

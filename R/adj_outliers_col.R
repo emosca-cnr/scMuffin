@@ -1,0 +1,14 @@
+#' Remove outliers to avoid that these influence colors
+#' @export
+
+adj_outliers_col <- function(x){
+  
+  s <- boxplot.stats(x)$stats
+  
+  ans <- x
+  ans[ans < s[1] ] <- s[1]
+  ans[ans > s[5] ] <- s[5]
+  
+  return(ans)
+  
+}

@@ -1,3 +1,5 @@
+version 0.20
+- for interoperability, functions now use gene expression matrix instead of seurat object
 version 0.19
 - fixed minor issues and every function is documented
 version 0.18

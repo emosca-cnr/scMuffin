@@ -1,5 +1,5 @@
 #' calculate signatures
-#' @param genes_by_cells Seurat object
+#' @param genes_by_cells genes_by_cells expression matrix. This matrix must contain positive values only.
 #' @param signatures list of gene signatures
 #' @param mc.cores number of cores
 #' @param nbins number of bins to split the distribution of average gene expression
@@ -26,7 +26,7 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 	
 	
 	#dataset bins
-	data_bins <- sc_data_bin(as.matrix(Seurat::GetAssayData(genes_by_cells)), nbins = nbins, use.log = TRUE)
+	data_bins <- sc_data_bin(as.matrix(genes_by_cells), nbins = nbins, use.log = TRUE)
 	
 	#signatures-by-cell matrix
 	if(mc.cores==1){
@@ -38,11 +38,11 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 		#		res_signatures[[i]] <- gene_set_score(signatures[[i]], genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin)
 		#	}
 		
-		res_signatures <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose))
+		res_signatures <- lapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose))
 		
 	}else{
 		
-		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(Seurat::GetAssayData(genes_by_cells)), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
+		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
 		
 	}
 	cat("assembling signatures_by_cells matrix...")
