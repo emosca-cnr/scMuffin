@@ -26,9 +26,14 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 	
 	
 	#dataset bins
-	data_bins <- sc_data_bin(as.matrix(genes_by_cells), nbins = nbins, use.log = TRUE)
+	data_bins <- NULL
+	if(null_model){
+		cat("defining bins...\n")
+		data_bins <- sc_data_bin(as.matrix(genes_by_cells), nbins = nbins, use.log = TRUE)
+	}
 	
 	#signatures-by-cell matrix
+	cat("calculating gene set scores...\n")
 	if(mc.cores==1){
 		
 		#debug...
@@ -45,14 +50,17 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 		res_signatures <- parallel::mclapply(signatures, function(i_marker_set) gene_set_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
 		
 	}
+	
+	
 	cat("assembling signatures_by_cells matrix...")
-
+	lapply(res_signatures, function(x) print(head(x)))
+	
 	if(score_type == "relative"){
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$avg_delta_score, dimnames = list(rownames(x))))))
 	}else{
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$case, dimnames = list(rownames(x))))))
 	}
 	
-	return(list(signatures_by_cells=SC_signatures_by_cell_matrix, full=res_signatures))
+	return(list(signatures_by_cells=SC_signatures_by_cell_matrix, full=res_signatures, signatures=signatures))
 	
 }

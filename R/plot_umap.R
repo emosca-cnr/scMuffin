@@ -4,11 +4,20 @@
 #' @param seurat_object seurat object, object with saved dimension reduction components
 #' @param file string, file name output
 #' @param color_by string, specification of a feature to colour by (e.g. cluster ID)
-#' 
+#' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
+
 #' @import Seurat graphics ggplot2
 #' @export
 #' 
-plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", ...){
+plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, ...){
+	
+	if(adj_outliers){
+		if(!is.numeric(seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by])){
+			message("Cannot adjust ", group.by, "because it's not numeric\n")
+		}else{
+			seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by] <- adj_outliers_col(seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by])
+		}
+	}
 	
 	jpeg(file, width=180, height=180, units="mm", res=300)
 	

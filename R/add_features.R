@@ -12,7 +12,7 @@ add_features <- function(features=NULL, cell_id=NULL, values=NULL){
 	rownames(features$df) <- features$df[, 1]
 	features$df[, 1] <- NULL
 	
-	features$type <- unlist(lapply(features$df[-1], class))
+	features$type <- unlist(lapply(features$df, class))
 	
 	return(features)
 	

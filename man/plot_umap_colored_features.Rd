@@ -10,6 +10,10 @@ plot_umap_colored_features(
   dir = "./",
   scale_feature = TRUE,
   feature_breaks = NULL,
+  adj_outliers = FALSE,
+  neg_eps = -0.1,
+  pos_eps = 0.1,
+  min_cells = 10,
   ...
 )
 }
@@ -17,6 +21,12 @@ plot_umap_colored_features(
 \item{seurat_object}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
 \item{features}{matrix, features by cells matrix}
+
+\item{adj_outliers}{logical, whether to adjust the feature scores, removing outliers}
+
+\item{neg_eps}{small negative value to define the color for null values around zero, default to -0.1}
+
+\item{pos_eps}{small positive value to define the color for null values around zero, default to =0.1}
 
 \item{n_colors}{numeric, number of colors to be used}
 }

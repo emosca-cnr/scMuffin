@@ -19,7 +19,7 @@ calculate_signatures(
 )
 }
 \arguments{
-\item{genes_by_cells}{Seurat object}
+\item{genes_by_cells}{genes_by_cells expression matrix. This matrix must contain positive values only.}
 
 \item{signatures}{list of gene signatures}
 

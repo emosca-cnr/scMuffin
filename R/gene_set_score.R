@@ -18,7 +18,7 @@
 gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE){
 	
 	if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
-		stop("not enough genes in gene set, please consider only gene set with enough number of genes\n")
+		message("not enough genes in gene set, please consider only gene set with enough number of genes\n")
 		res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
 	}else{
 		gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
@@ -109,7 +109,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 					#res <- res[res$nmark_min, ] #eliminate cells without a sufficient number of genes
 					
 				}else{
-					warning("cannot create null models for at least ", ncells_min, " cells\n")
+					message("cannot create null models for at least ", ncells_min, " cells\n")
 					res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
 				}
 				
@@ -117,7 +117,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 				
 			}else{
 				
-				warning("cannot calcolate gene set score for at least ", ncells_min, " cells\n")
+				message("cannot calcolate gene set score for at least ", ncells_min, " cells\n")
 				res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
 				
 			}

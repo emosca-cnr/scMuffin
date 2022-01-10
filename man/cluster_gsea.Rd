@@ -4,7 +4,7 @@
 \alias{cluster_gsea}
 \title{Calculate cluster enrichment by gsea approach}
 \usage{
-cluster_gsea(features, cell_clusters, min.cells = 100)
+cluster_gsea(feature_values, cell_clusters, min.cells = 100)
 }
 \arguments{
 \item{cell_clusters}{array with cell values named by their cluster ID}

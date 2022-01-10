@@ -12,7 +12,7 @@
 #' @importFrom utils data
 #' @export
 
-proliferation_analysis <- function(genes_by_cells, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE){
+proliferation_analysis <- function(genes_by_cells, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){
 	
 	data("SIG_Tirosh", envir=environment())
 	score_type <- score_type[1]
@@ -23,12 +23,12 @@ proliferation_analysis <- function(genes_by_cells, mc.cores=2, nbins=25, nmark_m
 	
 	ans <- tirosh$signatures_by_cells
 	
-	if(score_type == "mean"){
+	if(score_type == "mean" & mean_scale){
 		ans <- t(apply(ans, 1, scale))
 		colnames(ans) <- colnames(tirosh$signatures_by_cells)
 	}
 	
-	ans <- apply(tirosh$signatures_by_cells, 2, max, na.rm=TRUE) #max between the two signatures
+	ans <- apply(ans, 2, max, na.rm=TRUE) #max between the two signatures
 	names(ans) <- colnames(tirosh$signatures_by_cells)
 	
 	ans[ans==-Inf] <- NA

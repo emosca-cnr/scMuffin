@@ -12,6 +12,7 @@ plot_umap(
   feature_plot = FALSE,
   lab_size = 1,
   lab_color = "black",
+  adj_outliers = FALSE,
   ...
 )
 }
@@ -19,6 +20,8 @@ plot_umap(
 \item{seurat_object}{seurat object, object with saved dimension reduction components}
 
 \item{file}{string, file name output}
+
+\item{adj_outliers}{logical, whether to adjust the group.by scores, removing outliers}
 
 \item{color_by}{string, specification of a feature to colour by (e.g. cluster ID)}
 }

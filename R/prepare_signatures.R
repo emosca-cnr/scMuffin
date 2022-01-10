@@ -59,7 +59,7 @@ prepare_signatures <- function(signature_sources=NULL, custom_signatures=NULL, C
 			signatures$SIG_PNDB <- temp
 		}
 		
-		if("msigdb" %in% signature_sources){
+		if("msigdb" %in% signature_sources & !is.null(msigdb_hs_cat_subcat)){
 			msigdb_sigs <- apply(msigdb_hs_cat_subcat, 1, function(x) paste(x, collapse = "_"))
 			for(i in 1:nrow(msigdb_hs_cat_subcat)){
 				signatures[[msigdb_sigs[i]]] <- get_msigdb_geneset(species = msigdb_hs_cat_subcat[i, 1], category = msigdb_hs_cat_subcat[i, 2], subcategory = msigdb_hs_cat_subcat[i, 3])$path_list

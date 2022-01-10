@@ -10,7 +10,7 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_chisq <- function(feature_values, cell_clusters, fdr=0.05, top=2){
+cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2){
   
   
   #gene sets are clusters
@@ -18,18 +18,22 @@ cluster_chisq <- function(feature_values, cell_clusters, fdr=0.05, top=2){
   
   universe <- rownames(feature_values)
   
-  #deg list are feature values
+  ora_res <- vector("list", length = ncol(feature_values))
+  names(ora_res) <- colnames(feature_values)
   for(i in 1:ncol(feature_values)){
     
+    cat("processing", colnames(feature_values)[i], "...\n")
     feature_val_i <- lapply(split(setNames(feature_values[, i], rownames(feature_values)), feature_values[, i]), function(x) names(x))
-    ora_res <- vector("list", length(feature_val_i))
-    names(ora_res) <- names(feature_val_i)
-    for(j in 1:length(feature_val_i)){
-      
-      ora_res[[j]]  <- parallel::mclapply(gsl, function(x) ora(feature_val_i[[j]], universe[!universe %in% feature_val_i[[j]]], gsl = x, p_adj_method = "fdr"), mc.cores = mc.cores)
+    ora_res[[i]] <- vector("list", length(feature_val_i))
+    names(ora_res[[i]]) <- names(feature_val_i)
+
+        for(j in 1:length(feature_val_i)){
+      ora_res[[i]][[j]]  <- parallel::mclapply(gsl, function(x) ora(feature_val_i[[j]], universe[!universe %in% feature_val_i[[j]]], gsl = x, p_adj_method = "fdr"), mc.cores = mc.cores)
       
     }
     
   }
+  
+  return(ora_res)
 }
   
