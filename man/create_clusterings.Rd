@@ -2,15 +2,13 @@
 % Please edit documentation in R/create_clusterings.R
 \name{create_clusterings}
 \alias{create_clusterings}
-\title{Create clustering list}
+\title{Create the clustering object}
 \usage{
-create_clusterings(cell_id = NULL, values = NULL)
+create_clusterings(x)
 }
 \arguments{
-\item{cell_id}{vector of cell id}
-
-\item{values}{vector of values}
+\item{x}{data.frame of 1 or more cell labels with cell id as row names}
 }
 \description{
-Create clustering list
+Create the clustering object
 }

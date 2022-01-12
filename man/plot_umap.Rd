@@ -5,7 +5,7 @@
 \title{plot_umap}
 \usage{
 plot_umap(
-  seurat_object,
+  Seu_obj,
   file = "umap.jpg",
   labels = NULL,
   group.by = NULL,
@@ -17,7 +17,7 @@ plot_umap(
 )
 }
 \arguments{
-\item{seurat_object}{seurat object, object with saved dimension reduction components}
+\item{Seu_obj}{seurat object, object with saved dimension reduction components}
 
 \item{file}{string, file name output}
 

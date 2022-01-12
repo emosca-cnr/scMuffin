@@ -4,10 +4,10 @@
 \alias{diff_map}
 \title{Computation of Diffusion Map}
 \usage{
-diff_map(Seurat_object, output_ndc = 1:3, root_cell = NULL, ...)
+diff_map(Seu_obj, output_ndc = 1:3, root_cell = NULL, ...)
 }
 \arguments{
-\item{Seurat_object}{Seurat object with normalized data}
+\item{Seu_obj}{Seurat object with normalized data}
 
 \item{output_ndc}{The numnber of diffusion components that will be included in the output}
 

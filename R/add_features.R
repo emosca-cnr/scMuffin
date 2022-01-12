@@ -1,19 +1,18 @@
 #' Adds a feature to the feature list
-#' @param clusterings feature list
-#' @param cell_id vector of cell identifiers
-#' @param values vector or data.frame with feature values
+#' @param features features object
+#' @param features_to_add data.frame of 1 or more cell values with cell id as row names
 #' @export
 
-add_features <- function(features=NULL, cell_id=NULL, values=NULL){
+add_features <- function(features=NULL, features_to_add=NULL){
 	
-	temp <- data.frame(values, stringsAsFactors = F, row.names = cell_id)
-
-	features$df <- merge(features$df, temp, by=0, all=T, sort=F)
-	rownames(features$df) <- features$df[, 1]
-	features$df[, 1] <- NULL
+  ans <- create_features(x = features_to_add)
+  
+  ans$df <- merge(features$df, ans$df, by=0, all=T, sort=F)
+  rownames(ans$df) <- ans$df[, 1]
+  ans$df[, 1] <- NULL
 	
-	features$type <- unlist(lapply(features$df, class))
+  ans$type <- c(features$type, ans$type)
 	
-	return(features)
+	return(ans)
 	
 }

@@ -1,12 +1,18 @@
-#' Create clustering list
-#' @param cell_id vector of cell id
-#' @param values vector of values
+#' Create the clustering object
+#' @param x data.frame of 1 or more cell labels with cell id as row names
 #' @export
 
-create_clusterings <- function(cell_id=NULL, values=NULL){
+create_clusterings <- function(x){
+  
+  if(!is.data.frame(x)){
+    stop("x must be a data.frame")
+  }
 	
-	ans <- data.frame(values, row.names = cell_id)
-	
-	return(ans)
+  #clusterings must be factors
+  for(i in 1:ncol(x)){
+    x[, i] <- as.factor(x[, i])
+  }
+  
+  return(x)
 	
 }

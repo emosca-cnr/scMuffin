@@ -1,5 +1,5 @@
 #' cell cycle - merge the two Tirosh signatures for proliferation analysis
-#' @param genes_by_cells Seurat object
+#' @param genes_by_cells genes_by_cells expression matrix
 #' @param mc.cores number of cores
 #' @param nbins number of bins to split the distribution of average gene expression
 #' @param nmark_min numner of minimum markers that are required for the succesful calculation of a signature

@@ -96,17 +96,16 @@ res <- cell_trajectory_analysis(gbc)
 
 ## Assembling features and clusterings
 
-Definition of the feature object
+Definition of the features object:
 ```{r, include=TRUE, eval=FALSE}
-feat_obj <- create_features(cell_id = colnames(res_sig$SIG_CSEA$signatures_by_cells), values = t(res_sig$SIG_CSEA$signatures_by_cells))
-feat_obj <- add_features(feat_obj, cell_id = names(res_chrom_state), values = cbind(cs=res_chrom_state))
+feat_obj <- create_features(t(res_signatures$SIG_CSEA$signatures_by_cells))
+feat_obj <- add_features(feat_obj, as.data.frame(res_chrom_state))
 ```
 
 Clustering by features:
 ```{r, include=TRUE, eval=FALSE}
 feat_clust <- cluster_by_features(feat_obj)
 ```
-
 
 Definition of the clusterig objects
 ```{r, include=TRUE, eval=FALSE}
@@ -117,7 +116,8 @@ clust_obj <- add_clusterings(clust_obj, cell_id = names(clust_by_csea$clusters),
 
 ## Assessing clustering enrichment
 ```{r, include=TRUE, eval=FALSE}
-cl_enrich <- assess_cluster_enrichment()
+cl_enrich <- assess_cluster_enrichment(features = features, clusterings = clusterings)
+cl_enrich_table <- extract_cluster_enrichment_table(cl_enrich, q_type = "nes", c_type = "er")
 ```
 
 

@@ -1,6 +1,6 @@
 Package: scMuffin
 Title: Single cell multi-feature analyis
-Version: 0.21
+Version: 0.22
 Authors@R: 
     person(given = "First",
            family = "Last",

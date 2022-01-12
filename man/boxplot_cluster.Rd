@@ -2,12 +2,14 @@
 % Please edit documentation in R/boxplot_cluster.R
 \name{boxplot_cluster}
 \alias{boxplot_cluster}
-\title{Boxplot clusters}
+\title{Boxplot clusters
+Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.}
 \usage{
 boxplot_cluster(
   features = NULL,
-  cell_clusters = NULL,
-  cluster_enrichment = NULL,
+  clusterings = NULL,
+  clustering_name = NULL,
+  clust_enrich_res = NULL,
   dir_out = "./",
   only_top = 10,
   criterion = "fdr",
@@ -20,9 +22,11 @@ boxplot_cluster(
 \arguments{
 \item{features}{feature list}
 
-\item{cell_clusters}{cell clusters}
+\item{clusterings}{clusterings object}
 
-\item{cluster_enrichment}{result of assess_cluster_enrichment}
+\item{clustering_name}{one among the clusterings}
+
+\item{clust_enrich_res}{clustering enrichment results}
 
 \item{dir_out}{output directory}
 
@@ -39,5 +43,6 @@ boxplot_cluster(
 \item{...}{passed to axis}
 }
 \description{
+Boxplot clusters
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }

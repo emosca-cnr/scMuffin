@@ -1,17 +1,17 @@
 #' Computation of Diffusion Map
 #' 
 #' The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
-#' @param Seurat_object Seurat object with normalized data
+#' @param Seu_obj Seurat object with normalized data
 #' @param output_ndc The numnber of diffusion components that will be included in the output
 #' @param root_cell root cell or "random" to pick up a random root via the destiny::random_root function
 #' @param ... parameters for destiny::DiffusionMap
 #' @importFrom destiny DiffusionMap random_root DPT
 #' @export
 
-diff_map <- function(Seurat_object, output_ndc=1:3, root_cell=NULL, ...){
+diff_map <- function(Seu_obj, output_ndc=1:3, root_cell=NULL, ...){
 	
   cat("Calculating the diffusion map...\n")
-  res <- destiny::DiffusionMap(t(as.matrix(GetAssayData(Seurat_object, slot = "data"))), ...)
+  res <- destiny::DiffusionMap(t(as.matrix(GetAssayData(Seu_obj, slot = "data"))), ...)
 	
   #Il DPT ?? metrica che dipende dalla cellula scelta, identical(dpt[root.idx], dpt$dpt) dpt[["dpt"]]
   dpt_raw <- dpt <- NA

@@ -1,9 +1,9 @@
 #' Boxplot clusters 
-#' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param features feature list
-#' @param cell_clusters cell clusters
-#' @param cluster_enrichment result of assess_cluster_enrichment
+#' @param clusterings clusterings object
+#' @param clustering_name one among the clusterings
+#' @param clust_enrich_res clustering enrichment results
 #' @param only_top numeric, number of features to be shown with a different color and representing the most significative features according to t-test
 #' @param criterion "fdr" to sort features by fdr
 #' @param fdr_threshold fdr threshold
@@ -15,26 +15,37 @@
 #' @import graphics
 #' @export
 
-boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichment=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, do_scale_features=FALSE, ...){
+boxplot_cluster <- function(features=NULL, clusterings=NULL, clustering_name=NULL, clust_enrich_res=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, do_scale_features=FALSE, ...){
 	
 	if(!dir.exists(dir_out)){
 		dir.create(dir_out, recursive = TRUE)
 	}
 	
-	cells_by_features <- as.matrix(features$df)
+  cells_by_features <- features$df[, features$type!="factor", drop=F]
+	cells_by_features <- as.matrix(cells_by_features) ##to fix 
 	cells_by_features[is.na(cells_by_features)] <- 0
-	cells_by_features <- 	cells_by_features[, colSums(abs(cells_by_features))>0]
+	cells_by_features <- 	cells_by_features[, colSums(abs(cells_by_features))>0, drop=F]
 	
 	if(do_scale_features){
 		cells_by_features <- apply(cells_by_features, 2, scale)
-		rownames(cells_by_features) <- rownames(as.matrix(features$df))
+		rownames(cells_by_features) <- rownames(features$df)
 	}
 	
+	cell_clusters <- clusterings[, colnames(clusterings) == clustering_name]
 	cell_clusters_set <- levels(cell_clusters)
 	
+	
+	# clusters-by-feature value table of enrichment p-value
+	en_res_nes <- extract_cluster_enrichment_table(clust_enrich_res, q_type = "nes")
+	en_res_nes <- en_res_nes$cluster_gsea_table[names(en_res_nes$cluster_gsea_table) == clustering_name][[1]]
+	
+	en_res_q <- extract_cluster_enrichment_table(clust_enrich_res, q_type = "FDRq")
+	en_res_q <- en_res_q$cluster_gsea_table[names(en_res_q$cluster_gsea_table) == clustering_name][[1]]
+	
+	
 	if(only_pos_nes){
-		cluster_enrichment$fdrq[cluster_enrichment$nes < 0] <- 1
-		cluster_enrichment$nes[cluster_enrichment$nes < 0] <- 0
+	  en_res_q[en_res_nes < 0] <- 1
+	  en_res_nes[en_res_nes < 0] <- 0
 	}
 	
 	#boxplot for each cluster
@@ -46,9 +57,11 @@ boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichmen
 		
 		top_features_ans <- NA
 		
+		print(head(en_res_nes))
+		
 		top_features <- list(
-			fdr=cluster_enrichment$fdrq[rownames(cluster_enrichment$fdrq)==cell_clusters_set[cl], ],
-			nes=cluster_enrichment$nes[rownames(cluster_enrichment$nes)==cell_clusters_set[cl], ]
+			fdr=setNames(en_res_q[rownames(en_res_q)==cell_clusters_set[cl], ], colnames(en_res_q)),
+			nes=setNames(en_res_nes[rownames(en_res_nes)==cell_clusters_set[cl], ], colnames(en_res_nes))
 		)
 		
 		#distribution of all cells by feature
@@ -80,7 +93,7 @@ boxplot_cluster <- function(features=NULL, cell_clusters=NULL, cluster_enrichmen
 			par(mar = c(4, 10, 2, 1))
 			
 			#feature data of the cluster
-			cl_cells_idx <- rownames(cbf_cl) %in% names(cell_clusters)[cell_clusters == cell_clusters_set[cl]]
+			cl_cells_idx <- rownames(cbf_cl) %in% rownames(clusterings)[cell_clusters == cell_clusters_set[cl]]
 			data_clust <- cbf_cl[cl_cells_idx, , drop=FALSE]
 			
 			#feature data other clusters

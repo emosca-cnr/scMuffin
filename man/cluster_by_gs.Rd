@@ -4,10 +4,10 @@
 \alias{cluster_by_gs}
 \title{cluster by n-genes}
 \usage{
-cluster_by_gs(genes_by_cells, gs = NULL)
+cluster_by_gs(Seu_obj, gs = NULL)
 }
 \arguments{
-\item{genes_by_cells}{Seurat object}
+\item{Seu_obj}{Seu_obj}
 
 \item{gs}{vector of genes}
 }

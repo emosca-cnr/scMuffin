@@ -15,6 +15,8 @@ cluster_by_features(
 )
 }
 \arguments{
+\item{features}{features object or result of CNV calculation}
+
 \item{n_comp}{numeric, Dimensions of reduction to use as input}
 
 \item{cnv}{TRUE/FALSE set it to TRUE for clustering CNV results}
@@ -26,8 +28,6 @@ cluster_by_features(
 \item{scale_features}{whether to scale features}
 
 \item{...}{arguments passed to Seurat::DimPlot}
-
-\item{features_by_cells}{matrix, features by cells matrix}
 }
 \value{
 features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix

@@ -1,7 +1,7 @@
 #' plot_umap
 #' 
 #' Generate a UMAP visualization
-#' @param seurat_object seurat object, object with saved dimension reduction components
+#' @param Seu_obj seurat object, object with saved dimension reduction components
 #' @param file string, file name output
 #' @param color_by string, specification of a feature to colour by (e.g. cluster ID)
 #' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
@@ -9,13 +9,13 @@
 #' @import Seurat graphics ggplot2
 #' @export
 #' 
-plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, ...){
+plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, ...){
 	
 	if(adj_outliers){
-		if(!is.numeric(seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by])){
+		if(!is.numeric(Seu_obj@meta.data[, colnames(Seu_obj@meta.data) == group.by])){
 			message("Cannot adjust ", group.by, "because it's not numeric\n")
 		}else{
-			seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by] <- adj_outliers_col(seurat_object@meta.data[, colnames(seurat_object@meta.data) == group.by])
+			Seu_obj@meta.data[, colnames(Seu_obj@meta.data) == group.by] <- adj_outliers_col(Seu_obj@meta.data[, colnames(Seu_obj@meta.data) == group.by])
 		}
 	}
 	
@@ -25,14 +25,14 @@ plot_umap <- function(seurat_object, file="umap.jpg", labels=NULL, group.by=NULL
 	par(mgp=c(2, 0.7, 0))
 	
 	if(feature_plot){
-		res <- FeaturePlot(seurat_object, features = group.by, ...)
+		res <- FeaturePlot(Seu_obj, features = group.by, ...)
 	}else{
-		res <- Seurat::DimPlot(seurat_object, group.by=group.by, ...)
+		res <- Seurat::DimPlot(Seu_obj, group.by=group.by, ...)
 	}
 	
 	if(!is.null(labels)){
 		
-		data_plot <- Seurat::FetchData(seurat_object, vars = c("UMAP_1", "UMAP_2", group.by))
+		data_plot <- Seurat::FetchData(Seu_obj, vars = c("UMAP_1", "UMAP_2", group.by))
 		
 		#labels <- lapply(labels, function(x) paste0(sort(x), collapse = "\n")) #remove sort
 		labels <- lapply(labels, function(x) paste0(x, collapse = "\n")) #remove sort

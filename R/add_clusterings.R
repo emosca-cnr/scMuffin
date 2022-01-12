@@ -1,19 +1,13 @@
 #' Adds a clustering to the clustering list
-#' @param clusterings clustering list
-#' @param cell_id vector of cell identifiers
-#' @param values vector or data.frame with clustering labels
+#' @param clusterings clusterings object
+#' @param clusterings_to_add data.frame of 1 or more cell labels with cell id as row names
 #' @export
 
-add_clusterings <- function(clusterings=NULL, cell_id=NULL, values=NULL){
+add_clusterings <- function(clusterings=NULL, clusterings_to_add=NULL){
 	
-	for(i in 1:ncol(values)){
-		if(is.integer(values[, i])){
-			values[, i] <- as.character(as.numeric(values[,i]))
-		}
-	}
-	temp <- data.frame(values, row.names = cell_id)
+	ans <- create_clusterings(x = clusterings_to_add)
 
-	clusterings <- merge(clusterings, temp, by=0, all=T, sort=F)
+	clusterings <- merge(clusterings, ans, by=0, all=T, sort=F)
 	rownames(clusterings) <- clusterings[, 1]
 	clusterings[, 1] <- NULL
 	

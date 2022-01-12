@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap_features_by_clusters.R
 \name{plot_heatmap_features_by_clusters}
 \alias{plot_heatmap_features_by_clusters}
-\title{plot_heatmap_signatures}
+\title{plot_heatmap_features_by_clusters}
 \usage{
 plot_heatmap_features_by_clusters(
   features_by_clusters,
@@ -16,12 +16,12 @@ plot_heatmap_features_by_clusters(
 )
 }
 \arguments{
+\item{features_by_clusters}{list resulting from calculate_signatures_clusters()}
+
 \item{ntop}{number of top features considered for each cluster}
 
 \item{onlyUp}{top features are considered only on the basis of their positive deviation from null distribution (up-regulation)}
-
-\item{signatures_by_clusters}{list resulting from calculate_signatures_clusters()}
 }
 \description{
-plot_heatmap_signatures
+plot_heatmap_features_by_clusters
 }

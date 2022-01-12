@@ -18,7 +18,7 @@ proliferation_analysis(
 )
 }
 \arguments{
-\item{genes_by_cells}{Seurat object}
+\item{genes_by_cells}{genes_by_cells expression matrix}
 
 \item{mc.cores}{number of cores}
 

@@ -5,25 +5,27 @@
 \title{Boxplot clusters}
 \usage{
 dotplot_cluster(
-  cells_by_features,
-  cell_clusters,
-  top_features = NULL,
+  features,
+  clusterings = NULL,
+  clustering_name = NULL,
   dir_out = "./",
-  cont_tables = NULL
+  clust_enrich_res = NULL,
+  text_val = c("p", "wbd", "er")
 )
 }
 \arguments{
-\item{cells_by_features}{matrix, features by cells matrix}
+\item{features}{feautures object}
 
-\item{cell_clusters}{array with cell values named by their cluster ID}
+\item{clusterings}{clusterings object}
+
+\item{clustering_name}{one among the clusterings}
 
 \item{dir_out}{string, output directory}
 
-\item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
+\item{clust_enrich_res}{clustering enrichment results}
+
+\item{text_val}{which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-}
-\author{
-Noemi Di Nanni
 }

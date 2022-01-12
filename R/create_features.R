@@ -1,13 +1,24 @@
 #' Create feature list
-#' @param cell_id vector of cell id
-#' @param values vector of values
+#' @param x data.frame of 1 or more cell values with cell id as row names
 #' @export
 
-create_features <- function(cell_id=NULL, values=NULL){
+create_features <- function(x=NULL){
 	
-	ans <- list(df=data.frame(values, stringsAsFactors = F, row.names = cell_id))
-
-	ans$type <- unlist(lapply(ans$df, class))
+  if(!is.data.frame(x)){
+    stop("x must be a data.frame")
+  }
+  
+	ans <- list(
+	  df=x,
+	  type=sapply(x, class)
+	)
+	
+	#non numeric features are converted to factors
+	for(i in 1:ncol(ans$df)){
+	  if(ans$type[i] == "factor"){
+	    ans$df[, i] <- as.factorans$df[, i]
+	  }
+	}
 	
 	return(ans)
 	

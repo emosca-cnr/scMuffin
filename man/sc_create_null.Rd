@@ -4,10 +4,10 @@
 \alias{sc_create_null}
 \title{sc_create_null}
 \usage{
-sc_create_null(seurat_data, bins, gene_set, k = 100)
+sc_create_null(genes_by_cells, bins, gene_set, k = 100)
 }
 \arguments{
-\item{seurat_data}{genes-by-cells matrix}
+\item{genes_by_cells}{genes-by-cells matrix}
 
 \item{bins}{bins of genes}
 

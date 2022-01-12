@@ -5,7 +5,7 @@
 \title{plot_umap_colored_features}
 \usage{
 plot_umap_colored_features(
-  seurat_object,
+  Seu_obj,
   features,
   dir = "./",
   scale_feature = TRUE,
@@ -18,7 +18,7 @@ plot_umap_colored_features(
 )
 }
 \arguments{
-\item{seurat_object}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
+\item{Seu_obj}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
 \item{features}{matrix, features by cells matrix}
 

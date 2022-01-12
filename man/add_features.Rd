@@ -4,14 +4,12 @@
 \alias{add_features}
 \title{Adds a feature to the feature list}
 \usage{
-add_features(features = NULL, cell_id = NULL, values = NULL)
+add_features(features = NULL, features_to_add = NULL)
 }
 \arguments{
-\item{cell_id}{vector of cell identifiers}
+\item{features}{features object}
 
-\item{values}{vector or data.frame with feature values}
-
-\item{clusterings}{feature list}
+\item{features_to_add}{data.frame of 1 or more cell values with cell id as row names}
 }
 \description{
 Adds a feature to the feature list

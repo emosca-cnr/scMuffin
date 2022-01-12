@@ -4,10 +4,10 @@
 \alias{sc_data_bin}
 \title{sc_data_bin}
 \usage{
-sc_data_bin(seurat_data, nbins = 25, use.log = TRUE)
+sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE)
 }
 \arguments{
-\item{seurat_data}{genes-by-cells matrix}
+\item{genes_by_cells}{genes-by-cells matrix}
 
 \item{nbins}{number of bins}
 

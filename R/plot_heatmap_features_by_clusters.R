@@ -1,5 +1,5 @@
-#' plot_heatmap_signatures
-#' @param signatures_by_clusters list resulting from calculate_signatures_clusters()
+#' plot_heatmap_features_by_clusters
+#' @param features_by_clusters list resulting from calculate_signatures_clusters()
 #' @param ntop number of top features considered for each cluster
 #' @param onlyUp top features are considered only on the basis of their positive deviation from null distribution (up-regulation)
 #' @export

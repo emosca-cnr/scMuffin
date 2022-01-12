@@ -2,17 +2,17 @@
 #' 
 #' Split the input data matrix by rows into nbins
 #' 
-#' @param seurat_data genes-by-cells matrix
+#' @param genes_by_cells genes-by-cells matrix
 #' @param nbins number of bins
 #' @param use.log use logarithm
 #' @return vector with bin id for each row
 #' @export
 
 
-sc_data_bin <- function(seurat_data, nbins=25, use.log=TRUE){
+sc_data_bin <- function(genes_by_cells, nbins=25, use.log=TRUE){
 
 
-  ans <- rowSums(seurat_data)
+  ans <- rowSums(genes_by_cells)
   if(use.log){
     if(any(ans==0)){
       halfmin <- min(ans[ans>0]) / 2

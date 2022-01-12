@@ -4,12 +4,10 @@
 \alias{create_features}
 \title{Create feature list}
 \usage{
-create_features(cell_id = NULL, values = NULL)
+create_features(x = NULL)
 }
 \arguments{
-\item{cell_id}{vector of cell id}
-
-\item{values}{vector of values}
+\item{x}{data.frame of 1 or more cell values with cell id as row names}
 }
 \description{
 Create feature list

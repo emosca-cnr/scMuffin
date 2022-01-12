@@ -4,14 +4,12 @@
 \alias{add_clusterings}
 \title{Adds a clustering to the clustering list}
 \usage{
-add_clusterings(clusterings = NULL, cell_id = NULL, values = NULL)
+add_clusterings(clusterings = NULL, clusterings_to_add = NULL)
 }
 \arguments{
-\item{clusterings}{clustering list}
+\item{clusterings}{clusterings object}
 
-\item{cell_id}{vector of cell identifiers}
-
-\item{values}{vector or data.frame with clustering labels}
+\item{clusterings_to_add}{data.frame of 1 or more cell labels with cell id as row names}
 }
 \description{
 Adds a clustering to the clustering list

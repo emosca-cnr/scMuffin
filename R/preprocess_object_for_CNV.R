@@ -1,18 +1,18 @@
 #' preprocess_object_for_CNV
-#' @param input_object genes-by-cells input matrix
+#' @param genes_by_cells genes-by-cells input matrix
 #' @description Preprocessing function to obtain a genomically-ordered list of chromosomes. 
 #' @details The preliminary step consist of annotation, duplicates and NA values removal. 
 #' Then, the matrix is splitted as a list of dataframe, where every dataframe is a chromosome.
 #' Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position. 
-#' @usage preprocess_object_for_cnv(input_object)
+#' @usage preprocess_object_for_cnv(genes_by_cells)
 #' @return list of genomically-ordered chromosomes
 #' @author Valentina Nale
-#' @import Seurat org.Hs.eg.db
+#' @import org.Hs.eg.db
 #' @export
-preprocess_object_for_CNV <- function(input_object) {
+preprocess_object_for_CNV <- function(genes_by_cells) {
   
   # retrieve gene informations
-  # input_object=cellObj
+  # genes_by_cells=cellObj
   
 	cat("Retrieving gene locations...\n")
   gene_locations <- as.data.frame(org.Hs.eg.db::org.Hs.egCHRLOC)
@@ -25,9 +25,7 @@ preprocess_object_for_CNV <- function(input_object) {
   gene_locations$start_location <- NULL
   gene_locations$end_location <- NULL
   
-  # merged Seurat matrix and annotation matrix via "symbol"
-  #input_object <- Seurat::GetAssayData(object=input_object, slot="data")
-  matrix_complete <- merge(gene_locations, input_object, by.x="symbol", by.y=0, sort=FALSE)
+  matrix_complete <- merge(gene_locations, genes_by_cells, by.x="symbol", by.y=0, sort=FALSE)
   
   # remove chromosome names not in 1:22 and X,Y -- long names, duplicates
   matrix_complete <- matrix_complete[-which(grepl("_", matrix_complete$Chromosome)), ]

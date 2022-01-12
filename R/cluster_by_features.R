@@ -1,7 +1,7 @@
 #' Cluster by features
 #' 
 #' Clustering of the features_by_cell matrix
-#' @param features_by_cells matrix, features by cells matrix 
+#' @param features features object or result of CNV calculation
 #' @param n_comp numeric, Dimensions of reduction to use as input
 #' @param cnv TRUE/FALSE set it to TRUE for clustering CNV results
 #' @param plot_umap whether to plot the UMAP
@@ -21,25 +21,25 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 	if(cnv){
 		features_by_cells <- features
 	}else{
-		features_by_cells <- t(features$df)
+		features_by_cells <- t(features$df[, features$type != "factor", drop=F])
 		features_by_cells[is.na(features_by_cells)] <- 0
 	}
 	
 	
-	features_by_cells <- CreateSeuratObject(counts = features_by_cells, min.cells = 0, min.features = 0)
+	features_by_cells <- Seurat::CreateSeuratObject(counts = features_by_cells, min.cells = 0, min.features = 0)
 	all.genes <- rownames(features_by_cells)
 	#scale data
 	if(scale_features){
-		features_by_cells <- ScaleData(features_by_cells, features = all.genes)
+		features_by_cells <- Seurat::ScaleData(features_by_cells, features = all.genes)
 	}
 	
-	features_by_cells <- RunPCA(features_by_cells, features = all.genes)
+	features_by_cells <- Seurat::RunPCA(features_by_cells, features = all.genes)
 	
 	n_comp <- min(n_comp, ncol(features_by_cells@reductions$pca))
 	
-	features_by_cells <- FindNeighbors(features_by_cells, dims = 1:n_comp)
-	features_by_cells <- FindClusters(features_by_cells)
-	features_by_cells <- RunUMAP(features_by_cells, dims = 1:n_comp)
+	features_by_cells <- Seurat::FindNeighbors(features_by_cells, dims = 1:n_comp)
+	features_by_cells <- Seurat::FindClusters(features_by_cells)
+	features_by_cells <- Seurat::RunUMAP(features_by_cells, dims = 1:n_comp)
 	
 	if(plot_umap){
 		grDevices::jpeg(paste0(out_dir, "/feature_umap.jpg"), width = 180, height = 180, res=300, units="mm")
@@ -48,7 +48,7 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 		dev.off()
 	}
 	if(cnv){
-		features_by_cells <- BuildClusterTree(features_by_cells, features = all.genes, reorder = T)
+		features_by_cells <- Seurat::BuildClusterTree(features_by_cells, features = all.genes, reorder = T)
 		hc_cells <- as.hclust(features_by_cells@tools$BuildClusterTree)
 		ans <- list(clusters=features_by_cells@active.ident, hc=hc_cells, sobj=features_by_cells)
 	}else{
