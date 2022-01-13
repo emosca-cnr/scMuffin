@@ -2,14 +2,28 @@ Package: scMuffin
 Title: Single cell multi-feature analyis
 Version: 0.22
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+     person(given = "Noemi",
+           family = "Di Nanni",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "noemi.dinanni@itb.cnr.it",
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person(given = "Valentina",
+           family = "Nale",
+           role = c("aut", "cre"),
+           email = "valentina.nale@itb.cnr.it",
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+    person(given = "Alice",
+           family = "Chiodi",
+           role = c("aut", "cre"),
+           email = "alice.chiodi@itb.cnr.it",
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+   person(given = "Ettore",
+           family = "Mosca",
+           role = c("aut", "cre"),
+           email = "ettore.mosca@itb.cnr.it",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of markers for normal and tumor conditions, pathway activity, cell hierarchy, multipotency state, copy number variations and cell cycle state. Cell-level scores are used for cell cluster annotation and combined to obtain alternative cell clusters. scMuffin integrates any type of cell- or cluster-associated data, and can be used for single-cell multi-omics analyses (e.g. mutations, gene expression).
 License: GPL-3
-Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

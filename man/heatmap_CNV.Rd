@@ -4,7 +4,13 @@
 \alias{heatmap_CNV}
 \title{heatmap_CNV}
 \usage{
-heatmap_CNV(cnv)
+heatmap_CNV(
+  cnv,
+  cnv_clustering,
+  ref_cluster = NULL,
+  file = "heatmap_CNV.jpg",
+  ...
+)
 }
 \arguments{
 \item{cnv}{CNV matrix}
@@ -18,7 +24,7 @@ heatmap_CNV(cnv)
 \item{...}{arguments passed to ComplexHeatmap::Heatmap}
 }
 \description{
-Plot as an heatmap the resulting data from CNV.
+Plot an heatmap of the CNV.
 }
 \details{
 Preprocessing with 'preprocess_for_heatmap' needed.

@@ -1,4 +1,5 @@
 #' Remove outliers to avoid that these influence colors
+#' @param x numeric vector
 #' @export
 
 adj_outliers_col <- function(x){

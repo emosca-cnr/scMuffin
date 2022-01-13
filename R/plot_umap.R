@@ -2,10 +2,14 @@
 #' 
 #' Generate a UMAP visualization
 #' @param Seu_obj seurat object, object with saved dimension reduction components
+#' @param labels cluster labels
+#' @param group.by a feature to colour by (e.g. cluster ID)
+#' @param feature_plot whether to call Seurat::FeaturePlot
+#' @param lab_size label size
+#' @param lab_color label color
 #' @param file string, file name output
-#' @param color_by string, specification of a feature to colour by (e.g. cluster ID)
 #' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
-
+#' @param ... further arguments for Seurat::FeaturePlot or Seurat::DimPlot
 #' @import Seurat graphics ggplot2
 #' @export
 #' 
@@ -25,7 +29,7 @@ plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feat
 	par(mgp=c(2, 0.7, 0))
 	
 	if(feature_plot){
-		res <- FeaturePlot(Seu_obj, features = group.by, ...)
+		res <- Seurat::FeaturePlot(Seu_obj, features = group.by, ...)
 	}else{
 		res <- Seurat::DimPlot(Seu_obj, group.by=group.by, ...)
 	}

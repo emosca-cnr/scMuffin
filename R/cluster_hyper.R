@@ -1,16 +1,16 @@
 #' Calculate cluster enrichment by hypergeometric test
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-#' @param features_by_cells matrix, features by cells matrix
+#' @param feature_values matrix, features by cells matrix
 #' @param cell_clusters array with cell values named by their cluster ID
-#' @param n_top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
+#' @param top numeric, number of features to be shown with a difference color and representing the most significative features according to t-test
 #' @param fdr fdr threshold, default at 0.05
-#' @param dir_out string, output directory
+#' @param mc.cores number of cores
 #' @importFrom parallel mclapply
 #' @export
 #' @author Ettore Mosca
 
-cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2){
+cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2, mc.cores=1){
   
   
   #gene sets are clusters

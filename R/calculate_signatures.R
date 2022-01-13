@@ -53,7 +53,7 @@ calculate_signatures <- function(genes_by_cells, signatures=NULL, mc.cores=2, nb
 	
 	
 	cat("assembling signatures_by_cells matrix...")
-	lapply(res_signatures, function(x) print(head(x)))
+	#lapply(res_signatures, function(x) print(head(x)))
 	
 	if(score_type == "relative"){
 		SC_signatures_by_cell_matrix <- t(do.call(cbind, lapply(res_signatures, function(x) array(x$avg_delta_score, dimnames = list(rownames(x))))))

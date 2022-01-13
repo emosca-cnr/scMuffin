@@ -11,15 +11,11 @@ extract_cluster_enrichment_table(
 )
 }
 \arguments{
-\item{features}{feature list}
+\item{clust_enrich_res}{cluster enrichment result}
 
-\item{clusterings}{clustering list}
+\item{q_type}{the column of GSEA result that will appear in the output table}
 
-\item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
-
-\item{write_output}{boolean, TRUE to write the output in the output dir}
-
-\item{out_dir}{output dir}
+\item{c_type}{column of hyper result that will appear in the output table}
 }
 \description{
 extract_cluster_enrichment_table

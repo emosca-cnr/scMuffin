@@ -3,8 +3,12 @@
 #' Generate a UMAP visualization colored by feature distributions 
 #' @param Seu_obj seurat object, object with saved dimension reduction components calculate on genes by cells matrix
 #' @param features matrix, features by cells matrix
-#' @param n_colors numeric, number of colors to be used
+#' @param dir output directory
+#' @param scale_feature whether to scale features or not
+#' @param feature_breaks breaks for feature value distribution
+#' @param ... further arguments to plot_umap
 #' @param adj_outliers logical, whether to adjust the feature scores, removing outliers
+#' @param min_cells min number of cells in which the feature must have a non-zero value
 #' @param neg_eps small negative value to define the color for null values around zero, default to -0.1
 #' @param pos_eps small positive value to define the color for null values around zero, default to =0.1
 #' @import RColorBrewer

@@ -6,6 +6,9 @@
 \usage{
 adj_outliers_col(x)
 }
+\arguments{
+\item{x}{numeric vector}
+}
 \description{
 Remove outliers to avoid that these influence colors
 }

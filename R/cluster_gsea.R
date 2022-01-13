@@ -1,13 +1,14 @@
 #' Calculate cluster enrichment by gsea approach
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-#' @param features_by_cells matrix, features by cells matrix
+#' @param feature_values matrix, features by cells matrix
 #' @param cell_clusters array with cell values named by their cluster ID
 #' @param min.cells minimum number of cells
+#' @param mc.cores number of cores
 #' @export
 #' @author Ettore Mosca
 
-cluster_gsea <- function(feature_values, cell_clusters, min.cells=100){
+cluster_gsea <- function(feature_values, cell_clusters, min.cells=100, mc.cores=1){
   
   
   X <- as.matrix(feature_values)
@@ -23,7 +24,7 @@ cluster_gsea <- function(feature_values, cell_clusters, min.cells=100){
   
   #GSEA process on features-by-cells
   gsl <- lapply(split(cell_clusters, cell_clusters), function(x) names(x))
-  gsea_res <- gsea(X, gsl, mc_cores_perm = 2, ord.mode = rep(-1, ncol(X)), k = 99)
+  gsea_res <- gsea(X, gsl, mc_cores_perm = mc.cores, ord.mode = rep(-1, ncol(X)), k = 99)
   
   # nes_table <- do.call(cbind, lapply(gsea_res$gs_table, function(x) array(x$nes, dimnames = list(x$id))))
   # ##add clusters excluded by gsea

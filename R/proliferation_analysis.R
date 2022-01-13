@@ -8,7 +8,7 @@
 #' @param kmin minimum number of permutations; due to missing values it is hard to ensure that a signature can be compared to k permutations in every cell
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
-#' @param verbose verbosity
+#' @param mean_scale whether to scale the values obtained using score_type="mean"
 #' @importFrom utils data
 #' @export
 

@@ -4,9 +4,8 @@
 #' @param ref_cluster reference cluster
 #' @param file output file
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
-#' @description Plot as an heatmap the resulting data from CNV. 
+#' @description Plot an heatmap of the CNV. 
 #' @details Preprocessing with 'preprocess_for_heatmap' needed. 
-#' @usage heatmap_CNV(cnv)
 #' @author Valentina Nale
 #' @import ComplexHeatmap grDevices grid
 #' @export

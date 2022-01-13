@@ -38,8 +38,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}  
 ---
 
-
-
 # Getting started
 
 ```{r, include=TRUE, echo=FALSE, out.width="60%", fig.align = "center", fig.cap="scMuffing logo"}
@@ -68,7 +66,6 @@ res_signatures_clusters <- calculate_signatures_clusters(sign_list = res_signatu
 cnv_res <- calculate_CNV(gbc, wnd_size = 100, reference = GTEx_mean)
 cnv_clustering <- cluster_by_features(cnv_res, cnv=TRUE)
 cnv_res_ref <- apply_CNV_reference(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
-cnv_res_ref <- CNV_heatmap(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
 ```
 
 ## The global state of the chromatin
@@ -96,7 +93,7 @@ res <- cell_trajectory_analysis(gbc)
 
 ## Assembling features and clusterings
 
-Definition of the features object:
+Definition of the object that containts the features:
 ```{r, include=TRUE, eval=FALSE}
 feat_obj <- create_features(t(res_signatures$SIG_CSEA$signatures_by_cells))
 feat_obj <- add_features(feat_obj, as.data.frame(res_chrom_state))
@@ -107,19 +104,18 @@ Clustering by features:
 feat_clust <- cluster_by_features(feat_obj)
 ```
 
-Definition of the clusterig objects
+Definition of the object that contains the clusterings:
 ```{r, include=TRUE, eval=FALSE}
 clust_obj <- create_clusterings(cell_id = rownames(seu_obj), values = data.frame(global=seu_obj@meta.data$seurat_clusters))
 clust_obj <- add_clusterings(clust_obj, cell_id = names(clust_by_csea$clusters), values = data.frame(cancer_state=clust_by_csea$clusters)))
 ```
 
-
 ## Assessing clustering enrichment
+The enrichment of each cluster of cells in terms of quantitative or categorical features can be assessed using:
 ```{r, include=TRUE, eval=FALSE}
 cl_enrich <- assess_cluster_enrichment(features = features, clusterings = clusterings)
 cl_enrich_table <- extract_cluster_enrichment_table(cl_enrich, q_type = "nes", c_type = "er")
 ```
-
 
 ## Comparison of clusterings and definition of meta-clusters
 ```{r, include=TRUE, eval=FALSE}
@@ -131,11 +127,19 @@ meta_cl_cell <- get_meta_clusters(cl_list, meta_cl)
 
 # Visualization
 
+CNV heatmap
+```{r, include=TRUE, eval=FALSE}
+cnv_res_ref <- CNV_heatmap(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
+```
 
-Boxplot of cluster enrichment:
-
+Boxplot of cluster enrichment in a quantitative feature:
 ```{r, include=TRUE, eval=FALSE}
 top_feat_lab <- boxplot_cluster(feat_obj, cell_clusters = , cluster_enrichment = clust_enrich$global, fdr_threshold = 0.05, only_pos_nes = TRUE)
+```
+
+Boxplot of cluster enrichment in a categorical feature:
+```{r, include=TRUE, eval=FALSE}
+top_feat_lab <- dotplot_cluster(feat_obj, cell_clusters = , cluster_enrichment = clust_enrich$global, fdr_threshold = 0.05, only_pos_nes = TRUE)
 ```
 
 Plot umap labelling clusters using the enriched scores:

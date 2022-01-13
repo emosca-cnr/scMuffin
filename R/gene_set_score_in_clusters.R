@@ -5,6 +5,7 @@
 #' @param alt alterative
 #' @param test type of test
 #' @param null_model whether to use permutations or not
+#' @importFrom stats median wilcox.test t.test p.adjust
 #' @export
 
 gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t", null_model=TRUE){
@@ -30,7 +31,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 		if(null_model){
 			cluster_scores <- data.frame(
 				cells=tapply(score_table_clusters$nmark_min, score_table_clusters$cluster, sum),
-				med_case=tapply(score_table_clusters$case, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
+				med_case=tapply(score_table_clusters$case, score_table_clusters$cluster, function(x) stats::median(x, na.rm = T)),
 				med_control=tapply(score_table_clusters$avg_control, score_table_clusters$cluster, function(x) median(x, na.rm = T)),
 				stringsAsFactors = F
 			) #median cell score for markers(i) in each cell cluster
@@ -42,7 +43,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 				temp <- split(score_table_clusters, score_table_clusters$cluster)
 				for(i in 1:length(temp)){
 					if(nrow(temp[[i]]) >= ncells_min ){ #at least ncells_min with acceptable score
-						temp[[i]] <- wilcox.test(temp[[i]]$case, temp[[i]]$avg_control, alternative = alt, paired = F)
+						temp[[i]] <- stats::wilcox.test(temp[[i]]$case, temp[[i]]$avg_control, alternative = alt, paired = F)
 					}else{
 						temp[[i]] <- NA
 					}
@@ -54,7 +55,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 				temp <- split(score_table_clusters, score_table_clusters$cluster)
 				for(i in 1:length(temp)){
 					if(nrow(temp[[i]]) >= ncells_min ){ #at least ncells_min with acceptable score
-						temp[[i]] <- t.test(temp[[i]]$case, temp[[i]]$avg_control, alternative = alt, paired = T)
+						temp[[i]] <- stats::t.test(temp[[i]]$case, temp[[i]]$avg_control, alternative = alt, paired = T)
 					}else{
 						temp[[i]] <- NA
 					}
@@ -68,7 +69,7 @@ gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5,
 			cluster_scores <- merge(cluster_scores, res_p, by.x=1, by.y=0)
 			
 			colnames(cluster_scores)[c(1, 6, 7)] <- c("cluster", "stat", "p")
-			cluster_scores$fdr <- p.adjust(cluster_scores$p, method = "fdr")
+			cluster_scores$fdr <- stats::p.adjust(cluster_scores$p, method = "fdr")
 			
 			#missing values to 0
 			if(!all(clusters %in% cluster_scores$cluster)){

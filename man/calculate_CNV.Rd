@@ -18,6 +18,8 @@ calculate_CNV(
 )
 }
 \arguments{
+\item{genes_by_cells}{genes-by-cells data.frame}
+
 \item{reference}{one-column data.frame with a reference expression profile; rownames must match those of genes_by_cell;}
 
 \item{mc.cores}{number of cores;}
@@ -34,7 +36,7 @@ calculate_CNV(
 
 \item{na.rm}{whether to remove 0 values in CNV estimation}
 
-\item{genes_by_cell}{genes-by-cells data.frame}
+\item{center_genes}{whether to center genes or not}
 }
 \description{
 Calculate CNV

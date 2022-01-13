@@ -12,6 +12,7 @@
 
 prepare_signatures <- function(signature_sources=NULL, custom_signatures=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, genes=NULL){
 	
+	SIG_CM_normal <- SIG_CM_cancer <- SIG_CSEA <- SIG_PNDB <- NULL #to please the check
 	signatures <- custom_signatures
 	
 	if(!is.null(signature_sources)){

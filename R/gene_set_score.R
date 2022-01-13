@@ -1,4 +1,5 @@
 #' gene_set_score
+#' @param gene_set gene set
 #' @param genes_by_cells real data
 #' @param bins random data
 #' @param nmark_min min number of markers

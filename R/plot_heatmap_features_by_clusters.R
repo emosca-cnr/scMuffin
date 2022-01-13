@@ -1,7 +1,12 @@
 #' plot_heatmap_features_by_clusters
 #' @param features_by_clusters list resulting from calculate_signatures_clusters()
+#' @param significance_matrix significance matrix to add asterisks over the heatmap
+#' @param sig_threshold significance threshold
 #' @param ntop number of top features considered for each cluster
+#' @param out_dir output directory
 #' @param onlyUp top features are considered only on the basis of their positive deviation from null distribution (up-regulation)
+#' @param remove_null_features whether to remove null features
+#' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap grDevices
 #' @importFrom utils write.table

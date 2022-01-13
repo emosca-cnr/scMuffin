@@ -57,8 +57,6 @@ boxplot_cluster <- function(features=NULL, clusterings=NULL, clustering_name=NUL
 		
 		top_features_ans <- NA
 		
-		print(head(en_res_nes))
-		
 		top_features <- list(
 			fdr=setNames(en_res_q[rownames(en_res_q)==cell_clusters_set[cl], ], colnames(en_res_q)),
 			nes=setNames(en_res_nes[rownames(en_res_nes)==cell_clusters_set[cl], ], colnames(en_res_nes))

@@ -3,11 +3,12 @@
 #' @param n_step number used to divide hclust dendrogram height to obtain cut values to calculate silhouette
 #' @param max_clust maximum number of clusters
 #' @import cluster
+#' @importFrom stats hclust as.dist cutree
 #' @export
 
 meta_cluster <- function(overlap_mat, n_step = 11, max_clust=10) {
   diss <- max(overlap_mat) - overlap_mat
-  hc_cl <- hclust(as.dist(diss))
+  hc_cl <- stats::hclust(stats::as.dist(diss))
   
   val <- seq(min(hc_cl[["height"]]), max(hc_cl[["height"]]), length.out =n_step)
   sil <- data.frame(step=val, silhouette= rep(0, length(val)), stringsAsFactors = F)
@@ -26,7 +27,7 @@ meta_cluster <- function(overlap_mat, n_step = 11, max_clust=10) {
          col="red",
          lwd=3, lty=2)
   
-  clusters_hc <- cutree(hc_cl, h = sil$step[which(sil$silhouette == max(sil$silhouette, na.rm = T))[1]])
+  clusters_hc <- stats::cutree(hc_cl, h = sil$step[which(sil$silhouette == max(sil$silhouette, na.rm = T))[1]])
   n_clust <- max(clusters_hc)
   if(n_clust>max_clust){
   	clusters_hc <- cutree(hc_cl, k = max_clust)

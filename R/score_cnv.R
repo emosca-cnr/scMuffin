@@ -1,6 +1,7 @@
 #' Score CNV
 #' @param cnv_res Object resulting from calculate_cnv function
 #' @param plot_score boolean, whether to plot or not
+#' @importFrom stats quantile cor
 #' @export
 
 score_cnv <- function(cnv_res, plot_score=FALSE) {
@@ -12,12 +13,12 @@ score_cnv <- function(cnv_res, plot_score=FALSE) {
 
   ##### 2) correlation of each cell CNV vector with the average CNV vector of top 10% of cells
 
-  top10 <- quantile(cs, probs=0.9)
+  top10 <- stats::quantile(cs, probs=0.9)
   cs_filt <- names(cs[cs>top10])
   cnv_avg_top10 <- rowMeans(X[, colnames(X) %in% cs_filt])
 
 
-  corr <- cor(cnv_res, cnv_avg_top10, method = "spearman")
+  corr <- stats::cor(cnv_res, cnv_avg_top10, method = "spearman")
   
   res_corr <- as.data.frame(corr)
   res_cs <- as.data.frame(cs)

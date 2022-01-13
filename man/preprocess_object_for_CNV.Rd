@@ -4,7 +4,7 @@
 \alias{preprocess_object_for_CNV}
 \title{preprocess_object_for_CNV}
 \usage{
-preprocess_object_for_cnv(genes_by_cells)
+preprocess_object_for_CNV(genes_by_cells)
 }
 \arguments{
 \item{genes_by_cells}{genes-by-cells input matrix}

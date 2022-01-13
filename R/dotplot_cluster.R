@@ -50,12 +50,12 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
 		
 		for(i in 1:ncol(cells_by_features)){ #for each feature
 			
-		  col <- "pink"
-			if(!is.null(top_features)){
-				if(colnames(cells_by_features)[i] %in% gsub("_.+$", "", unlist(top_features[names(top_features) == cell_clusters_set[cl]]))){
-					col <- "red"
-				}
-			}
+		#   col <- "pink"
+		# 	if(!is.null(top_features)){
+		# 		if(colnames(cells_by_features)[i] %in% gsub("_.+$", "", unlist(top_features[names(top_features) == cell_clusters_set[cl]]))){
+		# 			col <- "red"
+		# 		}
+		# 	}
 			col <- "red"
 			
 			data_clust_i_fact <- factor(data_clust[, i], levels = sort(as.numeric(levels(data_clust[, i]))))

@@ -22,13 +22,21 @@ plot_umap_colored_features(
 
 \item{features}{matrix, features by cells matrix}
 
+\item{dir}{output directory}
+
+\item{scale_feature}{whether to scale features or not}
+
+\item{feature_breaks}{breaks for feature value distribution}
+
 \item{adj_outliers}{logical, whether to adjust the feature scores, removing outliers}
 
 \item{neg_eps}{small negative value to define the color for null values around zero, default to -0.1}
 
 \item{pos_eps}{small positive value to define the color for null values around zero, default to =0.1}
 
-\item{n_colors}{numeric, number of colors to be used}
+\item{min_cells}{min number of cells in which the feature must have a non-zero value}
+
+\item{...}{further arguments to plot_umap}
 }
 \description{
 Generate a UMAP visualization colored by feature distributions

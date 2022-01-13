@@ -4,18 +4,18 @@
 \alias{cluster_hyper}
 \title{Calculate cluster enrichment by hypergeometric test}
 \usage{
-cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2)
+cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2, mc.cores = 1)
 }
 \arguments{
+\item{feature_values}{matrix, features by cells matrix}
+
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
 \item{fdr}{fdr threshold, default at 0.05}
 
-\item{features_by_cells}{matrix, features by cells matrix}
+\item{top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
 
-\item{n_top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
-
-\item{dir_out}{string, output directory}
+\item{mc.cores}{number of cores}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

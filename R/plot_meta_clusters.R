@@ -1,4 +1,9 @@
 #' Plot meta clusters
+#' @param ov_mat overlap matrix
+#' @param meta_clusters meta clusters
+#' @param out_dir output directory
+#' @param file output file
+#' @param ... further arguments for ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap grDevices dendsort
 

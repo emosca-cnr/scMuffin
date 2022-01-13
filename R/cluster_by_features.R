@@ -10,6 +10,7 @@
 #' @param ... arguments passed to Seurat::DimPlot
 #' @return features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix
 #' @import Seurat
+#' @importFrom stats as.hclust
 #' @export
 
 cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALSE, out_dir="./", scale_features=TRUE, ...){
@@ -49,7 +50,7 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 	}
 	if(cnv){
 		features_by_cells <- Seurat::BuildClusterTree(features_by_cells, features = all.genes, reorder = T)
-		hc_cells <- as.hclust(features_by_cells@tools$BuildClusterTree)
+		hc_cells <- stats::as.hclust(features_by_cells@tools$BuildClusterTree)
 		ans <- list(clusters=features_by_cells@active.ident, hc=hc_cells, sobj=features_by_cells)
 	}else{
 		ans <- list(clusters=features_by_cells@active.ident, sobj=features_by_cells)

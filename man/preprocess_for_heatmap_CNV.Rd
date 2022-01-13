@@ -2,9 +2,9 @@
 % Please edit documentation in R/preprocess_for_heatmap_CNV.R
 \name{preprocess_for_heatmap_CNV}
 \alias{preprocess_for_heatmap_CNV}
-\title{preprocess_for_heatmap}
+\title{preprocess_for_heatmap_CNV}
 \usage{
-preprocess_for_heatmap(result_cnv)
+preprocess_for_heatmap_CNV(result_cnv)
 }
 \arguments{
 \item{result_cnv}{object resulting from CNV analyiss}

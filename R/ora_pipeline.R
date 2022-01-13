@@ -29,10 +29,10 @@ ora_pipeline <- function(deg_list=NULL, universe=NULL, gs=NULL, gsid2name=NULL, 
   }
   
   #filter gene set lists according to the universe
-  gs_i <- lapply(gs, function(x) filter_gsl(x, universe_id, min_size = min_size, max_size = max_size))
+  gs_i <- lapply(gs, function(x) filter_gsl(x, universe, min_size = min_size, max_size = max_size))
   
   #ORA
-  ora_res <- mclapply(gs_i, function(x) ora(deg_list, universe_id[!universe_id %in% deg_list], gsl = x, p_adj_method = "fdr"), mc.cores = mc.cores)
+  ora_res <- mclapply(gs_i, function(x) ora(deg_list, universe[!universe %in% deg_list], gsl = x, p_adj_method = "fdr"), mc.cores = mc.cores)
   
   #add pathwway info
   ora_res <- lapply(ora_res, function(x) merge(gsid2name, x, by.x="gsid", by.y="id", all.y=T))

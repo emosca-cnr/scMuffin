@@ -4,11 +4,12 @@
 #' @param gene_set a vector of genes
 #' @param k number of permutations
 #' @author Ettore Mosca
+#' @importFrom stats na.omit
 #' @export
 
 sc_create_null <- function(genes_by_cells, bins, gene_set, k=100){
 
-  ans <- bins[na.omit(match(gene_set, rownames(genes_by_cells)))]
+  ans <- bins[stats::na.omit(match(gene_set, rownames(genes_by_cells)))]
 
   ans <- lapply(ans, function(ibin) which(bins == ibin)) #elements of bins that belong to ibin, i.e. rows of seurat data that belong to "ibin" set
 

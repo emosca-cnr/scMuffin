@@ -21,9 +21,19 @@ plot_umap(
 
 \item{file}{string, file name output}
 
+\item{labels}{cluster labels}
+
+\item{group.by}{a feature to colour by (e.g. cluster ID)}
+
+\item{feature_plot}{whether to call Seurat::FeaturePlot}
+
+\item{lab_size}{label size}
+
+\item{lab_color}{label color}
+
 \item{adj_outliers}{logical, whether to adjust the group.by scores, removing outliers}
 
-\item{color_by}{string, specification of a feature to colour by (e.g. cluster ID)}
+\item{...}{further arguments for Seurat::FeaturePlot or Seurat::DimPlot}
 }
 \description{
 Generate a UMAP visualization

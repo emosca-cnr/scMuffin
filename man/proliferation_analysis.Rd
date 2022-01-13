@@ -36,7 +36,7 @@ proliferation_analysis(
 
 \item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
-\item{verbose}{verbosity}
+\item{mean_scale}{whether to scale the values obtained using score_type="mean"}
 }
 \description{
 cell cycle - merge the two Tirosh signatures for proliferation analysis

@@ -4,14 +4,16 @@
 \alias{cluster_gsea}
 \title{Calculate cluster enrichment by gsea approach}
 \usage{
-cluster_gsea(feature_values, cell_clusters, min.cells = 100)
+cluster_gsea(feature_values, cell_clusters, min.cells = 100, mc.cores = 1)
 }
 \arguments{
+\item{feature_values}{matrix, features by cells matrix}
+
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
 \item{min.cells}{minimum number of cells}
 
-\item{features_by_cells}{matrix, features by cells matrix}
+\item{mc.cores}{number of cores}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

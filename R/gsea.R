@@ -7,6 +7,7 @@
 #' @param mc_cores_perm number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm
 #' @import parallel
 #' @return data.frame with es, nes, p-value, adjusted p-value and FDR q-value
+#' @importFrom stats p.adjust
 
 gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
 
@@ -123,7 +124,7 @@ gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
     fdrq[fdrq>1] <- 1
 
     #out table
-    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=p.adjust(p_val, method='fdr'), nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
+    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=stats::p.adjust(p_val, method='fdr'), nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
 
   }
 

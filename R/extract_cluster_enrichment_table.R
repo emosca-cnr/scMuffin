@@ -1,11 +1,9 @@
 #' extract_cluster_enrichment_table
-#' @param features feature list
-#' @param clusterings clustering list
-#' @param meta_clusters boolean, TRUE if the assessment involves meta clusters
-#' @param write_output boolean, TRUE to write the output in the output dir
-#' @param out_dir output dir
+#' @param clust_enrich_res cluster enrichment result
+#' @param q_type the column of GSEA result that will appear in the output table
+#' @param c_type column of hyper result that will appear in the output table
 #' @export
-#' @importFrom utils write.table
+
 extract_cluster_enrichment_table <- function(clust_enrich_res, q_type="nes", c_type="er"){
 
   

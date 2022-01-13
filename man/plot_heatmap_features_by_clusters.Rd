@@ -18,9 +18,19 @@ plot_heatmap_features_by_clusters(
 \arguments{
 \item{features_by_clusters}{list resulting from calculate_signatures_clusters()}
 
+\item{significance_matrix}{significance matrix to add asterisks over the heatmap}
+
+\item{sig_threshold}{significance threshold}
+
 \item{ntop}{number of top features considered for each cluster}
 
 \item{onlyUp}{top features are considered only on the basis of their positive deviation from null distribution (up-regulation)}
+
+\item{out_dir}{output directory}
+
+\item{remove_null_features}{whether to remove null features}
+
+\item{...}{further arguments to ComplexHeatmap::Heatmap}
 }
 \description{
 plot_heatmap_features_by_clusters

@@ -12,6 +12,17 @@ plot_meta_clusters(
   ...
 )
 }
+\arguments{
+\item{ov_mat}{overlap matrix}
+
+\item{meta_clusters}{meta clusters}
+
+\item{out_dir}{output directory}
+
+\item{file}{output file}
+
+\item{...}{further arguments for ComplexHeatmap::Heatmap}
+}
 \description{
 Plot meta clusters
 }

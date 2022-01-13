@@ -17,6 +17,8 @@ gene_set_score(
 )
 }
 \arguments{
+\item{gene_set}{gene set}
+
 \item{genes_by_cells}{real data}
 
 \item{bins}{random data}

@@ -16,7 +16,7 @@ create_features <- function(x=NULL){
 	#non numeric features are converted to factors
 	for(i in 1:ncol(ans$df)){
 	  if(ans$type[i] == "factor"){
-	    ans$df[, i] <- as.factorans$df[, i]
+	    ans$df[, i] <- as.factor(ans$df[, i])
 	  }
 	}
 	

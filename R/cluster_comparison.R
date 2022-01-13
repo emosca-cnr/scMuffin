@@ -3,13 +3,14 @@
 #' @param cl2 x
 #' @param ctree1 x
 #' @param ctree2 x
+#' @importFrom stats as.hclust
 #' 
 #' @export
 
 cluster_comparison <- function(cl1, cl2, ctree1, ctree2){
 	
-	ctree1 <- as.hclust(ctree1)
-	ctree2 <- as.hclust(ctree2)
+	ctree1 <- stats::as.hclust(ctree1)
+	ctree2 <- stats::as.hclust(ctree2)
 	
 	ans <- table(cl1, cl2)
 	ans_freq <- t(apply(ans, 1, function(x) x / colSums(ans)))
