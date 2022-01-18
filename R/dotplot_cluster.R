@@ -12,6 +12,10 @@
 
 dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, dir_out="./", clust_enrich_res=NULL, text_val=c("p", "wbd", "er")){
 	
+  if(!dir.exists(dir_out)){
+    dir.create(dir_out, recursive = TRUE)
+  }
+  
   text_val <- match.arg(text_val, c("p", "wbd"))
   
   cells_by_features <- features$df[, features$type=="factor", drop=F]
@@ -46,7 +50,7 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
 		data_clust_at <- seq(1, ncol(cells_by_features)*2, by = 2)
 		data_no_clust_at <- seq(2, ncol(cells_by_features)*2, by = 2)
 		
-		plot(0, xlim=c(0, max(data_no_clust_at))+0.5, pch="", ylim = c(1, max(as.numeric(unlist(cells_by_features)))), xaxt="n", xlab="", ylab="", main = paste0("Cluster ", cell_clusters_set[cl]), yaxt="n")
+		plot(0, xlim=c(0, max(data_no_clust_at))+0.5, pch="", ylim = c(1, max(sapply(cells_by_features, as.numeric))), xaxt="n", xlab="", ylab="", main = paste0("Cluster ", cell_clusters_set[cl]), yaxt="n")
 		
 		for(i in 1:ncol(cells_by_features)){ #for each feature
 			
@@ -58,10 +62,10 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
 		# 	}
 			col <- "red"
 			
-			data_clust_i_fact <- factor(data_clust[, i], levels = sort(as.numeric(levels(data_clust[, i]))))
+			data_clust_i_fact <- data_clust[, i]
 			data_clust_i <- as.numeric(data_clust_i_fact)
 			
-			points(jitter(rep(data_clust_at[i], nrow(data_clust)), amount=0.3), jitter(data_clust_i, amount = 0.3), col=adjustcolor(col, 0.4), pch=16, cex=0.3)
+			points(jitter(rep(data_clust_at[i], nrow(data_clust)), amount=0.3), jitter(data_clust_i, amount = 0.3), col=adjustcolor(col, 0.7), pch=16, cex=0.3)
 			j <- (i-1)*length(cell_clusters_set)+cl
 			cat(j)
 			
@@ -82,7 +86,7 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
 		#dotplots of other clusters
 		for(i in 1:ncol(cells_by_features)){
 			
-			points(jitter(rep(data_no_clust_at[i], nrow(data_no_clust)), amount=0.3), jitter(as.numeric(data_no_clust[, i])), col=adjustcolor("darkgray", 0.4), pch=16, cex=0.3)
+			points(jitter(rep(data_no_clust_at[i], nrow(data_no_clust)), amount=0.3), jitter(as.numeric(data_no_clust[, i])), col=adjustcolor("darkgray", 0.7), pch=16, cex=0.3)
 			j <- (i-1)*length(cell_clusters_set)+cl
 			cat(j)
 			

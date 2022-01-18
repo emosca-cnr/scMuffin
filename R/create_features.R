@@ -8,17 +8,16 @@ create_features <- function(x=NULL){
     stop("x must be a data.frame")
   }
   
-	ans <- list(
-	  df=x,
-	  type=sapply(x, class)
-	)
+	ans <- list(df=x)
 	
 	#non numeric features are converted to factors
 	for(i in 1:ncol(ans$df)){
-	  if(ans$type[i] == "factor"){
+	  if(!is.numeric(ans$df[, i])){
 	    ans$df[, i] <- as.factor(ans$df[, i])
 	  }
 	}
+	
+	ans$type <- sapply(ans$df, class)
 	
 	return(ans)
 	
