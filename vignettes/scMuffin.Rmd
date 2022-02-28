@@ -89,6 +89,7 @@ Diffusion maps identify differentiation trajectories. scMuffin relies on the dif
 res <- cell_trajectory_analysis(gbc)
 ```
 
+
 # Clustering and Annotation
 
 ## Assembling features and clusterings
@@ -117,7 +118,14 @@ cl_enrich <- assess_cluster_enrichment(features = features, clusterings = cluste
 cl_enrich_table <- extract_cluster_enrichment_table(cl_enrich, q_type = "nes", c_type = "er")
 ```
 
+## Two-samples comparison
+To compare the clusterings of two samples on the basis of the expression of their markers:
+```{r, include=TRUE, eval=FALSE}
+sim_res <- quantify_samples_similarity(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2)
+```
+
 ## Comparison of clusterings and definition of meta-clusters
+
 ```{r, include=TRUE, eval=FALSE}
 cl_list <- clusterings_to_list(clusterings[, c("global", "GB500", "ribosomes")])
 ov_mat <- overlap_matrix(cl_list)
