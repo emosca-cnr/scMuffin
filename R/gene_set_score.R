@@ -19,7 +19,9 @@
 gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE){
 	
 	if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
-		message("not enough genes in gene set, please consider only gene set with enough number of genes\n")
+	  if(verbose){
+	    message("not enough genes in gene set, please consider only gene set with enough number of genes\n")
+	  }
 		res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
 	}else{
 		gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
@@ -27,7 +29,9 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 		
 		if(null_model){
 			control_set_data <- sc_create_null(genes_by_cells, bins = bins, gene_set = gene_set, k = k)
-			cat("nulls obtained: ", length(control_set_data), "\n")
+			if(verbose){
+			  message("nulls obtained: ", length(control_set_data), "\n")
+			}
 			for(i in 1:length(control_set_data)){
 				control_set_data[[i]][control_set_data[[i]]==0] <- NA
 			}

@@ -17,16 +17,19 @@
 #' @param pal palette for the output heatmap
 #' @param cluster_rows whether to cluster or not the rows
 #' @param cluster_columns whether to cluster or not the columns
+#' @param top_genes If specified, only the first top_genes genes of every element of the lists cluster_markers_1 and cluster_markers_2 will be considered. This implies that the markers for each clusters are considered sorted by decreasing relevance. Default is FALSE, which
 #' @param ... arguments passed to calculate_signatures
 #' @export
 #' @import RColorBrewer
 #' @importFrom circlize colorRamp2
 
-quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2, genes_min=3, genes_max=500, mc.cores=2, null_model=TRUE, ncells_min=5, do_plot=TRUE, sample_name_1="S1", sample_name_2="S2", outfile="cluster_similarity.jpg", pal=NULL, cluster_rows = F, cluster_columns = F, ...){
+quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2, genes_min=3, genes_max=500, mc.cores=2, null_model=TRUE, ncells_min=5, do_plot=TRUE, sample_name_1="S1", sample_name_2="S2", outfile="cluster_similarity.jpg", pal=NULL, cluster_rows = FALSE, cluster_columns = FALSE, top_genes=FALSE, ...){
   
   if(any(lengths(cluster_markers_1)) > genes_max | any(lengths(cluster_markers_1) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
+  
+  print(top_genes)
   
   clusters_1 <- clusters_1[match(colnames(gbc_1), names(clusters_1))]
   clusters_2 <- clusters_2[match(colnames(gbc_2), names(clusters_2))]
@@ -34,8 +37,14 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   cl_names <- names(cluster_markers_1)
   cl_names_2 <- names(cluster_markers_2)
   
-  
   signatures <- prepare_signatures(custom_signatures = list(cm=cluster_markers_1), genes = rownames(gbc_1), genes_min = genes_min, genes_max = genes_max)
+  cat("Sample 1\n")
+  print(lengths(signatures$cm))
+
+  if(is.numeric(top_genes)){
+    message("Reducing signatures to ", top_genes, "\n")
+    signatures$cm <- lapply(signatures$cm, function(x) x[1:min(length(x), top_genes)])
+  }
   print(lengths(signatures$cm))
   
   
@@ -45,13 +54,22 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   res_sig_cl <- mclapply(res_sig, function(x) calculate_signatures_clusters(sign_list = x$full, cell_clusters = clusters_2, null_model = null_model, ncells_min = ncells_min))
   
   
+  cat("Sample 2\n")
   print(lengths(cluster_markers_2))
   if(any(lengths(cluster_markers_2))>genes_max | any(lengths(cluster_markers_2) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
   signatures_2 <- prepare_signatures(custom_signatures = list(cm=signatures_2), genes = rownames(gbc_2), genes_min = genes_min)
   
+  if(is.numeric(top_genes)){
+    message("Reducing signatures to ", top_genes, "\n")
+    signatures_2$cm <- lapply(signatures_2$cm, function(x) x[1:min(length(x), top_genes)])
+  }
+  print(lengths(signatures_2$cm))
+  
+  
   res_sig_2 <- mclapply(signatures_2, function(x) calculate_signatures(gbc_1, signatures = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
+  
   
   #signature cluster median
   res_sig_cl_2 <- mclapply(res_sig_2, function(x) calculate_signatures_clusters(sign_list = x$full, cell_clusters = clusters_1, null_model = null_model, ncells_min = ncells_min))
@@ -70,7 +88,7 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
     missing_rows <- as.character(cl_names_2[!cl_names_2 %in% rownames(m2)])
     m2 <- rbind(m2, matrix(0, nrow = length(missing_rows), ncol = ncol(m2), dimnames = list(missing_rows, colnames(m2))))
   }
-  m2 <- m2[order(as.numeric(rownames(m2))), order(as.numeric(colnames(m2)))]
+  m2 <- m2[match(colnames(m1), rownames(m2)), match(rownames(m1), colnames(m2))]
   
   print(m1)
   print(m2)
@@ -95,6 +113,6 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
     
   }
   
-  return(list(clust_sim=clust_sim, markers_1=signatures$cm, markers_2=signatures_2$cm))
+  return(list(clust_sim=clust_sim, m1=m1, m2=m2, markers_1=signatures$cm, markers_2=signatures_2$cm))
   
 }
