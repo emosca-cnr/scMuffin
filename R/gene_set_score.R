@@ -57,6 +57,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 		
 		#ans[[1]] <- cbind(ans[[1]], case.z=colMeans(temp, na.rm = T))
 		
+		#attach to ans the genes-by-cells matrix of controls
 		if(null_model){
 			ans <- c(ans, lapply(control_set_data, function(x) data.frame(control=colMeans(x, na.rm = T), control.N=nrow(x), control.AV=colSums(!is.na(x)), stringsAsFactors = F))) #controls
 		}
@@ -66,7 +67,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 			ans[[i]][is.nan(ans[[i]][, 1]), 1] <- NA
 		}
 		
-		ans <- lapply(ans, function(x) cbind(x, nmark_min=x[,3]>=nmark_min)) #only cells in which the gene set is available
+		ans <- lapply(ans, function(x) cbind(x, nmark_min=x[,3]>=nmark_min)) #add nmark_min flag
 		
 		if(null_model){
 			#cells with enough genes
@@ -118,7 +119,9 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 					res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
 				}
 				
-				#res <- res[res$nmark_min, ] #eliminate cells without a sufficient number of genes
+				#cells without a sufficient number of genes
+				res$avg_delta_score[res$nmark_min] <- 0 
+				res$delta_score[res$nmark_min] <- 0
 				
 			}else{
 				
@@ -130,7 +133,8 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 		}else{ #without nullmodel
 			
 			res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
-			
+			#cells without a sufficient number of genes
+			res$case[res$nmark_min] <- 0
 		}
 		#ans <- list(score_table=res, permutations=ans[-1])
 	}
