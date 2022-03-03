@@ -120,8 +120,8 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 				}
 				
 				#cells without a sufficient number of genes
-				res$avg_delta_score[res$nmark_min] <- 0 
-				res$delta_score[res$nmark_min] <- 0
+				res$avg_delta_score[!res$nmark_min] <- 0 
+				res$delta_score[!res$nmark_min] <- 0
 				
 			}else{
 				
@@ -134,7 +134,7 @@ gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_m
 			
 			res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
 			#cells without a sufficient number of genes
-			res$case[res$nmark_min] <- 0
+			res$case[!res$nmark_min] <- 0
 		}
 		#ans <- list(score_table=res, permutations=ans[-1])
 	}
