@@ -37,7 +37,7 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   cl_names <- names(cluster_markers_1)
   cl_names_2 <- names(cluster_markers_2)
   
-  signatures <- prepare_signatures(custom_signatures = list(cm=cluster_markers_1), genes = rownames(gbc_1), genes_min = genes_min, genes_max = genes_max)
+  signatures <- prepare_gsls(custom_gsls = list(cm=cluster_markers_1), genes = rownames(gbc_1), genes_min = genes_min, genes_max = genes_max)
   cat("Sample 1\n")
   print(lengths(signatures$cm))
 
@@ -48,10 +48,10 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   print(lengths(signatures$cm))
   
   
-  res_sig <- mclapply(signatures, function(x) calculate_signatures(gbc_2, signatures = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
+  res_sig <- mclapply(signatures, function(x) calculate_gs_scores(gbc_2, gs_list = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
   
   #signature cluster median
-  res_sig_cl <- mclapply(res_sig, function(x) calculate_signatures_clusters(sign_list = x$full, cell_clusters = clusters_2, null_model = null_model, ncells_min = ncells_min))
+  res_sig_cl <- mclapply(res_sig, function(x) calculate_gs_scores_in_clusters(gs_scores_obj = x, cell_clusters = clusters_2, null_model = null_model, ncells_min = ncells_min))
   
   
   cat("Sample 2\n")
@@ -59,7 +59,7 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   if(any(lengths(cluster_markers_2))>genes_max | any(lengths(cluster_markers_2) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
-  signatures_2 <- prepare_signatures(custom_signatures = list(cm=signatures_2), genes = rownames(gbc_2), genes_min = genes_min)
+  signatures_2 <- prepare_gsls(custom_gsls = list(cm=signatures_2), genes = rownames(gbc_2), genes_min = genes_min)
   
   if(is.numeric(top_genes)){
     message("Reducing signatures to ", top_genes, "\n")
@@ -68,22 +68,22 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   print(lengths(signatures_2$cm))
   
   
-  res_sig_2 <- mclapply(signatures_2, function(x) calculate_signatures(gbc_1, signatures = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
+  res_sig_2 <- mclapply(signatures_2, function(x) calculate_gs_scores(gbc_1, gs_list = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
   
   
   #signature cluster median
-  res_sig_cl_2 <- mclapply(res_sig_2, function(x) calculate_signatures_clusters(sign_list = x$full, cell_clusters = clusters_1, null_model = null_model, ncells_min = ncells_min))
+  res_sig_cl_2 <- mclapply(res_sig_2, function(x) calculate_gs_scores_in_clusters(gs_scores_obj = x, cell_clusters = clusters_1, null_model = null_model, ncells_min = ncells_min))
   
   
   #check for possible missing clusters
-  m1 <- res_sig_cl$cm$signatures_by_clusters
+  m1 <- res_sig_cl$cm$gss_by_clusters
   if(any(!cl_names %in% rownames(m1))){
     missing_rows <- as.character(cl_names[!cl_names %in% rownames(m1)])
     m1 <- rbind(m1, matrix(0, nrow = length(missing_rows), ncol = ncol(m1), dimnames = list(missing_rows, colnames(m1))))
   }
   m1 <- m1[order(as.numeric(rownames(m1))), order(as.numeric(colnames(m1)))]
   
-  m2 <- res_sig_cl_2$cm$signatures_by_clusters
+  m2 <- res_sig_cl_2$cm$gss_by_clusters
   if(any(!cl_names_2 %in% rownames(m2))){
     missing_rows <- as.character(cl_names_2[!cl_names_2 %in% rownames(m2)])
     m2 <- rbind(m2, matrix(0, nrow = length(missing_rows), ncol = ncol(m2), dimnames = list(missing_rows, colnames(m2))))

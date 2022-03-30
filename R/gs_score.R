@@ -16,7 +16,7 @@
 #' @export
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
-gene_set_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE){
+gs_score <- function(gene_set, genes_by_cells, bins, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE){
 	
 	if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
 	  if(verbose){

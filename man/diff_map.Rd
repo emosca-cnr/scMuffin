@@ -4,10 +4,10 @@
 \alias{diff_map}
 \title{Computation of Diffusion Map}
 \usage{
-diff_map(Seu_obj, output_ndc = 1:3, root_cell = NULL, ...)
+diff_map(genes_by_cells = NULL, output_ndc = 1:3, root_cell = NULL, ...)
 }
 \arguments{
-\item{Seu_obj}{Seurat object with normalized data}
+\item{genes_by_cells}{normalized genes-by-cells expression matrix}
 
 \item{output_ndc}{The numnber of diffusion components that will be included in the output}
 

@@ -10,13 +10,13 @@ plot_heatmap_features_by_clusters(
   sig_threshold = 0.05,
   ntop = 10,
   onlyUp = TRUE,
-  out_dir = "./",
+  out_file = "heatmap_features_by_clusters.png",
   remove_null_features = FALSE,
   ...
 )
 }
 \arguments{
-\item{features_by_clusters}{list resulting from calculate_signatures_clusters()}
+\item{features_by_clusters}{features_by_clusters matrix}
 
 \item{significance_matrix}{significance matrix to add asterisks over the heatmap}
 
@@ -26,7 +26,7 @@ plot_heatmap_features_by_clusters(
 
 \item{onlyUp}{top features are considered only on the basis of their positive deviation from null distribution (up-regulation)}
 
-\item{out_dir}{output directory}
+\item{out_file}{output file}
 
 \item{remove_null_features}{whether to remove null features}
 

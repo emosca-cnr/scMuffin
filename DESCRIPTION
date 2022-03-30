@@ -1,6 +1,6 @@
 Package: scMuffin
 Title: Single cell multi-feature analyis
-Version: 0.25
+Version: 0.26
 Authors@R: 
      c(person(given = "Noemi",
            family = "Di Nanni",
@@ -27,6 +27,7 @@ License: GPL-3
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Encoding: UTF-8
 Depends: 
     R (>= 3.5.0)
 Imports:
@@ -47,7 +48,8 @@ Imports:
     VGAM,
     dendsort,
     grDevices,
-    ggplot2
+    ggplot2,
+    circlize
 Suggests: 
     rmarkdown,
     knitr,

@@ -8,7 +8,7 @@
 #' @importFrom stats median wilcox.test t.test p.adjust
 #' @export
 
-gene_set_score_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t", null_model=TRUE){
+gs_scores_in_clusters <- function(score_table, cell_clusters, ncells_min=5, alt="g", test="t", null_model=TRUE){
 	
 	if(!is.factor(cell_clusters)){
 		cell_clusters <- as.factor(cell_clusters)

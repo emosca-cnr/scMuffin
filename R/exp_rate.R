@@ -9,7 +9,7 @@
 exp_rate <- function(genes_by_cells, min_counts = 5){
   
 	cat("Calculating expression rate\n")
-  ans <- apply(genes_by_cells, 2, function(x) ifelse(sum(x > min_counts)>0, sum(x>min_counts) / sum(x[x>min_counts]), 0))
+  ans <- apply(as.matrix(genes_by_cells), 2, function(x) ifelse(sum(x > min_counts)>0, sum(x>min_counts) / sum(x[x>min_counts]), 0))
   names(ans) <- colnames(genes_by_cells)
   
   return(ans)

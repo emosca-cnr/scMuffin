@@ -49,9 +49,11 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 		dev.off()
 	}
 	if(cnv){
-		features_by_cells <- Seurat::BuildClusterTree(features_by_cells, features = all.genes, reorder = T)
-		hc_cells <- stats::as.hclust(features_by_cells@tools$BuildClusterTree)
+		#features_by_cells <- Seurat::BuildClusterTree(features_by_cells, features = all.genes, reorder = T)
+		#hc_cells <- stats::as.hclust(features_by_cells@tools$BuildClusterTree)
 		ans <- list(clusters=features_by_cells@active.ident, hc=hc_cells, sobj=features_by_cells)
+		ans <- list(clusters=features_by_cells@active.ident, sobj=features_by_cells)
+		
 	}else{
 		ans <- list(clusters=features_by_cells@active.ident, sobj=features_by_cells)
 	}
