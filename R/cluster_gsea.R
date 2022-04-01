@@ -39,9 +39,9 @@ cluster_gsea <- function(feature_values, cell_clusters, min.cells=100, mc.cores=
   # }
   # fdrq_table <- fdrq_table[, match(colnames(features$df), colnames(fdrq_table)), drop=F]
   
-  if(any(idx_out)){
-    gsea_res$gs_table <- lapply(gsea_res$gs_table, function(x) rbind(x, data.frame(id=names_idx_out, es=NA, p_val=NA, adj_p_val=NA, nes=NA, FDRq=NA, stringsAsFactors = F)))
-  }
+  #if(any(idx_out)){
+  #  gsea_res$gs_table <- lapply(gsea_res$gs_table, function(x) rbind(x, data.frame(id=names_idx_out, es=NA, p_val=NA, adj_p_val=NA, nes=NA, FDRq=NA, stringsAsFactors = F)))
+  #}
   
   return(gsea_res)
   

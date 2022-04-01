@@ -54,11 +54,36 @@ library(scMuffin)
 
 ## Cell-level estimation of gene set expression
 
-scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression. It requires in input a normalized genes-by-cells expression matrix. In the following example, we estimate gene sets score for the CancerSea gene sets using the Seurat object "seu_obj":
+scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression. The function prepare_gsls retrieves gene sets from CellMarker, PanglaoDB, CancerSEA and MSigDB, and accepts custom gene set as well. It requires in input a normalized genes-by-cells expression matrix. In the following example, we estimate gene sets score for the CancerSEA gene sets using the Seurat object "seu_obj":
 
 ```{r, include=TRUE, eval=FALSE}
-gsc <- prepare_signatures(gsc="SIG_CancerSEA", genes = rownames(seu_obj), genes_min = 3)
+gsc <- prepare_gsls(gs_sources = "SIG_CancerSEA", genes = rownames(seu_obj_1), genes_min = 3)
 res_gss <- calculate_gs_scores(genes_by_cells = GetAssayData(seu_obj), gs_list = gsc$SIG_CancerSEA)
+```
+
+The whole list of marker sets available from CellMarker and PanglaoDB can be accessed throught the internal data
+```{r, include=TRUE, eval=FALSE}
+names(SIG_PNDB)
+names(SIG_CM_cancer)
+names(SIG_CM_normal)
+```
+while for MSigDB we have to set up a data.frame to specify species, category and sub_category of the gene set collections; in this case, the whole list can be retrieved by means of
+
+```{r, include=TRUE}
+library(msigdbr)
+msigdbr_collections()
+msigdbr_show_species()
+```
+
+The gene sets of interests can be selected also acting on the corresponding arguments of the function. For instance, here we use
+```{r, include=TRUE, eval=FALSE}
+msig_df <- data.frame(c("Homo sapiens"), c("C2"), c("CP:BIOCARTA", "CP:REACTOME"))
+gsc <- prepare_gsls(gs_sources = c("SIG_CancerSEA", "SIG_PNDB", "SIG_CM_normal", "msigdb"), CM_tissues = c("Brain"), PNDB_tissues = c("Brain"), msigdb_hs_cat_subcat = msig_df, genes = rownames(seu_obj_1), genes_min = 3)
+```
+
+It is possible to list the tissues available in CellMarker and PanglaoDB by means of:
+```{r, include=TRUE, eval=FALSE}
+show_tissues("SIG_PNDB", "SIG_CM_normal", "SIG_CM_Cancer")
 ```
 
 Cell cluster average gene set score can be quantified using calculate_gs_scores_in_clusters:
@@ -71,12 +96,16 @@ res_gss_cls <- calculate_gs_scores_in_clusters(gs_scores_obj = res_gss, cell_clu
 The function calculate_CNV basically retrieves the genomic locations and performs the CNV estimation; cluster_by_features calculates the clustering; apply_CNV_reference redefines the CNV levels on the basis of (optional) reference cells; the dedicated plotting function CNV_heatmap handles the visualization, where the cluster of cells that contains the reference is marked. Here’s an example that illustrates CNV inference using a 100 genes window size and a reference profile from the The Genotype-Tissue Expression project (GTEx) portal (13): 
 
 ```{r, include=TRUE, eval=FALSE}
-cnv_res <- calculate_CNV(genes_by_cells = as.matrix(GetAssayData(seu_obj)), wnd_size = 100, reference = GTEx_mean, mc.cores = 2, )
+cnv_res <- calculate_CNV(genes_by_cells = as.matrix(GetAssayData(seu_obj_1)), wnd_size = 100, reference = GTEx_mean, mc.cores = 2, )
 cnv_clustering <- cluster_by_features(cnv_res, cnv=TRUE)
 cnv_res_ref <- apply_CNV_reference(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
 cnv_res_ref <- heatmap_CNV(cnv = cnv_res, cnv_clustering = cnv_clustering, ref_cluster = "reference")
 ```
 The calculation required approximately 10 minutes on 2 cores.
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="CNV pattern of sample PJ016 from GSE103224"}
+knitr::include_graphics("images/heatmap_CNV.jpg")
+```
 
 ## The global state of the chromatin
 The chromatin state can be calculated using genes-by-cells count matrix, as follows:
@@ -89,89 +118,129 @@ where 5 is the required threshold above which a gene is considered expressed.
 
 ## Cell  proliferation
 
-Cell proliferation is quantified considering the maximum value of the two gene sets scores for G1/S and G2/M genes:
+Cell proliferation is quantified considering the maximum between the two scores of G1/S and G2/M gene sets:
 ```{r, include=TRUE, eval=FALSE}
 res_prol <- proliferation_analysis(GetAssayData(seu_obj))
 ```
 
-## Trajectory analysis
+## Cell state trajectory analysis
 Diffusion maps identify differentiation trajectories. scMuffin relies on the diffusion pseudo time calculation available in the R package "destiny". Here we calculate the diffusion map over the first 50 PC (to speed up computation), using a random cell to obtain diffusion pseudotimes:
 
 ```{r, include=TRUE, eval=FALSE}
 res_dm <- diff_map(GetAssayData(seu_obj), root_cell = "random", n_pcs=50)
 ```
 
+## Visualization of cell-level quantities
+
+Cell-level values can be plotted over an existing UMAP by means of the function plot_umap_colored_features. This functions requires that features are set up in a features object:
+
+```{r, include=TRUE, eval=FALSE}
+feat_obj <- create_features(as.data.frame(t(res_gss$gss_by_cells)))
+plot_umap_colored_features(Seu_obj = seu_obj, features = feat_obj)
+```
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="UMAP of PJ016 sample from GSE103224, colored by CancerSEA Hypoxia"}
+knitr::include_graphics("images/umap_by_genes_col_feature_CSEA_Hypoxia.jpg")
+```
+
 # Clustering and Annotation
 
 ## Assembling features and clusterings
-
-Definition of the object that containts the features:
+To handle various types of features scMuffin requires the creation of a features object
 ```{r, include=TRUE, eval=FALSE}
-feat_obj <- create_features(t(res_signatures$SIG_CSEA$signatures_by_cells))
+feat_obj <- create_features(as.data.frame(t(res_gss$gss_by_cells)))
+```
+
+Any feature can be added to such object:
+```{r, include=TRUE, eval=FALSE}
 feat_obj <- add_features(feat_obj, as.data.frame(res_chrom_state))
 ```
 
-Clustering by features:
+Cells can be clustered by features, using cluster_by_features function, calls the Seurat clustering pipeline:
 ```{r, include=TRUE, eval=FALSE}
 feat_clust <- cluster_by_features(feat_obj)
 ```
 
-Definition of the object that contains the clusterings:
+scMuffin provides functions to compare different clusterings. First of all, we have to define the clusterings object:
 ```{r, include=TRUE, eval=FALSE}
-clust_obj <- create_clusterings(cell_id = rownames(seu_obj), values = data.frame(global=seu_obj@meta.data$seurat_clusters))
-clust_obj <- add_clusterings(clust_obj, cell_id = names(clust_by_csea$clusters), values = data.frame(cancer_state=clust_by_csea$clusters)))
+clust_obj <- create_clusterings(data.frame(global=seu_obj@meta.data$seurat_clusters, row.names = rownames(seu_obj@meta.data)))
+```
+
+Analogously to the feature object, it is possible to add other clusterings to such object:
+```{r, include=TRUE, eval=FALSE}
+clust_obj <- add_clusterings(clust_obj, data.frame(CancerSEAcs=feat_clust$sobj@meta.data$seurat_clusters, row.names = rownames(feat_clust$sobj@meta.data)))
+```
+
+Cluster-level average values and the associated variabilty can be quantified by means of:
+```{r, include=TRUE, eval=FALSE}
+cl_res <- cluster_stats(feat_obj = feat_obj, clusterings = clust_obj, avg = mean, var=sd)
 ```
 
 ## Assessing clustering enrichment
-The enrichment of each cluster of cells in terms of quantitative or categorical features can be assessed using:
+The enrichment of each cluster of cells in terms of quantitative or categorical features can be assessed by means of assess_cluster_enrichment function. According to the feature type CSEA or ORA will be applied to assess whether a cluster is enriched in a quantitative (CSEA) or categorical (ORA) feature. The function extract_cluster_enrichment_table enables the extraction og ììf clusters-by-features or clusters-by-values enrichment tables that contain the desidered quantities:
+
 ```{r, include=TRUE, eval=FALSE}
-cl_enrich <- assess_cluster_enrichment(features = features, clusterings = clusterings)
+cl_enrich <- assess_cluster_enrichment(features = feat_obj, clusterings = clust_obj)
 cl_enrich_table <- extract_cluster_enrichment_table(cl_enrich, q_type = "nes", c_type = "er")
 ```
 
-## Two-samples comparison
-To compare the clusterings of two samples on the basis of the expression of their markers:
+The results of CSEA for each cluster can be visualized with a boxplot that shows cell-values of the consdidered features in the every cluster:
 ```{r, include=TRUE, eval=FALSE}
-sim_res <- quantify_samples_similarity(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2)
+top_feat_lab <- boxplot_cluster(features = feat_obj, clusterings = clust_obj, clustering_name = "global", clust_enrich_res = cl_enrich, criterion = "fdr")
 ```
 
-## Comparison of clusterings and definition of meta-clusters
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="CSEA reusult for CancerSEA features in cluster 2 of PJ016 sample (GSE103224)."}
+knitr::include_graphics("images/cluster_2.jpg")
+```
+
+The reuslts of ORA are visualized by means of a dot plot:
+```{r, include=TRUE, eval=FALSE}
+top_feat_lab <- dotplot_cluster(features = feat_obj, clusterings = clust_obj, clustering_name = "global", clust_enrich_res = cl_enrich, text_val = "p")
+```
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="ORA result for two categorical features in cluster 1 of PJ016 sample (GSE103224)."}
+knitr::include_graphics("images/cluster_1.jpg")
+```
+
+The two visualization functions returns significant tags for each clusters. These can be used to annotate an UMAP:
+```{r, include=TRUE, eval=FALSE}
+plot_umap(seu_obj, group.by = "seurat_clusters", labels=lapply(top_feat_lab, function(x) x[1:2]), lab_size=3)
+```
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="UMAP annotated with the CSEA results using CancerSEA gene sets (sample PJ016 from GSE103224)."}
+knitr::include_graphics("images/umap.jpg")
+```
+
+
+Cluster-level values can be plotted as an heatmap.:
+```{r, include=TRUE, eval=FALSE}
+plot_heatmap_features_by_clusters(features_by_clusters = cl_enrich_table$cluster_gsea_table$global)
+```
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="Heatmap of CancerSEA values in cell clusters of PJ016 sample from GSE103224."}
+knitr::include_graphics("images/heatmap_features_by_clusters.png")
+```
+
+
+## Two-samples comparison
+scMuffins provides the function quantify_samples_similarity that estimateds the similarity among cell clusters of two samples quantifying the expression of cluster markers:
+```{r, include=TRUE, eval=FALSE}
+sim_res <- quantify_samples_similarity(gbc_1 = GetAssayData(seu_obj_1), gbc_2 = GetAssayData(seu_obj_2), clusters_1 = setNames(seu_obj_1@meta.data$seurat_clusters, rownames(seu_obj_1@meta.data)), clusters_2 = setNames(seu_obj_2@meta.data$seurat_clusters, rownames(seu_obj_2@meta.data)), cluster_markers_1 = cluster_markers_1, cluster_markers_2 = cluster_markers_2, nbins=10, kmin=30, sample_name_1 = "PJ016", sample_name_2 = "PJ017")
+```
+
+```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="Similarity among the cell clusters of PJ016 and PJ017 samples from GSE103224."}
+knitr::include_graphics("images/cluster_similarity.jpg")
+```
+
+<!-- ## Comparison of clusterings and definition of meta-clusters
+
+Lastly, scMuffin provides some functions to compare 
 
 ```{r, include=TRUE, eval=FALSE}
-cl_list <- clusterings_to_list(clusterings[, c("global", "GB500", "ribosomes")])
+cl_list <- clusterings_to_list(clusterings = clust_obj)
 ov_mat <- overlap_matrix(cl_list)
 meta_cl <- meta_cluster(ov_mat, n_step = 10, max_clust = 15)
 meta_cl_cell <- get_meta_clusters(cl_list, meta_cl)
+plot_meta_clusters(ov_mat, meta_clusters = meta_cl)
 ```
-
-# Visualization
-
-CNV heatmap
-```{r, include=TRUE, eval=FALSE}
-cnv_res_ref <- CNV_heatmap(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
-```
-
-Boxplot of cluster enrichment in a quantitative feature:
-```{r, include=TRUE, eval=FALSE}
-top_feat_lab <- boxplot_cluster(feat_obj, cell_clusters = , cluster_enrichment = clust_enrich$global, fdr_threshold = 0.05, only_pos_nes = TRUE)
-```
-
-Boxplot of cluster enrichment in a categorical feature:
-```{r, include=TRUE, eval=FALSE}
-top_feat_lab <- dotplot_cluster(feat_obj, cell_clusters = , cluster_enrichment = clust_enrich$global, fdr_threshold = 0.05, only_pos_nes = TRUE)
-```
-
-Plot umap labelling clusters using the enriched scores:
-```{r, include=TRUE, eval=FALSE}
-plot_umap(seu_obj, group.by = "seurat_clusters", labels=lapply(top_feat_lab, function(x) x[1:2]), lab_size=2)
-```
-
-Features-by-clusters heatmap:
-```{r, include=TRUE, eval=FALSE}
-plot_heatmap_features_by_clusters(list(feature_markers=t(clust_enrich$global$nes)), ntop = ncol(clust_enrich$global$nes))
-```
-
-plot meta clusters:
-```{r, include=TRUE, eval=FALSE}
-plot_meta_clusters(ov_mat, meta_cl)
-```
+-->

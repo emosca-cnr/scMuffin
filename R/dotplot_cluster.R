@@ -16,7 +16,7 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
     dir.create(dir_out, recursive = TRUE)
   }
   
-  text_val <- match.arg(text_val, c("p", "wbd"))
+  text_val <- match.arg(text_val, c("p", "wbd", "er"))
   
   cells_by_features <- features$df[, features$type=="factor", drop=F]
   

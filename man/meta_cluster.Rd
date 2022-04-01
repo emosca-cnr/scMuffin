@@ -4,7 +4,7 @@
 \alias{meta_cluster}
 \title{Returns meta-clusters obtained by using hierarchical clustering}
 \usage{
-meta_cluster(overlap_mat, n_step = 11, max_clust = 10)
+meta_cluster(overlap_mat, n_step = 11, max_clust = 10, do_plot = FALSE)
 }
 \arguments{
 \item{overlap_mat}{Overlap matrix as obtained form overlap_matrix() function}

@@ -59,7 +59,7 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   if(any(lengths(cluster_markers_2))>genes_max | any(lengths(cluster_markers_2) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
-  signatures_2 <- prepare_gsls(custom_gsls = list(cm=signatures_2), genes = rownames(gbc_2), genes_min = genes_min)
+  signatures_2 <- prepare_gsls(custom_gsls = list(cm=cluster_markers_2), genes = rownames(gbc_2), genes_min = genes_min)
   
   if(is.numeric(top_genes)){
     message("Reducing signatures to ", top_genes, "\n")
