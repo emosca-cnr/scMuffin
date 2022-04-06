@@ -12,6 +12,8 @@ meta_cluster(overlap_mat, n_step = 11, max_clust = 10, do_plot = FALSE)
 \item{n_step}{number used to divide hclust dendrogram height to obtain cut values to calculate silhouette}
 
 \item{max_clust}{maximum number of clusters}
+
+\item{do_plot}{whether to do the silohouette plot or not}
 }
 \description{
 Returns meta-clusters obtained by using hierarchical clustering

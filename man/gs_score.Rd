@@ -37,8 +37,8 @@ gs_score(
 }
 \value{
 list with
-score_table: data frame with gene set score for each cell
-permutations: list with the permutations
+   score_table: data frame with gene set score for each cell
+   permutations: list with the permutations
 }
 \description{
 gene_set_score

@@ -5,6 +5,7 @@
 #' @param avg function to use for average
 #' @param var function to use for variability
 #' @param na.rm whether to remove na or not
+#' @importFrom stats sd
 #' @export
 
 cluster_stats <- function(feat_obj=NULL, clusterings=NULL, which_col=NULL, avg=mean, var=sd, na.rm=TRUE){

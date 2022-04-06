@@ -2,7 +2,7 @@
 % Please edit documentation in R/boxplot_cluster.R
 \name{boxplot_cluster}
 \alias{boxplot_cluster}
-\title{Boxplot clusters
+\title{Boxplot clusters 
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.}
 \usage{
 boxplot_cluster(
@@ -43,6 +43,6 @@ boxplot_cluster(
 \item{...}{passed to axis}
 }
 \description{
-Boxplot clusters
+Boxplot clusters 
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }
