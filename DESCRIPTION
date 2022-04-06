@@ -1,29 +1,29 @@
 Package: scMuffin
-Title: Single cell multi-feature analyis
-Version: 0.29
+Title: Alon R package for resolving solid tumor heterogeneity from single-cell expression data
+Version: 0.30
 Date: 2022-04-05
 Authors@R: 
      c(person(given = "Noemi",
            family = "Di Nanni",
            role = c("aut"),
            email = "noemi.dinanni@itb.cnr.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = " 0000-0002-6399-321X")),
     person(given = "Valentina",
            family = "Nale",
            role = c("aut"),
            email = "valentina.nale@itb.cnr.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0002-4730-9342")),
     person(given = "Alice",
            family = "Chiodi",
            role = c("aut"),
            email = "alice.chiodi@itb.cnr.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0001-6646-4471")),
    person(given = "Ettore",
            family = "Mosca",
            role = c("aut", "cre"),
            email = "ettore.mosca@itb.cnr.it",
-           comment = c(ORCID = "YOUR-ORCID-ID")))
-Description: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of markers for normal and tumor conditions, pathway activity, cell hierarchy, multipotency state, copy number variations and cell cycle state. Cell-level scores are used for cell cluster annotation and combined to obtain alternative cell clusters. scMuffin integrates any type of cell- or cluster-associated data, and can be used for single-cell multi-omics analyses (e.g. mutations, gene expression).
+           comment = c(ORCID = "0000-0002-3102-5150")))
+Description: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNV, chromatin state and proliferation state. scMuffin facilitates the combination of  various cell-level evidences that used to highlight subtle cell-cell similarities, distinguish normal and tumoral cells, define cell identities, obtain alternative clusterings and link genomic aberrations with phenotypes.
 License: GPL-3
 LazyData: true
 RoxygenNote: 7.1.2

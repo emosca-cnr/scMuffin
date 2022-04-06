@@ -3,8 +3,8 @@
 \docType{data}
 \name{SIG_CM_cancer}
 \alias{SIG_CM_cancer}
-\title{signatures
-SIG_CM_cancer}
+\title{CellMarker Cancer markers
+Collected from the URL http://bio-bigdata.hrbmu.edu.cn/CellMarker/}
 \format{
 An object of class \code{list} of length 341.
 }
@@ -12,7 +12,7 @@ An object of class \code{list} of length 341.
 SIG_CM_cancer
 }
 \description{
-signatures
-SIG_CM_cancer
+CellMarker Cancer markers
+Collected from the URL http://bio-bigdata.hrbmu.edu.cn/CellMarker/
 }
 \keyword{datasets}

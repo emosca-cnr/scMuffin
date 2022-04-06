@@ -3,8 +3,8 @@
 \docType{data}
 \name{SIG_Tirosh}
 \alias{SIG_Tirosh}
-\title{signatures
-Tirosh}
+\title{Cell cycle gene sets
+Collected from Tirosh, et al., Dissecting the multicellular ecosystem of metastatic melanoma by single-cell RNA-seq. Science. 2016. doi: 10.1126/science.aad0501.}
 \format{
 An object of class \code{list} of length 2.
 }
@@ -12,7 +12,7 @@ An object of class \code{list} of length 2.
 SIG_Tirosh
 }
 \description{
-signatures
-Tirosh
+Cell cycle gene sets
+Collected from Tirosh, et al., Dissecting the multicellular ecosystem of metastatic melanoma by single-cell RNA-seq. Science. 2016. doi: 10.1126/science.aad0501.
 }
 \keyword{datasets}

@@ -3,8 +3,8 @@
 \docType{data}
 \name{SIG_PNDB}
 \alias{SIG_PNDB}
-\title{signatures
-SIG_PNDB}
+\title{Panglao DB markers
+Collected from the URL https://panglaodb.se/}
 \format{
 An object of class \code{list} of length 178.
 }
@@ -12,7 +12,7 @@ An object of class \code{list} of length 178.
 SIG_PNDB
 }
 \description{
-signatures
-SIG_PNDB
+Panglao DB markers
+Collected from the URL https://panglaodb.se/
 }
 \keyword{datasets}

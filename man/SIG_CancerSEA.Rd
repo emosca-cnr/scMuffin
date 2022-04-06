@@ -3,8 +3,8 @@
 \docType{data}
 \name{SIG_CancerSEA}
 \alias{SIG_CancerSEA}
-\title{signatures
-CancerSEA functional states}
+\title{CancerSEA functional states
+Collected from the URL http://biocc.hrbmu.edu.cn/CancerSEA/goDownload}
 \format{
 An object of class \code{list} of length 14.
 }
@@ -12,7 +12,7 @@ An object of class \code{list} of length 14.
 SIG_CancerSEA
 }
 \description{
-signatures
 CancerSEA functional states
+Collected from the URL http://biocc.hrbmu.edu.cn/CancerSEA/goDownload
 }
 \keyword{datasets}
