@@ -1,5 +1,6 @@
 <img src="vignettes/images/scMuffin_logo_pontillism.jpg" width="200">
-# scMuffin
+
+## scMuffin
 
 Single Cell analysis with multiple features
 
