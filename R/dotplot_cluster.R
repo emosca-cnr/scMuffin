@@ -2,15 +2,15 @@
 #' 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param features feautures object
-#' @param clusterings clusterings object
-#' @param clustering_name one among the clusterings
+#' @param partitions partitions object
+#' @param clustering_name one among the partitions
 #' @param clust_enrich_res clustering enrichment results
 #' @param text_val which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"
 #' @param dir_out string, output directory
 #' @importFrom grDevices jpeg
 #' @export
 
-dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, dir_out="./", clust_enrich_res=NULL, text_val=c("p", "wbd", "er")){
+dotplot_cluster <- function(features, partitions=NULL, clustering_name=NULL, dir_out="./", clust_enrich_res=NULL, text_val=c("p", "wbd", "er")){
 	
   if(!dir.exists(dir_out)){
     dir.create(dir_out, recursive = TRUE)
@@ -20,7 +20,7 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
   
   cells_by_features <- features$df[, features$type=="factor", drop=F]
   
-  cell_clusters <- clusterings[, colnames(clusterings) == clustering_name]
+  cell_clusters <- partitions[, colnames(partitions) == clustering_name]
   cell_clusters_set <- levels(cell_clusters)
 	
   # clusters-by-feature value table of enrichment p-value
@@ -41,10 +41,10 @@ dotplot_cluster <- function(features, clusterings=NULL, clustering_name=NULL, di
 		
 		#distribution of all cells by feature
 		#feature data of the cluster
-		data_clust <- as.data.frame(cells_by_features[rownames(cells_by_features) %in% rownames(clusterings)[cell_clusters == cell_clusters_set[cl]], ])
+		data_clust <- as.data.frame(cells_by_features[rownames(cells_by_features) %in% rownames(partitions)[cell_clusters == cell_clusters_set[cl]], ])
 		
 		#feature data other clusters
-		data_no_clust <- as.data.frame(cells_by_features[!rownames(cells_by_features) %in% rownames(clusterings)[cell_clusters == cell_clusters_set[cl]], ])
+		data_no_clust <- as.data.frame(cells_by_features[!rownames(cells_by_features) %in% rownames(partitions)[cell_clusters == cell_clusters_set[cl]], ])
 		
 		#boxplots of the cluster
 		data_clust_at <- seq(1, ncol(cells_by_features)*2, by = 2)

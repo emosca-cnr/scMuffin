@@ -1,7 +1,7 @@
 Package: scMuffin
 Title: Alon R package for resolving solid tumor heterogeneity from single-cell expression data
-Version: 0.30
-Date: 2022-04-05
+Version: 0.31
+Date: 2022-04-19
 Authors@R: 
      c(person(given = "Noemi",
            family = "Di Nanni",

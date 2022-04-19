@@ -2,7 +2,7 @@
 #' @param x data.frame of 1 or more cell labels with cell id as row names
 #' @export
 
-create_clusterings <- function(x){
+create_partitions_obj <- function(x){
   
   if(!is.data.frame(x)){
     stop("x must be a data.frame")

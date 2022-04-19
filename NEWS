@@ -1,3 +1,6 @@
+version 0.31
+- added the function process_GTEx_gene_reads
+- updated the vignette
 version 0.30
 - updated the data documentation
 - added ribosomal proteins gene set

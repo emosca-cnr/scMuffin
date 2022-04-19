@@ -6,7 +6,7 @@
 \usage{
 cluster_stats(
   feat_obj = NULL,
-  clusterings = NULL,
+  partitions = NULL,
   which_col = NULL,
   avg = mean,
   var = sd,
@@ -16,7 +16,7 @@ cluster_stats(
 \arguments{
 \item{feat_obj}{feature object}
 
-\item{clusterings}{clusterings object}
+\item{partitions}{partitions object}
 
 \item{which_col}{which column of the clustering object should be used. if NULL, all columns will be considered}
 

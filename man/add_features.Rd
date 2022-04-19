@@ -4,12 +4,12 @@
 \alias{add_features}
 \title{Adds a feature to the feature list}
 \usage{
-add_features(features = NULL, features_to_add = NULL)
+add_features(features_obj = NULL, to_add = NULL)
 }
 \arguments{
-\item{features}{features object}
+\item{features_obj}{features object}
 
-\item{features_to_add}{data.frame of 1 or more cell values with cell id as row names}
+\item{to_add}{data.frame of 1 or more cell values with cell id as row names}
 }
 \description{
 Adds a feature to the feature list

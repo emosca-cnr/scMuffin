@@ -6,7 +6,7 @@
 \usage{
 dotplot_cluster(
   features,
-  clusterings = NULL,
+  partitions = NULL,
   clustering_name = NULL,
   dir_out = "./",
   clust_enrich_res = NULL,
@@ -16,9 +16,9 @@ dotplot_cluster(
 \arguments{
 \item{features}{feautures object}
 
-\item{clusterings}{clusterings object}
+\item{partitions}{partitions object}
 
-\item{clustering_name}{one among the clusterings}
+\item{clustering_name}{one among the partitions}
 
 \item{dir_out}{string, output directory}
 

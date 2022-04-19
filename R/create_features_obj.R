@@ -2,7 +2,7 @@
 #' @param x data.frame of 1 or more cell values with cell id as row names
 #' @export
 
-create_features <- function(x=NULL){
+create_features_obj <- function(x=NULL){
 	
   if(!is.data.frame(x)){
     stop("x must be a data.frame")

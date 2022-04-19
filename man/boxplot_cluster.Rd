@@ -7,7 +7,7 @@ Produce boxplots of the given features in each cluster. A t-test is performed fo
 \usage{
 boxplot_cluster(
   features = NULL,
-  clusterings = NULL,
+  partitions = NULL,
   clustering_name = NULL,
   clust_enrich_res = NULL,
   dir_out = "./",
@@ -22,9 +22,9 @@ boxplot_cluster(
 \arguments{
 \item{features}{feature list}
 
-\item{clusterings}{clusterings object}
+\item{partitions}{partitions object}
 
-\item{clustering_name}{one among the clusterings}
+\item{clustering_name}{one among the partitions}
 
 \item{clust_enrich_res}{clustering enrichment results}
 

@@ -1,8 +1,8 @@
 #' Boxplot clusters 
 #' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param features feature list
-#' @param clusterings clusterings object
-#' @param clustering_name one among the clusterings
+#' @param partitions partitions object
+#' @param clustering_name one among the partitions
 #' @param clust_enrich_res clustering enrichment results
 #' @param only_top numeric, number of features to be shown with a different color and representing the most significative features according to t-test
 #' @param criterion "fdr" to sort features by fdr
@@ -15,7 +15,7 @@
 #' @import graphics
 #' @export
 
-boxplot_cluster <- function(features=NULL, clusterings=NULL, clustering_name=NULL, clust_enrich_res=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, do_scale_features=FALSE, ...){
+boxplot_cluster <- function(features=NULL, partitions=NULL, clustering_name=NULL, clust_enrich_res=NULL, dir_out="./", only_top=10, criterion="fdr", fdr_threshold=NULL, only_pos_nes=TRUE, do_scale_features=FALSE, ...){
 	
 	if(!dir.exists(dir_out)){
 		dir.create(dir_out, recursive = TRUE)
@@ -31,7 +31,7 @@ boxplot_cluster <- function(features=NULL, clusterings=NULL, clustering_name=NUL
 		rownames(cells_by_features) <- rownames(features$df)
 	}
 	
-	cell_clusters <- clusterings[, colnames(clusterings) == clustering_name]
+	cell_clusters <- partitions[, colnames(partitions) == clustering_name]
 	cell_clusters_set <- levels(cell_clusters)
 	
 	
@@ -91,7 +91,7 @@ boxplot_cluster <- function(features=NULL, clusterings=NULL, clustering_name=NUL
 			par(mar = c(4, 10, 2, 1))
 			
 			#feature data of the cluster
-			cl_cells_idx <- rownames(cbf_cl) %in% rownames(clusterings)[cell_clusters == cell_clusters_set[cl]]
+			cl_cells_idx <- rownames(cbf_cl) %in% rownames(partitions)[cell_clusters == cell_clusters_set[cl]]
 			data_clust <- cbf_cl[cl_cells_idx, , drop=FALSE]
 			
 			#feature data other clusters

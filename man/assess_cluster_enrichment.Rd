@@ -6,7 +6,7 @@
 \usage{
 assess_cluster_enrichment(
   features,
-  clusterings,
+  partitions,
   meta_clusters = FALSE,
   write_output = TRUE,
   out_dir = "./"
@@ -15,7 +15,7 @@ assess_cluster_enrichment(
 \arguments{
 \item{features}{feature list}
 
-\item{clusterings}{clustering list}
+\item{partitions}{clustering list}
 
 \item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
 
