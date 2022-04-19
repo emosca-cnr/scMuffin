@@ -59,6 +59,7 @@ devtools::load_all()
 
 # Obtaining the data used in this vignette
 To run the examples included in this vignette you need the following data:
+
 * two single cell datasets with counts as well as normalized expression values;
 * cell clusters;
 * UMAP visualization;
@@ -67,6 +68,7 @@ To run the examples included in this vignette you need the following data:
 Here's an example of how these data can be obtained from a publicly available study on High-Grade Glioma [@Yuan2018] (GSE103224):
 
 1. download the filtered genes-by-cells mtrices from the URLs:
+
 * sample PJ016: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758471;
 * sample PJ017: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472.
 
