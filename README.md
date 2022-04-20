@@ -6,7 +6,7 @@ Single cell (SC) analysis is crucial to study the complex cellular heterogeneity
 
 ## Installation
 
-scMuffin requires R >= 4.0.0 due to some of its dependencies, like Seurat [@Hao2021]. R can be installed from CRAN at the URL https://cran.r-project.org/index.html.
+scMuffin requires R >= 4.0.0 due to some of its dependencies, like Seurat (https://satijalab.org/seurat). R can be installed from CRAN at the URL https://cran.r-project.org/index.html.
 
 To succesfully install scMuffin you need some packages from Bioconductor (https://bioconductor.org) and github (https://github.com/). These packages can be installed using the following commands:
 
