@@ -47,15 +47,43 @@ vignette: >
 knitr::include_graphics("images/scMuffin_logo_pontillism.jpg")
 ```
 
+## Dependencies
+To succesfully install scMUffin you need to install the following packages from Bioconductor (https://bioconductor.org):
+
 ```{r, include=TRUE, eval=FALSE}
-library(devtools)
-install_github("emosca-cnr/scMuffin", build_vignettes = TRUE)
-library(scMuffin)
+if (!require("BiocManager", quietly = TRUE)){
+  install.packages("BiocManager")
+}
+BiocManager::install(c("org.Hs.eg.db", "destiny", "DESeq2", "BiocStyle"))
 ```
 
-```{r, include=F, message=FALSE, warning=FALSE, eval=F}
+and the package destiny [@Angerer2015] from github:
+
+```{r, include=TRUE, eval=FALSE}
+if (!require("devtools", quietly = TRUE)){
+  install.packages("devtools")
+}
+devtools::install_github("theislab/destiny")
+```
+
+The other dependencies, if missing, should be automatically installed using the following commands:
+
+```{r, include=TRUE, eval=FALSE}
+devtools::install_github("emosca-cnr/scMuffin", build_vignettes = TRUE)
+```
+
+To load the packes and read this documentation:
+
+```{r, include=TRUE, eval=FALSE}
+library(scMuffin)
+vignette("scMuffin")
+```
+
+
+<!--```{r, include=F, message=FALSE, warning=FALSE, eval=F}
 devtools::load_all()
 ```
+-->
 
 # Obtaining the data used in this vignette
 To run the examples included in this vignette you need the following data:

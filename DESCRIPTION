@@ -1,6 +1,6 @@
 Package: scMuffin
 Title: MUlti-Features INtegrative approach for SC data analysis
-Version: 0.31
+Version: 0.32
 Date: 2022-04-19
 Authors@R: 
      c(person(given = "Noemi",
@@ -29,7 +29,7 @@ LazyData: true
 RoxygenNote: 7.1.2
 Encoding: UTF-8
 Depends: 
-    R (>= 3.5.0)
+    R (≥ 4.0.0)
 Imports:
     graphics,
     parallel,
