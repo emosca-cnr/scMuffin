@@ -9,7 +9,7 @@ extract_cluster_enrichment_tags(
   q_selection_criterion = "FDRq",
   q_selection_threshold = 0.1,
   q_sort_crit = "nes",
-  q_sort_desc = FALSE,
+  q_sort_desc = TRUE,
   only_pos_nes = TRUE,
   c_selection_criterion = "p_adj",
   c_selection_threshold = 0.1,

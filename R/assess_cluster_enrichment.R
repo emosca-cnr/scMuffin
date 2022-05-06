@@ -2,16 +2,9 @@
 #' @param features feature list
 #' @param partitions clustering list
 #' @param meta_clusters boolean, TRUE if the assessment involves meta clusters
-#' @param write_output boolean, TRUE to write the output in the output dir
-#' @param out_dir output dir
 #' @export
-#' @importFrom utils write.table
 
-assess_cluster_enrichment <- function(features, partitions, meta_clusters=FALSE, write_output=TRUE, out_dir="./"){
-  
-  if(!dir.exists(out_dir)){
-    dir.create(out_dir, recursive=TRUE)
-  }
+assess_cluster_enrichment <- function(features, partitions, meta_clusters=FALSE){
   
   X_fact <- as.matrix(features$df[, features$type=="factor", drop=F])
   X_num <- as.matrix(features$df[, !features$type=="factor", drop=F])

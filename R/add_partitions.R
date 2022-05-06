@@ -7,7 +7,7 @@ add_partitions <- function(partitions_obj=NULL, to_add=NULL){
 	
 	ans <- create_partitions_obj(to_add)
 
-	clusterings <- merge(clusterings, ans, by=0, all=T, sort=F)
+	clusterings <- merge(partitions_obj, ans, by=0, all=T, sort=F)
 	rownames(clusterings) <- clusterings[, 1]
 	clusterings[, 1] <- NULL
 	

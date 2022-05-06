@@ -172,7 +172,7 @@ res_dm <- diff_map(GetAssayData(seu_obj_1), root_cell = "random", n_pcs=50)
 
 ## CNV inference
 
-The function calculate_CNV basically retrieves the genomic locations and performs the CNV estimation; `cluster_by_features` (see below) calculates the clustering; `apply_CNV_reference` redefines the CNV levels on the basis of (optional) reference cells; the dedicated plotting function `CNV_heatmap` handles the visualization (based on the R package ComplexHeatmap [@Gu2016]), where the cluster of cells that contains the reference is marked. Here’s an example that illustrates CNV inference using a 100 genes window size and a reference profile from the The Genotype-Tissue Expression project (GTEx) portal (13): 
+The function calculate_CNV basically retrieves the genomic locations and performs the CNV estimation; `cluster_by_features` (see below) calculates the clustering; `apply_CNV_reference` redefines the CNV levels on the basis of (optional) reference cells; the dedicated plotting function `heatmap_CNV` handles the visualization (based on the R package ComplexHeatmap [@Gu2016]), where the cluster of cells that contains the reference is marked. Here’s an example that illustrates CNV inference using a 100 genes window size and a reference profile from the The Genotype-Tissue Expression project (GTEx) portal (13): 
 
 ```{r, include=TRUE, eval=FALSE}
 GTEx_mean <- process_GTEx_gene_reads(geneReads="~/db/GTEx/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct", GTEx_annot="~/db/GTEx/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt", tissue="Brain")
