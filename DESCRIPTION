@@ -1,18 +1,18 @@
 Package: scMuffin
-Title: MUlti-Features INtegrative approach for SC data analysis
-Version: 0.33
-Date: 2022-05-06
+Title: MUlti-Features INtegrative approach for single-cell data analysis
+Version: 1.0.0
+Date: 2022-05-30
 Authors@R: 
-     c(person(given = "Noemi",
-           family = "Di Nanni",
-           role = c("aut"),
-           email = "noemi.dinanni@itb.cnr.it",
-           comment = c(ORCID = " 0000-0002-6399-321X")),
-    person(given = "Valentina",
+     c(person(given = "Valentina",
            family = "Nale",
            role = c("aut"),
            email = "valentina.nale@itb.cnr.it",
            comment = c(ORCID = "0000-0002-4730-9342")),
+    person(given = "Noemi",
+           family = "Di Nanni",
+           role = c("aut"),
+           email = "noemi.dinanni@itb.cnr.it",
+           comment = c(ORCID = " 0000-0002-6399-321X")),
     person(given = "Alice",
            family = "Chiodi",
            role = c("aut"),
