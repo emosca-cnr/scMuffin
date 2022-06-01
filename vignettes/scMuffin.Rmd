@@ -1,21 +1,25 @@
 ---
 title: "scMuffin"
 author:
-- name: Noemi Di Nanni*
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Valentina Nale*
+  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
+- name: Noemi Di Nanni*
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Alice Chiodi
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
+- name: Ingrid Cifola
+  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
+- name: Marco Moscatelli
+  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Cinzia Cocola
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Ingrid Cifola
+- name: Matteo Gnocchi
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Eleonora Piscitelli
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Ileana Zucchi
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Rolland Reinbold
+  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
+- name: Ileana Zucchi
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
 - name: Luciano Milanesi
   affiliation: National Research Council, Institute of Biomedical Technologies, Italy
@@ -32,7 +36,7 @@ output:
   BiocStyle::html_document:
     toc: true
 abstract: >
-  INTRODUCTION: Single cell (SC) analysis is crucial to study the complex cellular heterogeneity of solid tumors, which is one of the main obstacles for the development of effective cancer treatments. Such tumors typically contain a mixture of cells with aberrant genomic and expression profiles affecting specific sub-populations that have a pivotal role in cancer progression, whose identification eludes bulk approaches. We present scMuffin, an R package that provides functions to  characterize cell identity in solid tumors on the basis of multiple and complementary criteria. MATERIALS AND METHODS: Cell markers sources: CellMarker, PanglaoDB; gene set source: CancerSEAQ and MSigDB. Gene set expression is scored in comparison with an empirical null distribution. Copy Number Variations (CNVs) are estimated assessing the expression of adjacent genes. Cell state trajectories are computed using diffusion maps. Cluster enrichment is assessed for both quantitative and categorical features using Cell Set Enrichment Analysis and Over Representation Analysis. RESULTS: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNV, chromatin state and proliferation state. scMuffin facilitates the combination of  of various cell-level evidences that used to highlight subtle cell-cell similarities, distinguish normal and tumoral cells, define cell identities, obtain alternative partitions and link genomic aberrations with phenotypes. As a proof-of-principle, we studied a public dataset of human gliomas. CONCLUSIONS: scMuffin combines several tools to shed light on the identity of tumors cells and spot subtle cell types. The package is available at the URL https://github.com/emosca-cnr/scMuffin.
+  Single-cell (SC) gene expression analysis is crucial to dissect the complex cellular heterogeneity of solid tumors, which is one of the main obstacles for the development of effective cancer treatments. Such tumors typically contain a mixture of cells with aberrant genomic and transcriptomic profiles affecting specific sub-populations that might have a pivotal role in cancer progression, whose identification eludes bulk RNA-sequencing approaches. We present scMuffin, an R package that enables the characterization of cell identity in solid tumors on the basis of multiple and complementary criteria applied on SC gene expression data. scMuffin provides a series of functions to calculate several different qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNVs, chromatin state and proliferation state. Thus, scMuffin facilitates the combination of various evidences that can be used to distinguish normal and tumoral cells, define cell identities, cluster cells in different ways, link genomic aberrations to phenotypes and identify subtle differences between cell subtypes or cell states.
 
 vignette: >
   %\VignetteIndexEntry{scMuffin}
