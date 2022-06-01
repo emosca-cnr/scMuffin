@@ -1,4 +1,4 @@
-<img src="vignettes/images/scMuffin_logo_pontillism.jpg" width="200">
+<img src="vignettes/images/logo.jpg" width="200">
 
 ## scMuffin - A MUlti-Features INtegrative approach for SC data analysis
 
