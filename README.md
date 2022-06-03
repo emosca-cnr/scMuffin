@@ -34,3 +34,6 @@ Please look at the vignette included in the R package:
 vignette("scMuffin")
 ```
 
+## Citation
+https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1
+
