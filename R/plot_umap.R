@@ -13,7 +13,7 @@
 #' @import Seurat graphics ggplot2
 #' @export
 #' 
-plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, ...){
+plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, ...){
 	
 	if(adj_outliers){
 		if(!is.numeric(Seu_obj@meta.data[, colnames(Seu_obj@meta.data) == group.by])){
@@ -23,7 +23,7 @@ plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feat
 		}
 	}
 	
-	jpeg(file, width=180, height=180, units="mm", res=300)
+	jpeg(file, width=width, height=height, units=units, res=res)
 	
 	par(mar=c(3, 3, 3, 1))
 	par(mgp=c(2, 0.7, 0))
