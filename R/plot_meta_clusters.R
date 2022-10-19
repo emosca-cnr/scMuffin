@@ -1,14 +1,13 @@
 #' Plot meta clusters
 #' @param ov_mat overlap matrix
 #' @param meta_clusters meta clusters
-#' @param out_dir output directory
-#' @param file output file
+#' @param out_file output file
 #' @param ... further arguments for ComplexHeatmap::Heatmap
 #' @export
 #' @description Plot meta clusters
 #' @import ComplexHeatmap grDevices dendsort
 
-plot_meta_clusters <- function(ov_mat=NULL, meta_clusters=NULL, out_dir="./", file="/meta_clusters.jpg", ...){
+plot_meta_clusters <- function(ov_mat=NULL, meta_clusters=NULL, out_file="meta_clusters.jpg", ...){
 	
 	
 	if(!dir.exists(out_dir)){

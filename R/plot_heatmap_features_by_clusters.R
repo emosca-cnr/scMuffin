@@ -13,7 +13,8 @@
 #' @importFrom utils write.table
 
 
-plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, out_file="heatmap_features_by_clusters.png", remove_null_features=FALSE, ...){
+plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, 
+                                              out_file="heatmap_features_by_clusters.jpg", remove_null_features=FALSE, ...){
   
   
   if(!is.null(significance_matrix)){
@@ -70,7 +71,7 @@ plot_heatmap_features_by_clusters <- function(features_by_clusters, significance
       }
     }
     
-    grDevices::png(out_file, width = 180, height = 180, res=300, units="mm")
+    grDevices::jpeg(out_file, width = 180, height = 180, res=300, units="mm")
     
     h_tot_go <- ComplexHeatmap::Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, ...)
     draw(h_tot_go, heatmap_legend_side = "left")
