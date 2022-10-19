@@ -6,6 +6,7 @@
 #' @param var function to use for variability
 #' @param na.rm whether to remove na or not
 #' @importFrom stats sd
+#' @description Clusters statistics
 #' @export
 
 cluster_stats <- function(feat_obj=NULL, partitions=NULL, which_col=NULL, avg=mean, var=sd, na.rm=TRUE){

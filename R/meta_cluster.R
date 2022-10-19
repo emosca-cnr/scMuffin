@@ -5,6 +5,7 @@
 #' @param do_plot whether to do the silohouette plot or not
 #' @import cluster
 #' @importFrom stats hclust as.dist cutree
+#' @description Returns meta-clusters obtained by using hierarchical clustering
 #' @export
 
 meta_cluster <- function(overlap_mat, n_step = 11, max_clust=10, do_plot=FALSE) {

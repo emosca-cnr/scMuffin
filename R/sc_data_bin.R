@@ -6,6 +6,7 @@
 #' @param nbins number of bins
 #' @param use.log use logarithm
 #' @return vector with bin id for each row
+#' @description Split the input data matrix by rows into nbins
 #' @export
 
 

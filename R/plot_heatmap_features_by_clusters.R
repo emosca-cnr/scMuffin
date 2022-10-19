@@ -8,6 +8,7 @@
 #' @param remove_null_features whether to remove null features
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
+#' @description Plot heatmap festure by clusters
 #' @import ComplexHeatmap grDevices
 #' @importFrom utils write.table
 

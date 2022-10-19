@@ -4,6 +4,7 @@
 #' @param reference name of the reference column
 #' @param eps threshold for the min_max method
 #' @param method mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.
+#' @description Add reference vector to CNV matrix
 #' @export
 
 apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="reference", eps=0.2, method=c("mean", "min_max")){
@@ -14,7 +15,7 @@ apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="refere
 	
 	#find the cluster where the reference appears
 	if(is.null(reference) | !any(colnames(cnv) %in% reference)){
-		stop("can't find the refence\n")
+		stop("can't find the reference\n")
 	}
 	
 	ref_cluster <- NULL
@@ -52,7 +53,7 @@ apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="refere
 		
 		ref_cluster_min <- t(apply(cnv[, idx_ref_cells], 1, function(x) boxplot.stats(x)$stats[c(1,5)])) #lo whisker and high whisker
 		ref_cluster_max <- ref_cluster_min[, 2]
-		ref_cluster_min <- ref_cluster_min[, 1]
+		ref_cluster_min <- ref_cluster_min[, 1] 
 		
 		temp_higher <- cnv
 		idx_higher_tozero <- apply(temp_higher, 2, function(x) x < (ref_cluster_max + eps))

@@ -11,6 +11,7 @@
 #' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
 #' @param ... further arguments for Seurat::FeaturePlot or Seurat::DimPlot
 #' @import Seurat graphics ggplot2
+#' @description Generate a UMAP visualization
 #' @export
 #' 
 plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, ...){

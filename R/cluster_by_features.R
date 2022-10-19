@@ -1,6 +1,6 @@
 #' Cluster by features
 #' 
-#' Clustering of the features_by_cell matrix
+#' @description Clustering of the features_by_cell matrix
 #' @param features features object or result of CNV calculation
 #' @param n_comp numeric, Dimensions of reduction to use as input
 #' @param cnv TRUE/FALSE set it to TRUE for clustering CNV results

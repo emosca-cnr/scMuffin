@@ -1,6 +1,7 @@
 #' Adds a feature to the feature list
 #' @param features_obj features object
 #' @param to_add data.frame of 1 or more cell values with cell id as row names
+#' @description Adds a feature to the feature list
 #' @export
 
 add_features <- function(features_obj=NULL, to_add=NULL){

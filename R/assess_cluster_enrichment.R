@@ -2,6 +2,7 @@
 #' @param features feature list
 #' @param partitions clustering list
 #' @param meta_clusters boolean, TRUE if the assessment involves meta clusters
+#' @description Assess cluster enrichment
 #' @export
 
 assess_cluster_enrichment <- function(features, partitions, meta_clusters=FALSE){

@@ -2,6 +2,7 @@
 #' @param genes_by_cells matrix
 #' @param gene_sets list of gene sets
 #' @param out_dir output directory
+#' @description Calculate clusters by gene set
 #' @export
 
 

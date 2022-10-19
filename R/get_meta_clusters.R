@@ -3,6 +3,7 @@
 #' @param meta_clusters meta clusters
 #' @export
 #' @importFrom stats setNames
+#' @description Get cells in each meta cluster
 #' 
 
 get_meta_clusters <- function(cl_list, meta_clusters){

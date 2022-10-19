@@ -1,4 +1,5 @@
-#' prepare the gene set lists collected from various sources
+#' Prepare the gene set lists collected from various sources
+#' @description Prepare the gene set lists collected from various sources
 #' @param gs_sources character vector, possible values: "SIG_CM_cancer", "SIG_CM_normal", "SIG_CancerSEA", "SIG_PNDB" and "msigdb"
 #' @param custom_gsls named list of gene sets
 #' @param CM_tissues character vector with strings to filter CellMArker db by tissue name
@@ -18,7 +19,7 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
 	if(!is.null(gs_sources)){
 		
 		if(!is.null(CM_tissues)){
-			CM_tissues <- paste("CM__", CM_tissues, "__", sep = "")
+			CM_tissues <- paste("CM__", CM_tissues, "__", sep = "") 
 		}
 		
 		if(!is.null(PNDB_tissues)){

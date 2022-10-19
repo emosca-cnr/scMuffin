@@ -1,4 +1,5 @@
 #' Calculate gene set scores
+#' @description Calculate gene set scoring
 #' @param genes_by_cells genes_by_cells expression matrix. This matrix must contain positive values only.
 #' @param gs_list list of gene sets
 #' @param mc.cores number of cores
@@ -10,6 +11,7 @@
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param verbose verbosity
+#' @return list of objects containing also the feature object (feat_obj) for visualization purpose
 #' 
 #' @export
 #' @import Seurat parallel
@@ -21,7 +23,7 @@ calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=
 	print(names(gs_list))
 	cat("# of gene_sets: ", length(gs_list), "\n")
 	
-	#dataset bins
+	#dataset bins 
 	data_bins <- NULL
 	if(null_model){
 		cat("defining bins...\n")
@@ -57,6 +59,8 @@ calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=
 	  gss_by_cell_matrix <- t(do.call(cbind, lapply(gs_scores, function(x) array(x$case, dimnames = list(rownames(x))))))
 	}
 	
-	return(list(gss_by_cells=gss_by_cell_matrix, by_gs=gs_scores, gs_list=gs_list))
+	feat_obj <- create_features_obj(as.data.frame(t(gss_by_cell_matrix)))
+	
+	return(list(gss_by_cells=gss_by_cell_matrix, by_gs=gs_scores, gs_list=gs_list, feat_obj=feat_obj))
 	
 }

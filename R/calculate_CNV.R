@@ -9,6 +9,7 @@
 #' @param scale_cells whether to scale cells
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
+#' @description Calculate CNV with or without reference vector
 #' @export
 calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=c(-3, 3), scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
 	

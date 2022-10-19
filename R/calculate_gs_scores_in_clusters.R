@@ -1,9 +1,10 @@
-#' calculate_signatures_clusters
+#' Calculate signatures clusters
+#' @description Calculate signatures clusters
 #' @param gs_scores_obj list of gene signature lists
 #' @param cell_clusters cell cluster labels
 #' @param ncells_min min number of cells required for the clculation of the average signature in the cluster
 #' @param null_model TRUE to consider the permutations
-#'
+#' @return signatures by cluster matrix
 #' @export
 
 calculate_gs_scores_in_clusters <- function(gs_scores_obj=NULL, cell_clusters=NULL, ncells_min = 5, null_model = TRUE){
@@ -22,6 +23,6 @@ calculate_gs_scores_in_clusters <- function(gs_scores_obj=NULL, cell_clusters=NU
 	
 	SC_signatures_by_cluster_matrix <- SC_signatures_by_cluster_matrix[, match(levels(cell_clusters), colnames(SC_signatures_by_cluster_matrix))]
 	
-	return(list(gss_by_clusters=SC_signatures_by_cluster_matrix, by_gs=res_signatures_clusters))
+	return(list(gss_by_clusters=SC_signatures_by_cluster_matrix, by_gs=res_signatures_clusters)) 
 	
 }

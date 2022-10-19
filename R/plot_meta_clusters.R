@@ -5,6 +5,7 @@
 #' @param file output file
 #' @param ... further arguments for ComplexHeatmap::Heatmap
 #' @export
+#' @description Plot meta clusters
 #' @import ComplexHeatmap grDevices dendsort
 
 plot_meta_clusters <- function(ov_mat=NULL, meta_clusters=NULL, out_dir="./", file="/meta_clusters.jpg", ...){

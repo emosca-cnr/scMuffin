@@ -9,6 +9,7 @@
 #' @param c_selection_threshold threshold for selection of tags from ORA
 #' @param c_sort_crit criteria for sorting tags from ORA
 #' @param c_sort_desc sorting in decreasing order or ORA
+#' @description Extract cluster enrichment table
 #' @export
 
 extract_cluster_enrichment_tags <- function(clust_enrich_res, q_selection_criterion="FDRq", q_selection_threshold=0.1, q_sort_crit="nes", q_sort_desc=TRUE, only_pos_nes=TRUE, c_selection_criterion="p_adj", c_selection_threshold=0.1, c_sort_crit="p", c_sort_desc=FALSE){

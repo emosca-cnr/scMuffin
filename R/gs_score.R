@@ -13,6 +13,7 @@
 #'    permutations: list with the permutations
 #' @author Ettore Mosca
 #' @import graphics
+#' @description Gene set scoring
 #' @export
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){

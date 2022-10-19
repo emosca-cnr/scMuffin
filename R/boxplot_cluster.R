@@ -11,6 +11,7 @@
 #' @param do_scale_features whether to scale features
 #' @param dir_out output directory
 #' @param ... passed to axis
+#' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @importFrom grDevices jpeg
 #' @import graphics
 #' @export

@@ -8,6 +8,7 @@
 #' @param text_val which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"
 #' @param dir_out string, output directory
 #' @importFrom grDevices jpeg
+#' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @export
 
 dotplot_cluster <- function(features, partitions=NULL, clustering_name=NULL, dir_out="./", clust_enrich_res=NULL, text_val=c("p", "wbd", "er")){
