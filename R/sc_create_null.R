@@ -9,9 +9,12 @@
 
 sc_create_null <- function(genes_by_cells, bins, gene_set, k=100){
 
-  ans <- bins[stats::na.omit(match(gene_set, rownames(genes_by_cells)))]
-
-  ans <- lapply(ans, function(ibin) which(bins == ibin)) #elements of bins that belong to ibin, i.e. rows of seurat data that belong to "ibin" set
+  gene_set_idx <- stats::na.omit(match(gene_set, rownames(genes_by_cells)))
+  ans <- bins[gene_set_idx] ###bins that contain the gene set
+  
+  #remove the gene of the gene sets from the bins
+  bins <- bins[-gene_set_idx]
+  ans <- lapply(ans, function(ibin) which(bins == ibin)) #genes that belong the the bins (ibin) of the gene set
 
   kk <- min(unlist(lapply(ans, function(ibin) min(k, length(ibin))))) # the maximum actual k i constrained by ibin lenght, that is how many genes belong to such bin
 

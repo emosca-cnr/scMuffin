@@ -10,11 +10,12 @@
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param verbose verbosity
+#' @param na.rm whether to use NA or not
 #' 
 #' @export
 #' @import Seurat parallel
 
-calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE){
+calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE){
 	
 	score_type <- score_type[1]
 
@@ -25,7 +26,7 @@ calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=
 	data_bins <- NULL
 	if(null_model){
 		cat("defining bins...\n")
-		data_bins <- sc_data_bin(as.matrix(genes_by_cells), nbins = nbins, use.log = TRUE)
+		data_bins <- sc_data_bin(genes_by_cells, nbins = nbins, na.rm=na.rm)
 	}
 	
 	#signatures-by-cell matrix
@@ -39,11 +40,11 @@ calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=
 		#		res_signatures[[i]] <- gene_set_score(signatures[[i]], genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin)
 		#	}
 		
-	  gs_scores <- lapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose))
+	  gs_scores <- lapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm))
 		
 	}else{
 		
-	  gs_scores <- parallel::mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose), mc.cores = mc.cores)
+	  gs_scores <- parallel::mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm), mc.cores = mc.cores)
 		
 	}
 	

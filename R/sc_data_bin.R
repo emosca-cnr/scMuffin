@@ -4,25 +4,33 @@
 #' 
 #' @param genes_by_cells genes-by-cells matrix
 #' @param nbins number of bins
-#' @param use.log use logarithm
+#' @param na.rm whether to remove NA or not
+#' @importFrom ggplot cut_number
+#' @importFrom Matrix rowSums
 #' @return vector with bin id for each row
 #' @export
 
 
-sc_data_bin <- function(genes_by_cells, nbins=25, use.log=TRUE){
+sc_data_bin <- function(genes_by_cells, nbins=25, na.rm=FALSE){
 
 
-  ans <- rowSums(genes_by_cells)
-  if(use.log){
-    if(any(ans==0)){
-      halfmin <- min(ans[ans>0]) / 2
-      ans[ans==0] <- halfmin
-    }
-    ans <- cut(log2(ans), nbins, labels = FALSE)
-  }else{
-    ans <- cut(ans, nbins, labels = FALSE)
+  ans <- Matrix::rowSums(genes_by_cells)
+  if(na.rm){
+    n <- Matrix::rowSums(genes_by_cells>0)
+    ans <- ans/n
   }
+  #if(use.log){
+    # if(any(ans==0)){
+    #   halfmin <- min(ans[ans>0]) / 2
+    #   ans[ans==0] <- halfmin
+    # }
+  #  ans <- cut(log1p(ans), nbins, labels = FALSE)
+  #}else{
+  #  ans <- cut(ans, nbins, labels = FALSE)
+  #}
 
+  ans <- ggplot2::cut_number(ans, n = nbins, labels=FALSE)
+  
   return(ans)
 
 }
