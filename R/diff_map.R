@@ -6,6 +6,7 @@
 #' @param root_cell root cell or "random" to pick up a random root via the destiny::random_root function
 #' @param ... parameters for destiny::DiffusionMap
 #' @importFrom destiny DiffusionMap random_root DPT
+#' @description The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
 #' @export
 
 diff_map <- function(genes_by_cells=NULL, output_ndc=1:3, root_cell=NULL, ...){

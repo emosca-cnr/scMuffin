@@ -1,4 +1,4 @@
-#' Gene Sert Enrichment Analysis
+#' Gene Set Enrichment Analysis
 #' @param rl numeric matrix of genes-by-ranking criteria; each column contains numeric values; rownames are mandatory
 #' @param gsl named list of gene sets
 #' @param k integer, number of permutations
@@ -8,6 +8,7 @@
 #' @import parallel
 #' @return data.frame with es, nes, p-value, adjusted p-value and FDR q-value
 #' @importFrom stats p.adjust
+#' @description Gene set enrichment analysis
 
 gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
 

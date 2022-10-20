@@ -5,6 +5,7 @@
 #' @param k number of permutations
 #' @author Ettore Mosca
 #' @importFrom stats na.omit
+#' @description sc_create_null
 #' @export
 
 sc_create_null <- function(genes_by_cells, bins, gene_set, k=100){

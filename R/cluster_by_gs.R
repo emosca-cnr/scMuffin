@@ -2,6 +2,7 @@
 #' @param Seu_obj Seu_obj
 #' @param gs vector of genes
 #' @import Seurat
+#' @description Cluster by n-genes
 #' @export
 
 cluster_by_gs <- function(Seu_obj, gs=NULL){

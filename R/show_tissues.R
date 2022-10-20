@@ -1,6 +1,6 @@
 #' Show the tissues available by means of prepare_gsl
-
 #' @param gsc_source the source database
+#' @description Show the tissues available by means of prepare_gsl
 #' 
 #' @export
 

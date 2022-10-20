@@ -8,6 +8,7 @@
 #' @importFrom ggplot cut_number
 #' @importFrom Matrix rowSums
 #' @return vector with bin id for each row
+#' @description Split the input data matrix by rows into nbins
 #' @export
 
 

@@ -4,6 +4,7 @@
 #' @param x named vector, ranked list
 #' @param le leading edge information
 #' @return enrichment score
+#' @description Enrichment score
 #'
 es <- function(idx, x, le=F){
 

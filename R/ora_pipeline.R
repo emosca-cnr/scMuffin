@@ -11,6 +11,7 @@
 #' @param write_tables whether to write or not the output
 #' @param id project name
 #' @importFrom parallel mclapply
+#' @description Over representation analysis pipeline
 #' @export
 
 ora_pipeline <- function(deg_list=NULL, universe=NULL, gs=NULL, gsid2name=NULL, mc.cores=1, eg2sym=NULL, min_size = 5, max_size = 500, out_dir="./", write_tables=FALSE, id="ora"){

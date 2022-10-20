@@ -10,6 +10,7 @@
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param mean_scale whether to scale the values obtained using score_type="mean"
 #' @importFrom utils data
+#' @description cell cycle - merge the two Tirosh signatures for proliferation analysis
 #' @export
 
 proliferation_analysis <- function(genes_by_cells, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){

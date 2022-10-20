@@ -3,6 +3,7 @@
 #' @param category MSigDB category name, see msigdbr_collections()
 #' @param subcategory MsigDB subcategory name, see msigdbr_collections()
 #' @param type Gene name of interest, can be gene_symbol or entrez_gene
+#' @description Returns msigdb geneset in a format compatible with calculate_signatures()
 #' @import msigdbr
 #' @export
 

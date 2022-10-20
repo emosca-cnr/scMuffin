@@ -2,6 +2,7 @@
 #' @param clust_enrich_res cluster enrichment result
 #' @param q_type the column of GSEA result that will appear in the output table
 #' @param c_type column of hyper result that will appear in the output table
+#' @description Extract cluster enrichment table
 #' @export
 
 extract_cluster_enrichment_table <- function(clust_enrich_res, q_type="nes", c_type="er"){

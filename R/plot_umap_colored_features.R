@@ -3,7 +3,6 @@
 #' Generate a UMAP visualization colored by feature distributions 
 #' @param Seu_obj seurat object, object with saved dimension reduction components calculate on genes by cells matrix
 #' @param features matrix, features by cells matrix
-#' @param dir output directory
 #' @param scale_feature whether to scale features or not
 #' @param feature_breaks breaks for feature value distribution
 #' @param ... further arguments to plot_umap
@@ -12,13 +11,14 @@
 #' @param neg_eps small negative value to define the color for null values around zero, default to -0.1
 #' @param pos_eps small positive value to define the color for null values around zero, default to =0.1
 #' @import RColorBrewer
+#' @description Generate a UMAP visualization colored by feature distributions
 #' @export
 
-plot_umap_colored_features <- function(Seu_obj, features, dir="./", scale_feature=TRUE, feature_breaks=NULL, adj_outliers=FALSE, neg_eps=-0.1, pos_eps=0.1, min_cells=10, ...){
+plot_umap_colored_features <- function(Seu_obj, features, scale_feature=TRUE, feature_breaks=NULL, adj_outliers=FALSE, neg_eps=-0.1, pos_eps=0.1, min_cells=10, ...){
 	
-	if(!dir.exists(dir)){
-		dir.create(dir)
-	}
+	# if(!dir.exists(dir)){
+	# 	dir.create(dir)
+	# }
 	
 	feature_data <- features$df
 	#feature_data[is.na(feature_data)] <- 0

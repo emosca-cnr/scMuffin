@@ -4,6 +4,7 @@
 #' @param ctree1 x
 #' @param ctree2 x
 #' @importFrom stats as.hclust
+#' @description Cluster comparison
 #' 
 #' @export
 

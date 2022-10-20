@@ -5,6 +5,7 @@
 #' @param alt alterative
 #' @param test type of test
 #' @param null_model whether to use permutations or not
+#' @description Gene set scoring in clusters
 #' @importFrom stats median wilcox.test t.test p.adjust
 #' @export
 

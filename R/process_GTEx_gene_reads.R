@@ -13,13 +13,13 @@
 #' @importFrom utils read.delim read.table
 
 
-process_GTEx_gene_reads <- function(geneReads=NULL, GTEx_annot=NULL, tissue=NULL, id_type=c("gene_id", "symbol"), nrows=NULL) {
+process_GTEx_gene_reads <- function(geneReads=NULL, GTEx_annot=NULL, tissue=NULL, id_type=c("gene_id", "symbol"), nrows=-1) {
     
     id_type <- match.arg(id_type, c("gene_id", "symbol"))
     
     # load data and annotations
     cat("Reading input files: this could take a while...\n")
-    GTEx <- read.table(geneReads, skip=2, header = TRUE, sep = "\t", nrows = nrows)
+    GTEx <- read.table(geneReads, skip=2, header = TRUE, sep = "\t", nrows = nrows) 
     annot <- read.delim(GTEx_annot)
  
     cat("Processing data...\n")

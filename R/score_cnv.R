@@ -2,6 +2,7 @@
 #' @param cnv_res Object resulting from calculate_cnv function
 #' @param plot_score boolean, whether to plot or not
 #' @importFrom stats quantile cor
+#' @description Score CNV
 #' @export
 
 score_cnv <- function(cnv_res, plot_score=FALSE) {

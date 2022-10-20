@@ -7,6 +7,7 @@
 #' @param fdr fdr threshold, default at 0.05
 #' @param mc.cores number of cores
 #' @importFrom parallel mclapply
+#' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @export
 #' @author Ettore Mosca
 

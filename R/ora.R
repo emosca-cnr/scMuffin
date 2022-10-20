@@ -4,6 +4,7 @@
 #' @param gsl named list of sets
 #' @param p_adj_method p value adjustment method, see p.adjust.methods
 #' @importFrom stats p.adjust
+#' @description Over representation analysis
 #' @export
 
 ora <- function(wb, bb, gsl, p_adj_method='fdr'){

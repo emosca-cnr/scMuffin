@@ -20,6 +20,7 @@
 #' @param top_genes If specified, only the first top_genes genes of every element of the lists cluster_markers_1 and cluster_markers_2 will be considered. This implies that the markers for each clusters are considered sorted by decreasing relevance. Default is FALSE, which
 #' @param ... arguments passed to calculate_signatures
 #' @export
+#' @description Compare two samples on the basis of cluster markers
 #' @import RColorBrewer
 #' @importFrom circlize colorRamp2
 

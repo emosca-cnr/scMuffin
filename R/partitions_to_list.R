@@ -1,5 +1,6 @@
 #' clusterings_to_list
 #' @param partitions partitions object
+#' @description Clusterings to a list
 #' @export
 
 partitions_to_list <- function(partitions){

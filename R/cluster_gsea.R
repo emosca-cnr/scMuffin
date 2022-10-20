@@ -6,6 +6,7 @@
 #' @param min.cells minimum number of cells
 #' @param mc.cores number of cores
 #' @export
+#' @description Calculate cluster enrichment by gsea approach
 #' @author Ettore Mosca
 
 cluster_gsea <- function(feature_values, cell_clusters, min.cells=100, mc.cores=1){
