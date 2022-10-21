@@ -39,5 +39,5 @@ extract_cluster_enrichment_tags(
 \item{c_sort_desc}{sorting in decreasing order or ORA}
 }
 \description{
-extract_cluster_enrichment_table
+Extract cluster enrichment table
 }

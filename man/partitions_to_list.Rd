@@ -10,5 +10,5 @@ partitions_to_list(partitions)
 \item{partitions}{partitions object}
 }
 \description{
-clusterings_to_list
+Clusterings to a list
 }

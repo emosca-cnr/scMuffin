@@ -39,5 +39,5 @@ calculate_CNV(
 \item{center_genes}{whether to center genes or not}
 }
 \description{
-Calculate CNV
+Calculate CNV with or without reference vector
 }

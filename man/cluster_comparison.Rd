@@ -16,5 +16,5 @@ cluster_comparison(cl1, cl2, ctree1, ctree2)
 \item{ctree2}{x}
 }
 \description{
-cluster_comparison
+Cluster comparison
 }

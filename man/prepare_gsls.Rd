@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepare_gsls.R
 \name{prepare_gsls}
 \alias{prepare_gsls}
-\title{prepare the gene set lists collected from various sources}
+\title{Prepare the gene set lists collected from various sources}
 \usage{
 prepare_gsls(
   gs_sources = NULL,
@@ -33,5 +33,5 @@ prepare_gsls(
 \item{genes}{optional character vectors with the universe of all the genes under analysis}
 }
 \description{
-prepare the gene set lists collected from various sources
+Prepare the gene set lists collected from various sources
 }

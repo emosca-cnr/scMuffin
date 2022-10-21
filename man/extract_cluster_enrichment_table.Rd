@@ -18,5 +18,5 @@ extract_cluster_enrichment_table(
 \item{c_type}{column of hyper result that will appear in the output table}
 }
 \description{
-extract_cluster_enrichment_table
+Extract cluster enrichment table
 }

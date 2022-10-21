@@ -7,7 +7,6 @@
 plot_umap_colored_features(
   Seu_obj,
   features,
-  dir = "./",
   scale_feature = TRUE,
   feature_breaks = NULL,
   adj_outliers = FALSE,
@@ -21,8 +20,6 @@ plot_umap_colored_features(
 \item{Seu_obj}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
 \item{features}{matrix, features by cells matrix}
-
-\item{dir}{output directory}
 
 \item{scale_feature}{whether to scale features or not}
 
@@ -39,5 +36,8 @@ plot_umap_colored_features(
 \item{...}{further arguments to plot_umap}
 }
 \description{
+Generate a UMAP visualization colored by feature distributions
+}
+\details{
 Generate a UMAP visualization colored by feature distributions
 }

@@ -16,5 +16,5 @@ ora(wb, bb, gsl, p_adj_method = "fdr")
 \item{p_adj_method}{p value adjustment method, see p.adjust.methods}
 }
 \description{
-Over Representation Analysis
+Over representation analysis
 }

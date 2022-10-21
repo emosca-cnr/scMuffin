@@ -10,12 +10,13 @@ calculate_gs_scores(
   mc.cores = 2,
   nbins = 25,
   nmark_min = 5,
-  ncells_min = 5,
+  ncells_min = 10,
   k = 100,
   kmin = 50,
   score_type = c("relative", "mean"),
   null_model = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  na.rm = TRUE
 )
 }
 \arguments{
@@ -40,7 +41,12 @@ calculate_gs_scores(
 \item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
 \item{verbose}{verbosity}
+
+\item{na.rm}{whether to use NA or not}
+}
+\value{
+list of objects containing also the feature object (feat_obj) for visualization purpose
 }
 \description{
-Calculate gene set scores
+Calculate gene set scoring
 }

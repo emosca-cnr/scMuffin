@@ -13,6 +13,10 @@ plot_umap(
   lab_size = 1,
   lab_color = "black",
   adj_outliers = FALSE,
+  width = 180,
+  height = 180,
+  units = "mm",
+  res = 300,
   ...
 )
 }
@@ -36,5 +40,8 @@ plot_umap(
 \item{...}{further arguments for Seurat::FeaturePlot or Seurat::DimPlot}
 }
 \description{
+Generate a UMAP visualization
+}
+\details{
 Generate a UMAP visualization
 }

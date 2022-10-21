@@ -42,5 +42,5 @@ ora_pipeline(
 \item{id}{project name}
 }
 \description{
-ora pipeline
+Over representation analysis pipeline
 }

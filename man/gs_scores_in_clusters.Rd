@@ -27,5 +27,5 @@ gs_scores_in_clusters(
 \item{null_model}{whether to use permutations or not}
 }
 \description{
-gene_set_score_in_clusters
+Gene set scoring in clusters
 }

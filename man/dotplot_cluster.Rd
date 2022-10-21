@@ -29,3 +29,6 @@ dotplot_cluster(
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }
+\details{
+Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+}

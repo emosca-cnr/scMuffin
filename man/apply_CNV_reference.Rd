@@ -24,5 +24,5 @@ apply_CNV_reference(
 \item{method}{mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.}
 }
 \description{
-apply_CNV_reference
+Add reference vector to CNV matrix
 }

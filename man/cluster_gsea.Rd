@@ -16,6 +16,9 @@ cluster_gsea(feature_values, cell_clusters, min.cells = 100, mc.cores = 1)
 \item{mc.cores}{number of cores}
 }
 \description{
+Calculate cluster enrichment by gsea approach
+}
+\details{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }
 \author{

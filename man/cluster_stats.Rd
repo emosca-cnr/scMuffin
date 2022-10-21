@@ -27,5 +27,5 @@ cluster_stats(
 \item{na.rm}{whether to remove na or not}
 }
 \description{
-cluster_stats
+Clusters statistics
 }

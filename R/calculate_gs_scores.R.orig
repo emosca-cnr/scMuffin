@@ -11,13 +11,16 @@
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param verbose verbosity
+<<<<<<< HEAD
 #' @param na.rm whether to use NA or not
+=======
 #' @return list of objects containing also the feature object (feat_obj) for visualization purpose
+>>>>>>> 0f263d3740a8aecd808cb4e68d2dd82dc5f4fa3b
 #' 
 #' @export
 #' @import Seurat parallel
 
-calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE){
+calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE){
 	
 	score_type <- score_type[1]
 
@@ -62,7 +65,6 @@ calculate_gs_scores <- function(genes_by_cells, gs_list=NULL, mc.cores=2, nbins=
 	
 	feat_obj <- create_features_obj(as.data.frame(t(gss_by_cell_matrix)))
 	
-	#return(list(gss_by_cells=gss_by_cell_matrix, by_gs=gs_scores, gs_list=gs_list, feat_obj=feat_obj))
 	return(list(gss_by_cells=gss_by_cell_matrix, by_gs=gs_scores, gs_list=gs_list, feat_obj=feat_obj))
 	
 }

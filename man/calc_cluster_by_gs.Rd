@@ -14,5 +14,5 @@ calc_cluster_by_gs(genes_by_cells, gene_sets, out_dir = "./")
 \item{out_dir}{output directory}
 }
 \description{
-calc_cluster_by_gs
+Calculate clusters by gene set
 }

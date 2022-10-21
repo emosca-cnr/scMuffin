@@ -20,6 +20,9 @@ cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2, mc.cores = 1)
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }
+\details{
+Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+}
 \author{
 Ettore Mosca
 }

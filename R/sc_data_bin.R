@@ -5,7 +5,7 @@
 #' @param genes_by_cells genes-by-cells matrix
 #' @param nbins number of bins
 #' @param na.rm whether to remove NA or not
-#' @importFrom ggplot cut_number
+#' @importFrom ggplot2 cut_number
 #' @importFrom Matrix rowSums
 #' @return vector with bin id for each row
 #' @description Split the input data matrix by rows into nbins

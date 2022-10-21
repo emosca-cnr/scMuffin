@@ -11,7 +11,7 @@ exp_rate(genes_by_cells, min_counts = 5)
 \arguments{
 \item{genes_by_cells}{count matrix}
 
-\item{min_counts}{minimin number of counts}
+\item{min_counts}{minimum number of counts}
 }
 \value{
 expRate_vect vector with expression rate for each cell

@@ -18,3 +18,6 @@ diff_map(genes_by_cells = NULL, output_ndc = 1:3, root_cell = NULL, ...)
 \description{
 The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
 }
+\details{
+The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
+}

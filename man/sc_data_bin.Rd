@@ -4,18 +4,21 @@
 \alias{sc_data_bin}
 \title{sc_data_bin}
 \usage{
-sc_data_bin(genes_by_cells, nbins = 25, use.log = TRUE)
+sc_data_bin(genes_by_cells, nbins = 25, na.rm = FALSE)
 }
 \arguments{
 \item{genes_by_cells}{genes-by-cells matrix}
 
 \item{nbins}{number of bins}
 
-\item{use.log}{use logarithm}
+\item{na.rm}{whether to remove NA or not}
 }
 \value{
 vector with bin id for each row
 }
 \description{
+Split the input data matrix by rows into nbins
+}
+\details{
 Split the input data matrix by rows into nbins
 }

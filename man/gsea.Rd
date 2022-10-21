@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsea.R
 \name{gsea}
 \alias{gsea}
-\title{Gene Sert Enrichment Analysis}
+\title{Gene Set Enrichment Analysis}
 \usage{
 gsea(rl, gsl, k = 100, ord.mode = -1, mc_cores_path = 1, mc_cores_perm = 1)
 }
@@ -23,5 +23,5 @@ gsea(rl, gsl, k = 100, ord.mode = -1, mc_cores_path = 1, mc_cores_perm = 1)
 data.frame with es, nes, p-value, adjusted p-value and FDR q-value
 }
 \description{
-Gene Sert Enrichment Analysis
+Gene set enrichment analysis
 }

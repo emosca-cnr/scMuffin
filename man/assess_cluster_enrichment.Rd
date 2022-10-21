@@ -14,5 +14,5 @@ assess_cluster_enrichment(features, partitions, meta_clusters = FALSE)
 \item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
 }
 \description{
-assess_cluster_enrichment
+Assess cluster enrichment
 }

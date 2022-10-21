@@ -10,7 +10,7 @@ plot_heatmap_features_by_clusters(
   sig_threshold = 0.05,
   ntop = 10,
   onlyUp = TRUE,
-  out_file = "heatmap_features_by_clusters.png",
+  out_file = "heatmap_features_by_clusters.jpg",
   remove_null_features = FALSE,
   ...
 )
@@ -33,5 +33,5 @@ plot_heatmap_features_by_clusters(
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
 }
 \description{
-plot_heatmap_features_by_clusters
+Plot heatmap festure by clusters
 }

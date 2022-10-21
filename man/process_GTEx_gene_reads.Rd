@@ -9,7 +9,7 @@ process_GTEx_gene_reads(
   GTEx_annot = NULL,
   tissue = NULL,
   id_type = c("gene_id", "symbol"),
-  nrows = NULL
+  nrows = -1
 )
 }
 \arguments{

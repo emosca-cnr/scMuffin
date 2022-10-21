@@ -13,7 +13,8 @@ gs_score(
   k = 100,
   kmin = 50,
   verbose = TRUE,
-  null_model = TRUE
+  null_model = TRUE,
+  na.rm = TRUE
 )
 }
 \arguments{
@@ -41,7 +42,7 @@ list with
    permutations: list with the permutations
 }
 \description{
-gene_set_score
+Gene set scoring
 }
 \author{
 Ettore Mosca

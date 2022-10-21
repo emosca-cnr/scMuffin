@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_gs_scores_in_clusters.R
 \name{calculate_gs_scores_in_clusters}
 \alias{calculate_gs_scores_in_clusters}
-\title{calculate_signatures_clusters}
+\title{Calculate signatures clusters}
 \usage{
 calculate_gs_scores_in_clusters(
   gs_scores_obj = NULL,
@@ -20,6 +20,9 @@ calculate_gs_scores_in_clusters(
 
 \item{null_model}{TRUE to consider the permutations}
 }
+\value{
+signatures by cluster matrix
+}
 \description{
-calculate_signatures_clusters
+Calculate signatures clusters
 }

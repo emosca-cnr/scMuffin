@@ -12,5 +12,5 @@ cluster_by_gs(Seu_obj, gs = NULL)
 \item{gs}{vector of genes}
 }
 \description{
-cluster by n-genes
+Cluster by n-genes
 }

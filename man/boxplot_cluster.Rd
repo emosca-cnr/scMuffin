@@ -43,6 +43,5 @@ boxplot_cluster(
 \item{...}{passed to axis}
 }
 \description{
-Boxplot clusters 
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }

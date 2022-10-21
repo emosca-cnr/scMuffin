@@ -17,5 +17,5 @@ es(idx, x, le = F)
 enrichment score
 }
 \description{
-Enrichment Score
+Enrichment score
 }
