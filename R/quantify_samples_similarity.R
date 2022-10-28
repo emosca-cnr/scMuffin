@@ -21,7 +21,7 @@
 #' @param ... arguments passed to calculate_signatures
 #' @export
 #' @description Compare two samples on the basis of cluster markers
-#' @import RColorBrewer
+#' @import pals
 #' @importFrom circlize colorRamp2
 
 quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2, genes_min=3, genes_max=500, mc.cores=2, null_model=TRUE, ncells_min=5, do_plot=TRUE, sample_name_1="S1", sample_name_2="S2", outfile="cluster_similarity.jpg", pal=NULL, cluster_rows = FALSE, cluster_columns = FALSE, top_genes=FALSE, ...){
@@ -30,15 +30,18 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
   
-  print(top_genes)
+
+  scMuffinList_1 <- list(genes_by_cells=Matrix::as.matrix(gbc_1))
+  scMuffinList_1 <- add_partitions(scMuffinList_1, clusters = clusters_1, partition_id = "cl")
   
-  clusters_1 <- clusters_1[match(colnames(gbc_1), names(clusters_1))]
-  clusters_2 <- clusters_2[match(colnames(gbc_2), names(clusters_2))]
+  scMuffinList_2 <- list(genes_by_cells=Matrix::as.matrix(gbc_2))
+  scMuffinList_2 <- add_partitions(scMuffinList_2, clusters = clusters_2, partition_id = "cl")
   
   cl_names <- names(cluster_markers_1)
   cl_names_2 <- names(cluster_markers_2)
   
-  signatures <- prepare_gsls(custom_gsls = list(cm=cluster_markers_1), genes = rownames(gbc_1), genes_min = genes_min, genes_max = genes_max)
+  #the markers of sample 1 must be present in sample 2
+  signatures <- prepare_gsls(custom_gsls = list(cm=cluster_markers_1), genes = rownames(scMuffinList_2$genes_by_cells), genes_min = genes_min, genes_max = genes_max)
   cat("Sample 1\n")
   print(lengths(signatures$cm))
 
@@ -49,10 +52,11 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   print(lengths(signatures$cm))
   
   
-  res_sig <- mclapply(signatures, function(x) calculate_gs_scores(gbc_2, gs_list = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
-  
+  #expression of markers of sample 1 in sample 2
+  scMuffinList_2 <- calculate_gs_scores(scMuffinList_2, gs_list = signatures$cm, mc.cores=mc.cores, ...)
+
   #signature cluster median
-  res_sig_cl <- mclapply(res_sig, function(x) calculate_gs_scores_in_clusters(gs_scores_obj = x, cell_clusters = clusters_2, null_model = null_model, ncells_min = ncells_min))
+  scMuffinList_2 <- calculate_gs_scores_in_clusters(scMuffinList = scMuffinList_2, partition_id = "cl", null_model = null_model, ncells_min = ncells_min)
   
   
   cat("Sample 2\n")
@@ -60,7 +64,9 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   if(any(lengths(cluster_markers_2))>genes_max | any(lengths(cluster_markers_2) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")
   }
-  signatures_2 <- prepare_gsls(custom_gsls = list(cm=cluster_markers_2), genes = rownames(gbc_2), genes_min = genes_min)
+  
+  #markers of sample 2 must be in sample 1
+  signatures_2 <- prepare_gsls(custom_gsls = list(cm=cluster_markers_2), genes = rownames(scMuffinList_1$genes_by_cells), genes_min = genes_min)
   
   if(is.numeric(top_genes)){
     message("Reducing signatures to ", top_genes, "\n")
@@ -69,22 +75,22 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   print(lengths(signatures_2$cm))
   
   
-  res_sig_2 <- mclapply(signatures_2, function(x) calculate_gs_scores(gbc_1, gs_list = x, mc.cores=mc.cores/2, ...), mc.cores = mc.cores/2)
-  
+  #expression of markers of sample 2 in sample 1
+  scMuffinList_1 <- calculate_gs_scores(scMuffinList_1, gs_list = signatures_2$cm, mc.cores=mc.cores, ...)
   
   #signature cluster median
-  res_sig_cl_2 <- mclapply(res_sig_2, function(x) calculate_gs_scores_in_clusters(gs_scores_obj = x, cell_clusters = clusters_1, null_model = null_model, ncells_min = ncells_min))
+  scMuffinList_1 <- calculate_gs_scores_in_clusters(scMuffinList = scMuffinList_1, partition_id = "cl", null_model = null_model, ncells_min = ncells_min)
   
   
   #check for possible missing clusters
-  m1 <- res_sig_cl$cm$gss_by_clusters
+  m1 <- as.matrix(scMuffinList_1$cluster_data$cl$gene_set_scoring$summary)
   if(any(!cl_names %in% rownames(m1))){
     missing_rows <- as.character(cl_names[!cl_names %in% rownames(m1)])
     m1 <- rbind(m1, matrix(0, nrow = length(missing_rows), ncol = ncol(m1), dimnames = list(missing_rows, colnames(m1))))
   }
   m1 <- m1[order(as.numeric(rownames(m1))), order(as.numeric(colnames(m1)))]
   
-  m2 <- res_sig_cl_2$cm$gss_by_clusters
+  m2 <- as.matrix(scMuffinList_2$cluster_data$cl$gene_set_scoring$summary)
   if(any(!cl_names_2 %in% rownames(m2))){
     missing_rows <- as.character(cl_names_2[!cl_names_2 %in% rownames(m2)])
     m2 <- rbind(m2, matrix(0, nrow = length(missing_rows), ncol = ncol(m2), dimnames = list(missing_rows, colnames(m2))))
@@ -100,7 +106,7 @@ quantify_samples_similarity <- function(gbc_1, gbc_2, clusters_1, clusters_2, cl
   if(do_plot){
     
     if(is.null(pal)){
-      pal <- RColorBrewer::brewer.pal(11, "PuOr")
+      pal <- pals::brewer.puor(11)
     }
     
     extremes <- boxplot.stats(as.numeric(clust_sim))$stats

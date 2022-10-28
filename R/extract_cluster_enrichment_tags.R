@@ -1,88 +1,53 @@
-#' extract_cluster_enrichment_table
-#' @param clust_enrich_res cluster enrichment result
-#' @param q_selection_criterion criteria for selection of tags from CSEA
-#' @param q_selection_threshold threshold for selection of tags from CSEA
-#' @param q_sort_crit criteria for sorting tags from CSEA
-#' @param q_sort_desc sorting in decreasing order or not
-#' @param only_pos_nes only positive nes?
-#' @param c_selection_criterion criteria for selection of tags from ORA
-#' @param c_selection_threshold threshold for selection of tags from ORA
-#' @param c_sort_crit criteria for sorting tags from ORA
-#' @param c_sort_desc sorting in decreasing order or ORA
-#' @description Extract cluster enrichment table
+#' Extract the top results of GSEA and ORA for each cluster
+#' @param scMuffinList scMuffinList object
+#' @param partition_id one among the partitions
+#' @param GSEA_selection_criterion selection criteria for results of GSEA
+#' @param GSEA_selection_threshold threshold for selection of tags from GSEA
+#' @param ORA_selection_criterion selection criteria for results of ORA
+#' @param ORA_selection_threshold threshold for selection of tags from ORA
+#' @param n_max_per_cluster maximum number of tags per cluster
+#' @description Extract the best results of GSEA and ORA for each cluster
+#' @return Add or overwrite the "cluster_tags" list to `scMuffinList$cluster_data[[partition_id]]`
 #' @export
 
-extract_cluster_enrichment_tags <- function(clust_enrich_res, q_selection_criterion="FDRq", q_selection_threshold=0.1, q_sort_crit="nes", q_sort_desc=TRUE, only_pos_nes=TRUE, c_selection_criterion="p_adj", c_selection_threshold=0.1, c_sort_crit="p", c_sort_desc=FALSE){
+extract_cluster_enrichment_tags <- function(scMuffinList=NULL, partition_id=NULL, GSEA_selection_criterion="FDRq", GSEA_selection_threshold=0.25, only_pos_nes=TRUE, ORA_selection_criterion="p_adj", ORA_selection_threshold=0.1, n_max_per_cluster=3){
   
+  clust_enrich_res <- scMuffinList$cluster_data[[partition_id]][c("GSEA", "ORA")]
   
   ans <- vector("list", 2)
   names(ans) <- c("cluster_gsea_tags", "cluster_hyper_tags")
   
-  en_table_sel <- extract_cluster_enrichment_table(clust_enrich_res, q_type=q_selection_criterion, c_type=c_selection_criterion)
-  en_table_sort <- extract_cluster_enrichment_table(clust_enrich_res, q_type=q_sort_crit, c_type=c_sort_crit)
-  
-  if(only_pos_nes & q_sort_crit=="nes" & length(en_table_sort$cluster_gsea_table) > 0){
-    for(i in 1:length(en_table_sort$cluster_gsea_table)){
-      idx_pos_nes <- en_table_sort$cluster_gsea_table[[i]] < 0
-      en_table_sort$cluster_gsea_table[[i]][idx_pos_nes] <- 0 #negative nes ->0
-      en_table_sel$cluster_gsea_table[[i]][idx_pos_nes] <- 1 #fdr equal to 1
-    }
+  ##GSEA results
+  GSEA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "GSEA", quantity = GSEA_selection_criterion)
+  if(only_pos_nes){
+    GSEA_table_nes <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "GSEA", quantity = "nes")
+    GSEA_table[GSEA_table_nes < 0] <- 1 #fdr equal to 1
   }
   
   #selection of per-cluster tags
-  if(length(en_table_sort$cluster_gsea_table) > 0){
-    
-    en_table_sel$cluster_gsea_table <- lapply( en_table_sel$cluster_gsea_table, function(x) apply(x, 1, function(y) colnames(x)[y<q_selection_threshold]))
-    
-    #order
-    for(i in 1:length(en_table_sort$cluster_gsea_table)){#clusterings
-      
-      cluster_id <- names(en_table_sel$cluster_gsea_table[[i]])
-      en_table_sort$cluster_gsea_table[[i]] <- split(t(apply(en_table_sort$cluster_gsea_table[[i]], 1, function(x) colnames(en_table_sort$cluster_gsea_table[[i]])[order(abs(x), decreasing = q_sort_desc)])), cluster_id)
-    }
-    
-    #keep only those selected
-    for(i in 1:length(en_table_sort$cluster_gsea_table)){#clusterings
-      for(j in 1:length(en_table_sort$cluster_gsea_table[[i]])){#clusterings
-        en_table_sort$cluster_gsea_table[[i]][[j]] <- en_table_sort$cluster_gsea_table[[i]][[j]][en_table_sort$cluster_gsea_table[[i]][[j]] %in% en_table_sel$cluster_gsea_table[[i]][[j]]]
-      }
-    }
-    
-    ans$cluster_gsea_tags <- en_table_sort$cluster_gsea_table
-    
+  decreasing <- FALSE
+  if(GSEA_selection_criterion == "nes"){
+    decreasing <- TRUE
   }
+  gsea_tags <- apply(GSEA_table, 1, function(i_row) intersect(colnames(GSEA_table)[order(i_row, decreasing = decreasing)], colnames(GSEA_table)[i_row < GSEA_selection_threshold]))
+  gsea_tags <- lapply(gsea_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
   
   #selection
-  en_table_sel$cluster_hyper_table <- lapply( en_table_sel$cluster_hyper_table, function(x) lapply( x, function(y) apply(y, 1, function(z) colnames(y)[z<c_selection_threshold])))
+  ORA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "ORA", quantity = ORA_selection_criterion)
+  ORA_table <- do.call(cbind, ORA_table)
   
-  #order
-  if(length(en_table_sort$cluster_hyper_table) > 0){
-    
-    for(i in 1:length(en_table_sort$cluster_hyper_table)){#clusterings
-      split_factor <- rownames(en_table_sort$cluster_hyper_table[[i]][[1]])
-      en_table_sort$cluster_hyper_table[[i]] <- lapply(en_table_sort$cluster_hyper_table[[i]], function(x) split(t(apply(x, 1, function(y) colnames(x)[order(abs(y), decreasing = c_sort_desc)])), split_factor))
-    }
-    
-    #keep only those selected
-    for(i in 1:length(en_table_sort$cluster_hyper_table)){#clusterings
-      for(j in 1:length(en_table_sort$cluster_hyper_table[[i]])){#features
-        for(k in 1:length(en_table_sort$cluster_hyper_table[[i]][[j]])){#clusters
-          en_table_sort$cluster_hyper_table[[i]][[j]][[k]] <- en_table_sort$cluster_hyper_table[[i]][[j]][[k]][en_table_sort$cluster_hyper_table[[i]][[j]][[k]] %in% en_table_sel$cluster_hyper_table[[i]][[j]][[k]] ]
-        }
-      }
-    }
-    #paste labels
-    for(i in 1:length(en_table_sort$cluster_hyper_table)){#clusterings
-      ans$cluster_hyper_tags[[i]] <- vector("list", length(en_table_sort$cluster_hyper_table[[i]][[1]])) #number of clustersfeatures
-      names(ans$cluster_hyper_tags[[i]]) <- names(en_table_sort$cluster_hyper_table[[i]][[1]])
-      for(j in 1:length(ans$cluster_hyper_tags[[i]])){
-        ans$cluster_hyper_tags[[i]][[j]] <- lapply(en_table_sort$cluster_hyper_table[[i]], function(x) unlist(x[j]))
-        ans$cluster_hyper_tags[[i]][[j]] <- paste(names(ans$cluster_hyper_tags[[i]][[j]]), lapply(ans$cluster_hyper_tags[[i]][[j]], function(x) paste0(x, collapse = "_")))
-      }
-    }
-    
+  ora_tags <- apply(ORA_table, 1, function(i_row) intersect(colnames(ORA_table)[order(i_row, decreasing = decreasing)], colnames(ORA_table)[i_row < ORA_selection_threshold]))
+  ora_tags <- lapply(ora_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
+  
+  
+  decreasing <- TRUE
+  if(GSEA_selection_criterion %in% c("p", "p_adj")){
+    decreasing <- FALSE
   }
+  ora_tags <- apply(ORA_table, 1, function(y) intersect(colnames(ORA_table)[order(y, decreasing = decreasing)], colnames(ORA_table)[y<ORA_selection_threshold]))
   
-  return(ans)
+  scMuffinList$cluster_data[[partition_id]]$cluster_tags <- list(GSEA=gsea_tags, ORA=ora_tags)
+  
+  return(scMuffinList)
   
 }

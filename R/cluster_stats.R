@@ -1,33 +1,53 @@
 #' cluster_stats
-#' @param feat_obj feature object
-#' @param partitions partitions object
-#' @param which_col which column of the clustering object should be used. if NULL, all columns will be considered
-#' @param avg function to use for average
+#' @param scMuffinList scMuffinList object
+#' @param partition_id partition id
+#' @param feature_id feature id
+#' @param mean function to use for average
 #' @param var function to use for variability
 #' @param na.rm whether to remove na or not
 #' @importFrom stats sd
 #' @description Clusters statistics
 #' @export
 
-cluster_stats <- function(feat_obj=NULL, partitions=NULL, which_col=NULL, avg=mean, var=sd, na.rm=TRUE){
-	
-	partitions <- partitions[match(rownames(feat_obj$df), rownames(partitions)), , drop=F]
-		
-	if(is.null(which_col)){
-		ans_avg <- ans_var <- vector("list", ncol(partitions))
-		names(ans_avg) <- names(ans_var) <- colnames(partitions)
-		for(i in 1:length(ans_avg)){
-			ans_avg[[i]] <- t(apply(feat_obj$df[, feat_obj$type == "numeric"], 2, function(x) tapply(x, partitions[, i], avg, na.rm=na.rm)))
-			ans_avg[[i]][is.nan(ans_avg[[i]]) | is.na(ans_avg[[i]])] <- 0
-			
-			ans_var[[i]] <- t(apply(feat_obj$df[, feat_obj$type == "numeric"], 2, function(x) tapply(x, partitions[, i], var, na.rm=na.rm)))
-			ans_var[[i]][is.nan(ans_var[[i]]) | is.na(ans_var[[i]])] <- 0
-		}
-	}else{
-		ans_avg <- t(apply(feat_obj$df[, feat_obj$type == "numeric"], 1, function(x) tapply(x, partitions[, which_col], avg, na.rm)))
-		ans_var <- t(apply(feat_obj$df[, feat_obj$type == "numeric"], 1, function(x) tapply(x, partitions[, which_col], var, na.rm)))
-	}
-	
-	return(list(avg=ans_avg, var=ans_var))
-	
+cluster_stats <- function(scMuffinList=NULL, partition_id=NULL, feature_id=NULL, mean_f=mean, var_f=sd, na.rm=TRUE){
+  
+  X <- as.matrix(scMuffinList[[feature_id]]$summary)
+  X_clusters <- setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))
+  
+  X_clusters <- X_clusters[match(rownames(X), names(X_clusters))]
+  
+  if(is.numeric(X)){
+    X_mean <- apply(X, 2, function(i_col) tapply(i_col, X_clusters, FUN = mean_f, na.rm=na.rm))
+    X_var <- apply(X, 2, function(i_col) tapply(i_col, X_clusters, FUN = var_f, na.rm=na.rm))
+  }else{
+    stop("scMuffinList[[feature_id]]$summary is not numeric\n")
+  }
+  
+  if(length(scMuffinList$cluster_data[[partition_id]]$mean)==0){
+    
+    scMuffinList$cluster_data[[partition_id]]$mean <- X_mean
+    scMuffinList$cluster_data[[partition_id]]$var <- X_var
+    
+  }else{
+    
+    idx_shared <- intersect(colnames(scMuffinList$cluster_data[[partition_id]]$mean), colnames(X))
+    
+    if(length(idx_shared)>0){
+      scMuffinList$cluster_data[[partition_id]]$mean[, idx_shared] <- NULL
+      scMuffinList$cluster_data[[partition_id]]$var[, idx_shared] <- NULL
+    }
+    
+    scMuffinList$cluster_data[[partition_id]]$mean <- merge(scMuffinList$cluster_data[[partition_id]]$mean, X_mean, by=0)
+    rownames(scMuffinList$cluster_data[[partition_id]]$mean) <- scMuffinList$cluster_data[[partition_id]]$mean$Row.names
+    scMuffinList$cluster_data[[partition_id]]$mean$Row.names <- NULL
+    
+    scMuffinList$cluster_data[[partition_id]]$var <- merge(scMuffinList$cluster_data[[partition_id]]$var, X_var, by=0)
+    rownames(scMuffinList$cluster_data[[partition_id]]$var) <- scMuffinList$cluster_data[[partition_id]]$var$Row.names
+    scMuffinList$cluster_data[[partition_id]]$var$Row.names <- NULL
+    
+    
+  }
+  
+  return(scMuffinList)
+  
 }

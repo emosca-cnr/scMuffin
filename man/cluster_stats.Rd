@@ -5,26 +5,26 @@
 \title{cluster_stats}
 \usage{
 cluster_stats(
-  feat_obj = NULL,
-  partitions = NULL,
-  which_col = NULL,
-  avg = mean,
-  var = sd,
+  scMuffinList = NULL,
+  partition_id = NULL,
+  feature_id = NULL,
+  mean_f = mean,
+  var_f = sd,
   na.rm = TRUE
 )
 }
 \arguments{
-\item{feat_obj}{feature object}
+\item{scMuffinList}{scMuffinList object}
 
-\item{partitions}{partitions object}
+\item{partition_id}{partition id}
 
-\item{which_col}{which column of the clustering object should be used. if NULL, all columns will be considered}
-
-\item{avg}{function to use for average}
-
-\item{var}{function to use for variability}
+\item{feature_id}{feature id}
 
 \item{na.rm}{whether to remove na or not}
+
+\item{mean}{function to use for average}
+
+\item{var}{function to use for variability}
 }
 \description{
 Clusters statistics

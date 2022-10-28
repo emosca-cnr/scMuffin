@@ -6,8 +6,12 @@
 #' @description Get cells in each meta cluster
 #' 
 
-get_meta_clusters <- function(cl_list, meta_clusters){
+get_meta_clusters <- function(scMuffinList=NULL){
 
+  
+  meta_clusters <- scMuffinList$cluster_comparison$meta_clusters
+  cl_list <- scMuffinList$cluster_comparison$cluster_list
+  
 	meta_clusters$clusters$type <- gsub("_[^_]+$", "", meta_clusters$clusters$cluster)
 	
 	ans <- vector("list", nrow(meta_clusters$clusters))

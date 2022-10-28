@@ -8,8 +8,16 @@
 #' @description Returns meta-clusters obtained by using hierarchical clustering
 #' @export
 
-meta_cluster <- function(overlap_mat, n_step = 11, max_clust=10, do_plot=FALSE) {
-	diss <- max(overlap_mat) - overlap_mat
+meta_cluster <- function(scMuffinList=NULL, n_step = 11, max_clust=10, do_plot=FALSE) {
+  
+
+  scMuffinList$partitions$all <- as.factor(as.character(apply(scMuffinList$partitions, 1, function(i_row) paste0(colnames(scMuffinList$partitions), i_row, collapse="__"))))
+  
+
+  scMuffinList <- overlap_matrix(scMuffinList = scMuffinList)
+  overlap_mat <- scMuffinList$cluster_comparison$overlap_matrix
+  
+  diss <- max(overlap_mat) - overlap_mat
 	hc_cl <- stats::hclust(stats::as.dist(diss))
 	
 	val <- seq(min(hc_cl[["height"]]), max(hc_cl[["height"]]), length.out =n_step)
@@ -36,9 +44,33 @@ meta_cluster <- function(overlap_mat, n_step = 11, max_clust=10, do_plot=FALSE) 
 		clusters_hc <- cutree(hc_cl, k = max_clust)
 	}
 	clusters <- data.frame(cluster= names(clusters_hc), meta_cl = clusters_hc, stringsAsFactors = F)
-	ans <- list(dissimilarity = diss, hclust_out = hc_cl, clusters = clusters)
 	
-	return(ans)
+	
+	scMuffinList$cluster_comparison$meta_clusters <- list(dissimilarity = diss, hclust_out = hc_cl, clusters = clusters)
+	
+	meta_clusters <- scMuffinList$cluster_comparison$meta_clusters
+	cl_list <- scMuffinList$cluster_comparison$cluster_list
+	
+	meta_clusters$clusters$type <- gsub("_[^_]+$", "", meta_clusters$clusters$cluster)
+	
+	ans <- vector("list", nrow(meta_clusters$clusters))
+	
+	for(i in 1:nrow(meta_clusters$clusters)){
+	  
+	  idx_cl_list <- meta_clusters$clusters$type[i]
+	  ans[[i]] <- data.frame(meta_cl=meta_clusters$clusters$meta_cl[i], type=meta_clusters$clusters$type[i], cluster_id=meta_clusters$clusters$cluster[i], cell_id=names(cl_list[[idx_cl_list]])[cl_list[[idx_cl_list]] == meta_clusters$clusters$cluster[i]], stringsAsFactors = F)
+	  
+	}
+	
+	ans <- Reduce(rbind, ans)
+	scMuffinList$cluster_comparison$meta_clusters$cells <- unique(ans[, c("meta_cl", "cell_id")])
+	
+	temp <- split(ans, ans$meta_cl)
+	temp <- lapply(temp, function(x) table(x$cell_id, x$cluster_id))
+	scMuffinList$cluster_comparison$meta_clusters$occurrence <- temp
+
+	return(scMuffinList)
+	
 }
 
 

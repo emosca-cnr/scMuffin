@@ -11,7 +11,7 @@
 #' @export
 #' @author Ettore Mosca
 
-cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2, mc.cores=1){
+cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2){
   
   
   #gene sets are clusters
@@ -27,14 +27,12 @@ cluster_hyper <- function(feature_values, cell_clusters, fdr=0.05, top=2, mc.cor
     feature_val_i <- lapply(split(setNames(feature_values[, i], rownames(feature_values)), feature_values[, i]), function(x) names(x))
     ora_res[[i]] <- vector("list", length(feature_val_i))
     names(ora_res[[i]]) <- names(feature_val_i)
-
-        for(j in 1:length(feature_val_i)){
-      ora_res[[i]][[j]]  <- parallel::mclapply(gsl, function(x) ora(feature_val_i[[j]], universe[!universe %in% feature_val_i[[j]]], gsl = x, p_adj_method = "fdr"), mc.cores = mc.cores)
-      
+    
+    for(j in 1:length(feature_val_i)){
+      ora_res[[i]][[j]]  <- ora(feature_val_i[[j]], universe[!universe %in% feature_val_i[[j]]], gsl = gsl$clusters, p_adj_method = "fdr")
     }
     
   }
   
   return(ora_res)
 }
-  

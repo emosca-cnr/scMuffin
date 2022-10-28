@@ -5,26 +5,34 @@
 \title{Boxplot clusters}
 \usage{
 dotplot_cluster(
-  features,
-  partitions = NULL,
-  clustering_name = NULL,
+  scMuffinList = NULL,
+  feature_id = NULL,
+  feature_name = NULL,
+  partition_id = NULL,
   dir_out = "./",
-  clust_enrich_res = NULL,
-  text_val = c("p", "wbd", "er")
+  n_features = 10,
+  only_pos_nes = TRUE,
+  do_scale_features = FALSE,
+  cex.axis = 0.8,
+  quantity = c("p", "wbd", "er")
 )
 }
 \arguments{
-\item{features}{feautures object}
+\item{scMuffinList}{scMuffinList object}
 
-\item{partitions}{partitions object}
+\item{feature_id}{names of the features to be used.}
 
-\item{clustering_name}{one among the partitions}
+\item{partition_id}{one among the partitions}
 
 \item{dir_out}{string, output directory}
 
-\item{clust_enrich_res}{clustering enrichment results}
+\item{n_features}{maximum number of features that will be shown}
 
-\item{text_val}{which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"}
+\item{only_pos_nes}{whether to consider only positive enrichments}
+
+\item{cex.axis}{cex.axis}
+
+\item{quantity}{which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

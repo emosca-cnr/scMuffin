@@ -1,35 +1,32 @@
-#' extract_cluster_enrichment_table
-#' @param clust_enrich_res cluster enrichment result
-#' @param q_type the column of GSEA result that will appear in the output table
-#' @param c_type column of hyper result that will appear in the output table
+#' Extract cluster enrichment table
+#' @param scMuffinList scMuffinList object
+#' @param partition_id id of the parition to be used
+#' @param type "GSEA" or "ORA"
+#' @param quantity for GSEA: "es", "p_val", "adj_p_val", "nes" or "FDRq". ORA: "wbd", "exp", "er", "p", "p_adj".
+#' @param feature_name name of the features that will be considered. Must be any of `colnames(scMuffinList$cluster_data$[[parition_id]]$GSEA$gs_table)` or `names(scMuffinList$cluster_data$[[parition_id]]$ORA)`
 #' @description Extract cluster enrichment table
 #' @export
 
-extract_cluster_enrichment_table <- function(clust_enrich_res, q_type="nes", c_type="er"){
-
+extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, type=NULL, quantity=NULL, feature_name=NULL){
   
-  ans <- vector("list", 2)
-  names(ans) <- c("cluster_gsea_table", "cluster_hyper_table")
-  
-  if(!is.null(q_type) & !is.null(clust_enrich_res$cluster_gsea_res)){
-    ans$cluster_gsea_table <- clust_enrich_res$cluster_gsea_res
-    for(i in 1:length(clust_enrich_res$cluster_gsea_res)){
-      ans$cluster_gsea_table[[i]] <- do.call(cbind, lapply(clust_enrich_res$cluster_gsea_res[[i]]$gs_table, function(x) array(x[, colnames(x)==q_type], dimnames = list(x$id))))
+  if(type == "GSEA" & !is.null(scMuffinList$cluster_data[[partition_id]]$GSEA)){
+    
+    ans <- scMuffinList$cluster_data[[partition_id]]$GSEA$gs_table
+    if(!is.null(feature_name)){
+      ans <- ans[names(ans) %in% feature_name]
     }
-      
-      
+    ans <- do.call(cbind, lapply(ans, function(x) array(x[, colnames(x)==quantity], dimnames = list(x$id))))
   }
   
-  if(!is.null(c_type) & !is.null(clust_enrich_res$cluster_hyper_res)){
-    ans$cluster_hyper_table <- clust_enrich_res$cluster_hyper_res
+  
+  if(type == "ORA" & !is.null(scMuffinList$cluster_data[[partition_id]]$ORA)){
     
-    for(i in 1:length(clust_enrich_res$cluster_hyper_res)){ #every item corresponds to an item of clusterings
-      for(j in 1:length(clust_enrich_res$cluster_hyper_res[[i]])){ #every item corresponds to a feature
-        ans$cluster_hyper_table[[i]][[j]] <- do.call(cbind, lapply(clust_enrich_res$cluster_hyper_res[[i]][[j]], function(x) setNames(x$clusters[, colnames(x$clusters)==c_type], x$clusters$id)))
-      }
+    ans <- scMuffinList$cluster_data[[partition_id]]$ORA
+    if(!is.null(feature_name)){
+      ans <- ans[names(ans) %in% feature_name]
     }
-
-
+    ans <- lapply(ans, function(ans_i) do.call(cbind, lapply(ans_i, function(x) setNames(x[, colnames(x)==quantity], x$id))))
+                  
   }
 
   return(ans)

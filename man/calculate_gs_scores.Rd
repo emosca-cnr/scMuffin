@@ -5,7 +5,7 @@
 \title{Calculate gene set scores}
 \usage{
 calculate_gs_scores(
-  genes_by_cells,
+  scMuffinList = NULL,
   gs_list = NULL,
   mc.cores = 2,
   nbins = 25,
@@ -16,11 +16,12 @@ calculate_gs_scores(
   score_type = c("relative", "mean"),
   null_model = TRUE,
   verbose = TRUE,
-  na.rm = TRUE
+  na.rm = TRUE,
+  overwrite = FALSE
 )
 }
 \arguments{
-\item{genes_by_cells}{genes_by_cells expression matrix. This matrix must contain positive values only.}
+\item{scMuffinList}{scMuffinList object}
 
 \item{gs_list}{list of gene sets}
 
@@ -43,10 +44,12 @@ calculate_gs_scores(
 \item{verbose}{verbosity}
 
 \item{na.rm}{whether to use NA or not}
+
+\item{overwrite}{whether to update or not gene_set_scoring and gene_set_scoring_full elements of scMuffinList.}
 }
 \value{
-list of objects containing also the feature object (feat_obj) for visualization purpose
+scMuffinList with elements gene_set_scoring and gene_set_scoring_full added or updated.
 }
 \description{
-Calculate gene set scoring
+Calculate gene set scores using the approach described in Tirosh et al.
 }

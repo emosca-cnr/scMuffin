@@ -5,9 +5,9 @@
 \title{gene_set_score}
 \usage{
 gs_score(
-  gene_set,
-  genes_by_cells,
-  bins,
+  gene_set = NULL,
+  genes_by_cells = NULL,
+  bins = NULL,
   nmark_min = 5,
   ncells_min = 5,
   k = 100,

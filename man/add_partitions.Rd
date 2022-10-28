@@ -4,13 +4,15 @@
 \alias{add_partitions}
 \title{Adds a clustering to the clustering list}
 \usage{
-add_partitions(partitions_obj = NULL, to_add = NULL)
+add_partitions(scMuffinList = NULL, clusters = NULL, partition_id = NULL)
 }
 \arguments{
-\item{partitions_obj}{clusterings object}
+\item{scMuffinList}{clusterings object}
 
-\item{to_add}{data.frame of 1 or more cell labels with cell id as row names}
+\item{clusters}{named factor with cluster label for each cell}
+
+\item{partition_id}{partition id}
 }
 \description{
-Adds a clustering to the clustering list
+Adds a clustering to the parition list
 }

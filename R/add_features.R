@@ -4,16 +4,12 @@
 #' @description Adds a feature to the feature list
 #' @export
 
-add_features <- function(features_obj=NULL, to_add=NULL){
+add_features <- function(scMuffinList=NULL, id=NULL, summary=NULL, full=NULL){
 	
-  ans <- create_features_obj(x = to_add)
   
-  ans$df <- merge(features_obj$df, ans$df, by=0, all=T, sort=F)
-  rownames(ans$df) <- ans$df[, 1]
-  ans$df[, 1] <- NULL
-	
-  ans$type <- c(features_obj$type, ans$type)
-	
-	return(ans)
+  scMuffinList[[id]] <- list(summary=summary, full=full)
+  
+
+	return(scMuffinList)
 	
 }

@@ -4,7 +4,7 @@
 \alias{cluster_hyper}
 \title{Calculate cluster enrichment by hypergeometric test}
 \usage{
-cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2, mc.cores = 1)
+cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2)
 }
 \arguments{
 \item{feature_values}{matrix, features by cells matrix}

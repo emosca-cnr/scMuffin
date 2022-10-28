@@ -5,13 +5,12 @@
 \title{plot_umap_colored_features}
 \usage{
 plot_umap_colored_features(
-  Seu_obj,
-  features,
+  Seu_obj = NULL,
+  scMuffinList = NULL,
+  feature_id = NULL,
   scale_feature = TRUE,
-  feature_breaks = NULL,
+  n_intervals = 10,
   adj_outliers = FALSE,
-  neg_eps = -0.1,
-  pos_eps = 0.1,
   min_cells = 10,
   ...
 )
@@ -19,21 +18,21 @@ plot_umap_colored_features(
 \arguments{
 \item{Seu_obj}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
 
-\item{features}{matrix, features by cells matrix}
+\item{scMuffinList}{scMuffinList object}
+
+\item{feature_id}{feature id}
 
 \item{scale_feature}{whether to scale features or not}
 
-\item{feature_breaks}{breaks for feature value distribution}
+\item{n_intervals}{number of intervals for the palette}
 
 \item{adj_outliers}{logical, whether to adjust the feature scores, removing outliers}
-
-\item{neg_eps}{small negative value to define the color for null values around zero, default to -0.1}
-
-\item{pos_eps}{small positive value to define the color for null values around zero, default to =0.1}
 
 \item{min_cells}{min number of cells in which the feature must have a non-zero value}
 
 \item{...}{further arguments to plot_umap}
+
+\item{feature_breaks}{breaks for feature value distribution}
 }
 \description{
 Generate a UMAP visualization colored by feature distributions

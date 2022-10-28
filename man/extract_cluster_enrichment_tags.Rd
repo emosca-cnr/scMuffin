@@ -2,42 +2,37 @@
 % Please edit documentation in R/extract_cluster_enrichment_tags.R
 \name{extract_cluster_enrichment_tags}
 \alias{extract_cluster_enrichment_tags}
-\title{extract_cluster_enrichment_table}
+\title{Extract the top results of GSEA and ORA for each cluster}
 \usage{
 extract_cluster_enrichment_tags(
-  clust_enrich_res,
-  q_selection_criterion = "FDRq",
-  q_selection_threshold = 0.1,
-  q_sort_crit = "nes",
-  q_sort_desc = TRUE,
+  scMuffinList = NULL,
+  partition_id = NULL,
+  GSEA_selection_criterion = "FDRq",
+  GSEA_selection_threshold = 0.25,
   only_pos_nes = TRUE,
-  c_selection_criterion = "p_adj",
-  c_selection_threshold = 0.1,
-  c_sort_crit = "p",
-  c_sort_desc = FALSE
+  ORA_selection_criterion = "p_adj",
+  ORA_selection_threshold = 0.1,
+  n_max_per_cluster = 3
 )
 }
 \arguments{
-\item{clust_enrich_res}{cluster enrichment result}
+\item{scMuffinList}{scMuffinList object}
 
-\item{q_selection_criterion}{criteria for selection of tags from CSEA}
+\item{partition_id}{one among the partitions}
 
-\item{q_selection_threshold}{threshold for selection of tags from CSEA}
+\item{GSEA_selection_criterion}{selection criteria for results of GSEA}
 
-\item{q_sort_crit}{criteria for sorting tags from CSEA}
+\item{GSEA_selection_threshold}{threshold for selection of tags from GSEA}
 
-\item{q_sort_desc}{sorting in decreasing order or not}
+\item{ORA_selection_criterion}{selection criteria for results of ORA}
 
-\item{only_pos_nes}{only positive nes?}
+\item{ORA_selection_threshold}{threshold for selection of tags from ORA}
 
-\item{c_selection_criterion}{criteria for selection of tags from ORA}
-
-\item{c_selection_threshold}{threshold for selection of tags from ORA}
-
-\item{c_sort_crit}{criteria for sorting tags from ORA}
-
-\item{c_sort_desc}{sorting in decreasing order or ORA}
+\item{n_max_per_cluster}{maximum number of tags per cluster}
+}
+\value{
+Add or overwrite the "cluster_tags" list to `scMuffinList$cluster_data[[partition_id]]`
 }
 \description{
-Extract cluster enrichment table
+Extract the best results of GSEA and ORA for each cluster
 }

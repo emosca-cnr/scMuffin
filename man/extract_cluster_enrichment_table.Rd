@@ -2,20 +2,26 @@
 % Please edit documentation in R/extract_cluster_enrichment_table.R
 \name{extract_cluster_enrichment_table}
 \alias{extract_cluster_enrichment_table}
-\title{extract_cluster_enrichment_table}
+\title{Extract cluster enrichment table}
 \usage{
 extract_cluster_enrichment_table(
-  clust_enrich_res,
-  q_type = "nes",
-  c_type = "er"
+  scMuffinList,
+  partition_id = NULL,
+  type = NULL,
+  quantity = NULL,
+  feature_name = NULL
 )
 }
 \arguments{
-\item{clust_enrich_res}{cluster enrichment result}
+\item{scMuffinList}{scMuffinList object}
 
-\item{q_type}{the column of GSEA result that will appear in the output table}
+\item{partition_id}{id of the parition to be used}
 
-\item{c_type}{column of hyper result that will appear in the output table}
+\item{type}{"GSEA" or "ORA"}
+
+\item{quantity}{for GSEA: "es", "p_val", "adj_p_val", "nes" or "FDRq". ORA: "wbd", "exp", "er", "p", "p_adj".}
+
+\item{feature_name}{name of the features that will be considered. Must be any of `colnames(scMuffinList$cluster_data$[[parition_id]]$GSEA$gs_table)` or `names(scMuffinList$cluster_data$[[parition_id]]$ORA)`}
 }
 \description{
 Extract cluster enrichment table

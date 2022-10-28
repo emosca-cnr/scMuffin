@@ -4,7 +4,7 @@
 \alias{overlap_matrix}
 \title{Calculate the overlap coefficient between n sets}
 \usage{
-overlap_matrix(x)
+overlap_matrix(scMuffinList = NULL)
 }
 \arguments{
 \item{x}{list of item sets}

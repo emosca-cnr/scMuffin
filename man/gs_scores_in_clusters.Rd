@@ -5,8 +5,8 @@
 \title{gene_set_score_in_clusters}
 \usage{
 gs_scores_in_clusters(
-  score_table,
-  cell_clusters,
+  score_table = NULL,
+  cell_clusters = NULL,
   ncells_min = 5,
   alt = "g",
   test = "t",

@@ -2,16 +2,21 @@
 % Please edit documentation in R/assess_cluster_enrichment.R
 \name{assess_cluster_enrichment}
 \alias{assess_cluster_enrichment}
-\title{assess_cluster_enrichment}
+\title{Assess enrichment with ORA or GSEA}
 \usage{
-assess_cluster_enrichment(features, partitions, meta_clusters = FALSE)
+assess_cluster_enrichment(
+  scMuffinList = NULL,
+  feature_name = NULL,
+  partition_id = NULL,
+  meta_clusters = FALSE
+)
 }
 \arguments{
+\item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
+
 \item{features}{feature list}
 
 \item{partitions}{clustering list}
-
-\item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
 }
 \description{
 Assess cluster enrichment

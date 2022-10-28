@@ -4,7 +4,7 @@
 \alias{get_meta_clusters}
 \title{Get cells in each meta cluster}
 \usage{
-get_meta_clusters(cl_list, meta_clusters)
+get_meta_clusters(scMuffinList = NULL)
 }
 \arguments{
 \item{cl_list}{cluterings list}

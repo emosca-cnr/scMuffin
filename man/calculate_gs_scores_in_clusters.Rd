@@ -2,27 +2,33 @@
 % Please edit documentation in R/calculate_gs_scores_in_clusters.R
 \name{calculate_gs_scores_in_clusters}
 \alias{calculate_gs_scores_in_clusters}
-\title{Calculate signatures clusters}
+\title{Calculate gene set score at cluster level}
 \usage{
 calculate_gs_scores_in_clusters(
-  gs_scores_obj = NULL,
-  cell_clusters = NULL,
+  scMuffinList = NULL,
+  partition_id = NULL,
   ncells_min = 5,
-  null_model = TRUE
+  null_model = TRUE,
+  alt = "g",
+  test = "t"
 )
 }
 \arguments{
-\item{gs_scores_obj}{list of gene signature lists}
-
-\item{cell_clusters}{cell cluster labels}
+\item{partition_id}{cell cluster labels}
 
 \item{ncells_min}{min number of cells required for the clculation of the average signature in the cluster}
 
 \item{null_model}{TRUE to consider the permutations}
+
+\item{alt}{alterative}
+
+\item{test}{type of test}
+
+\item{gs_scores_obj}{list of gene signature lists}
 }
 \value{
-signatures by cluster matrix
+scMuffinList with updates in elements cluster_data and cluster_data_full
 }
 \description{
-Calculate signatures clusters
+Calculate gene set score at cluster level
 }

@@ -4,7 +4,7 @@
 \alias{add_features}
 \title{Adds a feature to the feature list}
 \usage{
-add_features(features_obj = NULL, to_add = NULL)
+add_features(scMuffinList = NULL, id = NULL, summary = NULL, full = NULL)
 }
 \arguments{
 \item{features_obj}{features object}
