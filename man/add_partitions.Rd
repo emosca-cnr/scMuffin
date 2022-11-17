@@ -7,12 +7,15 @@
 add_partitions(scMuffinList = NULL, clusters = NULL, partition_id = NULL)
 }
 \arguments{
-\item{scMuffinList}{clusterings object}
+\item{scMuffinList}{scMuffinList object}
 
-\item{clusters}{named factor with cluster label for each cell}
+\item{clusters}{named factor where the values are cells names and names are cluster labels}
 
-\item{partition_id}{partition id}
+\item{partition_id}{unique identifier for this partition}
+}
+\value{
+scMuffinList with the additional partition
 }
 \description{
-Adds a clustering to the parition list
+Add this partition to the set of partitions
 }

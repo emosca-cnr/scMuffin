@@ -1,13 +1,12 @@
 #' Calculate gene set score at cluster level
 #' @description Calculate gene set score at cluster level
-#' @param gs_scores_obj list of gene signature lists
-#' @param partition_id cell cluster labels
-#' @param ncells_min min number of cells required for the clculation of the average signature in the cluster
-#' @param null_model TRUE to consider the permutations
-#' @param alt alterative
-#' @param test type of test
-#' @return scMuffinList with updates in elements cluster_data and cluster_data_full
-#' @export
+#' @param scMuffinList scMuffinList object
+#' @param partition_id identifier of the partition to be used
+#' @param ncells_min minimum number of cells required for the calculation of the average signature in the cluster
+#' @param null_model TRUE to consider the empirical null based on gene set permutations
+#' @param alt alterative passed to [wilcox.test()] or [t.test()]
+#' @param test type of test: t to use [t.test()]; wrs to use [wilcox.test()]
+#' @return scMuffinList with cluster level scores in `sMuffinList$cluster_data[[partition_id]]`. The element [summary] contains a clusters-by-gene sets table, while the element [full] the full result
 
 calculate_gs_scores_in_clusters <- function(scMuffinList=NULL, partition_id=NULL, ncells_min = 5, null_model = TRUE, alt="g", test="t"){
   

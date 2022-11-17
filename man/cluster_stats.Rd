@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluster_stats.R
 \name{cluster_stats}
 \alias{cluster_stats}
-\title{cluster_stats}
+\title{Cell cluster statistics}
 \usage{
 cluster_stats(
   scMuffinList = NULL,
@@ -26,6 +26,9 @@ cluster_stats(
 
 \item{var}{function to use for variability}
 }
+\value{
+scMuffinList with data.frames "mean" and "var" added to [scMuffinList$cluster_data[[partition_id]]]
+}
 \description{
-Clusters statistics
+Calculate mean and variance for partition id and feature id
 }

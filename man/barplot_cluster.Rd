@@ -9,7 +9,7 @@ barplot_cluster(
   feature_id = NULL,
   feature_name = NULL,
   partition_id = NULL,
-  dir_out = "./",
+  dir_out = NULL,
   n_features = 10,
   only_pos_nes = TRUE,
   do_scale_features = FALSE,
@@ -35,8 +35,5 @@ barplot_cluster(
 \item{quantity}{which column of the hypergeometric result. Default is "p". Other values are "wbd" and "er"}
 }
 \description{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-}
-\details{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }

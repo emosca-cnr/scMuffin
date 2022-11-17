@@ -11,6 +11,9 @@ add_features(scMuffinList = NULL, id = NULL, summary = NULL, full = NULL)
 
 \item{to_add}{data.frame of 1 or more cell values with cell id as row names}
 }
+\value{
+The scMuffinList with the the additional feature
+}
 \description{
 Adds a feature to the feature list
 }

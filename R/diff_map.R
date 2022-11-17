@@ -1,35 +1,34 @@
-#' Computation of Diffusion Map
+#' Computation of of Diffusion Map and Diffusion Pseudo Time
 #' 
 #' The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
-#' @param genes_by_cells normalized genes-by-cells expression matrix
-#' @param output_ndc The numnber of diffusion components that will be included in the output
+#' @param scMuffinList scMuffinList object
 #' @param root_cell root cell or "random" to pick up a random root via the destiny::random_root function
-#' @param ... parameters for destiny::DiffusionMap
+#' @param n_pcs number of PCs to consider, 50 by default
+#' @param ... parameters passed to destiny::DiffusionMap
 #' @importFrom destiny DiffusionMap random_root DPT
-#' @description The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
+#' @description The functions computes a Diffusion Map and Diffusion Pseudo Time using destiny.
 #' @export
 
-diff_map <- function(genes_by_cells=NULL, output_ndc=1:3, root_cell=NULL, ...){
-	
+diff_map <- function(scMuffinList = NULL, root_cell="random", n_pcs=50, ...){
+  
   cat("Calculating the diffusion map...\n")
-  res <- destiny::DiffusionMap(t(as.matrix(genes_by_cells)), ...)
-	
+  res <- destiny::DiffusionMap(t(as.matrix(scMuffinList$normalized)), n_pcs=n_pcs, ...)
+  
   #Il DPT ?? metrica che dipende dalla cellula scelta, identical(dpt[root.idx], dpt$dpt) dpt[["dpt"]]
-  dpt_raw <- dpt <- NA
-  if(!is.null(root_cell)){
-    if(root_cell == "random"){
-      cat("calculating a random root...\n")
-      root_cell <- destiny::random_root(res) #NUll
-    }
-	  cat("Diffusion pseudotimes...\n")
-	  dpt <- destiny::DPT(res, tips = root_cell)
-	  dpt_raw <- dpt$dpt
-	  dpt <- -dpt$dpt + max(dpt$dpt)
-	}
-	
-	#Create DF: cell name, dpt, SR and PS
-	score <- data.frame(res@eigenvectors[, output_ndc], dpt_raw=dpt_raw, dpt=dpt, stringsAsFactors = F, row.names = rownames(res@eigenvectors))
-	
-	return(score)
-	
+  dpt <- NA
+  
+  if(root_cell == "random"){
+    cat("calculating a random root...\n")
+    root_cell <- destiny::random_root(res) #NUll
+  }
+  cat("Diffusion pseudotimes...\n")
+  dpt <- destiny::DPT(res, tips = root_cell)
+
+  scMuffinList$diffusion_map_pseudo_t <- list(
+    summary = data.frame(res@eigenvectors[, 1:2], dpt=dpt$dpt, branch=dpt@branch[, 1], tips=dpt@tips[, 1], stringsAsFactors = F, row.names = rownames(res@eigenvectors)),
+    full = dpt
+  )
+  
+  return(scMuffinList)
+  
 }

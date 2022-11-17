@@ -14,20 +14,20 @@ calculate_gs_scores_in_clusters(
 )
 }
 \arguments{
-\item{partition_id}{cell cluster labels}
+\item{scMuffinList}{scMuffinList object}
 
-\item{ncells_min}{min number of cells required for the clculation of the average signature in the cluster}
+\item{partition_id}{identifier of the partition to be used}
 
-\item{null_model}{TRUE to consider the permutations}
+\item{ncells_min}{minimum number of cells required for the calculation of the average signature in the cluster}
 
-\item{alt}{alterative}
+\item{null_model}{TRUE to consider the empirical null based on gene set permutations}
 
-\item{test}{type of test}
+\item{alt}{alterative passed to [wilcox.test()] or [t.test()]}
 
-\item{gs_scores_obj}{list of gene signature lists}
+\item{test}{type of test: t to use [t.test()]; wrs to use [wilcox.test()]}
 }
 \value{
-scMuffinList with updates in elements cluster_data and cluster_data_full
+scMuffinList with cluster level scores in `sMuffinList$cluster_data[[partition_id]]`. The element [summary] contains a clusters-by-gene sets table, while the element [full] the full result
 }
 \description{
 Calculate gene set score at cluster level

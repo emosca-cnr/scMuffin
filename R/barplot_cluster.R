@@ -1,6 +1,4 @@
 #' Barplot clusters 
-#' 
-#' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param scMuffinList scMuffinList object
 #' @param feature_id names of the features to be used.
 #' @param partition_id one among the partitions
@@ -13,7 +11,7 @@
 #' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @export
 
-barplot_cluster <- function(scMuffinList=NULL, feature_id=NULL, feature_name=NULL, partition_id=NULL, dir_out="./", n_features=10, only_pos_nes=TRUE, do_scale_features=FALSE, cex.axis=0.8, p.type=c("p", "p_adj")){
+barplot_cluster <- function(scMuffinList=NULL, feature_id=NULL, feature_name=NULL, partition_id=NULL, dir_out=NULL, n_features=10, only_pos_nes=TRUE, do_scale_features=FALSE, cex.axis=0.8, p.type=c("p", "p_adj")){
 	
   if(!dir.exists(dir_out)){
     dir.create(dir_out, recursive = TRUE)

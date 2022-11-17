@@ -18,13 +18,13 @@ gs_scores_in_clusters(
 
 \item{cell_clusters}{vector of cell clusters}
 
-\item{ncells_min}{minimum number of cells}
+\item{ncells_min}{minimum number of cells required for the calculation of the average signature in the cluster}
 
-\item{alt}{alterative}
+\item{alt}{alterative passed to [wilcox.test()] or [t.test()]}
 
-\item{test}{type of test}
+\item{test}{type of test: t to use [t.test()]; wrs to use [wilcox.test()]}
 
-\item{null_model}{whether to use permutations or not}
+\item{null_model}{TRUE to consider the empirical null based on gene set permutations}
 }
 \description{
 Gene set scoring in clusters

@@ -2,21 +2,21 @@
 % Please edit documentation in R/diff_map.R
 \name{diff_map}
 \alias{diff_map}
-\title{Computation of Diffusion Map}
+\title{Computation of of Diffusion Map and Diffusion Pseudo Time}
 \usage{
-diff_map(genes_by_cells = NULL, output_ndc = 1:3, root_cell = NULL, ...)
+diff_map(scMuffinList = NULL, root_cell = "random", n_pcs = 50, ...)
 }
 \arguments{
-\item{genes_by_cells}{normalized genes-by-cells expression matrix}
-
-\item{output_ndc}{The numnber of diffusion components that will be included in the output}
+\item{scMuffinList}{scMuffinList object}
 
 \item{root_cell}{root cell or "random" to pick up a random root via the destiny::random_root function}
 
-\item{...}{parameters for destiny::DiffusionMap}
+\item{n_pcs}{number of PCs to consider, 50 by default}
+
+\item{...}{parameters passed to destiny::DiffusionMap}
 }
 \description{
-The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
+The functions computes a Diffusion Map and Diffusion Pseudo Time using destiny.
 }
 \details{
 The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time

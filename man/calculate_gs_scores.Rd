@@ -29,9 +29,9 @@ calculate_gs_scores(
 
 \item{nbins}{number of bins to split the distribution of average gene expression}
 
-\item{nmark_min}{numner of minimum markers that are required for the succesful calculation of a gene set score}
+\item{nmark_min}{number of minimum markers that are required for the succesful calculation of a gene set score}
 
-\item{ncells_min}{numner of minimum cells in which a gene set has to be succesfully calculated}
+\item{ncells_min}{number of minimum cells in which a gene set has to be succesfully calculated}
 
 \item{k}{number of permutations}
 
@@ -48,8 +48,11 @@ calculate_gs_scores(
 \item{overwrite}{whether to update or not gene_set_scoring and gene_set_scoring_full elements of scMuffinList.}
 }
 \value{
-scMuffinList with elements gene_set_scoring and gene_set_scoring_full added or updated.
+scMuffinList with element gene_set_scoring, a list that contains summary and full. The element summary contains a cells-by-gene sets data.frame. The element "full" contains a data.frame for each gene set. See [gs_score()] for further details.
 }
 \description{
-Calculate gene set scores using the approach described in Tirosh et al.
+Calculate gene set scores using the approach described in Tirosh2016
+}
+\references{
+Tirosh2016 10.1126/science.aad0501
 }

@@ -1,10 +1,10 @@
 #' gene_set_score_in_clusters
 #' @param score_table real data
 #' @param cell_clusters vector of cell clusters
-#' @param ncells_min minimum number of cells
-#' @param alt alterative
-#' @param test type of test
-#' @param null_model whether to use permutations or not
+#' @param ncells_min minimum number of cells required for the calculation of the average signature in the cluster
+#' @param alt alterative passed to [wilcox.test()] or [t.test()]
+#' @param test type of test: t to use [t.test()]; wrs to use [wilcox.test()]
+#' @param null_model TRUE to consider the empirical null based on gene set permutations
 #' @description Gene set scoring in clusters
 #' @importFrom stats median wilcox.test t.test p.adjust
 #' @export

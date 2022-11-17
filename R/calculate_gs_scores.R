@@ -1,11 +1,11 @@
 #' Calculate gene set scores
-#' @description Calculate gene set scores using the approach described in Tirosh et al.
+#' @description Calculate gene set scores using the approach described in Tirosh2016
 #' @param scMuffinList scMuffinList object
 #' @param gs_list list of gene sets
 #' @param mc.cores number of cores
 #' @param nbins number of bins to split the distribution of average gene expression
-#' @param nmark_min numner of minimum markers that are required for the succesful calculation of a gene set score
-#' @param ncells_min numner of minimum cells in which a gene set has to be succesfully calculated
+#' @param nmark_min number of minimum markers that are required for the succesful calculation of a gene set score
+#' @param ncells_min number of minimum cells in which a gene set has to be succesfully calculated
 #' @param k number of permutations
 #' @param kmin minimum number of permutations; due to missing values it is hard to ensure that a gene set score can be compared to k permutations in every cell
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
@@ -13,7 +13,8 @@
 #' @param verbose verbosity
 #' @param na.rm whether to use NA or not
 #' @param overwrite whether to update or not gene_set_scoring and gene_set_scoring_full elements of scMuffinList. 
-#' @return scMuffinList with elements gene_set_scoring and gene_set_scoring_full added or updated.
+#' @return scMuffinList with element gene_set_scoring, a list that contains summary and full. The element summary contains a cells-by-gene sets data.frame. The element "full" contains a data.frame for each gene set. See [gs_score()] for further details.
+#' @references Tirosh2016 10.1126/science.aad0501
 #' 
 #' @export
 #' @import parallel
@@ -32,7 +33,7 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=2, nbi
   cat("na.rm:", na.rm, "\n")
   cat("overwrite:", overwrite, "\n")
   
-  if(length(scMuffinList$genes_by_cells)==0){
+  if(length(scMuffinList$normalized)==0){
     stop("scMuffinList does not contain genes_by_cells\n")
   }
   
@@ -57,7 +58,7 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=2, nbi
   data_bins <- NULL
   if(null_model){
     cat("defining bins...\n")
-    data_bins <- sc_data_bin(scMuffinList$genes_by_cells, nbins = nbins, na.rm=na.rm)
+    data_bins <- sc_data_bin(scMuffinList$normalized, nbins = nbins, na.rm=na.rm)
   }
   
   #signatures-by-cell matrix
@@ -71,11 +72,11 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=2, nbi
     #		res_signatures[[i]] <- gene_set_score(signatures[[i]], genes_by_cells = as.matrix(genes_by_cells@assays$RNA@data), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin)
     #	}
     
-    gs_scores <- lapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = scMuffinList$genes_by_cells, bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm))
+    gs_scores <- lapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = scMuffinList$normalized, bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm))
     
   }else{
     
-    gs_scores <- parallel::mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(scMuffinList$genes_by_cells), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm), mc.cores = mc.cores)
+    gs_scores <- parallel::mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(scMuffinList$normalized), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm), mc.cores = mc.cores)
     
   }
   

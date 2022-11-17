@@ -1,4 +1,5 @@
-#' gene_set_score
+#' Gene set scoring
+#' @description Calculate gene set scores using the approach described in Tirosh2016
 #' @param gene_set gene set
 #' @param genes_by_cells real data
 #' @param bins random data
@@ -8,13 +9,12 @@
 #' @param kmin minimim number of k
 #' @param verbose verbosity
 #' @param null_model boolean, whether to use the permutations or not
-#' @return list with
-#'    score_table: data frame with gene set score for each cell
-#'    permutations: list with the permutations
 #' @author Ettore Mosca
 #' @importFrom Matrix colMeans colSums
-#' @description Gene set scoring
+#' @return A data.frame with the following columns: case, the gene set average observed in the cell; case.N, number of genes in the gene set; case.AV, number of genes available in the cell; nmark_min, whether case.AV > nmark_min; avg_control, average of the averag gene set score in control cells; control.AV, number of available control cells, null_ok, whether a null could be defined for the cell; avg_delta_score, average of case minu each control cell; delta_score, case - avg_control.
 #' @export
+#' @references Tirosh2016 10.1126/science.aad0501
+
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
 gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE, na.rm=TRUE){

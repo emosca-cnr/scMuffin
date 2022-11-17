@@ -12,12 +12,19 @@ assess_cluster_enrichment(
 )
 }
 \arguments{
-\item{meta_clusters}{boolean, TRUE if the assessment involves meta clusters}
+\item{scMuffinList}{scMuffinList list}
 
-\item{features}{feature list}
+\item{feature_name}{the names of the feature that should be considered. It must be one of names(scMuffinList)}
 
-\item{partitions}{clustering list}
+\item{partition_id}{identifier of the partition to be considered}
+}
+\value{
+scMuffinList with GSEA or ORA elements under scMuffinList$cluster_data for the considered partition
 }
 \description{
-Assess cluster enrichment
+Assess cluster enrichment using ORA for categorical features and GSEA for numeric features.
+}
+\details{
+The output of GSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
+The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from GSEA and ORA results.
 }

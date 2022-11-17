@@ -5,7 +5,7 @@
 \title{cell cycle - merge the two Tirosh signatures for proliferation analysis}
 \usage{
 proliferation_analysis(
-  genes_by_cells,
+  scMuffinList = NULL,
   mc.cores = 2,
   nbins = 25,
   nmark_min = 5,
@@ -18,8 +18,6 @@ proliferation_analysis(
 )
 }
 \arguments{
-\item{genes_by_cells}{genes_by_cells expression matrix}
-
 \item{mc.cores}{number of cores}
 
 \item{nbins}{number of bins to split the distribution of average gene expression}
@@ -37,6 +35,8 @@ proliferation_analysis(
 \item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
 \item{mean_scale}{whether to scale the values obtained using score_type="mean"}
+
+\item{genes_by_cells}{genes_by_cells expression matrix}
 }
 \description{
 cell cycle - merge the two Tirosh signatures for proliferation analysis

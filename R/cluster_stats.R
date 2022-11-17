@@ -1,4 +1,4 @@
-#' cluster_stats
+#' Cell cluster statistics
 #' @param scMuffinList scMuffinList object
 #' @param partition_id partition id
 #' @param feature_id feature id
@@ -6,7 +6,8 @@
 #' @param var function to use for variability
 #' @param na.rm whether to remove na or not
 #' @importFrom stats sd
-#' @description Clusters statistics
+#' @description Calculate mean and variance for partition id and feature id
+#' @return scMuffinList with data.frames "mean" and "var" added to [scMuffinList$cluster_data[[partition_id]]]
 #' @export
 
 cluster_stats <- function(scMuffinList=NULL, partition_id=NULL, feature_id=NULL, mean_f=mean, var_f=sd, na.rm=TRUE){
