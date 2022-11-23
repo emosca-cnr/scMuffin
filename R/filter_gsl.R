@@ -3,8 +3,8 @@
 #' @param universe set of all possible values for items of gsl
 #' @param min_size minimum gene set size
 #' @param max_size maximum gene set size
-#' @description Filter a gene set list
 #' @export
+#' @return Filtered gene set list
 #' 
 filter_gsl <- function(gsl, universe, min_size=5, max_size=500){
   

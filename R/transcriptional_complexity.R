@@ -1,9 +1,15 @@
-#' Transcriptional Complexity
+#' Transcriptional Complexity and Entropy
 #' @param scMuffinList scMuffinList object
 #' @param min_counts minimum number of counts
-#' @param min_cells minimum number of cells in which a genes must have at least min_counts counts
-#' @param min_genes minimum number of genes that a cell must have with at least min_counts counts
-#' @return scMuffinList with transcr_compl element
+#' @param min_cells minimum number of cells in which a gene must have at least min_counts counts
+#' @param min_genes minimum number of genes that a cell must express with at least min_counts counts
+#' @return scMuffinList with transcr_compl element a list with summary (full is empty):
+#' \itemize{
+#'   \item{tot_counts, total number of transcripts;}
+#'   \item{n_genes, total number of expressed genes;}
+#'   \item{C, transcriptional complexity;}
+#'   \item{H, transcriptional entropy;}
+#'}
 #' @export
 
 transcr_compl <- function(scMuffinList = NULL, min_counts = 5, min_cells=10, min_genes=500){

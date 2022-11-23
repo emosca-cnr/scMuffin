@@ -1,14 +1,15 @@
-#' sc_create_null
+#' Create empirical null for gene set scoring
 #' @param genes_by_cells genes-by-cells matrix
-#' @param bins bins of genes
+#' @param bins bins of genes, created by means of \code{\link{sc_data_bin()}}
 #' @param gene_set a vector of genes
 #' @param k number of permutations
 #' @author Ettore Mosca
 #' @importFrom stats na.omit
 #' @description sc_create_null
+#' @return A list of null gene sets.
 #' @export
 
-sc_create_null <- function(genes_by_cells, bins, gene_set, k=100){
+sc_create_null <- function(genes_by_cells=NULL, bins=NULL, gene_set=NULL, k=100){
 
   gene_set_idx <- stats::na.omit(match(gene_set, rownames(genes_by_cells)))
   ans <- bins[gene_set_idx] ###bins that contain the gene set

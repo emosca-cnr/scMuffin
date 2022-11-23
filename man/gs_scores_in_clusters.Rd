@@ -2,7 +2,7 @@
 % Please edit documentation in R/gs_scores_in_clusters.R
 \name{gs_scores_in_clusters}
 \alias{gs_scores_in_clusters}
-\title{gene_set_score_in_clusters}
+\title{Gene set scoring at cluster level}
 \usage{
 gs_scores_in_clusters(
   score_table = NULL,

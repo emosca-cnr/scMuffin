@@ -1,15 +1,23 @@
-#' Create scMuffin list
-#' @param dgCMatrix Accepted input: only dgCMatrix
-#' @description Create scMuffin list
-#' @export
-#' 
+#' Create scMuffinList
+#' @description Create scMuffinList from counts and/or normalized data. 
+#' @param counts genes-by-cell matrix or data.frame of counts.
+#' @param normalized genes-by-cell matrix or data.frame with normalized expression.
+#' @return scMuffinList with counts and normalized elements as dgCMatrix.
+#' @importFrom Matrix Matrix
 
-create_scMuffinList <- function(dgCMatrix) {
-    if (is(dgCMatrix, 'sparseMatrix') == TRUE) {
-        scMuffinList$gene_by_cells <- as.data.frame(t(dgCMatrix))
-    } else {
-        warning("The only admitted input data is a dgCMatrix.")
-    }
+create_scMuffinList <- function(counts=NULL, normalized=NULL){
+  
+  scMuffinList <- list()
+  
+  if(!is.null(counts) | !is(counts, "dgCMatrix")){
+    scMuffinList$counts <- Matrix::Matrix(counts, sparse = TRUE)
+    cat("counts created\n")
+  }
+
+  if(!is.null(normalized) | !is(normalized, "dgCMatrix")){
+    scMuffinList$normalized <- Matrix::Matrix(normalized, sparse = TRUE)
+    cat("normalized created\n")
+  }
+  
+  return(scMuffinList)
 }
-
-

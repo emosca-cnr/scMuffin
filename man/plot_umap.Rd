@@ -17,6 +17,7 @@ plot_umap(
   height = 180,
   units = "mm",
   res = 300,
+  image_format = "png",
   ...
 )
 }
@@ -36,6 +37,16 @@ plot_umap(
 \item{lab_color}{label color}
 
 \item{adj_outliers}{logical, whether to adjust the group.by scores, removing outliers}
+
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
+
+\item{image_format}{png or jpeg}
 
 \item{...}{further arguments for Seurat::FeaturePlot or Seurat::DimPlot}
 }

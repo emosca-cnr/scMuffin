@@ -9,6 +9,7 @@
 #' @param genes_max maximum number of genes required in a gene set
 #' @param genes optional character vectors with the universe of all the genes under analysis
 #' @importFrom utils data
+#' @return A lists of gene set lists
 #' @export
 
 prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, genes=NULL){

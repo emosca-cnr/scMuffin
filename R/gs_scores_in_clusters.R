@@ -1,4 +1,4 @@
-#' gene_set_score_in_clusters
+#' Gene set scoring at cluster level
 #' @param score_table real data
 #' @param cell_clusters vector of cell clusters
 #' @param ncells_min minimum number of cells required for the calculation of the average signature in the cluster

@@ -5,15 +5,16 @@
 #' @param wnd_size number of adjacent genes considered;
 #' @param min_genes minimun number of genes expressed in a cell;
 #' @param min_cells minimum numbver of cells in which a gene must be expressed;
-#' @param expr_lim min and max values of relative expression; if FALSE this constraints will not be used
+#' @param expr_lim min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.
 #' @param scale_cells whether to scale cells
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
+#' @importFrom grDevices boxplot.stats
 #' @description Calculate CNV with or without reference vector
 #' @export
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=c(-3, 3), scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=NULL, scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
 	
-	genes_by_cells[is.na(genes_by_cells)] <- 0
+ 	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
 	cat("Filtering")
 	idx_keep <- rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
@@ -67,16 +68,21 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		genes_by_cells <- temp
 		rm(temp)
 		
+		if(is.null(expr_lim)){
+		  expr_lim <- grDevices::boxplot.stats(as.numeric(genes_by_cells))$stats[c(1, 5)]
+		}
+		
+		#constraints over relative expression Tirosh et al.
+		if(length(expr_lim)==2){
+		  cat("applying relative expression limits", expr_lim,"\n")
+		  cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
+		  genes_by_cells[genes_by_cells < expr_lim[1]] <- expr_lim[1]
+		  genes_by_cells[genes_by_cells > expr_lim[2]] <- expr_lim[2]
+		  cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
+		}
+		
 	}
 	
-	#constraints over relative expression Tirosh et al.
-	if(length(expr_lim)==2){
-		cat("applying relative expression limits\n")
-		cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
-		genes_by_cells[genes_by_cells < expr_lim[1]] <- expr_lim[1]
-		genes_by_cells[genes_by_cells > expr_lim[2]] <- expr_lim[2]
-		cat("min:", min(genes_by_cells), ", max:", max(genes_by_cells), "\n")
-	}
 	
 	# ***************************************************************
 	

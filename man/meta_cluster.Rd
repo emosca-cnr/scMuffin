@@ -2,11 +2,13 @@
 % Please edit documentation in R/meta_cluster.R
 \name{meta_cluster}
 \alias{meta_cluster}
-\title{Returns meta-clusters obtained by using hierarchical clustering}
+\title{Analysis of the various partitions and definition of meta-clusters}
 \usage{
 meta_cluster(scMuffinList = NULL, n_step = 11, max_clust = 10, do_plot = FALSE)
 }
 \arguments{
+\item{scMuffinList}{scMuffinList object with at least two partitions}
+
 \item{n_step}{number used to divide hclust dendrogram height to obtain cut values to calculate silhouette}
 
 \item{max_clust}{maximum number of clusters}
@@ -15,6 +17,20 @@ meta_cluster(scMuffinList = NULL, n_step = 11, max_clust = 10, do_plot = FALSE)
 
 \item{overlap_mat}{Overlap matrix as obtained form overlap_matrix() function}
 }
+\value{
+scMuffinList with:
+\itemize{
+  \item{scMuffinList$cluster_comparison$overlap_matrix, the overlap matrix}
+  \item{scMuffinList$cluster_comparison$meta_clusters, a list with information on meta-clusters:}
+  \itemize{
+    \item{dissimilarity, dissimilarity matrix;}
+    \item{hclust_out, stats::hclust output;}
+    \item{clusters, a data.frame for mapping  clusters and meta-clusters;}
+    \item{cells, a data.frame for mapping cells and meta-clusters;}
+    \item{occurrence, a list of meta-clusters, in which each element is a data.frame that show the occurrence of meta-cluster cells across clusters.}
+    }
+}
+}
 \description{
-Returns meta-clusters obtained by using hierarchical clustering
+Calculate the overlap matrix between all-pars of clusters of existing partitions.
 }

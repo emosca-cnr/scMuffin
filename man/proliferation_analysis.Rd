@@ -2,22 +2,24 @@
 % Please edit documentation in R/proliferation_analysis.R
 \name{proliferation_analysis}
 \alias{proliferation_analysis}
-\title{cell cycle - merge the two Tirosh signatures for proliferation analysis}
+\title{Define a proliferation score}
 \usage{
 proliferation_analysis(
   scMuffinList = NULL,
-  mc.cores = 2,
+  mc.cores = 1,
   nbins = 25,
   nmark_min = 5,
   ncells_min = 5,
-  k = 100,
-  kmin = 50,
+  k = 99,
+  kmin = 49,
   score_type = c("relative", "mean"),
   null_model = TRUE,
   mean_scale = TRUE
 )
 }
 \arguments{
+\item{scMuffinList}{scMuffinList object}
+
 \item{mc.cores}{number of cores}
 
 \item{nbins}{number of bins to split the distribution of average gene expression}
@@ -35,9 +37,14 @@ proliferation_analysis(
 \item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
 \item{mean_scale}{whether to scale the values obtained using score_type="mean"}
-
-\item{genes_by_cells}{genes_by_cells expression matrix}
+}
+\value{
+scMuffinList with element "proliferation", a list with:
+\itemize{
+\item{summary: data.frame with proliferation value}
+\item{full: data.frame with the vales of each of the two considered gene sets}
+}
 }
 \description{
-cell cycle - merge the two Tirosh signatures for proliferation analysis
+Define a proliferation score on the basis of two cell cycle gene sets. See SIG_Tirosh
 }

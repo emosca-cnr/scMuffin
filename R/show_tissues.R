@@ -1,7 +1,7 @@
-#' Show the tissues available by means of prepare_gsl
+#' Show the tissues available for \code{\link{prepare_gsl}}
 #' @param gsc_source the source database
 #' @description Show the tissues available by means of prepare_gsl
-#' 
+#' @return List of gsc_source with tissue vectors.
 #' @export
 
 show_tissues <- function(gsc_source=c("SIG_PNDB", "SIG_CM_normal", "SIG_CM_cancer")){

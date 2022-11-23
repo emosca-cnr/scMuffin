@@ -20,6 +20,9 @@ get_msigdb_geneset(
 
 \item{type}{Gene name of interest, can be gene_symbol or entrez_gene}
 }
+\value{
+List with msigdb_output, the output of msigdbr::msigdbr, and path_list, the list of gene sets
+}
 \description{
 Returns msigdb geneset in a format compatible with calculate_signatures()
 }

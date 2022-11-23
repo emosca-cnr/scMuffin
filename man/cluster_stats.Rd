@@ -27,7 +27,7 @@ cluster_stats(
 \item{var}{function to use for variability}
 }
 \value{
-scMuffinList with data.frames "mean" and "var" added to [scMuffinList$cluster_data[[partition_id]]]
+scMuffinList with data.frames "mean" and "var" added to "scMuffinList$cluster_data[[partition_id]]"
 }
 \description{
 Calculate mean and variance for partition id and feature id

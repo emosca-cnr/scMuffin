@@ -2,7 +2,7 @@
 % Please edit documentation in R/ora1gs.R
 \name{ora1gs}
 \alias{ora1gs}
-\title{Hypergeometric test on 1 dataset}
+\title{Hypergeometric test on 1 feature set}
 \usage{
 ora1gs(wb, bb, bd)
 }
@@ -14,5 +14,5 @@ ora1gs(wb, bb, bd)
 \item{bd}{balls drawn}
 }
 \description{
-Hypergeometric test on 1 dataset
+Hypergeometric test on 1 feature set
 }

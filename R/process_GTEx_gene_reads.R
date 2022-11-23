@@ -5,6 +5,8 @@
 #' @param tissue tissue name, see param "SMTS" in annotation 
 #' @param id_type whether the output should be specified as gene_id or symbol
 #' @param nrows limit the read to the top nrows. Useful for testing.
+#' @param norm.type Method for normalization. See Seurat::NormalizeData.
+#' @param ... further arguments passed to functin Seurat::NormalizeData.
 #' @description GTEx gene reads file is processed to obtain the average normalized gene expression in a tissue
 #' @return average normalized gene expression values
 #' @export
@@ -13,7 +15,7 @@
 #' @importFrom utils read.delim read.table
 
 
-process_GTEx_gene_reads <- function(geneReads=NULL, GTEx_annot=NULL, tissue=NULL, id_type=c("gene_id", "symbol"), nrows=-1) {
+process_GTEx_gene_reads <- function(geneReads=NULL, GTEx_annot=NULL, tissue=NULL, id_type=c("gene_id", "symbol"), nrows=-1, norm.type="LogNormalize", ...) {
     
     id_type <- match.arg(id_type, c("gene_id", "symbol"))
     
@@ -79,7 +81,7 @@ process_GTEx_gene_reads <- function(geneReads=NULL, GTEx_annot=NULL, tissue=NULL
     
 
     #normalization
-    GTEx <- NormalizeData(GTEx, normalization.method = "LogNormalize", scale.factor = 10000)
+    GTEx <- NormalizeData(GTEx, normalization.method = norm.type, scale.factor = 10000, ...)
     
     #calculate the average
     GTEx <- rowMeans(as.data.frame(GTEx))

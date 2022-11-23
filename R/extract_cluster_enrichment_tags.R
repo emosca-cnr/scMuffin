@@ -1,12 +1,13 @@
 #' Extract the top results of GSEA and ORA for each cluster
-#' @param scMuffinList scMuffinList object
-#' @param partition_id one among the partitions
-#' @param GSEA_selection_criterion selection criteria for results of GSEA
-#' @param GSEA_selection_threshold threshold for selection of tags from GSEA
-#' @param ORA_selection_criterion selection criteria for results of ORA
-#' @param ORA_selection_threshold threshold for selection of tags from ORA
-#' @param n_max_per_cluster maximum number of tags per cluster
-#' @description Extract the best results of GSEA and ORA for each cluster
+#' @param scMuffinList scMuffinList object.
+#' @param partition_id one among the partitions.
+#' @param GSEA_selection_criterion selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.
+#' @param GSEA_selection_threshold threshold for selection of tags from GSEA.
+#' @param ORA_selection_criterion selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.
+#' @param ORA_selection_threshold threshold for selection of tags from ORA.
+#' @param n_max_per_cluster maximum number of tags per cluster.
+#' @param only_pos_nes whether only positive nes should be considered in GSEA.
+#' @description Extract the best results of GSEA and ORA for each cluster.
 #' @return Add or overwrite the "cluster_tags" list to `scMuffinList$cluster_data[[partition_id]]`
 #' @export
 

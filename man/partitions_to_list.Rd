@@ -2,12 +2,15 @@
 % Please edit documentation in R/partitions_to_list.R
 \name{partitions_to_list}
 \alias{partitions_to_list}
-\title{clusterings_to_list}
+\title{Transfor partitions to lists}
 \usage{
 partitions_to_list(partitions)
 }
 \arguments{
 \item{partitions}{partitions object}
+}
+\value{
+List of partitions
 }
 \description{
 Clusterings to a list

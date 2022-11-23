@@ -32,6 +32,9 @@ prepare_gsls(
 
 \item{genes}{optional character vectors with the universe of all the genes under analysis}
 }
+\value{
+A lists of gene set lists
+}
 \description{
 Prepare the gene set lists collected from various sources
 }

@@ -16,23 +16,25 @@ extract_cluster_enrichment_tags(
 )
 }
 \arguments{
-\item{scMuffinList}{scMuffinList object}
+\item{scMuffinList}{scMuffinList object.}
 
-\item{partition_id}{one among the partitions}
+\item{partition_id}{one among the partitions.}
 
-\item{GSEA_selection_criterion}{selection criteria for results of GSEA}
+\item{GSEA_selection_criterion}{selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.}
 
-\item{GSEA_selection_threshold}{threshold for selection of tags from GSEA}
+\item{GSEA_selection_threshold}{threshold for selection of tags from GSEA.}
 
-\item{ORA_selection_criterion}{selection criteria for results of ORA}
+\item{only_pos_nes}{whether only positive nes should be considered in GSEA.}
 
-\item{ORA_selection_threshold}{threshold for selection of tags from ORA}
+\item{ORA_selection_criterion}{selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.}
 
-\item{n_max_per_cluster}{maximum number of tags per cluster}
+\item{ORA_selection_threshold}{threshold for selection of tags from ORA.}
+
+\item{n_max_per_cluster}{maximum number of tags per cluster.}
 }
 \value{
 Add or overwrite the "cluster_tags" list to `scMuffinList$cluster_data[[partition_id]]`
 }
 \description{
-Extract the best results of GSEA and ORA for each cluster
+Extract the best results of GSEA and ORA for each cluster.
 }

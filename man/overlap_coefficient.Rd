@@ -11,6 +11,9 @@ overlap_coefficient(x, y)
 
 \item{y}{vector of items}
 }
+\value{
+The overlap coefficient
+}
 \description{
 Calculate the overlap coefficient between two sets
 }

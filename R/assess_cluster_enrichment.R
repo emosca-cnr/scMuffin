@@ -2,6 +2,10 @@
 #' @param scMuffinList scMuffinList list
 #' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
 #' @param partition_id identifier of the partition to be considered
+#' @param min.cells.feature minimum number of cells in which a feature must have value
+#' @param min.cells.cluster minimum number of cells of a cluster
+#' @param mc.cores number of cores
+#' @param gsea.k number of GSEA permutations
 #' @description Assess cluster enrichment using ORA for categorical features and GSEA for numeric features.
 #' @details
 #' The output of GSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
@@ -10,7 +14,7 @@
 #' @return scMuffinList with GSEA or ORA elements under scMuffinList$cluster_data for the considered partition
 #' @export
 
-assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, meta_clusters=FALSE){
+assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, meta_clusters=FALSE, min.cells.feature=100, min.cells.cluster=5, mc.cores=1, gsea.k=99){
   
   
   X <- scMuffinList[[feature_name]]$summary
@@ -43,7 +47,7 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
     
     cat("GSEA for ", ncol(X), "features\n")
     
-    ans$cluster_gsea_res <- cluster_gsea(X, cell_clusters = X_clusters)
+    ans$cluster_gsea_res <- cluster_gsea(X, cell_clusters = X_clusters, min.cells.feature=min.cells.feature, min.cells.cluster=min.cells.cluster, mc.cores=mc.cores, gsea.k=gsea.k)
     
     if(length(scMuffinList$cluster_data[partition_id])==0){ # nor ORA neither GSEA
       
@@ -53,7 +57,7 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
       
       if(length(scMuffinList$cluster_data[partition_id]$GSEA)==0){ # ORA already there
         
-        scMuffinList$cluster_data[[partition_id]]$GSEA <- lans$cluster_hyper_res
+        scMuffinList$cluster_data[[partition_id]]$GSEA <- ans$cluster_hyper_res
         
       }
       

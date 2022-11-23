@@ -2,36 +2,59 @@
 % Please edit documentation in R/plot_heatmap_features_by_clusters.R
 \name{plot_heatmap_features_by_clusters}
 \alias{plot_heatmap_features_by_clusters}
-\title{plot_heatmap_features_by_clusters}
+\title{Plot an heatmap of feature values in cell clusters}
 \usage{
 plot_heatmap_features_by_clusters(
-  features_by_clusters,
+  scMuffinList = NULL,
+  feature_source = NULL,
+  partition_id = NULL,
   significance_matrix = NULL,
   sig_threshold = 0.05,
-  ntop = 10,
-  onlyUp = TRUE,
-  out_file = "heatmap_features_by_clusters.jpg",
+  file = "heatmap_features_by_clusters.jpg",
   remove_null_features = FALSE,
+  width = 180,
+  height = 180,
+  units = "mm",
+  res = 300,
+  image_format = "png",
+  scale = TRUE,
+  pal = NULL,
   ...
 )
 }
 \arguments{
-\item{features_by_clusters}{features_by_clusters matrix}
+\item{scMuffinList}{scMuffinList object}
 
-\item{significance_matrix}{significance matrix to add asterisks over the heatmap}
+\item{feature_source}{It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.}
+
+\item{significance_matrix}{optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source}
 
 \item{sig_threshold}{significance threshold}
+
+\item{file}{output file}
+
+\item{remove_null_features}{whether to remove null features}
+
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
+
+\item{image_format}{png or jpeg}
+
+\item{scale}{whether to scale the features}
+
+\item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
+
+\item{...}{further arguments to ComplexHeatmap::Heatmap}
 
 \item{ntop}{number of top features considered for each cluster}
 
 \item{onlyUp}{top features are considered only on the basis of their positive deviation from null distribution (up-regulation)}
-
-\item{out_file}{output file}
-
-\item{remove_null_features}{whether to remove null features}
-
-\item{...}{further arguments to ComplexHeatmap::Heatmap}
 }
 \description{
-Plot heatmap festure by clusters
+Plot an heatmap of feature values in cell clusters
 }

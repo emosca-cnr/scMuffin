@@ -1,5 +1,5 @@
-#' cell cycle - merge the two Tirosh signatures for proliferation analysis
-#' @param genes_by_cells genes_by_cells expression matrix
+#' Define a proliferation score
+#' @param scMuffinList scMuffinList object
 #' @param mc.cores number of cores
 #' @param nbins number of bins to split the distribution of average gene expression
 #' @param nmark_min numner of minimum markers that are required for the succesful calculation of a signature
@@ -10,10 +10,15 @@
 #' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param mean_scale whether to scale the values obtained using score_type="mean"
 #' @importFrom utils data
-#' @description cell cycle - merge the two Tirosh signatures for proliferation analysis
+#' @description Define a proliferation score on the basis of two cell cycle gene sets. See SIG_Tirosh
+#' @return scMuffinList with element "proliferation", a list with:
+#' \itemize{
+#' \item{summary: data.frame with proliferation value}
+#' \item{full: data.frame with the vales of each of the two considered gene sets}
+#' }
 #' @export
 
-proliferation_analysis <- function(scMuffinList = NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 5, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){
+proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 5, k=99, kmin=49, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){
 	
 	data("SIG_Tirosh", envir=environment())
 	score_type <- score_type[1]
@@ -31,11 +36,13 @@ proliferation_analysis <- function(scMuffinList = NULL, mc.cores=2, nbins=25, nm
 	
 
 
-	scMuffinList$proliferation <- data.frame(scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")], Proliferation_score=apply(scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")], 1, max, na.rm=TRUE)) #max between the two signatures
+	scMuffinList$proliferation <- list(
+	  summary=data.frame(Proliferation_score=apply(scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")], 1, max, na.rm=TRUE)), #max between the two signatures
+	  full=scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")]
+	)
 	
-scMuffinList$gene_set_scoring$summary$Tirosh_G1S <- scMuffinList$gene_set_scoring$summary$Tirosh_G2M <- NULL
-
- scMuffinList$gene_set_scoring$full[c("Tirosh_G1S", "Tirosh_G2M")] <- NULL
+	scMuffinList$gene_set_scoring$summary$Tirosh_G1S <- scMuffinList$gene_set_scoring$summary$Tirosh_G2M <- NULL
+	scMuffinList$gene_set_scoring$full[c("Tirosh_G1S", "Tirosh_G2M")] <- NULL
 
 	#ans[ans==-Inf] <- NA
 	

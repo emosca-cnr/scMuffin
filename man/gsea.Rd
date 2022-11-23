@@ -11,17 +11,17 @@ gsea(rl, gsl, k = 100, ord.mode = -1, mc_cores_path = 1, mc_cores_perm = 1)
 
 \item{gsl}{named list of gene sets}
 
-\item{k}{integer, number of permutations}
+\item{k}{number of permutations}
 
-\item{ord.mode}{ordering mode: -1 -> descending; 1 ascending; must be of lenght equal to ncol(rl)}
+\item{ord.mode}{ordering mode: -1 -> descending; 1 ascending; must be of length equal to `ncol(rl)`}
 
 \item{mc_cores_path}{number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path x mc_cores_perm}
 
 \item{mc_cores_perm}{number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm}
 }
 \value{
-data.frame with es, nes, p-value, adjusted p-value and FDR q-value
+list with two data.frames, gs_table and leading_edge. gs_table contains: es, enrichment score; nes normalized enrichment score; p-value, empirical p-value; adjusted p-value, BH FDR; FDR q-value, empirical FDR. leading_edge contains: tags, leading edge size; tags_perc, leading edge size percent over gene set; list_top, rank of the ES; list_top_perc, rank of the ES percent over full ranked list; lead_edge, gene names of the leading edge.
 }
 \description{
-Gene set enrichment analysis
+Gene Set Enrichment Analysis
 }

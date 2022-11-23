@@ -2,6 +2,7 @@
 #' @param x vector of items
 #' @param y vector of items
 #' @description Calculate the overlap coefficient between two sets
+#' @return The overlap coefficient
 #' @export
 #' 
 overlap_coefficient <- function(x, y){

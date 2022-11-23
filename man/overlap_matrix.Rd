@@ -2,12 +2,15 @@
 % Please edit documentation in R/overlap_matrix.R
 \name{overlap_matrix}
 \alias{overlap_matrix}
-\title{Calculate the overlap coefficient between n sets}
+\title{Calculate the overlap matrix between clusters}
 \usage{
 overlap_matrix(scMuffinList = NULL)
 }
 \arguments{
-\item{x}{list of item sets}
+\item{scMuffinList}{scMuffinList object}
+}
+\value{
+scMuffinList with scMuffinList$cluster_comparison$overlap_matrix
 }
 \description{
 Calculate the overlap coefficient between n sets

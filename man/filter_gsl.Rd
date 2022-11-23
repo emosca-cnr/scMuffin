@@ -15,6 +15,9 @@ filter_gsl(gsl, universe, min_size = 5, max_size = 500)
 
 \item{max_size}{maximum gene set size}
 }
+\value{
+Filtered gene set list
+}
 \description{
 Filter a gene set list
 }

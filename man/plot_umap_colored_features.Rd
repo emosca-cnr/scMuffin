@@ -2,41 +2,51 @@
 % Please edit documentation in R/plot_umap_colored_features.R
 \name{plot_umap_colored_features}
 \alias{plot_umap_colored_features}
-\title{plot_umap_colored_features}
+\title{UMAP Visualization colored by features}
 \usage{
 plot_umap_colored_features(
   Seu_obj = NULL,
   scMuffinList = NULL,
-  feature_id = NULL,
+  feature_name = NULL,
   scale_feature = TRUE,
-  n_intervals = 10,
   adj_outliers = FALSE,
   min_cells = 10,
+  out_dir = "./",
+  width = 180,
+  height = 180,
+  units = "mm",
+  res = 300,
+  image_format = "png",
   ...
 )
 }
 \arguments{
-\item{Seu_obj}{seurat object, object with saved dimension reduction components calculate on genes by cells matrix}
+\item{Seu_obj}{Seurat object with UMAP data}
 
 \item{scMuffinList}{scMuffinList object}
 
-\item{feature_id}{feature id}
+\item{feature_name}{feature name}
 
-\item{scale_feature}{whether to scale features or not}
-
-\item{n_intervals}{number of intervals for the palette}
+\item{scale_feature}{whether to scale feature values}
 
 \item{adj_outliers}{logical, whether to adjust the feature scores, removing outliers}
 
-\item{min_cells}{min number of cells in which the feature must have a non-zero value}
+\item{min_cells}{minimum number of cells in which the feature must have a non-zero value}
+
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
+
+\item{image_format}{png or jpeg}
 
 \item{...}{further arguments to plot_umap}
 
 \item{feature_breaks}{breaks for feature value distribution}
 }
 \description{
-Generate a UMAP visualization colored by feature distributions
-}
-\details{
-Generate a UMAP visualization colored by feature distributions
+Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. It requires a Seurat object with UMAP information.
 }

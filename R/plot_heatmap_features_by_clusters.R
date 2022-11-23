@@ -1,20 +1,27 @@
-#' plot_heatmap_features_by_clusters
-#' @param features_by_clusters features_by_clusters matrix
-#' @param significance_matrix significance matrix to add asterisks over the heatmap
+#' Plot an heatmap of feature values in cell clusters
+#' @param scMuffinList scMuffinList object
+#' @param significance_matrix optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source
+#' @param feature_source It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
 #' @param sig_threshold significance threshold
 #' @param ntop number of top features considered for each cluster
-#' @param out_file output file
+#' @param file output file
 #' @param onlyUp top features are considered only on the basis of their positive deviation from null distribution (up-regulation)
 #' @param remove_null_features whether to remove null features
+#' @param width image width
+#' @param height image height
+#' @param units image units
+#' @param res image resolution
+#' @param image_format png or jpeg
+#' @param scale whether to scale the features
+#' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
-#' @description Plot heatmap festure by clusters
 #' @import ComplexHeatmap grDevices
 #' @importFrom utils write.table
+#' @importFrom pals brewer.rdylbu brewer.ylorrd
+#' @importFrom circlize colorRamp2
 
-
-plot_heatmap_features_by_clusters <- function(features_by_clusters, significance_matrix=NULL, sig_threshold=0.05, ntop=10, onlyUp=TRUE, 
-                                              out_file="heatmap_features_by_clusters.jpg", remove_null_features=FALSE, ...){
+plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file="heatmap_features_by_clusters.jpg", remove_null_features=FALSE, width=180, height=180, units="mm", res=300, image_format="png", scale=TRUE, pal=NULL, ...){
   
   
   if(!is.null(significance_matrix)){
@@ -27,60 +34,72 @@ plot_heatmap_features_by_clusters <- function(features_by_clusters, significance
     cell_fun_asterisk <- NULL
   }
   
-  
-  #output filtering and plotting HEATMAP of each signature type
-  # if(!is.list(features_by_clusters)){
-  # 	features_by_clusters <- list(feature=features_by_clusters)
-  # 	if(!is.null(significance_matrix)){
-  # 		significance_matrix <- list(feature=significance_matrix)
-  # 	}
-  # }
-  #for(i in 1:length(features_by_clusters)){
-  
-  #		if(is.list(features_by_clusters[[i]])){
-  #			X <- features_by_clusters[[i]]$signatures_by_clusters
-  #		}else{
-  X <- features_by_clusters
-  #		}
-  
-  X[is.na(X)] <- 0
+   
+  if(is.matrix(feature_source)){
+    X <- t(feature_source)
+  }else{
+    
+    if(length(scMuffinList$cluster_data)==0){
+      stop("If feature_source is not a matrix, then scMuffinList$cluster_data must be defined.\n")
+    }
+    
+    partition_id <- match.arg(partition_id, names(scMuffinList$cluster_data))
+    
+    if(is.null(feature_source)){
+      X <-  t(scMuffinList$cluster_data[[partition_id]]$mean)
+    }else{
+      if(feature_source == "mean"){
+        X <-  t(scMuffinList$cluster_data[[partition_id]]$mean)
+      }else{
+        X <-  t(scMuffinList$cluster_data[[partition_id]]$gene_set_scoring$summary)
+      }
+    }
+  }
+
   if(remove_null_features){
+    X[is.na(X)] <- 0
     X <- X[rowSums(abs(X))>0, ]
     print(dim(X))
+  }
+  
+  if(is.null(pal)){
+    X_abs_max <- max(abs(c(min(X, na.rm = TRUE), max(X, na.rm = TRUE))))
+    if(any(X<0)){
+      pal <- rev(pals::brewer.rdylbu(5))
+      pal <- colorRamp2(c(-X_abs_max, 0, X_abs_max), c(pal[1], pal[3], pal[5]))
+    }else{
+      pal <- pals::brewer.ylorrd(5)
+    }
   }
   
   
   if(nrow(X)>0){
     
-    #find the feature to show in each cluster ###this does not work properly
-    top_features <- character()
-    for(j in 1:ncol(X)){
-      if(onlyUp){
-        top_features <- c(top_features, rownames(X)[which(rank(-X[, j]) <= ntop)])
-      }else{
-        top_features <- c(top_features, rownames(X)[which(rank(-abs(X[, j])) <= ntop)])
-      }
-    }
-    X <- X[rownames(X) %in% top_features, ]
-    
     if(!is.null(significance_matrix)){
-      sig_mat <- significance_matrix
+      sig_mat <- t(significance_matrix)
       sig_mat <- sig_mat[match(rownames(X), rownames(sig_mat)), match(colnames(X), colnames(sig_mat))]
-      if(onlyUp){
-        sig_mat[!X>0] <- 1
-      }
+      # if(onlyUp){
+      #   sig_mat[!X>0] <- 1
+      # }
     }
     
-    grDevices::jpeg(out_file, width = 180, height = 180, res=300, units="mm")
+    if(image_format == "jpeg"){
+      jpeg(file, width=width, height=height, units=units, res=res)
+    }
+    if(image_format == "png"){
+      png(file, width=width, height=height, units=units, res=res)
+    }
     
-    h_tot_go <- ComplexHeatmap::Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, ...)
+    if(scale){
+      X <- t(scale(t(X)))
+    }
+    
+    h_tot_go <- ComplexHeatmap::Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, ...)
     draw(h_tot_go, heatmap_legend_side = "left")
     
     dev.off()
     
-    #write.table(X, file=paste0(out_dir, "/table_", names(features_by_clusters)[i], ".txt"), sep = "\t", row.names = T, col.names = NA)
-    
-    
+
   }else{
     message("Are all rows empty?\n")
   }

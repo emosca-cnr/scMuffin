@@ -36,7 +36,6 @@ apply_CNV_reference <- function(cnv=NULL, cnv_clustering=NULL, reference="refere
 		
 	}
 	
-	
 	cat("Subtracting reference cells average from CNV profiles...\n")
 	
 	#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles

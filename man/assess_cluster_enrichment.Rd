@@ -8,7 +8,11 @@ assess_cluster_enrichment(
   scMuffinList = NULL,
   feature_name = NULL,
   partition_id = NULL,
-  meta_clusters = FALSE
+  meta_clusters = FALSE,
+  min.cells.feature = 100,
+  min.cells.cluster = 5,
+  mc.cores = 1,
+  gsea.k = 99
 )
 }
 \arguments{
@@ -17,6 +21,14 @@ assess_cluster_enrichment(
 \item{feature_name}{the names of the feature that should be considered. It must be one of names(scMuffinList)}
 
 \item{partition_id}{identifier of the partition to be considered}
+
+\item{min.cells.feature}{minimum number of cells in which a feature must have value}
+
+\item{min.cells.cluster}{minimum number of cells of a cluster}
+
+\item{mc.cores}{number of cores}
+
+\item{gsea.k}{number of GSEA permutations}
 }
 \value{
 scMuffinList with GSEA or ORA elements under scMuffinList$cluster_data for the considered partition

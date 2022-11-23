@@ -1,18 +1,15 @@
-#' sc_data_bin
-#' 
-#' Split the input data matrix by rows into nbins
-#' 
+#' Split the genes into bins by their expression
 #' @param genes_by_cells genes-by-cells matrix
 #' @param nbins number of bins
-#' @param na.rm whether to remove NA or not
+#' @param na.rm if TRUE, cells with null (0) values are not considered in the calculation of the gene expression level.
 #' @importFrom ggplot2 cut_number
 #' @importFrom Matrix rowSums
-#' @return vector with bin id for each row
+#' @return vector with bin identifier for each gene
 #' @description Split the input data matrix by rows into nbins
 #' @export
 
 
-sc_data_bin <- function(genes_by_cells, nbins=25, na.rm=FALSE){
+sc_data_bin <- function(genes_by_cells=NULL, nbins=25, na.rm=FALSE){
 
 
   ans <- Matrix::rowSums(genes_by_cells)

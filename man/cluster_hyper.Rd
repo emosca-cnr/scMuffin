@@ -4,24 +4,18 @@
 \alias{cluster_hyper}
 \title{Calculate cluster enrichment by hypergeometric test}
 \usage{
-cluster_hyper(feature_values, cell_clusters, fdr = 0.05, top = 2)
+cluster_hyper(feature_values = NULL, cell_clusters = NULL)
 }
 \arguments{
-\item{feature_values}{matrix, features by cells matrix}
+\item{feature_values}{matrix, cells-by-features}
 
 \item{cell_clusters}{array with cell values named by their cluster ID}
-
-\item{fdr}{fdr threshold, default at 0.05}
-
-\item{top}{numeric, number of features to be shown with a difference color and representing the most significative features according to t-test}
-
-\item{mc.cores}{number of cores}
+}
+\value{
+A list of data.frames, one for each categorical value. See [ora()]
 }
 \description{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
-}
-\details{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+Calculate cluster enrichment in each of the categorical values of a feature, by means of hypergeometric test
 }
 \author{
 Ettore Mosca

@@ -1,17 +1,31 @@
-#' Returns meta-clusters obtained by using hierarchical clustering
+#' Analysis of the various partitions and definition of meta-clusters
+#' @param scMuffinList scMuffinList object with at least two partitions
 #' @param overlap_mat Overlap matrix as obtained form overlap_matrix() function
 #' @param n_step number used to divide hclust dendrogram height to obtain cut values to calculate silhouette
 #' @param max_clust maximum number of clusters
 #' @param do_plot whether to do the silohouette plot or not
 #' @import cluster
 #' @importFrom stats hclust as.dist cutree
-#' @description Returns meta-clusters obtained by using hierarchical clustering
+#' @description Calculate the overlap matrix between all-pars of clusters of existing partitions.
+#' @return
+#' scMuffinList with:
+#' \itemize{
+#'   \item{scMuffinList$cluster_comparison$overlap_matrix, the overlap matrix}
+#'   \item{scMuffinList$cluster_comparison$meta_clusters, a list with information on meta-clusters:}
+#'   \itemize{
+#'     \item{dissimilarity, dissimilarity matrix;}
+#'     \item{hclust_out, stats::hclust output;}
+#'     \item{clusters, a data.frame for mapping  clusters and meta-clusters;}
+#'     \item{cells, a data.frame for mapping cells and meta-clusters;}
+#'     \item{occurrence, a list of meta-clusters, in which each element is a data.frame that show the occurrence of meta-cluster cells across clusters.}
+#'     }
+#' }
 #' @export
 
 meta_cluster <- function(scMuffinList=NULL, n_step = 11, max_clust=10, do_plot=FALSE) {
   
 
-  scMuffinList$partitions$all <- as.factor(as.character(apply(scMuffinList$partitions, 1, function(i_row) paste0(colnames(scMuffinList$partitions), i_row, collapse="__"))))
+  scMuffinList$partitions$all <- as.factor(as.character(apply(scMuffinList$partitions[, colnames(scMuffinList$partitions) != "all"], 1, function(i_row) paste0(colnames(scMuffinList$partitions), i_row, collapse="__"))))
   
 
   scMuffinList <- overlap_matrix(scMuffinList = scMuffinList)

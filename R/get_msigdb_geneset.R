@@ -5,6 +5,7 @@
 #' @param type Gene name of interest, can be gene_symbol or entrez_gene
 #' @description Returns msigdb geneset in a format compatible with calculate_signatures()
 #' @import msigdbr
+#' @return List with msigdb_output, the output of msigdbr::msigdbr, and path_list, the list of gene sets
 #' @export
 
 get_msigdb_geneset <- function(species, category=NULL, subcategory=NULL, type="gene_symbol") {
@@ -20,7 +21,6 @@ get_msigdb_geneset <- function(species, category=NULL, subcategory=NULL, type="g
   } else if (type == "entrez_gene") {
     msig_list <- split(x=msig$entrez_gene, f = msig$gs_name)
   }
-  output <- list(msigdb_output = msig,
-                 path_list = msig_list)
+  output <- list(msigdb_output = msig, path_list = msig_list)
   return(output)
 }

@@ -2,18 +2,22 @@
 % Please edit documentation in R/add_features.R
 \name{add_features}
 \alias{add_features}
-\title{Adds a feature to the feature list}
+\title{Add a feature to scMuffinList}
 \usage{
-add_features(scMuffinList = NULL, id = NULL, summary = NULL, full = NULL)
+add_features(scMuffinList = NULL, name = NULL, summary = NULL, full = NULL)
 }
 \arguments{
-\item{features_obj}{features object}
+\item{scMuffinList}{scMuffinList object}
 
-\item{to_add}{data.frame of 1 or more cell values with cell id as row names}
+\item{name}{feature name}
+
+\item{summary}{data.frame with cell identifiers as row.names}
+
+\item{full}{optional information related to the feature, like cell-level statistics}
 }
 \value{
-The scMuffinList with the the additional feature
+scMuffinList with the additional feature
 }
 \description{
-Adds a feature to the feature list
+Add a feature to scMuffinList
 }

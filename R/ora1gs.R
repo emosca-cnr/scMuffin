@@ -1,4 +1,4 @@
-#' Hypergeometric test on 1 dataset
+#' Hypergeometric test on 1 feature set
 #' @param wb white balls
 #' @param bb black balls
 #' @param bd balls drawn

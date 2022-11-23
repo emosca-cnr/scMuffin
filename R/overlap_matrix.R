@@ -1,6 +1,7 @@
-#' Calculate the overlap coefficient between n sets
-#' @param x list of item sets
+#' Calculate the overlap matrix between clusters
+#' @param scMuffinList scMuffinList object
 #' @description Calculate the overlap coefficient between n sets
+#' @return scMuffinList with scMuffinList$cluster_comparison$overlap_matrix
 #' @export
 overlap_matrix <- function(scMuffinList=NULL){
 	

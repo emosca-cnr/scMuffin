@@ -2,7 +2,7 @@
 % Please edit documentation in R/transcriptional_complexity.R
 \name{transcr_compl}
 \alias{transcr_compl}
-\title{Transcriptional Complexity}
+\title{Transcriptional Complexity and Entropy}
 \usage{
 transcr_compl(
   scMuffinList = NULL,
@@ -16,13 +16,19 @@ transcr_compl(
 
 \item{min_counts}{minimum number of counts}
 
-\item{min_cells}{minimum number of cells in which a genes must have at least min_counts counts}
+\item{min_cells}{minimum number of cells in which a gene must have at least min_counts counts}
 
-\item{min_genes}{minimum number of genes that a cell must have with at least min_counts counts}
+\item{min_genes}{minimum number of genes that a cell must express with at least min_counts counts}
 }
 \value{
-scMuffinList with transcr_compl element
+scMuffinList with transcr_compl element a list with summary (full is empty):
+\itemize{
+  \item{tot_counts, total number of transcripts;}
+  \item{n_genes, total number of expressed genes;}
+  \item{C, transcriptional complexity;}
+  \item{H, transcriptional entropy;}
+}
 }
 \description{
-Transcriptional Complexity
+Transcriptional Complexity and Entropy
 }

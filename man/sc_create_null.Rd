@@ -2,18 +2,21 @@
 % Please edit documentation in R/sc_create_null.R
 \name{sc_create_null}
 \alias{sc_create_null}
-\title{sc_create_null}
+\title{Create empirical null for gene set scoring}
 \usage{
-sc_create_null(genes_by_cells, bins, gene_set, k = 100)
+sc_create_null(genes_by_cells = NULL, bins = NULL, gene_set = NULL, k = 100)
 }
 \arguments{
 \item{genes_by_cells}{genes-by-cells matrix}
 
-\item{bins}{bins of genes}
+\item{bins}{bins of genes, created by means of \code{\link{sc_data_bin()}}}
 
 \item{gene_set}{a vector of genes}
 
 \item{k}{number of permutations}
+}
+\value{
+A list of null gene sets.
 }
 \description{
 sc_create_null

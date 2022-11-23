@@ -2,23 +2,20 @@
 % Please edit documentation in R/sc_data_bin.R
 \name{sc_data_bin}
 \alias{sc_data_bin}
-\title{sc_data_bin}
+\title{Split the genes into bins by their expression}
 \usage{
-sc_data_bin(genes_by_cells, nbins = 25, na.rm = FALSE)
+sc_data_bin(genes_by_cells = NULL, nbins = 25, na.rm = FALSE)
 }
 \arguments{
 \item{genes_by_cells}{genes-by-cells matrix}
 
 \item{nbins}{number of bins}
 
-\item{na.rm}{whether to remove NA or not}
+\item{na.rm}{if TRUE, cells with null (0) values are not considered in the calculation of the gene expression level.}
 }
 \value{
-vector with bin id for each row
+vector with bin identifier for each gene
 }
 \description{
-Split the input data matrix by rows into nbins
-}
-\details{
 Split the input data matrix by rows into nbins
 }

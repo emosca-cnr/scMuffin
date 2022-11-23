@@ -1,14 +1,15 @@
 #' Gene Set Enrichment Analysis
 #' @param rl numeric matrix of genes-by-ranking criteria; each column contains numeric values; rownames are mandatory
 #' @param gsl named list of gene sets
-#' @param k integer, number of permutations
-#' @param ord.mode ordering mode: -1 -> descending; 1 ascending; must be of lenght equal to ncol(rl)
+#' @param k number of permutations
+#' @param ord.mode ordering mode: -1 -> descending; 1 ascending; must be of length equal to `ncol(rl)`
 #' @param mc_cores_path number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path x mc_cores_perm
 #' @param mc_cores_perm number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm
 #' @import parallel
-#' @return data.frame with es, nes, p-value, adjusted p-value and FDR q-value
 #' @importFrom stats p.adjust
-#' @description Gene set enrichment analysis
+#' @return list with two data.frames, gs_table and leading_edge. gs_table contains: es, enrichment score; nes normalized enrichment score; p-value, empirical p-value; adjusted p-value, BH FDR; FDR q-value, empirical FDR. leading_edge contains: tags, leading edge size; tags_perc, leading edge size percent over gene set; list_top, rank of the ES; list_top_perc, rank of the ES percent over full ranked list; lead_edge, gene names of the leading edge.
+#' @export
+
 
 gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
 

@@ -2,24 +2,35 @@
 % Please edit documentation in R/cluster_gsea.R
 \name{cluster_gsea}
 \alias{cluster_gsea}
-\title{Calculate cluster enrichment by gsea approach}
+\title{Calculate cluster enrichment by means of GSEA}
 \usage{
-cluster_gsea(feature_values, cell_clusters, min.cells = 100, mc.cores = 1)
+cluster_gsea(
+  feature_values = NULL,
+  cell_clusters = NULL,
+  min.cells.feature = 100,
+  min.cells.cluster = 5,
+  mc.cores = 1,
+  gsea.k = 99
+)
 }
 \arguments{
 \item{feature_values}{matrix, features by cells matrix}
 
 \item{cell_clusters}{array with cell values named by their cluster ID}
 
-\item{min.cells}{minimum number of cells}
+\item{min.cells.feature}{minimum number of cells in which a feature must have value}
+
+\item{min.cells.cluster}{minimum number of cells of a cluster}
 
 \item{mc.cores}{number of cores}
+
+\item{gsea.k}{number of permutations}
+}
+\value{
+list with two elements: gs_table and leading_edge. See [gsea()]
 }
 \description{
 Calculate cluster enrichment by gsea approach
-}
-\details{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 }
 \author{
 Ettore Mosca
