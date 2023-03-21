@@ -9,7 +9,7 @@ sc_create_null(genes_by_cells = NULL, bins = NULL, gene_set = NULL, k = 100)
 \arguments{
 \item{genes_by_cells}{genes-by-cells matrix}
 
-\item{bins}{bins of genes, created by means of \code{\link{sc_data_bin()}}}
+\item{bins}{bins of genes, created by means of \code{\link{sc_data_bin}}}
 
 \item{gene_set}{a vector of genes}
 

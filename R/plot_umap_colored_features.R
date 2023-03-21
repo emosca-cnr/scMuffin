@@ -5,7 +5,6 @@
 #' @param scMuffinList scMuffinList object
 #' @param feature_name feature name
 #' @param scale_feature whether to scale feature values
-#' @param feature_breaks breaks for feature value distribution
 #' @param adj_outliers logical, whether to adjust the feature scores, removing outliers
 #' @param min_cells minimum number of cells in which the feature must have a non-zero value
 #' @param width image width
@@ -13,8 +12,10 @@
 #' @param units image units
 #' @param res image resolution
 #' @param image_format png or jpeg
+#' @param out_dir output directory
 #' @param ... further arguments to plot_umap
 #' @importFrom pals brewer.rdylbu brewer.purples alphabet
+#' @importFrom stats setNames
 #' @export
 
 plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=TRUE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, image_format="png", ...){

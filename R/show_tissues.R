@@ -1,6 +1,6 @@
-#' Show the tissues available for \code{\link{prepare_gsl}}
+#' Show the tissues available for \code{\link{prepare_gsls}}
 #' @param gsc_source the source database
-#' @description Show the tissues available by means of prepare_gsl
+#' @description Show the tissues available by means of \code{\link{prepare_gsls}}
 #' @return List of gsc_source with tissue vectors.
 #' @export
 

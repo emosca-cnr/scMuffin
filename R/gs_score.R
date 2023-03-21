@@ -9,7 +9,7 @@
 #' @param kmin minimim number of k
 #' @param verbose verbosity
 #' @param null_model boolean, whether to use the permutations or not
-#' @author Ettore Mosca
+#' @param na.rm whether to remove or not the missing values
 #' @importFrom Matrix colMeans colSums
 #' @return A data.frame with the following columns: case, the gene set average observed in the cell; case.N, number of genes in the gene set; case.AV, number of genes available in the cell; nmark_min, whether case.AV > nmark_min; avg_control, average of the averag gene set score in control cells; control.AV, number of available control cells, null_ok, whether a null could be defined for the cell; avg_delta_score, average of case minu each control cell; delta_score, case - avg_control.
 #' @export

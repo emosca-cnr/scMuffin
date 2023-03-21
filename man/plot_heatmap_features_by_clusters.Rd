@@ -27,6 +27,8 @@ plot_heatmap_features_by_clusters(
 
 \item{feature_source}{It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.}
 
+\item{partition_id}{identifier of the partition to be considered}
+
 \item{significance_matrix}{optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source}
 
 \item{sig_threshold}{significance threshold}
@@ -50,10 +52,6 @@ plot_heatmap_features_by_clusters(
 \item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
 
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
-
-\item{ntop}{number of top features considered for each cluster}
-
-\item{onlyUp}{top features are considered only on the basis of their positive deviation from null distribution (up-regulation)}
 }
 \description{
 Plot an heatmap of feature values in cell clusters

@@ -20,11 +20,11 @@ cluster_stats(
 
 \item{feature_id}{feature id}
 
+\item{mean_f}{function to use for average}
+
+\item{var_f}{function to use for variability}
+
 \item{na.rm}{whether to remove na or not}
-
-\item{mean}{function to use for average}
-
-\item{var}{function to use for variability}
 }
 \value{
 scMuffinList with data.frames "mean" and "var" added to "scMuffinList$cluster_data[[partition_id]]"

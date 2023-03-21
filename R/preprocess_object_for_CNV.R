@@ -43,6 +43,7 @@ preprocess_object_for_CNV <- function(genes_by_cells) {
   # change rownames with 'SYMBOL'
   mat_rn <- matrix_reduced[,-1]
   rownames(mat_rn) <- matrix_reduced[,1]
+  rm(matrix_reduced)
   
   # split chromosomes into a list of dataframe
   mat_splitted <- split(mat_rn, mat_rn$Chromosome)

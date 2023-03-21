@@ -2,7 +2,7 @@
 % Please edit documentation in R/show_tissues.R
 \name{show_tissues}
 \alias{show_tissues}
-\title{Show the tissues available for \code{\link{prepare_gsl}}}
+\title{Show the tissues available for \code{\link{prepare_gsls}}}
 \usage{
 show_tissues(gsc_source = c("SIG_PNDB", "SIG_CM_normal", "SIG_CM_cancer"))
 }
@@ -13,5 +13,5 @@ show_tissues(gsc_source = c("SIG_PNDB", "SIG_CM_normal", "SIG_CM_cancer"))
 List of gsc_source with tissue vectors.
 }
 \description{
-Show the tissues available by means of prepare_gsl
+Show the tissues available by means of \code{\link{prepare_gsls}}
 }

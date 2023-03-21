@@ -10,37 +10,27 @@
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
 #' @importFrom grDevices boxplot.stats
-#' @description Calculate CNV with or without reference vector
+#' @description Calculate CNV using the moving average approach firstly described in Patel et al., 2014 Science (DOI: 10.1126/science)
 #' @export
+#' 
 calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=NULL, scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
 	
  	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
-	cat("Filtering")
-	idx_keep <- rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
-	print(table(idx_keep))
+	cat("Filtering...")
+	idx_keep <- Matrix::rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
+	#print(table(idx_keep))
 	genes_by_cells <- genes_by_cells[idx_keep, ]
 	
-	idx_keep <- colSums(genes_by_cells !=0) >= min(min_genes, nrow(genes_by_cells))
-	print(table(idx_keep))
+	idx_keep <- Matrix::colSums(genes_by_cells !=0) >= min(min_genes, nrow(genes_by_cells))
+	#print(table(idx_keep))
 	genes_by_cells <- genes_by_cells[, idx_keep]
-	print("size after filtering")
-	print(dim(genes_by_cells))
-	
-	#centering genes-by-cells data
-	#if(center_genes){
-	#	gbc_mean <- rowMeans(genes_by_cells)
-	#	genes_by_cells <- as.data.frame(apply(genes_by_cells, 2, function(x) x - gbc_mean))
-	#}
-	
+	cat(" done\n")
+	cat("genes-by-cells:", dim(genes_by_cells), "\n")
+
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
-		
-		
-		#if(center_genes){
-		#	genes_by_cells$gbc_mean <- gbc_mean
-		#}
 		
 		colnames(reference) <- "reference"
 		genes_by_cells <- merge(genes_by_cells, reference, by="row.names", sort=F)
@@ -104,6 +94,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")
+	CNV_data_in <- lapply(ans, function(x) Matrix::Matrix(as.matrix(x), sparse = TRUE))
 	ans <- mclapply(ans, function(x) apply(x, 2, function(y) CNV(setNames(y, rownames(x)), wnd_size=wnd_size, na.rm = na.rm)), mc.cores = mc.cores)
 	
 	#merging chromosomes
@@ -111,7 +102,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		if(!is.matrix(ans[[i]])){
 			ans[[i]] <- matrix(ans[[i]], nrow = 1)
 		}
-		rownames(ans[[i]]) <- paste0("chr", names(ans)[i], "_", rownames(ans[[i]]))
+		rownames(ans[[i]]) <- paste0("chr", names(ans)[i], "__", rownames(ans[[i]]))
 	} 
 	
 	ans <- do.call(rbind, ans)
@@ -123,5 +114,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=1
 		rm(temp)
 	}
 	
-	return(ans)
+	regions_genes <- regions_to_genes(CNV=ans, CNV_input=CNV_data_in)
+	
+	return(list(CNV=ans, CNV_input=CNV_data_in, regions2genes=regions_genes))
 }

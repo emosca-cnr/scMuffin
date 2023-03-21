@@ -4,7 +4,7 @@
 #' @param normalized genes-by-cell matrix or data.frame with normalized expression.
 #' @return scMuffinList with counts and normalized elements as dgCMatrix.
 #' @importFrom Matrix Matrix
-
+#' @importFrom methods is
 create_scMuffinList <- function(counts=NULL, normalized=NULL){
   
   scMuffinList <- list()

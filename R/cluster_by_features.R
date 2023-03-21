@@ -40,7 +40,7 @@ cluster_by_features <- function(features, n_comp = 10, cnv=FALSE, plot_umap=FALS
 	
 	features_by_cells <- Seurat::FindNeighbors(features_by_cells, dims = 1:n_comp)
 	features_by_cells <- Seurat::FindClusters(features_by_cells)
-	features_by_cells <- Seurat::RunUMAP(features_by_cells, dims = 1:n_comp)
+	#features_by_cells <- Seurat::RunUMAP(features_by_cells, dims = 1:n_comp)
 	
 	if(plot_umap){
 		grDevices::jpeg(paste0(out_dir, "/feature_umap.jpg"), width = 180, height = 180, res=300, units="mm")

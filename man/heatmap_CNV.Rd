@@ -2,33 +2,40 @@
 % Please edit documentation in R/heatmap_CNV.R
 \name{heatmap_CNV}
 \alias{heatmap_CNV}
-\title{heatmap_CNV}
+\title{CNV Heatmap}
 \usage{
 heatmap_CNV(
-  cnv,
-  cnv_clustering,
-  ref_cluster = NULL,
-  file = "heatmap_CNV.jpg",
+  scMuffinList = NULL,
+  genes = NULL,
+  file = NULL,
+  width = 180,
+  height = 180,
+  units = "mm",
+  res = 300,
+  image_format = "png",
+  cluster_fontsize = 8,
+  chrom_fontsize = 8,
+  legend_fontsize = 8,
   ...
 )
 }
 \arguments{
-\item{cnv}{CNV matrix}
-
-\item{cnv_clustering}{cell clustering by CNV}
-
-\item{ref_cluster}{reference cluster}
+\item{scMuffinList}{scMuffinList object}
 
 \item{file}{output file}
+
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
+
+\item{image_format}{png or jpeg}
 
 \item{...}{arguments passed to ComplexHeatmap::Heatmap}
 }
 \description{
-Plot an heatmap of the CNV.
-}
-\details{
-Preprocessing with 'preprocess_for_heatmap' needed.
-}
-\author{
-Valentina Nale
+CNV Heatmap
 }

@@ -9,7 +9,9 @@ process_GTEx_gene_reads(
   GTEx_annot = NULL,
   tissue = NULL,
   id_type = c("gene_id", "symbol"),
-  nrows = -1
+  nrows = -1,
+  norm.type = "LogNormalize",
+  ...
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ process_GTEx_gene_reads(
 \item{id_type}{whether the output should be specified as gene_id or symbol}
 
 \item{nrows}{limit the read to the top nrows. Useful for testing.}
+
+\item{norm.type}{Method for normalization. See Seurat::NormalizeData.}
+
+\item{...}{further arguments passed to functin Seurat::NormalizeData.}
 }
 \value{
 average normalized gene expression values

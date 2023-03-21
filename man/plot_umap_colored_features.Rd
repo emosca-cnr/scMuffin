@@ -33,6 +33,8 @@ plot_umap_colored_features(
 
 \item{min_cells}{minimum number of cells in which the feature must have a non-zero value}
 
+\item{out_dir}{output directory}
+
 \item{width}{image width}
 
 \item{height}{image height}
@@ -44,8 +46,6 @@ plot_umap_colored_features(
 \item{image_format}{png or jpeg}
 
 \item{...}{further arguments to plot_umap}
-
-\item{feature_breaks}{breaks for feature value distribution}
 }
 \description{
 Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. It requires a Seurat object with UMAP information.

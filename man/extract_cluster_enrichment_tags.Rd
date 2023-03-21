@@ -20,13 +20,13 @@ extract_cluster_enrichment_tags(
 
 \item{partition_id}{one among the partitions.}
 
-\item{GSEA_selection_criterion}{selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.}
+\item{GSEA_selection_criterion}{selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table}} for possible values.}
 
 \item{GSEA_selection_threshold}{threshold for selection of tags from GSEA.}
 
 \item{only_pos_nes}{whether only positive nes should be considered in GSEA.}
 
-\item{ORA_selection_criterion}{selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.}
+\item{ORA_selection_criterion}{selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table}} for possible values.}
 
 \item{ORA_selection_threshold}{threshold for selection of tags from ORA.}
 

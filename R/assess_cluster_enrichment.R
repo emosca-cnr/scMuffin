@@ -12,9 +12,10 @@
 #' The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from GSEA and ORA results.
 #'
 #' @return scMuffinList with GSEA or ORA elements under scMuffinList$cluster_data for the considered partition
+#' @importFrom stats setNames
 #' @export
 
-assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, meta_clusters=FALSE, min.cells.feature=100, min.cells.cluster=5, mc.cores=1, gsea.k=99){
+assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=5, mc.cores=1, gsea.k=99){
   
   
   X <- scMuffinList[[feature_name]]$summary
@@ -76,7 +77,7 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
   
   
   ##### FACTOR -> Fisher exact test
-  if(is.factor(X[, 1])){
+  if(is.factor(X[, 1]) | is.character(X[, 1])){
     
     cat("ORA for ", ncol(X), "features\n")
     

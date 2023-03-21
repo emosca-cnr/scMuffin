@@ -8,7 +8,6 @@ assess_cluster_enrichment(
   scMuffinList = NULL,
   feature_name = NULL,
   partition_id = NULL,
-  meta_clusters = FALSE,
   min.cells.feature = 100,
   min.cells.cluster = 5,
   mc.cores = 1,

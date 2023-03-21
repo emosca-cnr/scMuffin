@@ -30,8 +30,7 @@ proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nm
 	#ans <- tirosh$gss_by_cells
 	
 	if(score_type == "mean" & mean_scale){
-		ans <- t(apply(ans, 1, scale))
-		colnames(ans) <- colnames(tirosh$gss_by_cells)
+	  scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")] <- t(scale(t(scMuffinList$gene_set_scoring$summary[, c("Tirosh_G1S", "Tirosh_G2M")])))
 	}
 	
 

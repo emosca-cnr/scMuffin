@@ -35,6 +35,8 @@ gs_score(
 \item{verbose}{verbosity}
 
 \item{null_model}{boolean, whether to use the permutations or not}
+
+\item{na.rm}{whether to remove or not the missing values}
 }
 \value{
 A data.frame with the following columns: case, the gene set average observed in the cell; case.N, number of genes in the gene set; case.AV, number of genes available in the cell; nmark_min, whether case.AV > nmark_min; avg_control, average of the averag gene set score in control cells; control.AV, number of available control cells, null_ok, whether a null could be defined for the cell; avg_delta_score, average of case minu each control cell; delta_score, case - avg_control.
@@ -44,7 +46,4 @@ Calculate gene set scores using the approach described in Tirosh2016
 }
 \references{
 Tirosh2016 10.1126/science.aad0501
-}
-\author{
-Ettore Mosca
 }

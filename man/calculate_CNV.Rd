@@ -11,7 +11,7 @@ calculate_CNV(
   wnd_size = 100,
   min_genes = 1000,
   min_cells = 100,
-  expr_lim = c(-3, 3),
+  expr_lim = NULL,
   scale_cells = TRUE,
   na.rm = FALSE,
   center_genes = FALSE
@@ -30,7 +30,7 @@ calculate_CNV(
 
 \item{min_cells}{minimum numbver of cells in which a gene must be expressed;}
 
-\item{expr_lim}{min and max values of relative expression; if FALSE this constraints will not be used}
+\item{expr_lim}{min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.}
 
 \item{scale_cells}{whether to scale cells}
 
@@ -39,5 +39,5 @@ calculate_CNV(
 \item{center_genes}{whether to center genes or not}
 }
 \description{
-Calculate CNV with or without reference vector
+Calculate CNV using the moving average approach firstly described in Patel et al., 2014 Science (DOI: 10.1126/science)
 }

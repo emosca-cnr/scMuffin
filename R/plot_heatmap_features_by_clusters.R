@@ -3,14 +3,13 @@
 #' @param significance_matrix optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source
 #' @param feature_source It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
 #' @param sig_threshold significance threshold
-#' @param ntop number of top features considered for each cluster
 #' @param file output file
-#' @param onlyUp top features are considered only on the basis of their positive deviation from null distribution (up-regulation)
 #' @param remove_null_features whether to remove null features
 #' @param width image width
 #' @param height image height
 #' @param units image units
 #' @param res image resolution
+#' @param partition_id identifier of the partition to be considered
 #' @param image_format png or jpeg
 #' @param scale whether to scale the features
 #' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
@@ -50,7 +49,8 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
     }else{
       if(feature_source == "mean"){
         X <-  t(scMuffinList$cluster_data[[partition_id]]$mean)
-      }else{
+      }
+      if(feature_source == "gss"){
         X <-  t(scMuffinList$cluster_data[[partition_id]]$gene_set_scoring$summary)
       }
     }

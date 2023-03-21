@@ -1,31 +1,45 @@
-#' heatmap_CNV
-#' @param cnv CNV matrix
-#' @param cnv_clustering cell clustering by CNV
-#' @param ref_cluster reference cluster
+#' CNV Heatmap
+#' @param scMuffinList scMuffinList object
 #' @param file output file
+#' @param width image width
+#' @param height image height
+#' @param units image units
+#' @param res image resolution
+#' @param image_format png or jpeg
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
-#' @description Plot an heatmap of the CNV. 
-#' @details Preprocessing with 'preprocess_for_heatmap' needed. 
-#' @author Valentina Nale
 #' @import ComplexHeatmap grDevices grid
 #' @export
 
-heatmap_CNV <- function(cnv, cnv_clustering, ref_cluster=NULL, file="heatmap_CNV.jpg", ...) {
+heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, ...) {
 	
-	cnv_clustering$clusters <- cnv_clustering$clusters[order(cnv_clustering$clusters)]
-	cnv <- cnv[, match(names(cnv_clustering$clusters), colnames(cnv))]
-	# 
-	# #find the cluster where the reference appears
-	# if(!is.null(reference) & any(colnames(cnv) == reference)){
-	# 
-	# 	ref_cluster <- cnv_clustering$clusters[names(cnv_clustering$clusters) == reference] #cluster in which the reference occurs
-	# 	cat("Reference cluster:", as.character(ref_cluster), "\n")
-	# 	cat("Subtracting reference cluster average from CNV profiles...\n")
-	# 	
-	# 	#update the CNV Matrix, subtracting the average of the reference cluster from CNV profiles
-	# 	ref_cluster_avg <- rowMeans(cnv[, cnv_clustering$clusters==ref_cluster])
-	# 	cnv <- apply(cnv, 2, function(x) x-ref_cluster_avg)
-	# }
+	#column_title_fontsize=8
+	
+	cnv_clustering <- scMuffinList$partitions[, "CNV"]
+	names(cnv_clustering) <- rownames(scMuffinList$partitions)
+	cnv <- scMuffinList$CNV$full$CNV
+	
+	#same cell ordering
+	cnv <- cnv[, match(names(cnv_clustering), colnames(cnv))]
+
+	### add requested genes
+	ha<-NULL
+	if(!is.null(genes)){
+		idx_genes <- setNames(vector("list", length(genes)), genes)
+		for(i in 1:length(genes)){
+			idx_genes[[i]] <- which(unlist(lapply(scMuffinList$CNV$full$regions2genes, function(x) any(x$symbol == genes[i]))))
+		}
+		idx_genes <- idx_genes[lengths(idx_genes)>0]
+		if(length(idx_genes)>0){
+			idx_cnv <- rep("", nrow(cnv))
+			for(i in 1:length(idx_genes)){
+				idx_cnv[idx_genes[[i]]] <- paste(idx_cnv[idx_genes[[i]]], names(idx_genes)[i], sep = ";")
+			}
+			idx_cnv <- gsub(";$", "", idx_cnv)
+			idx_cnv <- gsub("^;", "", idx_cnv)
+			idx_cnv <- factor(idx_cnv)
+			ha <- rowAnnotation(Gene = idx_cnv, annotation_legend_param=list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize, fontface = "italic")), show_annotation_name=FALSE)
+		}
+	}
 	
 	
 	row_chr <- gsub("(chr[^_]+)_.+", "\\1", rownames(cnv))
@@ -33,20 +47,37 @@ heatmap_CNV <- function(cnv, cnv_clustering, ref_cluster=NULL, file="heatmap_CNV
 	row_chr <- split(row_chr, row_chr)
 	ngenes_chr <- unlist(lapply(row_chr, length))
 	row_splits <- factor(rep(names(ngenes_chr), ngenes_chr), levels = unique(names(ngenes_chr)))
-	col_splits <- cnv_clustering$clusters
-	clust_color <- rep("black", length(levels(cnv_clustering$clusters)))
-	if(!is.null(ref_cluster)){
-		clust_color[levels(cnv_clustering$clusters)==ref_cluster] <- "red"
-	}
-	column_title_gp <- grid::gpar(col = clust_color)
+	col_splits <- cnv_clustering
+	clust_color <- rep("black", length(levels(cnv_clustering)))
 	
+	#ref_cluster <- cnv_clustering[names(cnv_clustering) == "reference"]
+	ref_cluster <- scMuffinList$CNV$full$ref_cluster
+	
+	if(length(ref_cluster)>0){
+		clust_color[levels(cnv_clustering)==ref_cluster] <- "red"
+	}
+	
+	column_title_gp <- grid::gpar(col = clust_color, fontsize = cluster_fontsize)
+	row_title_gp <- grid::gpar(fontsize = chrom_fontsize)
+	heatmap_legend_param <- list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize))
+
 	max_abs <- max(abs(cnv), na.rm = T)
 	
-	grDevices::jpeg(file, width=180, height=180, res=300, units="mm")
+	if(!is.null(file)){
+	  if(image_format == "jpeg"){
+	    jpeg(file, width=width, height=height, units=units, res=res)
+	  }
+	  if(image_format == "png"){
+	    png(file, width=width, height=height, units=units, res=res)
+	  }
+	}
 	
-	temp<- ComplexHeatmap::Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, name="cnv", ...)
+	temp<- ComplexHeatmap::Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, row_title_gp=row_title_gp, name="cnv", heatmap_legend_param=heatmap_legend_param, right_annotation = ha, ...)
 	draw(temp)
 	
-	dev.off()
+	if(!is.null(file)){
+	  dev.off()
+	}
+	
 	
 }

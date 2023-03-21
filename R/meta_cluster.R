@@ -1,6 +1,5 @@
 #' Analysis of the various partitions and definition of meta-clusters
 #' @param scMuffinList scMuffinList object with at least two partitions
-#' @param overlap_mat Overlap matrix as obtained form overlap_matrix() function
 #' @param n_step number used to divide hclust dendrogram height to obtain cut values to calculate silhouette
 #' @param max_clust maximum number of clusters
 #' @param do_plot whether to do the silohouette plot or not

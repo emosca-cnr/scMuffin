@@ -1,9 +1,9 @@
 #' Extract the top results of GSEA and ORA for each cluster
 #' @param scMuffinList scMuffinList object.
 #' @param partition_id one among the partitions.
-#' @param GSEA_selection_criterion selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.
+#' @param GSEA_selection_criterion selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table}} for possible values.
 #' @param GSEA_selection_threshold threshold for selection of tags from GSEA.
-#' @param ORA_selection_criterion selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table()}} for possible values.
+#' @param ORA_selection_criterion selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table}} for possible values.
 #' @param ORA_selection_threshold threshold for selection of tags from ORA.
 #' @param n_max_per_cluster maximum number of tags per cluster.
 #' @param only_pos_nes whether only positive nes should be considered in GSEA.
@@ -20,17 +20,23 @@ extract_cluster_enrichment_tags <- function(scMuffinList=NULL, partition_id=NULL
   
   ##GSEA results
   GSEA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "GSEA", quantity = GSEA_selection_criterion)
-  if(only_pos_nes){
-    GSEA_table_nes <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "GSEA", quantity = "nes")
-    GSEA_table[GSEA_table_nes < 0] <- 1 #fdr equal to 1
-  }
+  #if(only_pos_nes){
+  #  GSEA_table_nes <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "GSEA", quantity = "nes")
+  #  GSEA_table[GSEA_table_nes < 0] <- 1 #fdr equal to 1
+  #}
   
   #selection of per-cluster tags
   decreasing <- FALSE
   if(GSEA_selection_criterion == "nes"){
     decreasing <- TRUE
   }
-  gsea_tags <- apply(GSEA_table, 1, function(i_row) intersect(colnames(GSEA_table)[order(i_row, decreasing = decreasing)], colnames(GSEA_table)[i_row < GSEA_selection_threshold]))
+  
+  if(any(GSEA_selection_criterion %in% c("es", "nes"))){
+    gsea_tags <- apply(GSEA_table, 1, function(i_row) intersect(colnames(GSEA_table)[order(i_row, decreasing = decreasing)], colnames(GSEA_table)[i_row > GSEA_selection_threshold]))
+  }else{
+    gsea_tags <- apply(GSEA_table, 1, function(i_row) intersect(colnames(GSEA_table)[order(i_row, decreasing = decreasing)], colnames(GSEA_table)[i_row < GSEA_selection_threshold]))
+  }
+  
   gsea_tags <- lapply(gsea_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
   
   #selection

@@ -18,6 +18,7 @@ plot_umap(
   units = "mm",
   res = 300,
   image_format = "png",
+  text.size = 5,
   ...
 )
 }

@@ -17,6 +17,3 @@ A list of data.frames, one for each categorical value. See [ora()]
 \description{
 Calculate cluster enrichment in each of the categorical values of a feature, by means of hypergeometric test
 }
-\author{
-Ettore Mosca
-}

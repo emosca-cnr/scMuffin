@@ -14,8 +14,6 @@ meta_cluster(scMuffinList = NULL, n_step = 11, max_clust = 10, do_plot = FALSE)
 \item{max_clust}{maximum number of clusters}
 
 \item{do_plot}{whether to do the silohouette plot or not}
-
-\item{overlap_mat}{Overlap matrix as obtained form overlap_matrix() function}
 }
 \value{
 scMuffinList with:

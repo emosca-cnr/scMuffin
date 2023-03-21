@@ -1,6 +1,6 @@
 #' Create empirical null for gene set scoring
 #' @param genes_by_cells genes-by-cells matrix
-#' @param bins bins of genes, created by means of \code{\link{sc_data_bin()}}
+#' @param bins bins of genes, created by means of \code{\link{sc_data_bin}}
 #' @param gene_set a vector of genes
 #' @param k number of permutations
 #' @author Ettore Mosca

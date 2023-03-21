@@ -6,7 +6,7 @@
 #' @description Calculate cluster enrichment in each of the categorical values of a feature, by means of hypergeometric test
 #' @return A list of data.frames, one for each categorical value. See [ora()]
 #' @export
-#' @author Ettore Mosca
+#' @importFrom stats setNames
 
 cluster_hyper <- function(feature_values=NULL, cell_clusters=NULL){
   

@@ -39,10 +39,10 @@ inter_ds_cluster_sim <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_m
   }
   
 
-  scMuffinList_1 <- list(genes_by_cells=Matrix::as.matrix(gbc_1))
+  scMuffinList_1 <- create_scMuffinList(normalized=Matrix::as.matrix(gbc_1)) 
   scMuffinList_1 <- add_partitions(scMuffinList_1, clusters = clusters_1, partition_id = "cl")
   
-  scMuffinList_2 <- list(genes_by_cells=Matrix::as.matrix(gbc_2))
+  scMuffinList_2 <- create_scMuffinList(normalized=Matrix::as.matrix(gbc_2)) 
   scMuffinList_2 <- add_partitions(scMuffinList_2, clusters = clusters_2, partition_id = "cl")
   
   cl_names <- names(cluster_markers_1)
@@ -114,12 +114,12 @@ inter_ds_cluster_sim <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_m
   if(do_plot){
     
     if(is.null(pal)){
-      pal <- pals::brewer.puor(11)
+      pal <- pals::brewer.puor(11)[c(1, 6, 11)]
     }
     
     extremes <- boxplot.stats(as.numeric(clust_sim))$stats
     extremes <- max(abs(extremes))
-    col_fun <- circlize::colorRamp2(c(-extremes, 0, extremes), c(pal[1], pal[6], pal[11]))
+    col_fun <- circlize::colorRamp2(c(-extremes, 0, extremes), pal)
     
     jpeg(outfile, width = 200, height = 180, res=300, units="mm")
     hm <- Heatmap(clust_sim, cluster_rows = cluster_rows, cluster_columns = cluster_columns, col = col_fun, name = "Similarity", rect_gp = gpar(col = "white", lwd = 2), row_title = dataset_name_1, column_title = dataset_name_2)

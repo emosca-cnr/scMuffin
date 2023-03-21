@@ -19,7 +19,7 @@
 #' @description Generate a UMAP visualization
 #' @export
 #' 
-plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, image_format="png", ...){
+plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, image_format="png", text.size=5, ...){
 	
   image_format <- match.arg(image_format, c("png", "jpeg"))
   
@@ -55,7 +55,7 @@ plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feat
 		cluster_xy <- split(data_plot[, 1:2], data_plot[, 3])
 		cluster_xy <- do.call(rbind, lapply(cluster_xy, colMeans))
 		
-		plot(res + ggplot2::annotate(geom="text", x=cluster_xy[, 1], y=cluster_xy[, 2], label=labels, color=lab_color, size=lab_size))
+		plot(res + ggplot2::annotate(geom="text", x=cluster_xy[, 1], y=cluster_xy[, 2], label=labels, color=lab_color, size=lab_size, fontface = "bold") + theme(text = element_text(size = text.size), axis.text = element_text(size = text.size)))
 		
 	}else{
 		plot(res)
