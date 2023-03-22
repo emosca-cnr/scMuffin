@@ -1,6 +1,6 @@
 #' Prepare the gene set lists collected from various sources
 #' @description Prepare the gene set lists collected from various sources
-#' @param gs_sources character vector, possible values: "SIG_CM_cancer", "SIG_CM_normal", "SIG_CancerSEA", "SIG_PNDB" and "msigdb"
+#' @param gs_sources character vector, possible values: "CM_cancer", "CM_normal", "CancerSEA", "PNDB" and "msigdb"
 #' @param custom_gsls named list of gene sets
 #' @param CM_tissues character vector with strings to filter CellMArker db by tissue name
 #' @param PNDB_tissues character vector with strings to filter Panglao db by tissue name
@@ -12,10 +12,25 @@
 #' @return A lists of gene set lists
 #' @export
 
-prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, genes=NULL){
+prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, id_type=c("Symbol", "EntrezID"), genes=NULL){
 	
-	SIG_CM_normal <- SIG_CM_cancer <- SIG_CancerSEA <- SIG_PNDB <- NULL #to please the check
+	#SIG_CM_normal <- SIG_CM_cancer <- SIG_CancerSEA <- SIG_PNDB <- NULL #to please the check
+	gsls_EntrezID <- gsls_Symbol <- NULL #to please the check
 	gsls <- custom_gsls
+	
+	id_type <- match.arg(id_type, c("Symbol", "EntrezID"))
+	
+	if(id_type == "Symbol"){
+		
+		data("gsls_Symbol", envir=environment())
+		gsls_source <- gsls_Symbol
+			
+	}else{
+		
+		data("gsls_EntrezID", envir=environment())
+		gsls_source <- gsls_EntrezID
+
+	}
 	
 	if(!is.null(gs_sources)){
 		
@@ -34,32 +49,44 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
 		}
 		
 		if("SIG_CM_cancer" %in% gs_sources){
-			data("SIG_CM_cancer", envir=environment())
+			#data("SIG_CM_cancer", envir=environment())
 			temp <- list()
 			for(i in 1:length(CM_tissues)){
-				temp <- c(temp, (SIG_CM_cancer[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_cancer))]))
+				#temp <- c(temp, (SIG_CM_cancer[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_cancer))]))
+				temp <- c(temp, (gsls_source$CM_cancer[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_cancer))]))
 			}
-			gsls$SIG_CM_cancer <- temp
+			#gsls$SIG_CM_cancer <- temp
+			gsls$CM_cancer <- temp
 		}
+		
 		if("SIG_CM_normal" %in% gs_sources){
-			data("SIG_CM_normal", envir=environment())
+			#data("SIG_CM_normal", envir=environment())
 			temp <- list()
 			for(i in 1:length(CM_tissues)){
-				temp <- c(temp, (SIG_CM_normal[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_normal))]))
+				#temp <- c(temp, (SIG_CM_normal[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_normal))]))
+				temp <- c(temp, (gsls_source$CM_normal[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_normal))]))
 			}
-			gsls$SIG_CM_normal <- temp
+			#gsls$SIG_CM_normal <- temp
+			gsls$CM_normal <- temp
 		}
+		
 		if("SIG_CancerSEA" %in% gs_sources){
-			data("SIG_CancerSEA", envir=environment())
-			gsls$SIG_CancerSEA <- SIG_CancerSEA
+			#data("SIG_CancerSEA", envir=environment())
+			#gsls$SIG_CancerSEA <- SIG_CancerSEA
+			
+			gsls$CancerSEA <- gsls_source$CancerSEA
+			
 		}
+		
 		if("SIG_PNDB" %in% gs_sources){
-			data("SIG_PNDB", envir=environment())
+			#data("SIG_PNDB", envir=environment())
 			temp <- list()
 			for(i in 1:length(PNDB_tissues)){
-				temp <- c(temp, (SIG_PNDB[grepl(paste0("^", PNDB_tissues[i]), names(SIG_PNDB))]))
+				#temp <- c(temp, (SIG_PNDB[grepl(paste0("^", PNDB_tissues[i]), names(SIG_PNDB))]))
+				temp <- c(temp, (gsls_source$PNDB[grepl(paste0("^", PNDB_tissues[i]), names(gsls_source$PNDB))]))
 			}
-			gsls$SIG_PNDB <- temp
+			#gsls$SIG_PNDB <- temp
+			gsls$PNDB <- temp
 		}
 		
 		if("msigdb" %in% gs_sources & !is.null(msigdb_hs_cat_subcat)){

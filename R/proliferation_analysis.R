@@ -20,12 +20,13 @@
 
 proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 5, k=99, kmin=49, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){
 	
-	data("SIG_Tirosh", envir=environment())
+	data("gsls_EntrezID", envir=environment())
+	
 	score_type <- score_type[1]
 	
-	SIG_Tirosh <- lapply(SIG_Tirosh, function(x) lapply(x, function(y) unique(y[y %in% rownames(scMuffinList$normalized)])))
+	gsls_EntrezID$Tirosh <- lapply(gsls_EntrezID$Tirosh, function(x) lapply(x, function(y) unique(y[y %in% rownames(scMuffinList$normalized)])))
 	
-	scMuffinList <- calculate_gs_scores(scMuffinList, gs_list=SIG_Tirosh, mc.cores=mc.cores, nbins=nbins, nmark_min = nmark_min, ncells_min = ncells_min, k=k, kmin=kmin, score_type=score_type, null_model=null_model)
+	scMuffinList <- calculate_gs_scores(scMuffinList, gs_list=gsls_EntrezID$Tirosh, mc.cores=mc.cores, nbins=nbins, nmark_min = nmark_min, ncells_min = ncells_min, k=k, kmin=kmin, score_type=score_type, null_model=null_model)
 	
 	#ans <- tirosh$gss_by_cells
 	

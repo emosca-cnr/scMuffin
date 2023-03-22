@@ -11,6 +11,7 @@
 #'   \item{H, transcriptional entropy;}
 #'}
 #' @export
+#' @importFrom stats glm
 
 transcr_compl <- function(scMuffinList = NULL, min_counts = 5, min_cells=10, min_genes=500){
   

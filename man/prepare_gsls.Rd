@@ -12,11 +12,12 @@ prepare_gsls(
   msigdb_hs_cat_subcat = NULL,
   genes_min = 5,
   genes_max = 500,
+  id_type = c("Symbol", "EntrezID"),
   genes = NULL
 )
 }
 \arguments{
-\item{gs_sources}{character vector, possible values: "SIG_CM_cancer", "SIG_CM_normal", "SIG_CancerSEA", "SIG_PNDB" and "msigdb"}
+\item{gs_sources}{character vector, possible values: "CM_cancer", "CM_normal", "CancerSEA", "PNDB" and "msigdb"}
 
 \item{custom_gsls}{named list of gene sets}
 
