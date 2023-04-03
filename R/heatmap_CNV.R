@@ -10,7 +10,7 @@
 #' @import ComplexHeatmap grDevices grid
 #' @export
 
-heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, ...) {
+heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=10, ...) {
 	
 	#column_title_fontsize=8
 	
@@ -20,13 +20,15 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, file=NULL, width=180, h
 	
 	#same cell ordering
 	cnv <- cnv[, match(names(cnv_clustering), colnames(cnv))]
-
+	
 	### add requested genes
 	ha<-NULL
 	if(!is.null(genes)){
 		idx_genes <- setNames(vector("list", length(genes)), genes)
 		for(i in 1:length(genes)){
 			idx_genes[[i]] <- which(unlist(lapply(scMuffinList$CNV$full$regions2genes, function(x) any(x$symbol == genes[i]))))
+			idx_genes[[i]] <- median(which(unlist(lapply(scMuffinList$CNV$full$regions2genes, function(x) any(x$symbol == genes[i])))))
+			
 		}
 		idx_genes <- idx_genes[lengths(idx_genes)>0]
 		if(length(idx_genes)>0){
@@ -37,7 +39,13 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, file=NULL, width=180, h
 			idx_cnv <- gsub(";$", "", idx_cnv)
 			idx_cnv <- gsub("^;", "", idx_cnv)
 			idx_cnv <- factor(idx_cnv)
-			ha <- rowAnnotation(Gene = idx_cnv, annotation_legend_param=list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize, fontface = "italic")), show_annotation_name=FALSE)
+			
+			if(genes.labels){
+				ha <- rowAnnotation(link = anno_mark(at = which(idx_cnv != ""), labels = idx_cnv[idx_cnv != ""], labels_gp = gpar(fontsize = genes.labels.fontsize), padding = unit(1, "mm")))
+			}else{
+				#ha <- rowAnnotation(Gene = idx_cnv, annotation_legend_param=list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize, fontface = "italic")), show_annotation_name=FALSE)
+				ha <- rowAnnotation(Gene = ifelse(idx_cnv=="", 0, 1), col=list(Gene=setNames(c("white", "black"), c(0, 1))))
+			}
 		}
 	}
 	
@@ -60,23 +68,23 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, file=NULL, width=180, h
 	column_title_gp <- grid::gpar(col = clust_color, fontsize = cluster_fontsize)
 	row_title_gp <- grid::gpar(fontsize = chrom_fontsize)
 	heatmap_legend_param <- list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize))
-
+	
 	max_abs <- max(abs(cnv), na.rm = T)
 	
 	if(!is.null(file)){
-	  if(image_format == "jpeg"){
-	    jpeg(file, width=width, height=height, units=units, res=res)
-	  }
-	  if(image_format == "png"){
-	    png(file, width=width, height=height, units=units, res=res)
-	  }
+		if(image_format == "jpeg"){
+			jpeg(file, width=width, height=height, units=units, res=res)
+		}
+		if(image_format == "png"){
+			png(file, width=width, height=height, units=units, res=res)
+		}
 	}
 	
 	temp<- ComplexHeatmap::Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, row_title_gp=row_title_gp, name="cnv", heatmap_legend_param=heatmap_legend_param, right_annotation = ha, ...)
 	draw(temp)
 	
 	if(!is.null(file)){
-	  dev.off()
+		dev.off()
 	}
 	
 	

@@ -37,6 +37,11 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=2, nbi
     stop("scMuffinList does not contain genes_by_cells\n")
   }
   
+  idx_zero <- which(rowSums(scMuffinList$normalized)==0)
+  if(length(idx_zero)>0){
+    cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
+  }
+  
   if(!overwrite & length(scMuffinList$gene_set_scoring)>0){
     shared_columns <- intersect(colnames(scMuffinList$gene_set_scoring$summary), names(gs_list))
     if(length(shared_columns)>0){

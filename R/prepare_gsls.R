@@ -7,16 +7,21 @@
 #' @param msigdb_hs_cat_subcat data.frame with species, category and subcategory: e.g. "Homo sapiens", "NA", "CP:KEGG"
 #' @param genes_min minimum number of genes required in a gene set
 #' @param genes_max maximum number of genes required in a gene set
-#' @param genes optional character vectors with the universe of all the genes under analysis
+#' @param scMuffinList scMuffinList object
 #' @importFrom utils data
 #' @return A lists of gene set lists
 #' @export
 
-prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, id_type=c("Symbol", "EntrezID"), genes=NULL){
+prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, id_type=c("Symbol", "EntrezID"), scMuffinList=NULL){
 	
 	#SIG_CM_normal <- SIG_CM_cancer <- SIG_CancerSEA <- SIG_PNDB <- NULL #to please the check
 	gsls_EntrezID <- gsls_Symbol <- NULL #to please the check
 	gsls <- custom_gsls
+	
+	if(length(scMuffinList$normalized)==0){
+		stop("scMuffinList does not contain a normalized genes_by_cells expression matrix\n")
+	}
+	
 	
 	id_type <- match.arg(id_type, c("Symbol", "EntrezID"))
 	
@@ -103,9 +108,14 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
 	}
 	
 	### filter gsls
-	if(!is.null(genes)){
-		gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
+	genes <- rownames(scMuffinList$normalized)
+	idx_zero <- which(rowSums(scMuffinList$normalized)==0)
+	if(length(idx_zero)>0){
+		cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
 	}
+	genes <- genes[-idx_zero]
+	gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
+	
 	for(i in 1:length(gsls)){
 		gs_length <- unlist(lapply(gsls[[i]], length))
 		gsls[[i]] <- gsls[[i]][gs_length >= genes_min & gs_length <= genes_max]
