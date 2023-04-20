@@ -18,15 +18,18 @@
 #' }
 #' @export
 
-proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 5, k=99, kmin=49, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE){
-	
-	data("gsls_EntrezID", envir=environment())
+proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 5, k=99, kmin=49, score_type=c("relative", "mean"), null_model=TRUE, mean_scale=TRUE, gsl=NULL){
 	
 	score_type <- score_type[1]
 	
-	gsls_EntrezID$Tirosh <- lapply(gsls_EntrezID$Tirosh, function(x) lapply(x, function(y) unique(y[y %in% rownames(scMuffinList$normalized)])))
+	if(is.null(gsl)){
+		stop("Please provede a gene set list.")
+	}
 	
-	scMuffinList <- calculate_gs_scores(scMuffinList, gs_list=gsls_EntrezID$Tirosh, mc.cores=mc.cores, nbins=nbins, nmark_min = nmark_min, ncells_min = ncells_min, k=k, kmin=kmin, score_type=score_type, null_model=null_model)
+	gsl <- lapply(gsl, function(x) lapply(x, function(y) unique(y[y %in% rownames(scMuffinList$normalized)])))
+	print(lengths(gsl))
+	
+	scMuffinList <- calculate_gs_scores(scMuffinList, gs_list=gsl, mc.cores=mc.cores, nbins=nbins, nmark_min = nmark_min, ncells_min = ncells_min, k=k, kmin=kmin, score_type=score_type, null_model=null_model)
 	
 	#ans <- tirosh$gss_by_cells
 	

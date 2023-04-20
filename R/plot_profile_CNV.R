@@ -31,7 +31,8 @@ plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=
     avg_cl_cnv <- t(apply(cnv, 1, function(i_row) tapply(i_row, cnv_clustering, median)))
     avg_cnv <- apply(cnv, 1, median)
   }
-  sd_cl <- apply(avg_cl_cnv, 2, sd)
+  #sd_cl <- apply(avg_cl_cnv, 2, sd)
+  sd_all <- sd(as.numeric(avg_cl_cnv))
   
   cl_lev <- levels(cnv_clustering)
   
@@ -79,7 +80,8 @@ plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=
       #lines(chr_start[k]:chr_end[k], avg_cl_cnv[chr_start[k]:chr_end[k], j], col=col[(k %% 2) + 1])
       points(chr_start[k]:chr_end[k], avg_cl_cnv[chr_start[k]:chr_end[k], j], col=col[chr_start[k]:chr_end[k]], pch=16, cex=cex.points)
     }
-    abline(h=c(-sd_cl[j], sd_cl[j]), lty=2)
+    #abline(h=c(-sd_cl[j], sd_cl[j]), lty=2)
+    abline(h=c(-sd_all, sd_all), lty=2)
     #lines(avg_cl_cnv[, j], col="red")
     #if(!z.score){
     #  lines(avg_cnv)

@@ -11,6 +11,9 @@
 
 extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, type=NULL, quantity=NULL, feature_id=NULL){
   
+  if(is.null(quantity)){
+    stop("quantity can not be null.\n")
+  }
   if(type == "GSEA" & !is.null(scMuffinList$cluster_data[[partition_id]]$GSEA)){
     
     ans <- scMuffinList$cluster_data[[partition_id]]$GSEA$gs_table

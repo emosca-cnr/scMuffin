@@ -1,7 +1,7 @@
 #' Plot an heatmap of feature values in cell clusters
 #' @param scMuffinList scMuffinList object
 #' @param significance_matrix optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source
-#' @param feature_source It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
+#' @param feature_source It can be a "mean", "gss" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
 #' @param sig_threshold significance threshold
 #' @param file output file
 #' @param remove_null_features whether to remove null features
@@ -20,7 +20,7 @@
 #' @importFrom pals brewer.rdylbu brewer.ylorrd
 #' @importFrom circlize colorRamp2
 
-plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file="heatmap_features_by_clusters.jpg", remove_null_features=FALSE, width=180, height=180, units="mm", res=300, image_format="png", scale=TRUE, pal=NULL, ...){
+plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, remove_null_features=FALSE, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, ...){
   
   
   if(!is.null(significance_matrix)){
@@ -51,7 +51,7 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
         X <-  t(scMuffinList$cluster_data[[partition_id]]$mean)
       }
       if(feature_source == "gss"){
-        X <-  t(scMuffinList$cluster_data[[partition_id]]$gene_set_scoring$summary)
+        X <-  t(as.matrix(scMuffinList$cluster_data[[partition_id]]$gene_set_scoring$summary))
       }
     }
   }
@@ -83,11 +83,8 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
       # }
     }
     
-    if(image_format == "jpeg"){
-      jpeg(file, width=width, height=height, units=units, res=res)
-    }
-    if(image_format == "png"){
-      png(file, width=width, height=height, units=units, res=res)
+    if(!is.null(file)){
+        png(file, width=width, height=height, units=units, res=res)
     }
     
     if(scale){
@@ -97,7 +94,9 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
     h_tot_go <- ComplexHeatmap::Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, ...)
     draw(h_tot_go, heatmap_legend_side = "left")
     
-    dev.off()
+    if(!is.null(file)){
+      dev.off()
+    }
     
 
   }else{

@@ -39,7 +39,7 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
       
       feature_data_i <- feature_data[, i]
       
-      if(sum(!is.na(feature_data_i))>min_cells){
+      if(sum(!is.na(feature_data_i)) >= min_cells){
         
         if(is.numeric(feature_data_i)){
           
@@ -53,29 +53,33 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
           
           feature_data_i[is.na(feature_data_i)] <- 0
           
-          if(any(feature_data_i < 0)){
+          if(sum(abs(feature_data_i) > 0) >= min_cells){
             
-            #cut the feature id separately for <=0 and >0 in a total of 10 intervals
-            #reorder cells according to feature data
-            idx_neg <- feature_data_i <= 0
-            idx_pos <- feature_data_i > 0
-            md <- c(setNames(ggplot2::cut_interval(feature_data_i[idx_neg], 5, dig.lab = 2), rownames(feature_data)[idx_neg]), setNames(ggplot2::cut_interval(feature_data_i[feature_data_i>0], 5, dig.lab = 2), rownames(feature_data)[idx_pos]))
-            md <- md[match(rownames(feature_data), names(md))]
-            md <- factor(md, levels=rev(levels(md)))
-            
-            #add the metadata
-            Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-            plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(pals::brewer.rdylbu(10)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
-            
-          }else{
-            
-            #if only positive values
-            md <- ggplot2::cut_interval(feature_data_i, 5, dig.lab = 2)
-            md <- factor(md, levels=rev(levels(md)))
-            Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-            plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(pals::brewer.ylorrd(5)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
-            
+            if(any(feature_data_i < 0)){
+              
+              #cut the feature id separately for <=0 and >0 in a total of 10 intervals
+              #reorder cells according to feature data
+              idx_neg <- feature_data_i <= 0
+              idx_pos <- feature_data_i > 0
+              md <- c(setNames(ggplot2::cut_interval(feature_data_i[idx_neg], 5, dig.lab = 2), rownames(feature_data)[idx_neg]), setNames(ggplot2::cut_interval(feature_data_i[feature_data_i>0], 5, dig.lab = 2), rownames(feature_data)[idx_pos]))
+              md <- md[match(rownames(feature_data), names(md))]
+              md <- factor(md, levels=rev(levels(md)))
+              
+              #add the metadata
+              Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(pals::brewer.rdylbu(10)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
+              
+            }else{
+              
+              #if only positive values
+              md <- ggplot2::cut_interval(feature_data_i, 5, dig.lab = 2)
+              md <- factor(md, levels=rev(levels(md)))
+              Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(pals::brewer.ylorrd(5)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
+              
+            }
           }
+          
           
         }else{
           

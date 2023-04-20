@@ -9,7 +9,7 @@ assess_cluster_enrichment(
   feature_name = NULL,
   partition_id = NULL,
   min.cells.feature = 100,
-  min.cells.cluster = 5,
+  min.cells.cluster = 10,
   mc.cores = 1,
   gsea.k = 99
 )

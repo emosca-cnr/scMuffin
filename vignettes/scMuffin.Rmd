@@ -1,55 +1,20 @@
 ---
-title: "scMuffin"
-author:
-- name: Valentina Nale*
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Noemi Di Nanni*
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Alice Chiodi
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Ingrid Cifola
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Marco Moscatelli
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Cinzia Cocola
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Matteo Gnocchi
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Eleonora Piscitelli
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Rolland Reinbold
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Ileana Zucchi
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Luciano Milanesi
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Alessandra Mezzelani
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Paride Pelucchi*
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-- name: Ettore Mosca*
-  affiliation: National Research Council, Institute of Biomedical Technologies, Italy
-  email: ettore.mosca@itb.cnr.it
+title: "scMuffin package vignettes"
 package: scMuffin
 bibliography: references.bib
 output:
-  BiocStyle::html_document:
+  rmarkdown::html_vignette:
     toc: true
-abstract: >
-  Single-cell (SC) gene expression analysis is crucial to dissect the complex cellular heterogeneity of solid tumors, which is one of the main obstacles for the development of effective cancer treatments. Such tumors typically contain a mixture of cells with aberrant genomic and transcriptomic profiles affecting specific sub-populations that might have a pivotal role in cancer progression, whose identification eludes bulk RNA-sequencing approaches. We present scMuffin, an R package that enables the characterization of cell identity in solid tumors on the basis of multiple and complementary criteria applied on SC gene expression data. scMuffin provides a series of functions to calculate several different qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNVs, chromatin state and proliferation state. Thus, scMuffin facilitates the combination of various evidences that can be used to distinguish normal and tumoral cells, define cell identities, cluster cells in different ways, link genomic aberrations to phenotypes and identify subtle differences between cell subtypes or cell states.
-
+    number_sections: true
 vignette: >
-  %\VignetteIndexEntry{scMuffin}
+  %\VignetteIndexEntry{scMuffin package vignettes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
 
 
 # Getting started
-
-```{r, include=TRUE, echo=FALSE, out.width="60%", fig.align = "center", fig.cap="scMuffing logo"}
-knitr::include_graphics("images/logo.jpg")
-```
+![](images/logo.jpg){width=300px}
 
 ## Installation
 
@@ -81,12 +46,21 @@ To load the package:
 library(scMuffin)
 ```
 
-<!--```{r, include=F, message=FALSE, warning=FALSE, eval=F}
-devtools::load_all()
+```{r, include=F, message=FALSE, warning=FALSE, eval=T}
+devtools::load_all("~/source/general/single_cell/scMuffin")
 ```
--->
 
-# Obtaining the data used in this vignette
+## Input
+
+scMuffin is intended to be used downstream general purpose tasks like quality control, normalization, cell clustering and dataset integration, for which there are dedicated tools, such as Seurat [@Hao2021]. scMuffin requires three inputs:
+
+* genes-by-cells raw counts matrix;
+* genes-by-cells normalized expression matrix;
+* a partition of cells (cell clusters).
+
+Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design one may want to apply strong or mild filters before using scMuffin.
+
+## Obtaining the data used in this vignette
 To run the examples included in this vignette you need the following data:
 
 * two single cell datasets with counts as well as normalized expression values;
@@ -104,6 +78,9 @@ Here's an example of how these data can be obtained from a publicly available st
 2. read the text files into R and use the Seurat package [@Hao2021] to perform a series of typical tasks (e.g. normalization, clustering); here's a concise example using sample PJ016:
 ```{r, include=TRUE, eval=FALSE}
 gbc_counts <- read.table("GSM2758471_PJ016.filtered.matrix.txt")
+sym <- gbc_counts[, "V2"]
+gbc_counts[, "V2"] <- NULL
+gbc_counts <- keep_strongest_representative(gbc_counts, sym)
 seu_obj_1 <- CreateSeuratObject(count=gbc_counts, project="PJ016")
 seu_obj_1 <- NormalizeData(seu_obj_1)
 seu_obj_1 <- FindVariableFeatures(seu_obj_1)
@@ -113,18 +90,32 @@ seu_obj_1 <- FindNeighbors(seu_obj_1)
 seu_obj_1 <- FindClusters(seu_obj_1)
 seu_obj_1 <- RunUMAP(seu_obj_1)
 ```
-In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis that one wants to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
+The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we take advantage of the function `keep_strongest_representative`, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis that one wants to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
 
-#  Cell-level quantities 
-
-## Gene set scoring
-
-scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression. The function prepare_gsls retrieves gene sets from CellMarker [Zhang2019], PanglaoDB [@Franzen2019], CancerSEA [@Yuan2019] and MSigDB [@Subramanian2005], and accepts custom gene set as well. The full list of gene sets available whitin CellMarker, PanglaoDB and CancerSEA collections can be listed using:
+# The scMuffinList data structure
+All data and results of scMuffin are stored in the scMuffinList, so that every function takes in input such structure and returns a modified version of it. The scMuffinList can be created as follows:
 ```{r, include=TRUE, eval=FALSE}
-names(SIG_PNDB)
-names(SIG_CM_cancer)
-names(SIG_CM_normal)
-names(SIG_CancerSEA)
+scMuffinList_demo <- create_scMuffinList(counts=GetAssayData(seu_obj_1, assay="RNA", slot="counts"), normalized=GetAssayData(seu_obj_1, assay="RNA", slot="data"))
+```
+Many analyses require cell clusters. Any partition can be added as follows:
+```{r, include=TRUE, eval=FALSE}
+scMuffinList_demo <- add_partitions(scMuffinList_demo, clusters = seu_obj_1$seurat_clusters, partition_id = "global_expr")
+```
+where seu_obj_1$seurat_clusters is a named vector that contains cells clusters and whose names are cell labels. 
+```{r, include=T, eval=T, echo=T}
+head(scMuffinList_demo$partitions[, 2, drop=F])
+```
+
+# Gene set scoring
+
+scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression.
+
+## Assembling input gene sets
+
+The function `prepare_gsls` retrieves gene sets from CellMarker [Zhang2019], PanglaoDB [@Franzen2019], CancerSEA [@Yuan2019] and MSigDB [@Subramanian2005], and accepts custom gene set as well. The full list of gene sets available whitin CellMarker, PanglaoDB and CancerSEA collections can be listed using:
+```{r, include=TRUE, eval=FALSE}
+data("gsls_EntrezID")
+data("gsls_Symbol")
 ```
 
 while in the case of MSigDB we can use its dedicated functions:
@@ -141,194 +132,202 @@ head(show_tissues())
 
 Here is an example:
 ```{r, include=TRUE, eval=FALSE}
-msig_df <- data.frame(c("Homo sapiens"), c("C2"), c("CP:BIOCARTA", "CP:REACTOME"))
-gsc <- prepare_gsls(gs_sources = c("SIG_CancerSEA", "SIG_PNDB", "SIG_CM_normal", "msigdb"), CM_tissues = c("Brain"), PNDB_tissues = c("Brain"), msigdb_hs_cat_subcat = msig_df, genes = rownames(seu_obj_1), genes_min = 3)
+gsc <- prepare_gsls(gs_sources = c("CancerSEA", "PNDB"), PNDB_tissues = c("Brain"), scMuffinList = scMuffinList_demo, genes_min = 3)
 ```
 
-Note that in the case of MSigDB we have to set up a data.frame to specify species, category and sub_category of the gene set collections.
+Note that in the case of MSigDB we have to set up a `data.frame` to specify species, category and sub_category of the gene set collections.
 
-The calculation of gene set scores requires in input a normalized genes-by-cells expression matrix. In the following example, we estimate gene sets scores for the CancerSEA gene sets using the Seurat object `seu_obj_1`:
+## Calculate Gene set scores at cell and cluster level
+
+In the following example, we estimate the scores for CancerSEA gene sets:
 
 ```{r, include=TRUE, eval=FALSE}
-res_gss <- calculate_gs_scores(genes_by_cells = GetAssayData(seu_obj_1), gs_list = gsc$SIG_CancerSEA)
+scMuffinList_demo <- calculate_gs_scores(scMuffinList = scMuffinList_demo, gs_list = gsc$CancerSEA)
+```
+The results of any analysis are stored as elements of the `scMuffinList`. The gene set scoring engine stores its results in `scMuffinList$gene_set_scoring`, where `summary` is a cells-by-features data.frame with cell scores, and `full` contains a series of additional details for every gene set:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$gene_set_scoring$summary)
+head(scMuffinList_demo$gene_set_scoring$full$CSEA_Angiogenesis)
 ```
 
-## Chromatin state, proliferation rate and cell state trajectories
+The function `calculate_gs_scores_in_clusters` defines the median values of gene set scores in every cluster of a given partition id:
+```{r, include=TRUE, eval=FALSE}
+scMuffinList <- calculate_gs_scores_in_clusters(scMuffinList, partition_id = "global_expr")
+```
+```{r, include=TRUE, eval=TRUE}
+scMuffinList_demo$cluster_data$global_expr$gene_set_scoring$summary
+```
 
-The chromatin state can be calculated using genes-by-cells count matrix, as follows:
+These mean values are useful to obtain a concise visualization of gene set expression throughout the dataset, using the function `plot_heatmap_features_by_clusters`:
+```{r, include=TRUE, eval=FALSE}
+plot_heatmap_features_by_clusters(scMuffinList, feature_source = "gss")
+```
+![caption](images/gene_set_scores_clusters.png){width=600px} 
+
+# CNV inference
+
+## CNV calculation
+CNV inference is performed by the function `CNV_analysis`.
 
 ```{r, include=TRUE, eval=FALSE}
-res_chrom_state <- exp_rate(GetAssayData(seu_obj_1, slot = "count"), min_counts = 5)
+scMuffinList_demo <- CNV_analysis(scMuffinList_demo)
+```
+The results are stored in `scMuffinList_demo$CNV`, where summary contains the "CNV_signal" and `scMuffinList_demo$CNV$full$CNV` the regions-by-cells CNV matrix; the element `scMuffinList_demo$CNV$full$regions2genes` is important to map the original data into the CNV regions; lastly, the `scMuffinList_demo$CNV$full$detected_cnv_regions` is a data.frame that list the CNV regions detected in each chromosome and cell cluster:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$CNV$summary)
+head(scMuffinList_demo$CNV$full$CNV)
+head(scMuffinList_demo$CNV$full$regions2genes)
+head(scMuffinList_demo$CNV$full$detected_cnv_regions$chr1)
+```
+Importantly, CNV inference adds the "CNV" partition:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$partitions)
 ```
 
-where 5 is the required threshold above which a gene is considered expressed.
+The calculation can be demanding. For example, it requires approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R), 2.60GHz). 
+
+## CNV visualization
+
+scMuffin provides two visualizations for CNVs: an heatmap and the cluster average profile plot. The heatmap is based on ComnplexHeatmap package and beside it, it is possible to visualize the genomic location of a series of given genes (specified in the argument `genes`), or, alternatively, the location of detected CNVs (argument `mark.detected.cnv = T`)
+
+
+```{r, include=TRUE, eval=FALSE}
+col_fun <- circlize::colorRamp2(seq(-0.2, 0.2, length.out = 11), rev(pals::brewer.rdylbu(11)))
+heatmap_CNV(scMuffinList = scMuffinList_demo, genes = c("YBX1", "HNRNPM"), genes.labels = T, col=col_fun)
+
+heatmap_CNV(scMuffinList = scMuffinList_demo, mark.detected.cnv = T, col=col_fun)
+
+plot_profile_CNV(scMuffinList = scMuffinList_demo, cluster = 0, cex.points = 0.5) 
+```
+
+![caption](images/heatmap_CNV_PJ016_vignette_genes.jpg){width=600px}
+![](images/heatmap_CNV_PJ016_vignette_cnv.jpg){width=600px}
+
+To function `plot_profile_CNV` plots the median CNV profile of a cluster:
+
+```{r, include=TRUE, eval=FALSE}
+plot_profile_CNV(scMuffinList = scMuffinList_demo, cluster = 0, cex.points = 0.5) 
+```
+![](images/CNV_profile_ref_0.png_0.png){width=600px}
+
+# Transcriptional complexity
+
+The transcriptional complexity can be quantified by means of the function `transcr_compl`. The corresponding summary element contains a `data.frame` with the number of cell transcripts, the number of genes detected in every cell, the TC-ratio (C), the TC-LMR (linear model residual) and the TC-H (entropy):
+
+```{r, include=TRUE, eval=FALSE}
+scMuffinList_demo <- transcr_compl(scMuffinList_demo)
+```
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$transcr_compl$summary)
+```
+
+# Cell proliferation rate
 
 Cell proliferation is quantified considering the maximum between the two scores of G1/S and G2/M gene sets:
 ```{r, include=TRUE, eval=FALSE}
-res_prol <- proliferation_analysis(GetAssayData(seu_obj_1))
+scMuffinList_demo <- proliferation_analysis(scMuffinList_demo)
+```
+The proliferation score is stored in the `summary` element of `scMuffinList_demo$proliferation`:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$proliferation$summary)
 ```
 
+# Cell state trajectories
 Diffusion maps identify differentiation trajectories. scMuffin relies on the diffusion pseudo time calculation available in the R package "destiny" [@Angerer2016]. Here we calculate the diffusion map over the first 50 PC (to speed up computation), using a random cell to obtain diffusion pseudotimes:
 
 ```{r, include=TRUE, eval=FALSE}
-res_dm <- diff_map(GetAssayData(seu_obj_1), root_cell = "random", n_pcs=50)
+scMuffinList_demo <- diff_map(scMuffinList_demo, root_cell = "random", n_pcs=50)
+```
+A data.frame with the most important features of the analysis (the first two eigenvectors, pseudotime, branch information and whether a cell is a tip of the branch or not) are stored `scMuffinList_demo$diffusion_map_pseudo_t$summary`:
+```{r, include=TRUE, eval=TRUE}
+scMuffinList_demo$diffusion_map_pseudo_t$summary
 ```
 
-## CNV inference
+# Cluster enrichment assessment
 
-The function calculate_CNV basically retrieves the genomic locations and performs the CNV estimation; `cluster_by_features` (see below) calculates the clustering; `apply_CNV_reference` redefines the CNV levels on the basis of (optional) reference cells; the dedicated plotting function `heatmap_CNV` handles the visualization (based on the R package ComplexHeatmap [@Gu2016]), where the cluster of cells that contains the reference is marked. Here’s an example that illustrates CNV inference using a 100 genes window size and a reference profile from the The Genotype-Tissue Expression project (GTEx) portal (13): 
+Cell clusters can be assessed for enrichment in quantitative and categorical values. The appropriate statistical test is automatically chosen according to feature type. In this example, we assess cluster enrichment for the feature `gene_set_scoring` (quantitative one) for the cluster defined by the partition `global_expr`:
+```{r, include=TRUE, eval=FALSE}
+scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
+```
+In case of quantitative features the result is a list named GSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `CSEA_Angiogenesis`:
+```{r, include=TRUE, eval=TRUE}
+scMuffinList_demo$cluster_data$global_expr$GSEA$gs_table$CSEA_Angiogenesis
+```
+In this this example we assess cluster enrichment in relation to categorical feature, namely cell cycle phase:
+```{r, include=TRUE, eval=FALSE}
+scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "CC_Phase", partition_id = "global_expr")
+```
+As for categorical features the result is a list named ORA, placed under the elements `cluster_data$global_expr` (partition id). The list contains ORA results for every categorical value. Here's the enrichment of clusters in terms of cells with value "G1":
+```{r, include=TRUE, eval=TRUE}
+scMuffinList_demo$cluster_data$global_expr$ORA$CC_Phase$G1
+```
+
+The enrichment analysis results appearing in these tables can be easily extracted and organized in a clusters-by-values table by means of `extract_cluster_enrichment_table`. For instance, here we extract GSEA NES and FDRq values, and ORA er (enrichment ratio) values:
+
+```{r, include=TRUE, eval=TRUE}
+gsea_fdr_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "GSEA", quantity = "FDRq")
+gsea_nes_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "GSEA", quantity = "nes")
+ora_p_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "ORA", quantity = "p")
+gsea_fdr_table
+```
+These tables can be plotted with the function `plot_heatmap_features_by_clusters`. In the following example we plot NES values with a asterisks according to their significance:
 
 ```{r, include=TRUE, eval=FALSE}
-GTEx_mean <- process_GTEx_gene_reads(geneReads="~/db/GTEx/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct", GTEx_annot="~/db/GTEx/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt", tissue="Brain")
-cnv_res <- calculate_CNV(genes_by_cells = as.matrix(GetAssayData(seu_obj_1)), wnd_size = 100, reference = GTEx_mean, mc.cores = 2)
-cnv_clustering <- cluster_by_features(cnv_res, cnv=TRUE)
-cnv_res_ref <- apply_CNV_reference(cnv = cnv_res, cnv_clustering = cnv_clustering, reference="reference")
-cnv_res_ref <- heatmap_CNV(cnv = cnv_res, cnv_clustering = cnv_clustering, ref_cluster = "reference")
+plot_heatmap_features_by_clusters(feature_source = gsea_nes_table, significance_matrix = gsea_fdr_table, sig_threshold = 0.05)
 ```
-The calculation required approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R), 2.60GHz).
+![](images/nes_fdr.png){width=300px}
 
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="CNV pattern of sample PJ016 from GSE103224"}
-knitr::include_graphics("images/heatmap_CNV.jpg")
-```
-
-## Assembling features
-
-To handle various types of features scMuffin requires the creation of a specific object:
+Similarly, it's possible to extract the most significant "tags" of any clusters; for example, here we extract the top 3 tags by FDRq (GSEA) and p_adj (ORA):
 ```{r, include=TRUE, eval=FALSE}
-feat_obj <- create_features_obj(as.data.frame(t(res_gss$gss_by_cells)))
+scMuffinList_demo <- extract_cluster_enrichment_tags(scMuffinList_demo, partition_id = "global_expr", n_max_per_cluster = 3, GSEA_selection_criterion="FDRq", only_pos_nes = TRUE, GSEA_selection_threshold = 0.05, ORA_selection_criterion = "p_adj", ORA_selection_threshold = 0.25)
+```
+The results are placed under the `cluster_tags` element:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$cluster_data$global_expr$cluster_tags$GSEA)
 ```
 
-Any feature can be added to such object:
+The results of cluster enrichment can be visualized by barplots and boxplots for, respectively, categorical values and quantitative values.
 ```{r, include=TRUE, eval=FALSE}
-feat_obj <- add_features(feat_obj, as.data.frame(res_chrom_state))
+barplot_cluster(scMuffinList_demo, partition_id = "global_expr", feature_name = "CC_Phase", feature_id = "CC_Phase")
+boxplot_cluster(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
+![caption](images/cluster_2_barplot.jpg){width=600px}
+ ![caption](images/cluster_2_boxplot.jpg){width=600px}
+ 
+# Comparison between clusters
 
-A useful combination of feartures is the joint analysis of cell state trajectories in relation to proliferation and chromatin state. Here's an example on how to perform such analysis and visualize the results:
+## Intra-dataset
 
-```{r, include=TRUE, eval=FALSE}
-library(viridis) #palette
-
-#create the features object and add the features of interest
-feat_obj <- create_features_obj(res_dm)
-feat_obj <- add_features(feat_obj, data.frame(chrom_state=res_chrom_state))
-feat_obj <- add_features(feat_obj, data.frame(prol_state=res_prol))
-
-png("cell_traj_cs_pr.png", width = 180, height = 90, units="mm", res=300)
-par(mfrow=c(1, 2))
-#color intervals and palette for chrom_state
-col_val <- cut(adj_outliers_col(feat_obj$df$chrom_state), breaks = 7, dig.lab = 1)
-col_pal <- viridis::viridis(length(levels(as.factor(col_val))))
-plot(feat_obj$df$DC1, feat_obj$df$DC2, col=col_pal[as.numeric(col_val)], pch=16, cex=0.6, xlab="DC1", ylab="DC2")
-
-#color intervals and palette for prol_state
-col_val <- cut(adj_outliers_col(feat_obj$df$prol_state), breaks = 7, dig.lab = 1)
-col_pal <- viridis::viridis(length(levels(as.factor(col_val))))
-plot(feat_obj$df$DC1, feat_obj$df$DC2, col=col_pal[as.numeric(col_val)], pch=16, cex=0.6, xlab="DC1", ylab="DC2")
-dev.off()
-```
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="Cell state trajectories of PJ016 sample from [@Yuan2018] (GSE103224), colored by chromatin state (left) or proliferation rate (right)."}
-knitr::include_graphics("images/cell_traj_cs_pr.png")
-```
-
-
-## UMAP colored by cell-level quantities
-
-Cell-level values can be plotted over an existing UMAP by means of the function `plot_umap_colored_features`, which automatically produces a plot for every feature defined in the feature object.
+The function `overlap_matrix` calculates the overlap coefficient between all-pairs of clusters of two or more partitions of the same cells (same dataset):
 
 ```{r, include=TRUE, eval=FALSE}
-plot_umap_colored_features(Seu_obj = seu_obj_1, features = feat_obj)
+scMuffinList_demo <- overlap_matrix(scMuffinList_demo)
+```
+The results are stored under the element `cluster_comparison```:
+```{r, include=TRUE, eval=TRUE}
+head(scMuffinList_demo$cluster_comparison$overlap_matrix)
 ```
 
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="UMAP of PJ016 sample from [@Yuan2018] (GSE103224), colored by CancerSEA Hypoxia"}
-knitr::include_graphics("images/umap_by_genes_col_feature_CSEA_Hypoxia.jpg")
-```
+## Inter-dataset
 
-# Clustering and annotation
-
-## Clustering
-
-scMuffin provides 2 function to perform cell clustering by a set of features or a set of genes.
-```{r, include=TRUE, eval=FALSE}
-feat_clust <- cluster_by_features(feat_obj)
-seu_obj_1 <- cluster_by_gs(seu_obj_1, gs = SIG_CancerSEA$CSEA_Apoptosis)
-```
-In both cases the clustering procedure is based on the Seurat clustering pipeline.
-
-## Cluster-level quantities
-
-Cluster-level gene set scores can be quantified using `calculate_gs_scores_in_clusters`:
-```{r, include=TRUE, eval=FALSE}
-res_gss_cls <- calculate_gs_scores_in_clusters(gs_scores_obj = res_gss, cell_clusters = seu_obj_1$seurat_clusters)
-```
-
-Cluster-level average and variabilty of any feature can be quantified by means of:
-```{r, include=TRUE, eval=FALSE}
-cl_res <- cluster_stats(feat_obj = feat_obj, partitions = clust_obj, avg = mean, var=sd)
-```
-
-Cluster-level values can be plotted as heatmap:
-```{r, include=TRUE, eval=FALSE}
-plot_heatmap_features_by_clusters(features_by_clusters = res_gss_cls$gss_by_clusters)
-```
-
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="Heatmap of CancerSEA values in cell clusters of PJ016 sample from [@Yuan2018] (GSE103224)."}
-knitr::include_graphics("images/heatmap_features_by_clusters.png")
-```
-
-
-## Assembling partitions
-
-Besides handling  various features, scMuffin handles various partitions:
-```{r, include=TRUE, eval=FALSE}
-clust_obj <- create_partitions_obj(data.frame(global=seu_obj_1@meta.data$seurat_clusters, row.names = rownames(seu_obj_1@meta.data)))
-clust_obj <- add_partitions(clust_obj, data.frame(CancerSEAcs=feat_clust$sobj@meta.data$seurat_clusters, row.names = rownames(feat_clust$sobj@meta.data)))
-```
-
-## Cluster enrichment assessment
-scMuffin provides function to assess the statistical significance of cluster enrichment in terms of both quantitative and categorical features, using CSEA or ORA, respectively. Clusters-by-features or clusters-by-values enrichment tables that contain the desidered quantities can be assembled by means of  extract_cluster_enrichment_table. 
+Inter-dataset comparison is performed through the function `inter_dataset_comparison`, which require a list of Seurat objects and a gene set list. The activity of this gene set list will be assessed over the clusters of all datasets. In needed, the function `prepare_cluster_markers_list` provides the possibility to prepare a gene set list of cluster markers, starting 
 
 ```{r, include=TRUE, eval=FALSE}
-cl_enrich <- assess_cluster_enrichment(features = feat_obj, partitions = clust_obj)
-cl_enrich_table <- extract_cluster_enrichment_table(cl_enrich, q_type = "nes", c_type = "er")
+dataset_cmp_res <- inter_dataset_comparison(seu_obj_list = seu_obj_list, gsl = cluster_markers_list, genes_max = 500, genes_min = 5)
+plot_heatmap_dataset_comparison(dataset_cmp_res, outfile = "vignette/heatmap_ds_cmp.png")
+plot_heatmap_dataset_comparison(dataset_cmp_res, outfile = "vignette/heatmap_ds_cmp_p.png", type = "significance")
 ```
+![caption](images/heatmap_ds_cmp.png){width=600px}
+![caption](images/heatmap_ds_cmp_p.png){width=600px}
 
-The results of CSEA for each cluster can be visualized with a boxplot that shows cell-values of the consdidered features in the every cluster:
+The function can be used to analyze any gene set. In the following example we assess the expression of CancerSEA gene sets across datasets:
+
 ```{r, include=TRUE, eval=FALSE}
-top_feat_lab <- boxplot_cluster(features = feat_obj, partitions = clust_obj, clustering_name = "global", clust_enrich_res = cl_enrich, criterion = "fdr")
+gsl <- prepare_gsls(gs_sources = "CancerSEA", genes=unlist(lapply(seu_obj_list, rownames)))
+dataset_cmp_res_cancersea <- inter_dataset_comparison(seu_obj_list = seu_obj_list, gsl = gsl$CancerSEA, genes_max = 500, genes_min = 5)
+plot_heatmap_dataset_comparison(dataset_cmp_res_cancersea, outfile = "vignette/heatmap_ds_cmp_cancer.png")
 ```
-
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="CSEA reusult for CancerSEA features in cluster 2 of PJ016 sample from [@Yuan2018] (GSE103224)."}
-knitr::include_graphics("images/cluster_2.jpg")
-```
-
-The reuslts of ORA are visualized by means of a dot plot:
-```{r, include=TRUE, eval=FALSE}
-top_feat_lab <- dotplot_cluster(features = feat_obj, partitions = clust_obj, clustering_name = "global", clust_enrich_res = cl_enrich, text_val = "p")
-```
-
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="ORA result for two categorical features in cluster 1 of PJ016 sample (GSE103224)."}
-knitr::include_graphics("images/cluster_1.jpg")
-```
-
-The two visualization functions returns significant tags for each clusters. These can be used to annotate an UMAP:
-```{r, include=TRUE, eval=FALSE}
-plot_umap(seu_obj_1, group.by = "seurat_clusters", labels=lapply(top_feat_lab, function(x) x[1:2]), lab_size=3)
-```
-
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="UMAP annotated with the CSEA results using CancerSEA gene sets (sample PJ016 from [@Yuan2018], GSE103224)."}
-knitr::include_graphics("images/umap.jpg")
-```
-
-
-## Two-samples comparison
-scMuffins provides the function quantify_samples_similarity that estimateds the similarity among cell clusters of two samples quantifying the expression of cluster markers:
-```{r, include=TRUE, eval=FALSE}
-sim_res <- quantify_samples_similarity(gbc_1 = GetAssayData(seu_obj_1), gbc_2 = GetAssayData(seu_obj_2), clusters_1 = setNames(seu_obj_1@meta.data$seurat_clusters, rownames(seu_obj_1@meta.data)), clusters_2 = setNames(seu_obj_2@meta.data$seurat_clusters, rownames(seu_obj_2@meta.data)), cluster_markers_1 = cluster_markers_1, cluster_markers_2 = cluster_markers_2, nbins=10, kmin=30, sample_name_1 = "PJ016", sample_name_2 = "PJ017")
-```
-
-```{r, include=TRUE, echo=FALSE, out.width="100%", fig.align = "center", fig.cap="Similarity among the cell clusters of PJ016 and PJ017 samples from [@Yuan2018] (GSE103224)."}
-knitr::include_graphics("images/cluster_similarity.jpg")
-```
+![caption](images/heatmap_ds_cmp_cancer.png){width=600px}
 
 # References
 

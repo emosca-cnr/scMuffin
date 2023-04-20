@@ -7,6 +7,9 @@
 heatmap_CNV(
   scMuffinList = NULL,
   genes = NULL,
+  genes.labels = FALSE,
+  regions = NULL,
+  mark.detected.cnv = FALSE,
   file = NULL,
   width = 180,
   height = 180,
@@ -16,6 +19,7 @@ heatmap_CNV(
   cluster_fontsize = 8,
   chrom_fontsize = 8,
   legend_fontsize = 8,
+  genes.labels.fontsize = 8,
   ...
 )
 }

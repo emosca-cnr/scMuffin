@@ -4,7 +4,16 @@
 \alias{gsea}
 \title{Gene Set Enrichment Analysis}
 \usage{
-gsea(rl, gsl, k = 100, ord.mode = -1, mc_cores_path = 1, mc_cores_perm = 1)
+gsea(
+  rl,
+  gsl,
+  k = 100,
+  min.size = 100,
+  ord.mode = -1,
+  min.k.nes = 10,
+  mc_cores_path = 1,
+  mc_cores_perm = 1
+)
 }
 \arguments{
 \item{rl}{numeric matrix of genes-by-ranking criteria; each column contains numeric values; rownames are mandatory}

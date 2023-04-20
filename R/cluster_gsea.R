@@ -11,12 +11,13 @@
 #' @description Calculate cluster enrichment by gsea approach
 #' @author Ettore Mosca
 
-cluster_gsea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feature=100, min.cells.cluster=5, mc.cores=1, gsea.k=99){
+cluster_gsea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, gsea.k=99, min.k.nes=10){
   
   
   X <- as.matrix(feature_values)
   X[is.na(X)] <- 0
   
+  #remove features with all null values
   idx_out <- colSums(X!=0) < min.cells.feature
   names_idx_out <- colnames(X)[idx_out]
   
@@ -25,7 +26,7 @@ cluster_gsea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feat
     stop("not enough cells with values\n")
   }
   
-  ## ensure that every cluster has at least min.cells.cluster
+  ## ensure that every cluster has at least min.cells.cluster with values !=0 
   cluster_size <- table(cell_clusters)
   cell_cluster_ok <- names(cluster_size)[cluster_size >= min.cells.cluster]
   excluded_clusters <- names(cluster_size)[cluster_size < min.cells.cluster]
@@ -33,7 +34,7 @@ cluster_gsea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feat
   
   #GSEA process on features-by-cells
   gsl <- lapply(split(cell_cluster_ok, cell_cluster_ok), function(x) names(x))
-  gsea_res <- gsea(X, gsl, mc_cores_perm = mc.cores, ord.mode = rep(-1, ncol(X)), k = gsea.k)
+  gsea_res <- gsea(X, gsl, mc_cores_perm = mc.cores, ord.mode = rep(-1, ncol(X)), k = gsea.k, min.size = min.cells.feature, min.k.nes = min.k.nes)
   
   # insert a row for excluded clusters
   if(length(excluded_clusters)>0){

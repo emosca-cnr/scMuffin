@@ -8,9 +8,10 @@ cluster_gsea(
   feature_values = NULL,
   cell_clusters = NULL,
   min.cells.feature = 100,
-  min.cells.cluster = 5,
+  min.cells.cluster = 10,
   mc.cores = 1,
-  gsea.k = 99
+  gsea.k = 99,
+  min.k.nes = 10
 )
 }
 \arguments{

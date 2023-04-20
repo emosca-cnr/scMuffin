@@ -15,7 +15,14 @@
 #' @importFrom stats setNames
 #' @export
 
-assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=5, mc.cores=1, gsea.k=99){
+assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, gsea.k=99){
+  
+  if(length(scMuffinList[[feature_name]]) == 0){
+    stop("Can't find scMuffinList[[feature_name]]\n")
+  }
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
   
   
   X <- scMuffinList[[feature_name]]$summary

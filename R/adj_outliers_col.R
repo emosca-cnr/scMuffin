@@ -7,7 +7,7 @@ adj_outliers_col <- function(x){
   
 	#print(summary(x))
   s <- boxplot.stats(x)$stats
-  print(s)
+  #print(s)
   
   ans <- x
   ans[ans < s[1] ] <- s[1]

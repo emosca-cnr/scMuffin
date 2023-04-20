@@ -11,7 +11,7 @@
 #' @export
 
 
-gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
+gsea <- function(rl, gsl, k=100, min.size=100, ord.mode=-1, min.k.nes=10, mc_cores_path=1, mc_cores_perm=1){
 
   #cheks
   if(!is.matrix(rl) | !is.numeric(rl)){
@@ -22,17 +22,20 @@ gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
     stop("length(ord.mode) must be equal to ncol(rl)")
   }
 
+  min.k.nes <- min(min.k.nes, k)
+  
   #create the list of ranked vectors
   rll <- vector('list', ncol(rl))
   names(rll) <- colnames(rl)
   for(i in 1:length(rll)){
     rll[[i]] <- sort(array(rl[, i], dimnames = list(rownames(rl))), decreasing = ord.mode[i]==-1)
   }
-
-  #permutation of gene ids
-  cat('generating', k, 'permutations\n')
-  x_perm <- lapply(1:k, function(x) sample(rownames(rl), nrow(rl)))
-
+  
+  ##keep just elements that are !=0
+  rll <- lapply(rll, function(x) x[x!=0])
+  rll <- rll[lengths(rll)>min.size]
+  cat("Ranked list that passed the checks:", names(rll), "\n")
+  
   #real es
   print("ES...")
   #real_es <- lapply(gsl, function(x) lapply(rll, function(y) es(which(names(y) %in% x), y)))
@@ -48,6 +51,17 @@ gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
   }
 
   #permutations
+  #k permutation of all gene ids
+  cat('generating', k, 'permutations\n')
+  x_perm <- lapply(1:k, function(x) sample(rownames(rl), nrow(rl)))
+  
+  #every element of x_perm is a list with a rll-specific permutation, because each element of rll has different size
+  x_perm <- vector("list", length = k)
+  for(i in 1:length(x_perm)){
+    x_perm[[i]] <- lapply(rll, function(x) sample(rownames(x), length(x)))
+  }
+  
+  
   print("calculating permutations")
   if(mc_cores_path==1){
     if(mc_cores_perm == 1){
@@ -100,33 +114,48 @@ gsea <- function(rl, gsl, k=100, ord.mode=-1, mc_cores_path=1, mc_cores_perm=1){
   for(i in 1:length(rll)){
 
     p_val <- apply(res[[i]], 1, function(x) ifelse(x[1] >= 0, sum(x >= x[1]) / length(x), sum(x <= x[1]) / length(x)))
-
+    #p-values for real ES == 0 are set to 1
+    p_val[res[[i]][, 1] == 0] <- 1
+    
     #normalized ES
+    n_pos_perm <- rowSums(res[[i]]>0)
+    n_neg_perm <- rowSums(res[[i]]<0)
     means <- t(apply(res[[i]], 1, function(x) c(mean(x[x>0]), abs(mean(x[x<0]))))) #positive, negative
+    means[is.nan(means)] <- 0 #NaN values are caused by the absence of any positive or negative value
     nes <- res[[i]] / means[, 1]
     nes_neg <- res[[i]] / means[, 2]
     nes[res[[i]] < 0] <- nes_neg[res[[i]] < 0]
+    nes[is.nan(nes)] <- 0 #NaN values are caused by 0/0
     rm(means, nes_neg)
+    
+    #if there are not at least min.k.nes the NES is unrelieable
+    nes[nes>0 & n_pos_perm < min.k.nes] <- 0
+    nes[nes<0 & n_neg_perm < min.k.nes] <- 0
 
     #calculate FDR
     all_nes <- as.numeric(nes)
-    n_nes_pos <- sum(nes>=0)
-    n_nes_neg <- sum(nes<=0)
-    n_real_nes_pos <- sum(nes[,1] >= 0)
-    n_real_nes_neg <- sum(nes[,1] <= 0)
+    n_nes_pos <- sum(nes>0)
+    n_nes_neg <- sum(nes<0)
+    n_real_nes_pos <- sum(nes[,1] > 0)
+    n_real_nes_neg <- sum(nes[,1] < 0)
     if((n_nes_pos + n_nes_neg) != (k*length(gsl) + nrow(nes))){
       warning('some nes value is equal to zero')
     }
 
     #FDR: NES* > 0: fdrq = #(all positive NESp >= NES*) / #(all positive NESp) / [ #(all NES* >= NES*) / (all positive NES*) ]
     #FDR: NES* < 0: fdrq = #(all negative NESp <= NES*) / #(all negative NESp) / [ #(all NES* <= NES*) / (all negative NES*) ]
+    
     fdrq <- sapply(nes[, 1], function(x) ifelse(x>0, sum(all_nes >= x) / n_nes_pos, sum(all_nes <= x) / n_nes_neg))
     fdrq <- fdrq / sapply(nes[, 1], function(x) ifelse(x>0, sum(nes[, 1] >= x) / n_real_nes_pos, sum(nes[, 1] <= x) / n_real_nes_neg))
+  
+    #q of nes that are equal to 0 are set to 1
+    fdrq[nes[, 1] == 0] <- 1
+
     rm(all_nes)
     fdrq[fdrq>1] <- 1
 
     #out table
-    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=stats::p.adjust(p_val, method='fdr'), nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
+    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=stats::p.adjust(p_val, method='fdr'), n_pos_perm=n_pos_perm, n_neg_perm=n_neg_perm, nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
 
   }
 

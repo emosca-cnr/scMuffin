@@ -10,13 +10,12 @@ plot_heatmap_features_by_clusters(
   partition_id = NULL,
   significance_matrix = NULL,
   sig_threshold = 0.05,
-  file = "heatmap_features_by_clusters.jpg",
+  file = NULL,
   remove_null_features = FALSE,
   width = 180,
   height = 180,
   units = "mm",
   res = 300,
-  image_format = "png",
   scale = TRUE,
   pal = NULL,
   ...
@@ -25,7 +24,7 @@ plot_heatmap_features_by_clusters(
 \arguments{
 \item{scMuffinList}{scMuffinList object}
 
-\item{feature_source}{It can be a "mean", "gene_set_scoring" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.}
+\item{feature_source}{It can be a "mean", "gss" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.}
 
 \item{partition_id}{identifier of the partition to be considered}
 
@@ -45,13 +44,13 @@ plot_heatmap_features_by_clusters(
 
 \item{res}{image resolution}
 
-\item{image_format}{png or jpeg}
-
 \item{scale}{whether to scale the features}
 
 \item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
 
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
+
+\item{image_format}{png or jpeg}
 }
 \description{
 Plot an heatmap of feature values in cell clusters

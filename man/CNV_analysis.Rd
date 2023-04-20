@@ -15,7 +15,9 @@ CNV_analysis(
   center_genes = FALSE,
   expr_lim = FALSE,
   method = "mean",
-  na.rm = FALSE
+  na.rm = FALSE,
+  z.score = FALSE,
+  eps = NULL
 )
 }
 \arguments{

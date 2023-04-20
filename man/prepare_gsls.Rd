@@ -13,6 +13,7 @@ prepare_gsls(
   genes_min = 5,
   genes_max = 500,
   id_type = c("Symbol", "EntrezID"),
+  scMuffinList = NULL,
   genes = NULL
 )
 }
@@ -31,7 +32,7 @@ prepare_gsls(
 
 \item{genes_max}{maximum number of genes required in a gene set}
 
-\item{genes}{optional character vectors with the universe of all the genes under analysis}
+\item{scMuffinList}{scMuffinList object}
 }
 \value{
 A lists of gene set lists

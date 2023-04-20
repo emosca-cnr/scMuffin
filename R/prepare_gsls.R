@@ -12,118 +12,122 @@
 #' @return A lists of gene set lists
 #' @export
 
-prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, id_type=c("Symbol", "EntrezID"), scMuffinList=NULL){
-	
-	#SIG_CM_normal <- SIG_CM_cancer <- SIG_CancerSEA <- SIG_PNDB <- NULL #to please the check
-	gsls_EntrezID <- gsls_Symbol <- NULL #to please the check
-	gsls <- custom_gsls
-	
-	if(length(scMuffinList$normalized)==0){
-		stop("scMuffinList does not contain a normalized genes_by_cells expression matrix\n")
-	}
-	
-	
-	id_type <- match.arg(id_type, c("Symbol", "EntrezID"))
-	
-	if(id_type == "Symbol"){
-		
-		data("gsls_Symbol", envir=environment())
-		gsls_source <- gsls_Symbol
-			
-	}else{
-		
-		data("gsls_EntrezID", envir=environment())
-		gsls_source <- gsls_EntrezID
-
-	}
-	
-	if(!is.null(gs_sources)){
-		
-		if(!is.null(CM_tissues)){
-			CM_tissues <- paste("CM__", CM_tissues, "__", sep = "") 
-		}
-		
-		if(!is.null(PNDB_tissues)){
-			PNDB_tissues <- paste("PN__", PNDB_tissues, "__", sep = "")
-		}
-		
-		if(!is.null(custom_gsls)){
-			gsls <- custom_gsls
-		}else{
-			gsls <- list()
-		}
-		
-		if("SIG_CM_cancer" %in% gs_sources){
-			#data("SIG_CM_cancer", envir=environment())
-			temp <- list()
-			for(i in 1:length(CM_tissues)){
-				#temp <- c(temp, (SIG_CM_cancer[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_cancer))]))
-				temp <- c(temp, (gsls_source$CM_cancer[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_cancer))]))
-			}
-			#gsls$SIG_CM_cancer <- temp
-			gsls$CM_cancer <- temp
-		}
-		
-		if("SIG_CM_normal" %in% gs_sources){
-			#data("SIG_CM_normal", envir=environment())
-			temp <- list()
-			for(i in 1:length(CM_tissues)){
-				#temp <- c(temp, (SIG_CM_normal[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_normal))]))
-				temp <- c(temp, (gsls_source$CM_normal[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_normal))]))
-			}
-			#gsls$SIG_CM_normal <- temp
-			gsls$CM_normal <- temp
-		}
-		
-		if("SIG_CancerSEA" %in% gs_sources){
-			#data("SIG_CancerSEA", envir=environment())
-			#gsls$SIG_CancerSEA <- SIG_CancerSEA
-			
-			gsls$CancerSEA <- gsls_source$CancerSEA
-			
-		}
-		
-		if("SIG_PNDB" %in% gs_sources){
-			#data("SIG_PNDB", envir=environment())
-			temp <- list()
-			for(i in 1:length(PNDB_tissues)){
-				#temp <- c(temp, (SIG_PNDB[grepl(paste0("^", PNDB_tissues[i]), names(SIG_PNDB))]))
-				temp <- c(temp, (gsls_source$PNDB[grepl(paste0("^", PNDB_tissues[i]), names(gsls_source$PNDB))]))
-			}
-			#gsls$SIG_PNDB <- temp
-			gsls$PNDB <- temp
-		}
-		
-		if("msigdb" %in% gs_sources & !is.null(msigdb_hs_cat_subcat)){
-			msigdb_sigs <- apply(msigdb_hs_cat_subcat, 1, function(x) paste(x, collapse = "_"))
-			for(i in 1:nrow(msigdb_hs_cat_subcat)){
-				gsls[[msigdb_sigs[i]]] <- get_msigdb_geneset(species = msigdb_hs_cat_subcat[i, 1], category = msigdb_hs_cat_subcat[i, 2], subcategory = msigdb_hs_cat_subcat[i, 3])$path_list
-			}
-		}
-		
-	}
-	
-	if(!is.list(gsls)){
-	  message("Empty gene set list\n")
-	}
-	
-	### filter gsls
-	genes <- rownames(scMuffinList$normalized)
-	idx_zero <- which(rowSums(scMuffinList$normalized)==0)
-	if(length(idx_zero)>0){
-		cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
-	}
-	genes <- genes[-idx_zero]
-	gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
-	
-	for(i in 1:length(gsls)){
-		gs_length <- unlist(lapply(gsls[[i]], length))
-		gsls[[i]] <- gsls[[i]][gs_length >= genes_min & gs_length <= genes_max]
-	}
-	
-	#gsls_length <- unlist(lapply(gsls[[i]], length))
-	
-	
-	return(gsls)
-	
+prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PNDB_tissues=NULL, msigdb_hs_cat_subcat=NULL, genes_min=5, genes_max=500, id_type=c("Symbol", "EntrezID"), scMuffinList=NULL, genes=NULL){
+  
+  #SIG_CM_normal <- SIG_CM_cancer <- SIG_CancerSEA <- SIG_PNDB <- NULL #to please the check
+  gsls_EntrezID <- gsls_Symbol <- NULL #to please the check
+  gsls <- custom_gsls
+  
+  if(is.null(genes)){
+    if(length(scMuffinList$normalized)==0){
+      stop("scMuffinList does not contain a normalized genes_by_cells expression matrix\n")
+    }
+  }
+  
+  
+  id_type <- match.arg(id_type, c("Symbol", "EntrezID"))
+  
+  if(id_type == "Symbol"){
+    
+    data("gsls_Symbol", envir=environment())
+    gsls_source <- gsls_Symbol
+    
+  }else{
+    
+    data("gsls_EntrezID", envir=environment())
+    gsls_source <- gsls_EntrezID
+    
+  }
+  
+  if(!is.null(gs_sources)){
+    
+    if(!is.null(CM_tissues)){
+      CM_tissues <- paste("CM__", CM_tissues, "__", sep = "") 
+    }
+    
+    if(!is.null(PNDB_tissues)){
+      PNDB_tissues <- paste("PN__", PNDB_tissues, "__", sep = "")
+    }
+    
+    if(!is.null(custom_gsls)){
+      gsls <- custom_gsls
+    }else{
+      gsls <- list()
+    }
+    
+    if("CM_cancer" %in% gs_sources){
+      #data("SIG_CM_cancer", envir=environment())
+      temp <- list()
+      for(i in 1:length(CM_tissues)){
+        #temp <- c(temp, (SIG_CM_cancer[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_cancer))]))
+        temp <- c(temp, (gsls_source$CM_cancer[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_cancer))]))
+      }
+      #gsls$SIG_CM_cancer <- temp
+      gsls$CM_cancer <- temp
+    }
+    
+    if("CM_normal" %in% gs_sources){
+      #data("SIG_CM_normal", envir=environment())
+      temp <- list()
+      for(i in 1:length(CM_tissues)){
+        #temp <- c(temp, (SIG_CM_normal[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_normal))]))
+        temp <- c(temp, (gsls_source$CM_normal[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_normal))]))
+      }
+      #gsls$SIG_CM_normal <- temp
+      gsls$CM_normal <- temp
+    }
+    
+    if("CancerSEA" %in% gs_sources){
+      #data("SIG_CancerSEA", envir=environment())
+      #gsls$SIG_CancerSEA <- SIG_CancerSEA
+      
+      gsls$CancerSEA <- gsls_source$CancerSEA
+      
+    }
+    
+    if("PNDB" %in% gs_sources){
+      #data("SIG_PNDB", envir=environment())
+      temp <- list()
+      for(i in 1:length(PNDB_tissues)){
+        #temp <- c(temp, (SIG_PNDB[grepl(paste0("^", PNDB_tissues[i]), names(SIG_PNDB))]))
+        temp <- c(temp, (gsls_source$PNDB[grepl(paste0("^", PNDB_tissues[i]), names(gsls_source$PNDB))]))
+      }
+      #gsls$SIG_PNDB <- temp
+      gsls$PNDB <- temp
+    }
+    
+    if("msigdb" %in% gs_sources & !is.null(msigdb_hs_cat_subcat)){
+      msigdb_sigs <- apply(msigdb_hs_cat_subcat, 1, function(x) paste(x, collapse = "_"))
+      for(i in 1:nrow(msigdb_hs_cat_subcat)){
+        gsls[[msigdb_sigs[i]]] <- get_msigdb_geneset(species = msigdb_hs_cat_subcat[i, 1], category = msigdb_hs_cat_subcat[i, 2], subcategory = msigdb_hs_cat_subcat[i, 3])$path_list
+      }
+    }
+    
+  }
+  
+  if(!is.list(gsls)){
+    message("Empty gene set list\n")
+  }
+  
+  ### filter gsls
+  if(is.null(genes)){
+    genes <- rownames(scMuffinList$normalized)
+    idx_zero <- which(rowSums(scMuffinList$normalized)==0)
+    if(length(idx_zero)>0){
+      cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
+      genes <- genes[-idx_zero]
+    }
+  }
+  gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
+  
+  for(i in 1:length(gsls)){
+    gs_length <- unlist(lapply(gsls[[i]], length))
+    gsls[[i]] <- gsls[[i]][gs_length >= genes_min & gs_length <= genes_max]
+  }
+  
+  #gsls_length <- unlist(lapply(gsls[[i]], length))
+  
+  
+  return(gsls)
+  
 }

@@ -14,7 +14,8 @@ proliferation_analysis(
   kmin = 49,
   score_type = c("relative", "mean"),
   null_model = TRUE,
-  mean_scale = TRUE
+  mean_scale = TRUE,
+  gsl = NULL
 )
 }
 \arguments{

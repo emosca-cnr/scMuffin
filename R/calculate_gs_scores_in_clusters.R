@@ -18,17 +18,18 @@ calculate_gs_scores_in_clusters <- function(scMuffinList=NULL, partition_id=NULL
   #signatures-by-clusters matrix
   SC_signatures_by_cluster_matrix <- do.call(rbind, lapply(res_signatures_clusters, function(x) array(x$score[order(x$cluster)], dimnames = list(c(x$cluster[order(x$cluster)])))))
   
-  SC_signatures_by_cluster_matrix <- SC_signatures_by_cluster_matrix[, match(levels(setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))), colnames(SC_signatures_by_cluster_matrix))]
+  #SC_signatures_by_cluster_matrix <- SC_signatures_by_cluster_matrix[, match(levels(setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))), colnames(SC_signatures_by_cluster_matrix))]
   
-  
+  cluster_levels <- levels(factor(setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))))
+  SC_signatures_by_cluster_matrix <- SC_signatures_by_cluster_matrix[, match(cluster_levels, colnames(SC_signatures_by_cluster_matrix))]
+
   ### OUTPUT
   
-  scMuffinList$cluster_data[[partition_id]] <- list(gene_set_scoring=
-                                                      list(
+  scMuffinList$cluster_data[[partition_id]]$gene_set_scoring <- list(
                                                         summary=as.data.frame(t(SC_signatures_by_cluster_matrix)),
                                                         full=res_signatures_clusters
                                                       )
-  )
+
   
   return(scMuffinList) 
   
