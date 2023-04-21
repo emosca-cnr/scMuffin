@@ -58,4 +58,5 @@ Suggests:
     knitr,
     BiocStyle
 VignetteBuilder: knitr
-URL: https://emosca-cnr/scMuffin/docs
+URL: https://emosca-cnr/scMuffin/docs,
+    https://emosca-cnr.github.io/scMuffin
