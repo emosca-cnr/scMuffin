@@ -39,12 +39,12 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 	
 	# clusters-by-feature value table of enrichment p-value
 	#en_res_nes <- extract_cluster_enrichment_table(clust_enrich_res, q_type = "nes")
-	#en_res_nes <- en_res_nes$cluster_gsea_table[names(en_res_nes$cluster_gsea_table) == clustering_name][[1]]
-	en_res_nes <- extract_cluster_enrichment_table(scMuffinList=scMuffinList, partition_id = partition_id, type = "GSEA", feature_id = feature_id, quantity = "nes")
+	#en_res_nes <- en_res_nes$cluster_csea_table[names(en_res_nes$cluster_csea_table) == clustering_name][[1]]
+	en_res_nes <- extract_cluster_enrichment_table(scMuffinList=scMuffinList, partition_id = partition_id, type = "CSEA", feature_id = feature_id, quantity = "nes")
 	
 	#en_res_q <- extract_cluster_enrichment_table(clust_enrich_res, q_type = "FDRq")
-	#en_res_q <- en_res_q$cluster_gsea_table[names(en_res_q$cluster_gsea_table) == clustering_name][[1]]
-	en_res_q <- extract_cluster_enrichment_table(scMuffinList=scMuffinList, partition_id = partition_id, type = "GSEA", feature_id = feature_id, quantity = "FDRq")
+	#en_res_q <- en_res_q$cluster_csea_table[names(en_res_q$cluster_csea_table) == clustering_name][[1]]
+	en_res_q <- extract_cluster_enrichment_table(scMuffinList=scMuffinList, partition_id = partition_id, type = "CSEA", feature_id = feature_id, quantity = "FDRq")
 	
 	if(only_pos_nes){
 	  en_res_q[en_res_nes < 0] <- 1

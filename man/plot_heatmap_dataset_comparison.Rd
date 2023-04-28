@@ -17,7 +17,7 @@ plot_heatmap_dataset_comparison(
 )
 }
 \arguments{
-\item{type}{"score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of GSEA.}
+\item{type}{"score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of CSEA.}
 
 \item{outfile}{out file name}
 

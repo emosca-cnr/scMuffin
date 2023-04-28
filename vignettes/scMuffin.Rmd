@@ -13,10 +13,9 @@ vignette: >
 ---
 
 
-# Getting started
 ![](images/logo.jpg){width=300px}
 
-## Installation
+# Installation
 
 scMuffin requires R >= 4.0.0, due to some of its dependencies, like Seurat [@Hao2021]. R can be installed from CRAN at the URL https://cran.r-project.org/index.html.
 
@@ -50,7 +49,7 @@ library(scMuffin)
 devtools::load_all("~/source/general/single_cell/scMuffin")
 ```
 
-## Input
+# Input
 
 scMuffin is intended to be used downstream general purpose tasks like quality control, normalization, cell clustering and dataset integration, for which there are dedicated tools, such as Seurat [@Hao2021]. scMuffin requires three inputs:
 
@@ -60,7 +59,7 @@ scMuffin is intended to be used downstream general purpose tasks like quality co
 
 Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design one may want to apply strong or mild filters before using scMuffin.
 
-## Obtaining the data used in this vignette
+# Obtaining the data used in this vignette
 To run the examples included in this vignette you need the following data:
 
 * two single cell datasets with counts as well as normalized expression values;
@@ -249,9 +248,9 @@ Cell clusters can be assessed for enrichment in quantitative and categorical val
 ```{r, include=TRUE, eval=FALSE}
 scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
-In case of quantitative features the result is a list named GSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `CSEA_Angiogenesis`:
+In case of quantitative features the result is a list named CSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `CSEA_Angiogenesis`:
 ```{r, include=TRUE, eval=TRUE}
-scMuffinList_demo$cluster_data$global_expr$GSEA$gs_table$CSEA_Angiogenesis
+scMuffinList_demo$cluster_data$global_expr$CSEA$gs_table$CSEA_Angiogenesis
 ```
 In this this example we assess cluster enrichment in relation to categorical feature, namely cell cycle phase:
 ```{r, include=TRUE, eval=FALSE}
@@ -262,28 +261,28 @@ As for categorical features the result is a list named ORA, placed under the ele
 scMuffinList_demo$cluster_data$global_expr$ORA$CC_Phase$G1
 ```
 
-The enrichment analysis results appearing in these tables can be easily extracted and organized in a clusters-by-values table by means of `extract_cluster_enrichment_table`. For instance, here we extract GSEA NES and FDRq values, and ORA er (enrichment ratio) values:
+The enrichment analysis results appearing in these tables can be easily extracted and organized in a clusters-by-values table by means of `extract_cluster_enrichment_table`. For instance, here we extract CSEA NES and FDRq values, and ORA er (enrichment ratio) values:
 
 ```{r, include=TRUE, eval=TRUE}
-gsea_fdr_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "GSEA", quantity = "FDRq")
-gsea_nes_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "GSEA", quantity = "nes")
+csea_fdr_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "CSEA", quantity = "FDRq")
+csea_nes_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "CSEA", quantity = "nes")
 ora_p_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "ORA", quantity = "p")
-gsea_fdr_table
+csea_fdr_table
 ```
 These tables can be plotted with the function `plot_heatmap_features_by_clusters`. In the following example we plot NES values with a asterisks according to their significance:
 
 ```{r, include=TRUE, eval=FALSE}
-plot_heatmap_features_by_clusters(feature_source = gsea_nes_table, significance_matrix = gsea_fdr_table, sig_threshold = 0.05)
+plot_heatmap_features_by_clusters(feature_source = csea_nes_table, significance_matrix = csea_fdr_table, sig_threshold = 0.05)
 ```
-![](images/nes_fdr.png){width=300px}
+![](images/nes.fdr.png){width=300px}
 
-Similarly, it's possible to extract the most significant "tags" of any clusters; for example, here we extract the top 3 tags by FDRq (GSEA) and p_adj (ORA):
+Similarly, it's possible to extract the most significant "tags" of any clusters; for example, here we extract the top 3 tags by FDRq (CSEA) and p_adj (ORA):
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- extract_cluster_enrichment_tags(scMuffinList_demo, partition_id = "global_expr", n_max_per_cluster = 3, GSEA_selection_criterion="FDRq", only_pos_nes = TRUE, GSEA_selection_threshold = 0.05, ORA_selection_criterion = "p_adj", ORA_selection_threshold = 0.25)
+scMuffinList_demo <- extract_cluster_enrichment_tags(scMuffinList_demo, partition_id = "global_expr", n_max_per_cluster = 3, CSEA_selection_criterion="FDRq", only_pos_nes = TRUE, CSEA_selection_threshold = 0.05, ORA_selection_criterion = "p_adj", ORA_selection_threshold = 0.25)
 ```
 The results are placed under the `cluster_tags` element:
 ```{r, include=TRUE, eval=TRUE}
-head(scMuffinList_demo$cluster_data$global_expr$cluster_tags$GSEA)
+head(scMuffinList_demo$cluster_data$global_expr$cluster_tags$CSEA)
 ```
 
 The results of cluster enrichment can be visualized by barplots and boxplots for, respectively, categorical values and quantitative values.
@@ -292,7 +291,7 @@ barplot_cluster(scMuffinList_demo, partition_id = "global_expr", feature_name = 
 boxplot_cluster(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
 ![caption](images/cluster_2_barplot.jpg){width=600px}
- ![caption](images/cluster_2_boxplot.jpg){width=600px}
+ ![caption](images/cluster_2.jpg){width=600px}
  
 # Comparison between clusters
 

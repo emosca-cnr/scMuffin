@@ -126,6 +126,6 @@ detect_CNV_regions <- function(scMuffinList = NULL, z.score=FALSE, eps=NULL){
   }
   
   
-  return(cnv_regions)
+  return(ans)
   
 }

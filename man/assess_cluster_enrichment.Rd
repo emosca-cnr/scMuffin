@@ -2,7 +2,7 @@
 % Please edit documentation in R/assess_cluster_enrichment.R
 \name{assess_cluster_enrichment}
 \alias{assess_cluster_enrichment}
-\title{Assess enrichment with ORA or GSEA}
+\title{Assess enrichment with ORA or CSEA}
 \usage{
 assess_cluster_enrichment(
   scMuffinList = NULL,
@@ -11,7 +11,7 @@ assess_cluster_enrichment(
   min.cells.feature = 100,
   min.cells.cluster = 10,
   mc.cores = 1,
-  gsea.k = 99
+  csea.k = 99
 )
 }
 \arguments{
@@ -27,15 +27,15 @@ assess_cluster_enrichment(
 
 \item{mc.cores}{number of cores}
 
-\item{gsea.k}{number of GSEA permutations}
+\item{csea.k}{number of CSEA permutations}
 }
 \value{
-scMuffinList with GSEA or ORA elements under scMuffinList$cluster_data for the considered partition
+scMuffinList with CSEA or ORA elements under scMuffinList$cluster_data for the considered partition
 }
 \description{
-Assess cluster enrichment using ORA for categorical features and GSEA for numeric features.
+Assess cluster enrichment using ORA for categorical features and CSEA for numeric features.
 }
 \details{
-The output of GSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
-The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from GSEA and ORA results.
+The output of CSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
+The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from CSEA and ORA results.
 }

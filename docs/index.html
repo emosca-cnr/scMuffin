@@ -54,33 +54,12 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><p><img src="articles/images/logo.jpg" width="200"></p>
-<div class="section level2">
-<h2 id="scmuffin---a-multi-features-integrative-approach-for-sc-data-analysis">scMuffin - A MUlti-Features INtegrative approach for SC data analysis<a class="anchor" aria-label="anchor" href="#scmuffin---a-multi-features-integrative-approach-for-sc-data-analysis"></a>
-</h2>
+<div class="section level1">
+<div class="page-header"><h1 id="scmuffin---a-multi-features-integrative-approach-for-sc-data-analysis">scMuffin - A MUlti-Features INtegrative approach for SC data analysis<a class="anchor" aria-label="anchor" href="#scmuffin---a-multi-features-integrative-approach-for-sc-data-analysis"></a>
+</h1></div>
 <p>Single-cell (SC) gene expression analysis is crucial to dissect the complex cellular heterogeneity of solid tumors, which is one of the main obstacles for the development of effective cancer treatments. Such tumors typically contain a mixture of cells with aberrant genomic and transcriptomic profiles affecting specific sub-populations that might have a pivotal role in cancer progression, whose identification eludes bulk RNA-sequencing approaches. We present scMuffin, an R package that enables the characterization of cell identity in solid tumors on the basis of multiple and complementary criteria applied on SC gene expression data. scMuffin provides a series of functions to calculate several different qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNVs, chromatin state and proliferation state. Thus, scMuffin facilitates the combination of various evidences that can be used to distinguish normal and tumoral cells, define cell identities, cluster cells in different ways, link genomic aberrations to phenotypes and identify subtle differences between cell subtypes or cell states.</p>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>scMuffin requires R &gt;= 4.0.0 due to some of its dependencies, like Seurat (<a href="https://satijalab.org/seurat" class="external-link uri">https://satijalab.org/seurat</a>). R can be installed from CRAN at the URL <a href="https://cran.r-project.org/index.html" class="external-link uri">https://cran.r-project.org/index.html</a>.</p>
-<p>To succesfully install scMuffin you need some packages from Bioconductor (<a href="https://bioconductor.org" class="external-link uri">https://bioconductor.org</a>) and github (<a href="https://github.com/" class="external-link uri">https://github.com/</a>). These packages can be installed using the following commands:</p>
-<p>```{r, include=TRUE, eval=FALSE} if (!require(“BiocManager”, quietly = TRUE)){ install.packages(“BiocManager”) } BiocManager::install(c(“BiocStyle”, “ComplexHeatmap”, “DESeq2”, “org.Hs.eg.db”))</p>
-<p>if (!require(“devtools”, quietly = TRUE)){ install.packages(“devtools”) } devtools::install_github(“theislab/destiny”)</p>
-<pre><code>
-The other dependencies, if missing, should be automatically installed using the following command:
-
-```{r, include=TRUE, eval=FALSE}
-devtools::install_github("emosca-cnr/scMuffin", build_vignettes = TRUE)</code></pre>
-</div>
-<div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h2>
-<p>Please look at the vignette included in the R package: <code>{r, eval=FALSE} vignette("scMuffin")</code></p>
-</div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
-<p><a href="https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1" class="external-link uri">https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1</a></p>
+<p>The documentation is available at the URL: <a href="https://emosca-cnr.github.io/scMuffin" class="external-link uri">https://emosca-cnr.github.io/scMuffin</a></p>
+<p>Citation: <a href="https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1" class="external-link uri">https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1</a></p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">

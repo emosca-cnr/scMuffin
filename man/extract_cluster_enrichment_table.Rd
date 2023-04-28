@@ -17,11 +17,11 @@ extract_cluster_enrichment_table(
 
 \item{partition_id}{id of the partition to be used}
 
-\item{type}{"GSEA" or "ORA"}
+\item{type}{"CSEA" or "ORA"}
 
-\item{quantity}{possible values are as follows. GSEA: es, enrichment score; p_val empirical p-value; adj_p_val, FDR (BH); nes normalized enrichment score; FDRq empirical FDR. ORA: wbd (white balls drawn), number of cells with the value of interest in the cluster; exp expected number of cells with the value of interest in the cluster; er, enrichment ratio; p, hypergeometric test p-value; p_adj, BH FDR}
+\item{quantity}{possible values are as follows. CSEA: es, enrichment score; p_val empirical p-value; adj_p_val, FDR (BH); nes normalized enrichment score; FDRq empirical FDR. ORA: wbd (white balls drawn), number of cells with the value of interest in the cluster; exp expected number of cells with the value of interest in the cluster; er, enrichment ratio; p, hypergeometric test p-value; p_adj, BH FDR}
 
-\item{feature_id}{name of the features that will be considered. Must be any of `colnames(scMuffinList$cluster_data$[[parition_id]]$GSEA$gs_table)` or `names(scMuffinList$cluster_data$[[parition_id]]$ORA)`}
+\item{feature_id}{name of the features that will be considered. Must be any of `colnames(scMuffinList$cluster_data$[[parition_id]]$CSEA$gs_table)` or `names(scMuffinList$cluster_data$[[parition_id]]$ORA)`}
 }
 \value{
 A cluster enrichment table with the desired quantity

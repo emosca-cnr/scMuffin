@@ -11,7 +11,7 @@
 #' @export
 
 
-gsea <- function(rl, gsl, k=100, min.size=100, ord.mode=-1, min.k.nes=10, mc_cores_path=1, mc_cores_perm=1){
+csea <- function(rl, gsl, k=100, min.size=100, ord.mode=-1, min.k.nes=10, mc_cores_path=1, mc_cores_perm=1){
 
   #cheks
   if(!is.matrix(rl) | !is.numeric(rl)){

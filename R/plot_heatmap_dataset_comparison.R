@@ -1,6 +1,6 @@
 #' plot_heatmap_dataset_comparison
 #' @param dataset_cmp_list
-#' @param type "score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of GSEA.
+#' @param type "score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of CSEA.
 #' @param width image width
 #' @param height image height
 #' @param units image units
@@ -48,10 +48,12 @@ plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score",
     ca <- columnAnnotation(markers=ca, col=list(markers=setNames(pals::brewer.pastel1(length(levels(ca)))[as.numeric(ca)], ca)))
   }
   
-  plot(Heatmap(as.matrix(M), col=col_fun, right_annotation = ra, top_annotation = ca, name = name, ...))
+  hm <- Heatmap(as.matrix(M), col=col_fun, right_annotation = ra, top_annotation = ca, name = name, ...)
+  draw(hm)
   
   if(!is.null(outfile)){
     dev.off()
   }
+  #return(hm)
   
 }

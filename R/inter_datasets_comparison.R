@@ -53,7 +53,7 @@ inter_dataset_comparison <- function(seu_obj_list=NULL, gsl=NULL, genes_min=3, g
     scMuffinList_list[[i]] <- assess_cluster_enrichment(scMuffinList_list[[i]], feature_name = "gene_set_scoring", partition_id = "C")
     
     score_matrix[[i]] <- scMuffinList_list[[i]]$cluster_data$C$gene_set_scoring$summary
-    significance_matrix[[i]] <- extract_cluster_enrichment_table(scMuffinList_list[[i]],  partition_id = "C", type = "GSEA", quantity = "FDRq")
+    significance_matrix[[i]] <- extract_cluster_enrichment_table(scMuffinList_list[[i]],  partition_id = "C", type = "CSEA", quantity = "FDRq")
     
     #add missing cluster markers
     missing_marker_sets <- names(gsl)[!names(gsl) %in% colnames(score_matrix[[i]])]

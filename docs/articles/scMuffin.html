@@ -67,15 +67,16 @@
 
     
     
-<div class="section level2">
-<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
-</h2>
 <p><img src="images/logo.jpg" width="300"></p>
-<div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h3>
-<p>scMuffin requires R &gt;= 4.0.0, due to some of its dependencies, like Seurat <span class="citation">(Hao et al. 2021)</span>. R can be installed from CRAN at the URL <a href="https://cran.r-project.org/index.html" class="external-link uri">https://cran.r-project.org/index.html</a>.</p>
-<p>To succesfully install scMuffin you need some packages from Bioconductor (<a href="https://bioconductor.org" class="external-link uri">https://bioconductor.org</a>) and github (<a href="https://github.com/" class="external-link uri">https://github.com/</a>). These packages can be installed using the following commands:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>scMuffin requires R &gt;= 4.0.0, due to some of its dependencies,
+like Seurat <span class="citation">(Hao et al. 2021)</span>. R can be
+installed from CRAN at the URL <a href="https://cran.r-project.org/index.html" class="external-link uri">https://cran.r-project.org/index.html</a>.</p>
+<p>To succesfully install scMuffin you need some packages from
+Bioconductor (<a href="https://bioconductor.org" class="external-link uri">https://bioconductor.org</a>) and github (<a href="https://github.com/" class="external-link uri">https://github.com/</a>). These
+packages can be installed using the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
@@ -86,35 +87,50 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"theislab/destiny"</span><span class="op">)</span></span></code></pre></div>
-<p>The other dependencies, if missing, should be automatically installed using the following command:</p>
+<p>The other dependencies, if missing, should be automatically installed
+using the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"emosca-cnr/scMuffin"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>To load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scMuffin</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="input">Input<a class="anchor" aria-label="anchor" href="#input"></a>
-</h3>
-<p>scMuffin is intended to be used downstream general purpose tasks like quality control, normalization, cell clustering and dataset integration, for which there are dedicated tools, such as Seurat <span class="citation">(Hao et al. 2021)</span>. scMuffin requires three inputs:</p>
+<div class="section level2">
+<h2 id="input">Input<a class="anchor" aria-label="anchor" href="#input"></a>
+</h2>
+<p>scMuffin is intended to be used downstream general purpose tasks like
+quality control, normalization, cell clustering and dataset integration,
+for which there are dedicated tools, such as Seurat <span class="citation">(Hao et al. 2021)</span>. scMuffin requires three
+inputs:</p>
 <ul>
 <li>genes-by-cells raw counts matrix;</li>
 <li>genes-by-cells normalized expression matrix;</li>
 <li>a partition of cells (cell clusters).</li>
 </ul>
-<p>Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design one may want to apply strong or mild filters before using scMuffin.</p>
+<p>Typically, the two genes-by-cells matrices have already been filtered
+to exclude low quality cells and genes that could negatively affect the
+analyses. However, the characterization of cells that can be achieved
+with scMuffin offers insights that can be used to (further) filter a
+dataset and/or to decide on which cells apply particular analyses
+(e.g. biomarker identification). In general, according to research
+questions and experimental design one may want to apply strong or mild
+filters before using scMuffin.</p>
 </div>
-<div class="section level3">
-<h3 id="obtaining-the-data-used-in-this-vignette">Obtaining the data used in this vignette<a class="anchor" aria-label="anchor" href="#obtaining-the-data-used-in-this-vignette"></a>
-</h3>
-<p>To run the examples included in this vignette you need the following data:</p>
+<div class="section level2">
+<h2 id="obtaining-the-data-used-in-this-vignette">Obtaining the data used in this vignette<a class="anchor" aria-label="anchor" href="#obtaining-the-data-used-in-this-vignette"></a>
+</h2>
+<p>To run the examples included in this vignette you need the following
+data:</p>
 <ul>
-<li>two single cell datasets with counts as well as normalized expression values;</li>
+<li>two single cell datasets with counts as well as normalized
+expression values;</li>
 <li>cell clusters;</li>
 <li>UMAP visualization;</li>
 <li>cluster markers.</li>
 </ul>
-<p>Here’s an example of how these data can be obtained from a publicly available study on High-Grade Glioma <span class="citation">(J. Yuan et al. 2018)</span> (GSE103224):</p>
+<p>Here’s an example of how these data can be obtained from a publicly
+available study on High-Grade Glioma <span class="citation">(J. Yuan et
+al. 2018)</span> (GSE103224):</p>
 <ol style="list-style-type: decimal">
 <li>download the filtered genes-by-cells mtrices from the URLs:</li>
 </ol>
@@ -123,7 +139,9 @@
 <li>sample PJ017: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472" class="external-link uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472</a>.</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
-<li>read the text files into R and use the Seurat package <span class="citation">(Hao et al. 2021)</span> to perform a series of typical tasks (e.g. normalization, clustering); here’s a concise example using sample PJ016:</li>
+<li>read the text files into R and use the Seurat package <span class="citation">(Hao et al. 2021)</span> to perform a series of typical
+tasks (e.g. normalization, clustering); here’s a concise example using
+sample PJ016:</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"GSM2758471_PJ016.filtered.matrix.txt"</span><span class="op">)</span></span>
@@ -138,37 +156,62 @@
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span></code></pre></div>
-<p>The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we take advantage of the function <code>keep_strongest_representative</code>, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis that one wants to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.</p>
-</div>
+<p>The genes-by-cells count matrix available at NCBI GEO is provided
+with Ensembl identifiers and gene symbols, which are not unique. So,
+after having read the table, we take advantage of the function
+<code>keep_strongest_representative</code>, which defines a
+genes-by-cells matrix with symbols as row names. In case of multiple
+Ensembl ids mapped to the same symbol, the row with the highest average
+count is kept as representative of the gene. In a real scenario, the
+functions listed above should be run using appropriate parameters that
+take into account the specificities of the dataset under consideration
+and the objectives of the analysis that one wants to perform. Here we
+just wanted to provide a means to obtain a dataset to follow this
+vignette. Please read the Seurat documentation for further details about
+the functions listed above.</p>
 </div>
 <div class="section level2">
 <h2 id="the-scmuffinlist-data-structure">The scMuffinList data structure<a class="anchor" aria-label="anchor" href="#the-scmuffinlist-data-structure"></a>
 </h2>
-<p>All data and results of scMuffin are stored in the scMuffinList, so that every function takes in input such structure and returns a modified version of it. The scMuffinList can be created as follows:</p>
+<p>All data and results of scMuffin are stored in the scMuffinList, so
+that every function takes in input such structure and returns a modified
+version of it. The scMuffinList can be created as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_scMuffinList.html">create_scMuffinList</a></span><span class="op">(</span>counts<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>, normalized<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Many analyses require cell clusters. Any partition can be added as follows:</p>
+<p>Many analyses require cell clusters. Any partition can be added as
+follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_partitions.html">add_partitions</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, clusters <span class="op">=</span> <span class="va">seu_obj_1</span><span class="op">$</span><span class="va">seurat_clusters</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p>where seu_obj_1$seurat_clusters is a named vector that contains cells clusters and whose names are cell labels.</p>
+<p>where seu_obj_1$seurat_clusters is a named vector that contains cells
+clusters and whose names are cell labels.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">partitions</span><span class="op">[</span>, <span class="fl">2</span>, drop<span class="op">=</span><span class="cn">F</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    CNV</span></span>
-<span><span class="co">## V3   0</span></span>
-<span><span class="co">## V4   0</span></span>
-<span><span class="co">## V5   2</span></span>
-<span><span class="co">## V6   0</span></span>
-<span><span class="co">## V7   2</span></span>
+<span><span class="co">## V3   2</span></span>
+<span><span class="co">## V4   3</span></span>
+<span><span class="co">## V5   0</span></span>
+<span><span class="co">## V6   3</span></span>
+<span><span class="co">## V7   0</span></span>
 <span><span class="co">## V8   1</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="gene-set-scoring">Gene set scoring<a class="anchor" aria-label="anchor" href="#gene-set-scoring"></a>
 </h2>
-<p>scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression.</p>
+<p>scMuffin provides functions to set up one or more collections of gene
+sets and perform cell-level estimation of gene set expression in
+relation to an empirical null model. This can be applied to any gene
+set, and can therefore be used to estimate various cell’s phenotypes,
+like pathway activities or marker set expression.</p>
 <div class="section level3">
 <h3 id="assembling-input-gene-sets">Assembling input gene sets<a class="anchor" aria-label="anchor" href="#assembling-input-gene-sets"></a>
 </h3>
-<p>The function <code>prepare_gsls</code> retrieves gene sets from CellMarker [Zhang2019], PanglaoDB <span class="citation">(Franzén, Gan, and Björkegren 2019)</span>, CancerSEA <span class="citation">(H. Yuan et al. 2019)</span> and MSigDB <span class="citation">(Subramanian et al. 2005)</span>, and accepts custom gene set as well. The full list of gene sets available whitin CellMarker, PanglaoDB and CancerSEA collections can be listed using:</p>
+<p>The function <code>prepare_gsls</code> retrieves gene sets from
+CellMarker [Zhang2019], PanglaoDB <span class="citation">(Franzén, Gan,
+and Björkegren 2019)</span>, CancerSEA <span class="citation">(H. Yuan
+et al. 2019)</span> and MSigDB <span class="citation">(Subramanian et
+al. 2005)</span>, and accepts custom gene set as well. The full list of
+gene sets available whitin CellMarker, PanglaoDB and CancerSEA
+collections can be listed using:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"gsls_EntrezID"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"gsls_Symbol"</span><span class="op">)</span></span></code></pre></div>
@@ -176,99 +219,89 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">msigdbr</span><span class="fu">::</span><span class="fu"><a href="https://igordot.github.io/msigdbr/reference/msigdbr_collections.html" class="external-link">msigdbr_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">msigdbr</span><span class="fu">::</span><span class="fu"><a href="https://igordot.github.io/msigdbr/reference/msigdbr_species.html" class="external-link">msigdbr_species</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The gene sets of interest can be selected acting on the corresponding arguments <code>CM_tissues</code>, <code>PNDB_tissues</code>, and <code>msigdb_hs_cat_subcat</code>. In the case of CellMarker and PanglaoDB we can specify a list of desired tissues. The full set can be listed by means of show_tissues. Here we show just the first part of the output:</p>
+<p>The gene sets of interest can be selected acting on the corresponding
+arguments <code>CM_tissues</code>, <code>PNDB_tissues</code>, and
+<code>msigdb_hs_cat_subcat</code>. In the case of CellMarker and
+PanglaoDB we can specify a list of desired tissues. The full set can be
+listed by means of show_tissues. Here we show just the first part of the
+output:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/show_tissues.html">show_tissues</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Here is an example:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_gsls.html">prepare_gsls</a></span><span class="op">(</span>gs_sources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CancerSEA"</span>, <span class="st">"PNDB"</span><span class="op">)</span>, PNDB_tissues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Brain"</span><span class="op">)</span>, scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, genes_min <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p>Note that in the case of MSigDB we have to set up a <code>data.frame</code> to specify species, category and sub_category of the gene set collections.</p>
+<p>Note that in the case of MSigDB we have to set up a
+<code>data.frame</code> to specify species, category and sub_category of
+the gene set collections.</p>
 </div>
 <div class="section level3">
 <h3 id="calculate-gene-set-scores-at-cell-and-cluster-level">Calculate Gene set scores at cell and cluster level<a class="anchor" aria-label="anchor" href="#calculate-gene-set-scores-at-cell-and-cluster-level"></a>
 </h3>
-<p>In the following example, we estimate the scores for CancerSEA gene sets:</p>
+<p>In the following example, we estimate the scores for CancerSEA gene
+sets:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores.html">calculate_gs_scores</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, gs_list <span class="op">=</span> <span class="va">gsc</span><span class="op">$</span><span class="va">CancerSEA</span><span class="op">)</span></span></code></pre></div>
-<p>The results of any analysis are stored as elements of the <code>scMuffinList</code>. The gene set scoring engine stores its results in <code>scMuffinList$gene_set_scoring</code>, where <code>summary</code> is a cells-by-features data.frame with cell scores, and <code>full</code> contains a series of additional details for every gene set:</p>
+<p>The results of any analysis are stored as elements of the
+<code>scMuffinList</code>. The gene set scoring engine stores its
+results in <code>scMuffinList$gene_set_scoring</code>, where
+<code>summary</code> is a cells-by-features data.frame with cell scores,
+and <code>full</code> contains a series of additional details for every
+gene set:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    CSEA_Angiogenesis CSEA_Apoptosis CSEA_Cell_Cycle CSEA_Differentiation</span></span>
-<span><span class="co">## V3       -0.08918562     0.04322924      0.17300016            0.2360843</span></span>
-<span><span class="co">## V4       -0.01725770     0.10940020      0.28114799            0.2767576</span></span>
-<span><span class="co">## V5        0.11402356     0.05401112     -0.02053489            0.1757745</span></span>
-<span><span class="co">## V6       -0.06014349     0.02707061      0.37283078            0.2492808</span></span>
-<span><span class="co">## V7        0.10562932     0.24878223     -0.08555433            0.1855214</span></span>
-<span><span class="co">## V8        0.16643327     0.27654624     -0.08090808            0.1075169</span></span>
-<span><span class="co">##    CSEA_DNA_damage</span></span>
-<span><span class="co">## V3      0.13994803</span></span>
-<span><span class="co">## V4      0.31254961</span></span>
-<span><span class="co">## V5      0.16894379</span></span>
-<span><span class="co">## V6      0.18368743</span></span>
-<span><span class="co">## V7      0.03395132</span></span>
-<span><span class="co">## V8      0.11673244</span></span></code></pre>
+<pre><code><span><span class="co">##    Angiogenesis   Apoptosis  Cell_Cycle Differentiation DNA_damage</span></span>
+<span><span class="co">## V3 -0.089113218 -0.02736876  0.15982556       0.2216575 0.14051428</span></span>
+<span><span class="co">## V4 -0.003587037  0.05131560  0.30245301       0.2518166 0.29326775</span></span>
+<span><span class="co">## V5  0.122828520 -0.02124108 -0.01387160       0.1500232 0.16742211</span></span>
+<span><span class="co">## V6 -0.072394618 -0.01090225  0.38740856       0.2247531 0.19227076</span></span>
+<span><span class="co">## V7  0.114843858  0.18815302 -0.11715432       0.1688834 0.03979306</span></span>
+<span><span class="co">## V8  0.180094845  0.24514734 -0.07518025       0.1015920 0.11925093</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">CSEA_Angiogenesis</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##         case case.N case.AV nmark_min avg_control control.AV null_ok</span></span>
-<span><span class="co">## V3 0.5958431     71      22      TRUE   0.6850288         99    TRUE</span></span>
-<span><span class="co">## V4 0.6793401     71      22      TRUE   0.6965978        100    TRUE</span></span>
-<span><span class="co">## V5 0.8097307     71      24      TRUE   0.6957071         99    TRUE</span></span>
-<span><span class="co">## V6 0.6537237     71      16      TRUE   0.7138672         99    TRUE</span></span>
-<span><span class="co">## V7 0.8049070     71      24      TRUE   0.6992777         99    TRUE</span></span>
-<span><span class="co">## V8 0.8873211     71      19      TRUE   0.7208879        100    TRUE</span></span>
-<span><span class="co">##    avg_delta_score delta_score</span></span>
-<span><span class="co">## V3     -0.08918562 -0.08918562</span></span>
-<span><span class="co">## V4     -0.01725770 -0.01725770</span></span>
-<span><span class="co">## V5      0.11402356  0.11402356</span></span>
-<span><span class="co">## V6     -0.06014349 -0.06014349</span></span>
-<span><span class="co">## V7      0.10562932  0.10562932</span></span>
-<span><span class="co">## V8      0.16643327  0.16643327</span></span></code></pre>
-<p>The function <code>calculate_gs_scores_in_clusters</code> defines the median values of gene set scores in every cluster of a given partition id:</p>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
+<p>The function <code>calculate_gs_scores_in_clusters</code> defines the
+median values of gene set scores in every cluster of a given partition
+id:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores_in_clusters.html">calculate_gs_scores_in_clusters</a></span><span class="op">(</span><span class="va">scMuffinList</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
-<pre><code><span><span class="co">##   CSEA_Angiogenesis CSEA_Apoptosis CSEA_Cell_Cycle CSEA_Differentiation</span></span>
-<span><span class="co">## 0        0.03466622     0.04455260    -0.027667196            0.1546205</span></span>
-<span><span class="co">## 1        0.06283949    -0.05569218     0.119220367            0.1789833</span></span>
-<span><span class="co">## 2        0.02561436     0.06234254    -0.011424615            0.1577567</span></span>
-<span><span class="co">## 3        0.01546160     0.05865145     0.002646498            0.1788135</span></span>
-<span><span class="co">## 4        0.01048663     0.03058474     0.002924762            0.1105544</span></span>
-<span><span class="co">## 5        0.15187334     0.05179504    -0.001454732            0.2022856</span></span>
-<span><span class="co">## 6        0.04492144    -0.02827166     0.037926976            0.1453372</span></span>
-<span><span class="co">## 7        0.02152934    -0.06650877     0.298973763            0.2397246</span></span>
-<span><span class="co">## 8        0.06987440     0.04130317    -0.035846983            0.1945336</span></span>
-<span><span class="co">##   CSEA_DNA_damage CSEA_DNA_repair   CSEA_EMT CSEA_Hypoxia CSEA_Inflammation</span></span>
-<span><span class="co">## 0      0.06477004    -0.010409047 0.24631020  0.161630871      -0.001521447</span></span>
-<span><span class="co">## 1      0.14481900     0.151772082 0.10215837  0.021980962      -0.017672214</span></span>
-<span><span class="co">## 2      0.16351859    -0.013112346 0.24304692  0.286081417       0.151495357</span></span>
-<span><span class="co">## 3      0.15417556     0.002515808 0.18619531  0.295312377       0.112050700</span></span>
-<span><span class="co">## 4      0.13590319     0.017085982 0.24579872  0.316156629       0.087552771</span></span>
-<span><span class="co">## 5      0.16387229     0.008464217 0.32835167  0.284878014       0.103306520</span></span>
-<span><span class="co">## 6      0.21480019     0.083121431 0.11631038  0.018344308       0.062785742</span></span>
-<span><span class="co">## 7      0.14811608     0.143265241 0.07557108  0.008915609       0.020922322</span></span>
-<span><span class="co">## 8      0.25436327     0.067705312 0.14146636 -0.020107706       0.027748835</span></span>
-<span><span class="co">##   CSEA_Invasion CSEA_Metastasis CSEA_Proliferation CSEA_Quiescence</span></span>
-<span><span class="co">## 0     0.1491915       0.3167512        -0.03419802     -0.04874756</span></span>
-<span><span class="co">## 1     0.4192880       0.1410125         0.16986820     -0.01040003</span></span>
-<span><span class="co">## 2     0.1947080       0.3166050        -0.02744911      0.09093454</span></span>
-<span><span class="co">## 3     0.2183125       0.3104895         0.01500294      0.03456636</span></span>
-<span><span class="co">## 4     0.1516411       0.2714825         0.08584974      0.14455138</span></span>
-<span><span class="co">## 5     0.2210099       0.3680268        -0.01962822      0.05680748</span></span>
-<span><span class="co">## 6     0.2105844       0.1090950         0.03454176      0.05277640</span></span>
-<span><span class="co">## 7     0.5083292       0.1830839         0.35488900     -0.04732778</span></span>
-<span><span class="co">## 8     0.2925115       0.1651046         0.14961468      0.13518170</span></span>
-<span><span class="co">##   CSEA_Stemness</span></span>
-<span><span class="co">## 0     0.2592561</span></span>
-<span><span class="co">## 1     0.3960544</span></span>
-<span><span class="co">## 2     0.2616661</span></span>
-<span><span class="co">## 3     0.2791968</span></span>
-<span><span class="co">## 4     0.3027992</span></span>
-<span><span class="co">## 5     0.2357361</span></span>
-<span><span class="co">## 6     0.3783765</span></span>
-<span><span class="co">## 7     0.4564071</span></span>
-<span><span class="co">## 8     0.3973588</span></span></code></pre>
-<p>These mean values are useful to obtain a concise visualization of gene set expression throughout the dataset, using the function <code>plot_heatmap_features_by_clusters</code>:</p>
+<pre><code><span><span class="co">##   Angiogenesis    Apoptosis   Cell_Cycle Differentiation DNA_damage</span></span>
+<span><span class="co">## 0  0.047859938 -0.088965155  0.110267077      0.16918450 0.16103980</span></span>
+<span><span class="co">## 1  0.056847826  0.036663900  0.006437504      0.16233049 0.18251283</span></span>
+<span><span class="co">## 2  0.032503390 -0.034567178 -0.065434867      0.08517490 0.14345603</span></span>
+<span><span class="co">## 3  0.056820484 -0.007732416 -0.043253422      0.09640405 0.07634114</span></span>
+<span><span class="co">## 4  0.035065898 -0.020565102 -0.069010461      0.09766083 0.13605394</span></span>
+<span><span class="co">## 5  0.057012002 -0.007916085 -0.027483616      0.12878842 0.15750102</span></span>
+<span><span class="co">## 6  0.009464465 -0.048782422  0.011650033      0.14793156 0.23773401</span></span>
+<span><span class="co">## 7  0.180890552 -0.004328227 -0.026837614      0.18052135 0.14210041</span></span>
+<span><span class="co">## 8  0.144201389 -0.018635396  0.021841089      0.16421038 0.21497220</span></span>
+<span><span class="co">## 9  0.045549704 -0.068738127  0.295309989      0.25482631 0.17238070</span></span>
+<span><span class="co">##     DNA_repair       EMT      Hypoxia Inflammation  Invasion Metastasis</span></span>
+<span><span class="co">## 0  0.098945306 0.1429307 -0.002983632  0.008729023 0.4472744  0.1144382</span></span>
+<span><span class="co">## 1  0.009465724 0.2523039  0.333431166  0.152182984 0.2503599  0.3066740</span></span>
+<span><span class="co">## 2 -0.025654591 0.1912701  0.210172770  0.038350228 0.1130673  0.2673377</span></span>
+<span><span class="co">## 3 -0.011475854 0.2303885  0.167091886  0.005294070 0.1752660  0.2788620</span></span>
+<span><span class="co">## 4  0.030970644 0.2275091  0.304570531  0.110102310 0.1778773  0.2702203</span></span>
+<span><span class="co">## 5 -0.009794570 0.2157880  0.271551139  0.066140185 0.2598153  0.2959017</span></span>
+<span><span class="co">## 6  0.055899011 0.1773771 -0.037244689  0.032686215 0.2602460  0.0970928</span></span>
+<span><span class="co">## 7 -0.027613833 0.3274798  0.295935075  0.110663000 0.2846644  0.3815454</span></span>
+<span><span class="co">## 8  0.016203928 0.1376003 -0.046727520 -0.001804147 0.2446869  0.1113544</span></span>
+<span><span class="co">## 9  0.107220520 0.1154087  0.023735537  0.041855789 0.5635380  0.1552216</span></span>
+<span><span class="co">##   Proliferation   Quiescence  Stemness</span></span>
+<span><span class="co">## 0    0.17611146 -0.009397549 0.3951332</span></span>
+<span><span class="co">## 1    0.01102549  0.068921466 0.2960947</span></span>
+<span><span class="co">## 2   -0.05060590 -0.018336789 0.2438539</span></span>
+<span><span class="co">## 3    0.01032691 -0.037541588 0.2649289</span></span>
+<span><span class="co">## 4    0.12775340  0.153623982 0.3388603</span></span>
+<span><span class="co">## 5    0.03528640 -0.031068515 0.2487021</span></span>
+<span><span class="co">## 6    0.03657727 -0.077159027 0.3848135</span></span>
+<span><span class="co">## 7   -0.03310542  0.051625491 0.2351137</span></span>
+<span><span class="co">## 8    0.06128233  0.041054982 0.4134585</span></span>
+<span><span class="co">## 9    0.37196567 -0.025262162 0.4170985</span></span></code></pre>
+<p>These mean values are useful to obtain a concise visualization of
+gene set expression throughout the dataset, using the function
+<code>plot_heatmap_features_by_clusters</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span><span class="va">scMuffinList</span>, feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
@@ -282,91 +315,107 @@
 <div class="section level3">
 <h3 id="cnv-calculation">CNV calculation<a class="anchor" aria-label="anchor" href="#cnv-calculation"></a>
 </h3>
-<p>CNV inference is performed by the function <code>CNV_analysis</code>.</p>
+<p>CNV inference is performed by the function
+<code>CNV_analysis</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNV_analysis.html">CNV_analysis</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
-<p>The results are stored in <code>scMuffinList_demo$CNV</code>, where summary contains the “CNV_signal” and <code>scMuffinList_demo$CNV$full$CNV</code> the regions-by-cells CNV matrix; the element <code>scMuffinList_demo$CNV$full$regions2genes</code> is important to map the original data into the CNV regions; lastly, the <code>scMuffinList_demo$CNV$full$detected_cnv_regions</code> is a data.frame that list the CNV regions detected in each chromosome and cell cluster:</p>
+<p>The results are stored in <code>scMuffinList_demo$CNV</code>, where
+summary contains the “CNV_signal” and
+<code>scMuffinList_demo$CNV$full$CNV</code> the regions-by-cells CNV
+matrix; the element
+<code>scMuffinList_demo$CNV$full$regions2genes</code> is important to
+map the original data into the CNV regions; lastly, the
+<code>scMuffinList_demo$CNV$full$detected_cnv_regions</code> is a
+data.frame that list the CNV regions detected in each chromosome and
+cell cluster:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    CNV_signal</span></span>
-<span><span class="co">## V3   41.61357</span></span>
-<span><span class="co">## V4   48.08947</span></span>
-<span><span class="co">## V5   39.13876</span></span>
-<span><span class="co">## V6   44.46613</span></span>
-<span><span class="co">## V7   36.90114</span></span>
-<span><span class="co">## V8   44.93450</span></span></code></pre>
+<span><span class="co">## V3   42.63922</span></span>
+<span><span class="co">## V4   49.41188</span></span>
+<span><span class="co">## V5   40.24116</span></span>
+<span><span class="co">## V6   45.47030</span></span>
+<span><span class="co">## V7   37.84952</span></span>
+<span><span class="co">## V8   45.86847</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">CNV</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                    V3         V4          V5</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.09439528 -0.1298259 -0.08592605</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.09439528 -0.1298259 -0.08592605</span></span>
-<span><span class="co">## chr1__SAMD11_923922__SPEN_15847706        -0.09759899 -0.1330395 -0.08592605</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.09759899 -0.1254592 -0.08592605</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.10080269 -0.1198235 -0.08592605</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.10080269 -0.1174013 -0.08592605</span></span>
+<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.09649985 -0.1330433 -0.08760797</span></span>
+<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.09649985 -0.1330433 -0.08760797</span></span>
+<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.09978001 -0.1363396 -0.08760797</span></span>
+<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.09978001 -0.1286003 -0.08760797</span></span>
+<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.10306018 -0.1228353 -0.08760797</span></span>
+<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.10306018 -0.1203667 -0.08760797</span></span>
 <span><span class="co">##                                                    V6          V7         V8</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.07809396 -0.09126164 -0.1287080</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.07809396 -0.08801308 -0.1287080</span></span>
-<span><span class="co">## chr1__SAMD11_923922__SPEN_15847706        -0.07809396 -0.08801308 -0.1229857</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.07485419 -0.08801308 -0.1197168</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08053094 -0.09126164 -0.1164479</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07729117 -0.09126164 -0.1131790</span></span>
+<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.07987470 -0.09295970 -0.1308550</span></span>
+<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.07987470 -0.08965322 -0.1308550</span></span>
+<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.07987470 -0.08965322 -0.1250560</span></span>
+<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.07657357 -0.08965322 -0.1217379</span></span>
+<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08234611 -0.09295970 -0.1184198</span></span>
+<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07904497 -0.09295970 -0.1151017</span></span>
 <span><span class="co">##                                                   V9        V10        V11</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.1338054 -0.1115354 0.03965468</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.1370741 -0.1115354 0.04297391</span></span>
-<span><span class="co">## chr1__SAMD11_923922__SPEN_15847706        -0.1338054 -0.1082252 0.04877464</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.1338054 -0.1115354 0.05457536</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.1338054 -0.1115354 0.05705685</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.1338054 -0.1082252 0.06037609</span></span>
+<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.1360846 -0.1135812 0.03934666</span></span>
+<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.1394048 -0.1135812 0.04272745</span></span>
+<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.1360846 -0.1102118 0.04862384</span></span>
+<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.1360846 -0.1135812 0.05452022</span></span>
+<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.1360846 -0.1135812 0.05703581</span></span>
+<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.1360846 -0.1102118 0.06041660</span></span>
 <span><span class="co">##                                                   V12</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.08178787</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.08178787</span></span>
-<span><span class="co">## chr1__SAMD11_923922__SPEN_15847706        -0.08178787</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.07842147</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.07842147</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07254742</span></span></code></pre>
+<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.08363167</span></span>
+<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.08363167</span></span>
+<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.08363167</span></span>
+<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.08020467</span></span>
+<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08020467</span></span>
+<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07423670</span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">regions2genes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $chr1__LINC00115_826205__UQCRHL_15807161</span></span>
 <span><span class="co">##       symbol location</span></span>
 <span><span class="co">## 11 LINC00115   826205</span></span>
 <span><span class="co">## 12 LINC01128   827797</span></span>
-<span><span class="co">## 13    SAMD11   923922</span></span>
+<span><span class="co">## 13    SAMD11   925730</span></span>
 <span><span class="co">## 14     NOC2L   944202</span></span>
 <span><span class="co">## 15      HES4   998963</span></span>
 <span><span class="co">## 16     ISG15  1013496</span></span></code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">detected_cnv_regions</span><span class="op">$</span><span class="va">chr1</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    chr                                   start start.loc</span></span>
-<span><span class="co">## 1 chr1 chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
-<span><span class="co">## 2 chr1    chr1__PHF13_6613730__LYPLA2_23791144   6613730</span></span>
-<span><span class="co">## 3 chr1    chr1__CAMTA1_6785323__FUCA1_23845080   6785323</span></span>
-<span><span class="co">## 4 chr1  chr1__HIPK1_113953876__CHTOP_153633981 113953876</span></span>
-<span><span class="co">## 5 chr1   chr1__CD58_116514533__RAB13_153981604 116514533</span></span>
-<span><span class="co">## 6 chr1  chr1__S100A2_153561108__DEDD_161120977 153561108</span></span>
-<span><span class="co">##                                      stop  stop.loc cluster   length</span></span>
-<span><span class="co">## 1   chr1__KLHL21_6590723__PITHD1_23778417  23778417       0 22952212</span></span>
-<span><span class="co">## 2   chr1__DNAJC11_6634169__HMGCL_23801876  23801876       0 17188146</span></span>
-<span><span class="co">## 3   chr1__TMEM201_9588910__STMN1_25900115  25900115       0 19114792</span></span>
-<span><span class="co">## 4  chr1__SIKE1_114769483__CRTC2_153947675 153947675       0 39993799</span></span>
-<span><span class="co">## 5  chr1__S100A3_153547328__NIT1_161118117 161118117       0 44603584</span></span>
-<span><span class="co">## 6 chr1__ILF2_153661787__ADAMTS4_161189725 161189725       0  7628617</span></span></code></pre>
+<pre><code><span><span class="co">##     chr                                    start start.loc</span></span>
+<span><span class="co">## 1  chr1  chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
+<span><span class="co">## 4  chr1   chr1__HIPK1_113953876__CHTOP_153633981 113953876</span></span>
+<span><span class="co">## 9  chr1   chr1__BLZF1_169367878__CHIT1_203216078 169367878</span></span>
+<span><span class="co">## 10 chr1  chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
+<span><span class="co">## 11 chr1  chr1__LRIG2_113073197__S100A6_153534598 113073197</span></span>
+<span><span class="co">## 12 chr1 chr1__ALDH9A1_165662215__LMOD1_201896455 165662215</span></span>
+<span><span class="co">##                                         stop  stop.loc cluster   length</span></span>
+<span><span class="co">## 1      chr1__TMEM201_9588910__STMN1_25900115  25900115       0 25073910</span></span>
+<span><span class="co">## 4  chr1__RAB13_153981604__C1orf226_162378840 162378840       0 48424964</span></span>
+<span><span class="co">## 9    chr1__SLC19A2_169463910__BTG2_203305518 203305518       0 33937640</span></span>
+<span><span class="co">## 10      chr1__ZBTB48_6579993__RPL11_23691778  23691778       1 22865573</span></span>
+<span><span class="co">## 11      chr1__TPM3_154161812__UAP1_162561439 162561439       1 49488242</span></span>
+<span><span class="co">## 12 chr1__METTL18_169792531__ATP2B4_203626831 203626831       1 37964616</span></span></code></pre>
 <p>Importantly, CNV inference adds the “CNV” partition:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">partitions</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    global_expr CNV</span></span>
-<span><span class="co">## V3           1   0</span></span>
-<span><span class="co">## V4           1   0</span></span>
-<span><span class="co">## V5           5   2</span></span>
-<span><span class="co">## V6           1   0</span></span>
-<span><span class="co">## V7           5   2</span></span>
-<span><span class="co">## V8           5   1</span></span></code></pre>
-<p>The calculation can be demanding. For example, it requires approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R), 2.60GHz).</p>
+<span><span class="co">## V3           0   2</span></span>
+<span><span class="co">## V4           0   3</span></span>
+<span><span class="co">## V5           7   0</span></span>
+<span><span class="co">## V6           0   3</span></span>
+<span><span class="co">## V7           7   0</span></span>
+<span><span class="co">## V8           7   1</span></span></code></pre>
+<p>The calculation can be demanding. For example, it requires
+approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R),
+2.60GHz).</p>
 </div>
 <div class="section level3">
 <h3 id="cnv-visualization">CNV visualization<a class="anchor" aria-label="anchor" href="#cnv-visualization"></a>
 </h3>
-<p>scMuffin provides two visualizations for CNVs: an heatmap and the cluster average profile plot. The heatmap is based on ComnplexHeatmap package and beside it, it is possible to visualize the genomic location of a series of given genes (specified in the argument <code>genes</code>), or, alternatively, the location of detected CNVs (argument <code>mark.detected.cnv = T</code>)</p>
+<p>scMuffin provides two visualizations for CNVs: an heatmap and the
+cluster average profile plot. The heatmap is based on ComnplexHeatmap
+package and beside it, it is possible to visualize the genomic location
+of a series of given genes (specified in the argument
+<code>genes</code>), or, alternatively, the location of detected CNVs
+(argument <code>mark.detected.cnv = T</code>)</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">col_fun</span> <span class="op">&lt;-</span> <span class="fu">circlize</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/circlize/man/colorRamp2.html" class="external-link">colorRamp2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">pals</span><span class="fu">::</span><span class="fu"><a href="https://kwstat.github.io/pals/reference/brewer.html" class="external-link">brewer.rdylbu</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YBX1"</span>, <span class="st">"HNRNPM"</span><span class="op">)</span>, genes.labels <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span>
@@ -375,7 +424,8 @@
 <span></span>
 <span><span class="fu"><a href="../reference/plot_profile_CNV.html">plot_profile_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, cluster <span class="op">=</span> <span class="fl">0</span>, cex.points <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="images/heatmap_CNV_PJ016_vignette_genes.jpg" width="600" alt="caption"><img src="images/heatmap_CNV_PJ016_vignette_cnv.jpg" width="600"></p>
-<p>To function <code>plot_profile_CNV</code> plots the median CNV profile of a cluster:</p>
+<p>To function <code>plot_profile_CNV</code> plots the median CNV
+profile of a cluster:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_profile_CNV.html">plot_profile_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, cluster <span class="op">=</span> <span class="fl">0</span>, cex.points <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="images/CNV_profile_ref_0.png_0.png" width="600"></p>
@@ -384,166 +434,182 @@
 <div class="section level2">
 <h2 id="transcriptional-complexity">Transcriptional complexity<a class="anchor" aria-label="anchor" href="#transcriptional-complexity"></a>
 </h2>
-<p>The transcriptional complexity can be quantified by means of the function <code>transcr_compl</code>. The corresponding summary element contains a <code>data.frame</code> with the number of cell transcripts, the number of genes detected in every cell, the TC-ratio (C), the TC-LMR (linear model residual) and the TC-H (entropy):</p>
+<p>The transcriptional complexity can be quantified by means of the
+function <code>transcr_compl</code>. The corresponding summary element
+contains a <code>data.frame</code> with the number of cell transcripts,
+the number of genes detected in every cell, the TC-ratio (C), the TC-LMR
+(linear model residual) and the TC-H (entropy):</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transcr_compl.html">transcr_compl</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">transcr_compl</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    tot_counts n_genes        C        H          LM</span></span>
-<span><span class="co">## V3      16233    1052 0.863711 6.523161 -0.02531052</span></span>
-<span><span class="co">## V4      14286    1168 1.089642 6.736431  0.06163495</span></span>
-<span><span class="co">## V5      15857    1217 1.022871 6.602594  0.04557971</span></span>
-<span><span class="co">## V6      15157    1208 1.062197 6.763307  0.05702736</span></span>
-<span><span class="co">## V7      15615    1172 1.000316 6.536441  0.03421426</span></span>
-<span><span class="co">## V8      15286    1218 1.061952 6.685640  0.05785375</span></span></code></pre>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="cell-proliferation-rate">Cell proliferation rate<a class="anchor" aria-label="anchor" href="#cell-proliferation-rate"></a>
 </h2>
-<p>Cell proliferation is quantified considering the maximum between the two scores of G1/S and G2/M gene sets:</p>
+<p>Cell proliferation is quantified considering the maximum between the
+two scores of G1/S and G2/M gene sets:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proliferation_analysis.html">proliferation_analysis</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
-<p>The proliferation score is stored in the <code>summary</code> element of <code>scMuffinList_demo$proliferation</code>:</p>
+<p>The proliferation score is stored in the <code>summary</code> element
+of <code>scMuffinList_demo$proliferation</code>:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">proliferation</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Proliferation_score</span></span>
-<span><span class="co">## V3          0.27013968</span></span>
-<span><span class="co">## V4          0.42946960</span></span>
-<span><span class="co">## V5         -0.17596045</span></span>
-<span><span class="co">## V6          0.40310925</span></span>
-<span><span class="co">## V7         -0.04090571</span></span>
-<span><span class="co">## V8         -0.12102751</span></span></code></pre>
+<span><span class="co">## V3          0.24639700</span></span>
+<span><span class="co">## V4          0.49466334</span></span>
+<span><span class="co">## V5         -0.18135986</span></span>
+<span><span class="co">## V6          0.35468552</span></span>
+<span><span class="co">## V7         -0.07408355</span></span>
+<span><span class="co">## V8         -0.11730502</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="cell-state-trajectories">Cell state trajectories<a class="anchor" aria-label="anchor" href="#cell-state-trajectories"></a>
 </h2>
-<p>Diffusion maps identify differentiation trajectories. scMuffin relies on the diffusion pseudo time calculation available in the R package “destiny” <span class="citation">(Angerer et al. 2016)</span>. Here we calculate the diffusion map over the first 50 PC (to speed up computation), using a random cell to obtain diffusion pseudotimes:</p>
+<p>Diffusion maps identify differentiation trajectories. scMuffin relies
+on the diffusion pseudo time calculation available in the R package
+“destiny” <span class="citation">(Angerer et al. 2016)</span>. Here we
+calculate the diffusion map over the first 50 PC (to speed up
+computation), using a random cell to obtain diffusion pseudotimes:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diff_map.html">diff_map</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, root_cell <span class="op">=</span> <span class="st">"random"</span>, n_pcs<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p>A data.frame with the most important features of the analysis (the first two eigenvectors, pseudotime, branch information and whether a cell is a tip of the branch or not) are stored <code>scMuffinList_demo$diffusion_map_pseudo_t$summary</code>:</p>
+<p>A data.frame with the most important features of the analysis (the
+first two eigenvectors, pseudotime, branch information and whether a
+cell is a tip of the branch or not) are stored
+<code>scMuffinList_demo$diffusion_map_pseudo_t$summary</code>:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">diffusion_map_pseudo_t</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
-<pre><code><span><span class="co">##            DC1          DC2      dpt branch  tips</span></span>
-<span><span class="co">## V3  0.02501839 -0.022810097 1.888927      2 FALSE</span></span>
-<span><span class="co">## V4  0.03166680 -0.032411924 1.967455      2 FALSE</span></span>
-<span><span class="co">## V5 -0.01895550 -0.010695236 1.675576      3 FALSE</span></span>
-<span><span class="co">## V6  0.03301277 -0.039363092 1.990567      2 FALSE</span></span>
-<span><span class="co">## V7 -0.01821403 -0.009274310 1.670158      3 FALSE</span></span>
-<span><span class="co">## V8 -0.01831355 -0.009674605 1.671976      3 FALSE</span></span></code></pre>
+<pre><code><span><span class="co">##            DC1         DC2       dpt branch  tips</span></span>
+<span><span class="co">## V3 -0.02439247 0.027065472 0.4543284     NA FALSE</span></span>
+<span><span class="co">## V4 -0.03067862 0.038183692 0.3605517      1 FALSE</span></span>
+<span><span class="co">## V5  0.01926612 0.005728970 1.3628920      2 FALSE</span></span>
+<span><span class="co">## V6 -0.03187947 0.047049007 0.3474134      1 FALSE</span></span>
+<span><span class="co">## V7  0.01855801 0.004949549 1.3447794      2 FALSE</span></span>
+<span><span class="co">## V8  0.01855621 0.005021415 1.3454328      2 FALSE</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="cluster-enrichment-assessment">Cluster enrichment assessment<a class="anchor" aria-label="anchor" href="#cluster-enrichment-assessment"></a>
 </h2>
-<p>Cell clusters can be assessed for enrichment in quantitative and categorical values. The appropriate statistical test is automatically chosen according to feature type. In this example, we assess cluster enrichment for the feature <code>gene_set_scoring</code> (quantitative one) for the cluster defined by the partition <code>global_expr</code>:</p>
+<p>Cell clusters can be assessed for enrichment in quantitative and
+categorical values. The appropriate statistical test is automatically
+chosen according to feature type. In this example, we assess cluster
+enrichment for the feature <code>gene_set_scoring</code> (quantitative
+one) for the cluster defined by the partition
+<code>global_expr</code>:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p>In case of quantitative features the result is a list named GSEA, placed under the elements <code>cluster_data$global_expr</code> (partition id). The list contains the gene set table and the leading edge results. Here’s the result related to the gene set <code>CSEA_Angiogenesis</code>:</p>
+<p>In case of quantitative features the result is a list named CSEA,
+placed under the elements <code>cluster_data$global_expr</code>
+(partition id). The list contains the gene set table and the leading
+edge results. Here’s the result related to the gene set
+<code>CSEA_Angiogenesis</code>:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">GSEA</span><span class="op">$</span><span class="va">gs_table</span><span class="op">$</span><span class="va">CSEA_Angiogenesis</span></span></code></pre></div>
-<pre><code><span><span class="co">##   id         es p_val adj_p_val n_pos_perm n_neg_perm       nes        FDRq</span></span>
-<span><span class="co">## 0  0 -0.1767187  0.01 0.0180000         98          2 0.0000000 1.000000000</span></span>
-<span><span class="co">## 1  1  0.3124272  0.02 0.0300000        100          0 1.2511556 0.098737084</span></span>
-<span><span class="co">## 2  2  0.1687780  1.00 1.0000000        100          0 0.6984846 0.974741676</span></span>
-<span><span class="co">## 3  3 -0.1578852  0.01 0.0180000         99          1 0.0000000 1.000000000</span></span>
-<span><span class="co">## 4  4 -0.2900841  0.01 0.0180000         97          3 0.0000000 1.000000000</span></span>
-<span><span class="co">## 5  5  0.5501378  0.01 0.0180000         98          2 2.1523242 0.006888634</span></span>
-<span><span class="co">## 6  6  0.3163922  0.10 0.1285714         97          3 1.2295078 0.106773823</span></span>
-<span><span class="co">## 7  7  0.2876240  0.24 0.2700000         96          4 1.1208356 0.234213548</span></span>
-<span><span class="co">## 8  8  0.4906238  0.01 0.0180000         86         14 1.7152713 0.006888634</span></span></code></pre>
-<p>In this this example we assess cluster enrichment in relation to categorical feature, namely cell cycle phase:</p>
+<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">CSEA</span><span class="op">$</span><span class="va">gs_table</span><span class="op">$</span><span class="va">CSEA_Angiogenesis</span></span></code></pre></div>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
+<p>In this this example we assess cluster enrichment in relation to
+categorical feature, namely cell cycle phase:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p>As for categorical features the result is a list named ORA, placed under the elements <code>cluster_data$global_expr</code> (partition id). The list contains ORA results for every categorical value. Here’s the enrichment of clusters in terms of cells with value “G1”:</p>
+<p>As for categorical features the result is a list named ORA, placed
+under the elements <code>cluster_data$global_expr</code> (partition id).
+The list contains ORA results for every categorical value. Here’s the
+enrichment of clusters in terms of cells with value “G1”:</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">ORA</span><span class="op">$</span><span class="va">CC_Phase</span><span class="op">$</span><span class="va">G1</span></span></code></pre></div>
-<pre><code><span><span class="co">##   id    N   wb  bb  bd wbd       exp        er            p        p_adj</span></span>
-<span><span class="co">## 0  0 2828 2049 779 583 399 422.40700 0.9445866 9.931667e-01 1.000000e+00</span></span>
-<span><span class="co">## 1  1 2828 2049 779 502   0 363.71924 0.0000000 1.000000e+00 1.000000e+00</span></span>
-<span><span class="co">## 2  2 2828 2049 779 474 441 343.43211 1.2840966 3.156377e-34 1.420369e-33</span></span>
-<span><span class="co">## 3  3 2828 2049 779 446 431 323.14498 1.3337667 5.121689e-47 4.609520e-46</span></span>
-<span><span class="co">## 4  4 2828 2049 779 330 273 239.09830 1.1417898 2.642676e-06 5.946021e-06</span></span>
-<span><span class="co">## 5  5 2828 2049 779 262 250 189.82956 1.3169709 1.192875e-23 3.578624e-23</span></span>
-<span><span class="co">## 6  6 2828 2049 779 220 165 159.39887 1.0351391 2.124319e-01 3.823774e-01</span></span>
-<span><span class="co">## 7  7 2828 2049 779 138   0  99.98656 0.0000000 1.000000e+00 1.000000e+00</span></span>
-<span><span class="co">## 8  8 2828 2049 779 130  90  94.19024 0.9555130 8.275204e-01 1.000000e+00</span></span></code></pre>
-<p>The enrichment analysis results appearing in these tables can be easily extracted and organized in a clusters-by-values table by means of <code>extract_cluster_enrichment_table</code>. For instance, here we extract GSEA NES and FDRq values, and ORA er (enrichment ratio) values:</p>
+<pre><code><span><span class="co">##   id    N   wb  bb  bd wbd       exp       er            p        p_adj</span></span>
+<span><span class="co">## 0  0 2828 2049 779 499   0 361.54562 0.000000 1.000000e+00 1.000000e+00</span></span>
+<span><span class="co">## 1  1 2828 2049 779 475 459 344.15665 1.333695 2.289783e-50 2.289783e-49</span></span>
+<span><span class="co">## 2  2 2828 2049 779 378 343 273.87624 1.252391 8.889784e-21 1.777957e-20</span></span>
+<span><span class="co">## 3  3 2828 2049 779 309 293 223.88296 1.308720 2.712597e-26 9.041991e-26</span></span>
+<span><span class="co">## 4  4 2828 2049 779 296 272 214.46393 1.268279 2.060936e-18 3.434894e-18</span></span>
+<span><span class="co">## 5  5 2828 2049 779 257 253 186.20686 1.358704 5.986769e-32 2.993384e-31</span></span>
+<span><span class="co">## 6  6 2828 2049 779 185 145 134.03996 1.081767 3.528719e-02 4.410899e-02</span></span>
+<span><span class="co">## 7  7 2828 2049 779 172 169 124.62093 1.356112 6.593125e-21 1.648281e-20</span></span>
+<span><span class="co">## 8  8 2828 2049 779 142 115 102.88472 1.117756 1.066766e-02 1.523951e-02</span></span>
+<span><span class="co">## 9  9 2828 2049 779 115   0  83.32214 0.000000 1.000000e+00 1.000000e+00</span></span></code></pre>
+<p>The enrichment analysis results appearing in these tables can be
+easily extracted and organized in a clusters-by-values table by means of
+<code>extract_cluster_enrichment_table</code>. For instance, here we
+extract CSEA NES and FDRq values, and ORA er (enrichment ratio)
+values:</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gsea_fdr_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"GSEA"</span>, quantity <span class="op">=</span> <span class="st">"FDRq"</span><span class="op">)</span></span>
-<span><span class="va">gsea_nes_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"GSEA"</span>, quantity <span class="op">=</span> <span class="st">"nes"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">csea_fdr_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"CSEA"</span>, quantity <span class="op">=</span> <span class="st">"FDRq"</span><span class="op">)</span></span>
+<span><span class="va">csea_nes_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"CSEA"</span>, quantity <span class="op">=</span> <span class="st">"nes"</span><span class="op">)</span></span>
 <span><span class="va">ora_p_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"ORA"</span>, quantity <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span>
-<span><span class="va">gsea_fdr_table</span></span></code></pre></div>
-<pre><code><span><span class="co">##   CSEA_Angiogenesis CSEA_Apoptosis CSEA_Cell_Cycle CSEA_Differentiation</span></span>
-<span><span class="co">## 0       1.000000000    0.091711957     1.000000000          1.000000000</span></span>
-<span><span class="co">## 1       0.098737084    0.018292683     0.004608295          0.046718576</span></span>
-<span><span class="co">## 2       0.974741676    0.008152174     1.000000000          0.266963293</span></span>
-<span><span class="co">## 3       1.000000000    0.008152174     1.000000000          0.354467927</span></span>
-<span><span class="co">## 4       1.000000000    0.831521739     1.000000000          0.997775306</span></span>
-<span><span class="co">## 5       0.006888634    0.008152174     1.000000000          0.044493882</span></span>
-<span><span class="co">## 6       0.106773823    0.018292683     0.231950845          0.845383760</span></span>
-<span><span class="co">## 7       0.234213548    0.018292683     0.004608295          0.008898776</span></span>
-<span><span class="co">## 8       0.006888634    0.813858696     1.000000000          0.008898776</span></span>
-<span><span class="co">##   CSEA_DNA_damage CSEA_DNA_repair    CSEA_EMT CSEA_Hypoxia CSEA_Inflammation</span></span>
-<span><span class="co">## 0     1.000000000     1.000000000 0.059325176  0.998883929       1.000000000</span></span>
-<span><span class="co">## 1     0.306117909     0.005643341 1.000000000  1.000000000       1.000000000</span></span>
-<span><span class="co">## 2     0.171301446     1.000000000 0.017797553  0.005580357       0.005586592</span></span>
-<span><span class="co">## 3     1.000000000     1.000000000 1.000000000  0.005580357       0.013966480</span></span>
-<span><span class="co">## 4     0.332220986     0.996613995 1.000000000  0.005580357       0.055865922</span></span>
-<span><span class="co">## 5     0.979977753     1.000000000 0.008898776  0.005580357       0.101955307</span></span>
-<span><span class="co">## 6     0.008898776     0.005643341 1.000000000  1.000000000       0.982122905</span></span>
-<span><span class="co">## 7     0.038561364     0.005643341 1.000000000  1.000000000       1.000000000</span></span>
-<span><span class="co">## 8     0.008898776     0.007054176 1.000000000  1.000000000       1.000000000</span></span>
-<span><span class="co">##   CSEA_Invasion CSEA_Metastasis CSEA_Proliferation CSEA_Quiescence</span></span>
-<span><span class="co">## 0   1.000000000     0.172991071        1.000000000     1.000000000</span></span>
-<span><span class="co">## 1   0.008898776     1.000000000        0.005592841     1.000000000</span></span>
-<span><span class="co">## 2   1.000000000     0.005580357        1.000000000     0.014833127</span></span>
-<span><span class="co">## 3   1.000000000     0.005580357        1.000000000     1.000000000</span></span>
-<span><span class="co">## 4   1.000000000     0.952008929        0.011185682     0.004944376</span></span>
-<span><span class="co">## 5   1.000000000     0.005580357        1.000000000     0.627935723</span></span>
-<span><span class="co">## 6   0.280311457     1.000000000        0.856823266     0.020408163</span></span>
-<span><span class="co">## 7   0.008898776     1.000000000        0.005592841     1.000000000</span></span>
-<span><span class="co">## 8   0.038561364     1.000000000        0.267058166     0.613102596</span></span>
-<span><span class="co">##   CSEA_Stemness</span></span>
-<span><span class="co">## 0    1.00000000</span></span>
-<span><span class="co">## 1    0.00779510</span></span>
-<span><span class="co">## 2    1.00000000</span></span>
-<span><span class="co">## 3    1.00000000</span></span>
-<span><span class="co">## 4    0.00935412</span></span>
-<span><span class="co">## 5    1.00000000</span></span>
-<span><span class="co">## 6    0.00779510</span></span>
-<span><span class="co">## 7    0.00779510</span></span>
-<span><span class="co">## 8    0.00779510</span></span></code></pre>
-<p>These tables can be plotted with the function <code>plot_heatmap_features_by_clusters</code>. In the following example we plot NES values with a asterisks according to their significance:</p>
+<span><span class="va">csea_fdr_table</span></span></code></pre></div>
+<pre><code><span><span class="co">##   Angiogenesis  Apoptosis  Cell_Cycle Differentiation  DNA_damage  DNA_repair</span></span>
+<span><span class="co">## 0  0.946014127 0.00879397 0.003722084      0.02250000 0.690090090 0.004201681</span></span>
+<span><span class="co">## 1  0.989909183 0.01470588 1.000000000      0.11800000 0.102102102 1.000000000</span></span>
+<span><span class="co">## 2  1.000000000 0.64049414 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
+<span><span class="co">## 3  1.000000000 0.09803922 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
+<span><span class="co">## 4  1.000000000 0.23743719 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
+<span><span class="co">## 5  0.823410696 0.88819095 0.058064516      1.00000000 0.955955956 1.000000000</span></span>
+<span><span class="co">## 6  1.000000000 0.01172529 0.579404467      1.00000000 0.009009009 0.111344538</span></span>
+<span><span class="co">## 7  0.009081736 0.01470588 0.048387097      0.02666667 1.000000000 0.031250000</span></span>
+<span><span class="co">## 8  0.031786075 0.76331658 0.967741935      0.01000000 0.009009009 0.110644258</span></span>
+<span><span class="co">## 9  0.992936428 0.00879397 0.003722084      0.01000000 0.315315315 0.004201681</span></span>
+<span><span class="co">##           EMT     Hypoxia Inflammation    Invasion  Metastasis Proliferation</span></span>
+<span><span class="co">## 0 1.000000000 1.000000000  1.000000000 0.007021063 1.000000000   0.005035247</span></span>
+<span><span class="co">## 1 0.013513514 0.006024096  0.006079027 0.968906720 0.006024096   1.000000000</span></span>
+<span><span class="co">## 2 0.951351351 0.013253012  1.000000000 1.000000000 0.075301205   1.000000000</span></span>
+<span><span class="co">## 3 0.012012012 0.952811245  1.000000000 1.000000000 0.065060241   1.000000000</span></span>
+<span><span class="co">## 4 0.416666667 0.006024096  0.030395137 1.000000000 0.201807229   0.005035247</span></span>
+<span><span class="co">## 5 0.953453453 0.009036145  0.167173252 0.937311936 0.008032129   1.000000000</span></span>
+<span><span class="co">## 6 1.000000000 1.000000000  0.954407295 0.546238716 1.000000000   0.992950655</span></span>
+<span><span class="co">## 7 0.009009009 0.006024096  0.036474164 0.252758275 0.006024096   1.000000000</span></span>
+<span><span class="co">## 8 1.000000000 1.000000000  1.000000000 0.235205617 1.000000000   0.308408862</span></span>
+<span><span class="co">## 9 1.000000000 1.000000000  1.000000000 0.007021063 1.000000000   0.005035247</span></span>
+<span><span class="co">##    Quiescence    Stemness</span></span>
+<span><span class="co">## 0 1.000000000 0.007021063</span></span>
+<span><span class="co">## 1 0.004454343 1.000000000</span></span>
+<span><span class="co">## 2 0.040000000 1.000000000</span></span>
+<span><span class="co">## 3 1.000000000 1.000000000</span></span>
+<span><span class="co">## 4 0.004454343 0.007021063</span></span>
+<span><span class="co">## 5 1.000000000 1.000000000</span></span>
+<span><span class="co">## 6 0.040000000 0.007021063</span></span>
+<span><span class="co">## 7 0.129175947 1.000000000</span></span>
+<span><span class="co">## 8 0.534521158 0.007021063</span></span>
+<span><span class="co">## 9 0.040000000 0.007021063</span></span></code></pre>
+<p>These tables can be plotted with the function
+<code>plot_heatmap_features_by_clusters</code>. In the following example
+we plot NES values with a asterisks according to their significance:</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>feature_source <span class="op">=</span> <span class="va">gsea_nes_table</span>, significance_matrix <span class="op">=</span> <span class="va">gsea_fdr_table</span>, sig_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="images/nes_fdr.png" width="300"></p>
-<p>Similarly, it’s possible to extract the most significant “tags” of any clusters; for example, here we extract the top 3 tags by FDRq (GSEA) and p_adj (ORA):</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>feature_source <span class="op">=</span> <span class="va">csea_nes_table</span>, significance_matrix <span class="op">=</span> <span class="va">csea_fdr_table</span>, sig_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
+<p><img src="images/nes.fdr.png" width="300"></p>
+<p>Similarly, it’s possible to extract the most significant “tags” of
+any clusters; for example, here we extract the top 3 tags by FDRq (CSEA)
+and p_adj (ORA):</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_tags.html">extract_cluster_enrichment_tags</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, n_max_per_cluster <span class="op">=</span> <span class="fl">3</span>, GSEA_selection_criterion<span class="op">=</span><span class="st">"FDRq"</span>, only_pos_nes <span class="op">=</span> <span class="cn">TRUE</span>, GSEA_selection_threshold <span class="op">=</span> <span class="fl">0.05</span>, ORA_selection_criterion <span class="op">=</span> <span class="st">"p_adj"</span>, ORA_selection_threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
-<p>The results are placed under the <code>cluster_tags</code> element:</p>
+<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_tags.html">extract_cluster_enrichment_tags</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, n_max_per_cluster <span class="op">=</span> <span class="fl">3</span>, CSEA_selection_criterion<span class="op">=</span><span class="st">"FDRq"</span>, only_pos_nes <span class="op">=</span> <span class="cn">TRUE</span>, CSEA_selection_threshold <span class="op">=</span> <span class="fl">0.05</span>, ORA_selection_criterion <span class="op">=</span> <span class="st">"p_adj"</span>, ORA_selection_threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
+<p>The results are placed under the <code>cluster_tags</code>
+element:</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">cluster_tags</span><span class="op">$</span><span class="va">GSEA</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">cluster_tags</span><span class="op">$</span><span class="va">CSEA</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`0`</span></span>
-<span><span class="co">## [1] "CSEA_Apoptosis"  "CSEA_EMT"        "CSEA_Metastasis"</span></span>
+<span><span class="co">## [1] "Cell_Cycle" "DNA_repair" "Invasion"  </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1`</span></span>
-<span><span class="co">## [1] "CSEA_DNA_repair" "CSEA_Cell_Cycle" "CSEA_Invasion"  </span></span>
+<span><span class="co">## [1] "Apoptosis"    "Inflammation" "Hypoxia"     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2`</span></span>
-<span><span class="co">## [1] "CSEA_Metastasis"   "CSEA_Inflammation" "CSEA_Hypoxia"     </span></span>
+<span><span class="co">## [1] "Hypoxia"    "Metastasis" "EMT"       </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`3`</span></span>
-<span><span class="co">## [1] "CSEA_Apoptosis"  "CSEA_Metastasis" "CSEA_Hypoxia"   </span></span>
+<span><span class="co">## [1] "EMT"        "Metastasis" "Apoptosis" </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`4`</span></span>
-<span><span class="co">## [1] "CSEA_Quiescence" "CSEA_Hypoxia"    "CSEA_Stemness"  </span></span>
+<span><span class="co">## [1] "Quiescence" "Hypoxia"    "Stemness"  </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`5`</span></span>
-<span><span class="co">## [1] "CSEA_Metastasis"   "CSEA_Angiogenesis" "CSEA_Apoptosis"</span></span></code></pre>
-<p>The results of cluster enrichment can be visualized by barplots and boxplots for, respectively, categorical values and quantitative values.</p>
+<span><span class="co">## [1] "Metastasis"   "Hypoxia"      "Inflammation"</span></span></code></pre>
+<p>The results of cluster enrichment can be visualized by barplots and
+boxplots for, respectively, categorical values and quantitative
+values.</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/barplot_cluster.html">barplot_cluster</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, feature_id <span class="op">=</span> <span class="st">"CC_Phase"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/boxplot_cluster.html">boxplot_cluster</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="images/cluster_2_barplot.jpg" width="600" alt="caption"><img src="images/cluster_2_boxplot.jpg" width="600" alt="caption"></p>
+<p><img src="images/cluster_2_barplot.jpg" width="600" alt="caption"><img src="images/cluster_2.jpg" width="600" alt="caption"></p>
 </div>
 <div class="section level2">
 <h2 id="comparison-between-clusters">Comparison between clusters<a class="anchor" aria-label="anchor" href="#comparison-between-clusters"></a>
@@ -551,44 +617,60 @@
 <div class="section level3">
 <h3 id="intra-dataset">Intra-dataset<a class="anchor" aria-label="anchor" href="#intra-dataset"></a>
 </h3>
-<p>The function <code>overlap_matrix</code> calculates the overlap coefficient between all-pairs of clusters of two or more partitions of the same cells (same dataset):</p>
+<p>The function <code>overlap_matrix</code> calculates the overlap
+coefficient between all-pairs of clusters of two or more partitions of
+the same cells (same dataset):</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/overlap_matrix.html">overlap_matrix</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
 <p>The results are stored under the element `cluster_comparison```:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_comparison</span><span class="op">$</span><span class="va">overlap_matrix</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                    CNV_0       CNV_1       CNV_2      CNV_3 global_expr_0</span></span>
-<span><span class="co">## CNV_0         1.00000000 0.000000000 0.000000000 0.00000000    0.01372213</span></span>
-<span><span class="co">## CNV_1         0.00000000 1.000000000 0.000000000 0.00000000    0.38250429</span></span>
-<span><span class="co">## CNV_2         0.00000000 0.000000000 1.000000000 0.00000000    0.24528302</span></span>
-<span><span class="co">## CNV_3         0.00000000 0.000000000 0.000000000 1.00000000    0.56948229</span></span>
-<span><span class="co">## global_expr_0 0.01372213 0.382504288 0.245283019 0.56948229    1.00000000</span></span>
-<span><span class="co">## global_expr_1 0.98007968 0.007968127 0.001992032 0.01362398    0.00000000</span></span>
-<span><span class="co">##               global_expr_1 global_expr_2 global_expr_3 global_expr_4</span></span>
-<span><span class="co">## CNV_0           0.980079681   0.002109705    0.00000000    0.23030303</span></span>
-<span><span class="co">## CNV_1           0.007968127   0.373417722    0.36547085    0.57575758</span></span>
-<span><span class="co">## CNV_2           0.001992032   0.504219409    0.55829596    0.07272727</span></span>
-<span><span class="co">## CNV_3           0.013623978   0.155313351    0.09264305    0.12121212</span></span>
-<span><span class="co">## global_expr_0   0.000000000   0.000000000    0.00000000    0.00000000</span></span>
-<span><span class="co">## global_expr_1   1.000000000   0.000000000    0.00000000    0.00000000</span></span>
-<span><span class="co">##               global_expr_5 global_expr_6 global_expr_7 global_expr_8</span></span>
-<span><span class="co">## CNV_0           0.003816794   0.963636364   0.992753623   0.953846154</span></span>
-<span><span class="co">## CNV_1           0.255725191   0.027272727   0.007246377   0.023076923</span></span>
-<span><span class="co">## CNV_2           0.671755725   0.000000000   0.000000000   0.007692308</span></span>
-<span><span class="co">## CNV_3           0.068702290   0.009090909   0.000000000   0.015384615</span></span>
-<span><span class="co">## global_expr_0   0.000000000   0.000000000   0.000000000   0.000000000</span></span>
-<span><span class="co">## global_expr_1   0.000000000   0.000000000   0.000000000   0.000000000</span></span></code></pre>
+<pre><code><span><span class="co">##                     CNV_0       CNV_1     CNV_2     CNV_3       CNV_4</span></span>
+<span><span class="co">## CNV_0         1.000000000 0.000000000 0.0000000 0.0000000 0.000000000</span></span>
+<span><span class="co">## CNV_1         0.000000000 1.000000000 0.0000000 0.0000000 0.000000000</span></span>
+<span><span class="co">## CNV_2         0.000000000 0.000000000 1.0000000 0.0000000 0.000000000</span></span>
+<span><span class="co">## CNV_3         0.000000000 0.000000000 0.0000000 1.0000000 0.000000000</span></span>
+<span><span class="co">## CNV_4         0.000000000 0.000000000 0.0000000 0.0000000 1.000000000</span></span>
+<span><span class="co">## global_expr_0 0.004008016 0.004008016 0.5651303 0.5261845 0.008264463</span></span>
+<span><span class="co">##               global_expr_0 global_expr_1 global_expr_2 global_expr_3</span></span>
+<span><span class="co">## CNV_0           0.004008016     0.6042105   0.394179894   0.372168285</span></span>
+<span><span class="co">## CNV_1           0.004008016     0.3368421   0.531746032   0.559870550</span></span>
+<span><span class="co">## CNV_2           0.565130261     0.0000000   0.007936508   0.006472492</span></span>
+<span><span class="co">## CNV_3           0.526184539     0.0000000   0.002645503   0.000000000</span></span>
+<span><span class="co">## CNV_4           0.008264463     0.1157025   0.099173554   0.078512397</span></span>
+<span><span class="co">## global_expr_0   1.000000000     0.0000000   0.000000000   0.000000000</span></span>
+<span><span class="co">##               global_expr_4 global_expr_5 global_expr_6 global_expr_7</span></span>
+<span><span class="co">## CNV_0            0.14189189   0.657587549    0.00000000     0.7674419</span></span>
+<span><span class="co">## CNV_1            0.19594595   0.334630350    0.01621622     0.2325581</span></span>
+<span><span class="co">## CNV_2            0.09459459   0.000000000    0.74054054     0.0000000</span></span>
+<span><span class="co">## CNV_3            0.02702703   0.000000000    0.22702703     0.0000000</span></span>
+<span><span class="co">## CNV_4            0.66115702   0.008264463    0.01621622     0.0000000</span></span>
+<span><span class="co">## global_expr_0    0.00000000   0.000000000    0.00000000     0.0000000</span></span>
+<span><span class="co">##               global_expr_8 global_expr_9</span></span>
+<span><span class="co">## CNV_0           0.007042254   0.000000000</span></span>
+<span><span class="co">## CNV_1           0.021126761   0.008695652</span></span>
+<span><span class="co">## CNV_2           0.605633803   0.200000000</span></span>
+<span><span class="co">## CNV_3           0.345070423   0.782608696</span></span>
+<span><span class="co">## CNV_4           0.021126761   0.008695652</span></span>
+<span><span class="co">## global_expr_0   0.000000000   0.000000000</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="inter-dataset">Inter-dataset<a class="anchor" aria-label="anchor" href="#inter-dataset"></a>
 </h3>
-<p>Inter-dataset comparison is performed through the function <code>inter_dataset_comparison</code>, which require a list of Seurat objects and a gene set list. The activity of this gene set list will be assessed over the clusters of all datasets. In needed, the function <code>prepare_cluster_markers_list</code> provides the possibility to prepare a gene set list of cluster markers, starting</p>
+<p>Inter-dataset comparison is performed through the function
+<code>inter_dataset_comparison</code>, which require a list of Seurat
+objects and a gene set list. The activity of this gene set list will be
+assessed over the clusters of all datasets. In needed, the function
+<code>prepare_cluster_markers_list</code> provides the possibility to
+prepare a gene set list of cluster markers, starting</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dataset_cmp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inter_dataset_comparison.html">inter_dataset_comparison</a></span><span class="op">(</span>seu_obj_list <span class="op">=</span> <span class="va">seu_obj_list</span>, gsl <span class="op">=</span> <span class="va">cluster_markers_list</span>, genes_max <span class="op">=</span> <span class="fl">500</span>, genes_min <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_heatmap_dataset_comparison.html">plot_heatmap_dataset_comparison</a></span><span class="op">(</span><span class="va">dataset_cmp_res</span>, outfile <span class="op">=</span> <span class="st">"vignette/heatmap_ds_cmp.png"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_heatmap_dataset_comparison.html">plot_heatmap_dataset_comparison</a></span><span class="op">(</span><span class="va">dataset_cmp_res</span>, outfile <span class="op">=</span> <span class="st">"vignette/heatmap_ds_cmp_p.png"</span>, type <span class="op">=</span> <span class="st">"significance"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/heatmap_ds_cmp.png" width="600" alt="caption"><img src="images/heatmap_ds_cmp_p.png" width="600" alt="caption"></p>
-<p>The function can be used to analyze any gene set. In the following example we assess the expression of CancerSEA gene sets across datasets:</p>
+<p>The function can be used to analyze any gene set. In the following
+example we assess the expression of CancerSEA gene sets across
+datasets:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_gsls.html">prepare_gsls</a></span><span class="op">(</span>gs_sources <span class="op">=</span> <span class="st">"CancerSEA"</span>, genes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">seu_obj_list</span>, <span class="va">rownames</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dataset_cmp_res_cancersea</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inter_dataset_comparison.html">inter_dataset_comparison</a></span><span class="op">(</span>seu_obj_list <span class="op">=</span> <span class="va">seu_obj_list</span>, gsl <span class="op">=</span> <span class="va">gsl</span><span class="op">$</span><span class="va">CancerSEA</span>, genes_max <span class="op">=</span> <span class="fl">500</span>, genes_min <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
@@ -616,22 +698,41 @@ plot_meta_clusters(ov_mat, meta_clusters = meta_cl)
 -->
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Angerer2016" class="csl-entry">
-Angerer, Philipp, Laleh Haghverdi, Maren Büttner, Fabian J. Theis, Carsten Marr, and Florian Buettner. 2016. <span>“<span class="nocase">destiny : diffusion maps for large-scale single-cell data in R</span>.”</span> <em>Bioinformatics</em> 32 (8): 1241–43. <a href="https://doi.org/10.1093/bioinformatics/btv715" class="external-link">https://doi.org/10.1093/bioinformatics/btv715</a>.
+Angerer, Philipp, Laleh Haghverdi, Maren Büttner, Fabian J. Theis,
+Carsten Marr, and Florian Buettner. 2016. <span>“<span class="nocase">destiny : diffusion maps for large-scale single-cell data
+in R</span>.”</span> <em>Bioinformatics</em> 32 (8): 1241–43. <a href="https://doi.org/10.1093/bioinformatics/btv715" class="external-link">https://doi.org/10.1093/bioinformatics/btv715</a>.
 </div>
 <div id="ref-Franzen2019" class="csl-entry">
-Franzén, Oscar, Li-Ming Gan, and Johan L M Björkegren. 2019. <span>“<span class="nocase">PanglaoDB: a web server for exploration of mouse and human single-cell RNA sequencing data</span>.”</span> <em>Database</em> 2019 (January). <a href="https://doi.org/10.1093/database/baz046" class="external-link">https://doi.org/10.1093/database/baz046</a>.
+Franzén, Oscar, Li-Ming Gan, and Johan L M Björkegren. 2019.
+<span>“<span class="nocase">PanglaoDB: a web server for exploration of
+mouse and human single-cell RNA sequencing data</span>.”</span>
+<em>Database</em> 2019 (January). <a href="https://doi.org/10.1093/database/baz046" class="external-link">https://doi.org/10.1093/database/baz046</a>.
 </div>
 <div id="ref-Hao2021" class="csl-entry">
-Hao, Yuhan, Stephanie Hao, Erica Andersen-Nissen, William M. Mauck, Shiwei Zheng, Andrew Butler, Maddie J. Lee, et al. 2021. <span>“<span class="nocase">Integrated analysis of multimodal single-cell data</span>.”</span> <em>Cell</em> 184 (13): 3573–3587.e29. <a href="https://doi.org/10.1016/j.cell.2021.04.048" class="external-link">https://doi.org/10.1016/j.cell.2021.04.048</a>.
+Hao, Yuhan, Stephanie Hao, Erica Andersen-Nissen, William M. Mauck,
+Shiwei Zheng, Andrew Butler, Maddie J. Lee, et al. 2021. <span>“<span class="nocase">Integrated analysis of multimodal single-cell
+data</span>.”</span> <em>Cell</em> 184 (13): 3573–3587.e29. <a href="https://doi.org/10.1016/j.cell.2021.04.048" class="external-link">https://doi.org/10.1016/j.cell.2021.04.048</a>.
 </div>
 <div id="ref-Subramanian2005" class="csl-entry">
-Subramanian, Aravind, Pablo Tamayo, Vamsi K. Mootha, Sayan Mukherjee, Benjamin L. Ebert, Michael A. Gillette, Amanda Paulovich, et al. 2005. <span>“<span class="nocase">Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles</span>.”</span> <em>Proceedings of the National Academy of Sciences</em> 102 (43): 15545–50. <a href="https://doi.org/10.1073/pnas.0506580102" class="external-link">https://doi.org/10.1073/pnas.0506580102</a>.
+Subramanian, Aravind, Pablo Tamayo, Vamsi K. Mootha, Sayan Mukherjee,
+Benjamin L. Ebert, Michael A. Gillette, Amanda Paulovich, et al. 2005.
+<span>“<span class="nocase">Gene set enrichment analysis: A
+knowledge-based approach for interpreting genome-wide expression
+profiles</span>.”</span> <em>Proceedings of the National Academy of
+Sciences</em> 102 (43): 15545–50. <a href="https://doi.org/10.1073/pnas.0506580102" class="external-link">https://doi.org/10.1073/pnas.0506580102</a>.
 </div>
 <div id="ref-Yuan2019" class="csl-entry">
-Yuan, Huating, Min Yan, Guanxiong Zhang, Wei Liu, Chunyu Deng, Gaoming Liao, Liwen Xu, et al. 2019. <span>“<span class="nocase">CancerSEA: a cancer single-cell state atlas</span>.”</span> <em>Nucleic Acids Research</em> 47 (D1): D900–908. <a href="https://doi.org/10.1093/nar/gky939" class="external-link">https://doi.org/10.1093/nar/gky939</a>.
+Yuan, Huating, Min Yan, Guanxiong Zhang, Wei Liu, Chunyu Deng, Gaoming
+Liao, Liwen Xu, et al. 2019. <span>“<span class="nocase">CancerSEA: a
+cancer single-cell state atlas</span>.”</span> <em>Nucleic Acids
+Research</em> 47 (D1): D900–908. <a href="https://doi.org/10.1093/nar/gky939" class="external-link">https://doi.org/10.1093/nar/gky939</a>.
 </div>
 <div id="ref-Yuan2018" class="csl-entry">
-Yuan, Jinzhou, Hanna Mendes Levitin, Veronique Frattini, Erin C. Bush, Deborah M. Boyett, Jorge Samanamud, Michele Ceccarelli, et al. 2018. <span>“<span class="nocase">Single-cell transcriptome analysis of lineage diversity in high-grade glioma</span>.”</span> <em>Genome Medicine</em> 10 (1): 57. <a href="https://doi.org/10.1186/s13073-018-0567-9" class="external-link">https://doi.org/10.1186/s13073-018-0567-9</a>.
+Yuan, Jinzhou, Hanna Mendes Levitin, Veronique Frattini, Erin C. Bush,
+Deborah M. Boyett, Jorge Samanamud, Michele Ceccarelli, et al. 2018.
+<span>“<span class="nocase">Single-cell transcriptome analysis of
+lineage diversity in high-grade glioma</span>.”</span> <em>Genome
+Medicine</em> 10 (1): 57. <a href="https://doi.org/10.1186/s13073-018-0567-9" class="external-link">https://doi.org/10.1186/s13073-018-0567-9</a>.
 </div>
 </div>
 </div>

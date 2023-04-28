@@ -2,13 +2,13 @@
 % Please edit documentation in R/extract_cluster_enrichment_tags.R
 \name{extract_cluster_enrichment_tags}
 \alias{extract_cluster_enrichment_tags}
-\title{Extract the top results of GSEA and ORA for each cluster}
+\title{Extract the top results of CSEA and ORA for each cluster}
 \usage{
 extract_cluster_enrichment_tags(
   scMuffinList = NULL,
   partition_id = NULL,
-  GSEA_selection_criterion = "FDRq",
-  GSEA_selection_threshold = 0.25,
+  CSEA_selection_criterion = "FDRq",
+  CSEA_selection_threshold = 0.25,
   only_pos_nes = TRUE,
   ORA_selection_criterion = "p_adj",
   ORA_selection_threshold = 0.1,
@@ -20,11 +20,11 @@ extract_cluster_enrichment_tags(
 
 \item{partition_id}{one among the partitions.}
 
-\item{GSEA_selection_criterion}{selection criteria for results of GSEA. See \code{\link{extract_cluster_enrichment_table}} for possible values.}
+\item{CSEA_selection_criterion}{selection criteria for results of CSEA. See \code{\link{extract_cluster_enrichment_table}} for possible values.}
 
-\item{GSEA_selection_threshold}{threshold for selection of tags from GSEA.}
+\item{CSEA_selection_threshold}{threshold for selection of tags from CSEA.}
 
-\item{only_pos_nes}{whether only positive nes should be considered in GSEA.}
+\item{only_pos_nes}{whether only positive nes should be considered in CSEA.}
 
 \item{ORA_selection_criterion}{selection criteria for results of ORA. See \code{\link{extract_cluster_enrichment_table}} for possible values.}
 
@@ -36,5 +36,5 @@ extract_cluster_enrichment_tags(
 Add or overwrite the "cluster_tags" list to `scMuffinList$cluster_data[[partition_id]]`
 }
 \description{
-Extract the best results of GSEA and ORA for each cluster.
+Extract the best results of CSEA and ORA for each cluster.
 }
