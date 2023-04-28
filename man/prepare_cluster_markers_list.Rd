@@ -2,7 +2,8 @@
 % Please edit documentation in R/prepare_cluster_markers_list.R
 \name{prepare_cluster_markers_list}
 \alias{prepare_cluster_markers_list}
-\title{prepare_cluster_markers_list}
+\title{Prepare cluster markers list
+Prepare cluster markers list for inter_dataset_comparison}
 \usage{
 prepare_cluster_markers_list(
   marker_table_list = NULL,
@@ -15,6 +16,24 @@ prepare_cluster_markers_list(
   top = 500
 )
 }
+\arguments{
+\item{marker_table_list}{list of marker tables, as produced by Seurat::FindAllMarkers}
+
+\item{effect_size}{name of effect size column}
+
+\item{effect_size_thr}{threshold over effect size}
+
+\item{sig_column}{column with significance score}
+
+\item{sig_thr}{threshold over effect significance score}
+
+\item{id_column}{column with IDs}
+
+\item{cluster}{column with cell cluster}
+
+\item{top}{maximum number of markers per cluster}
+}
 \description{
-prepare_cluster_markers_list
+Prepare cluster markers list
+Prepare cluster markers list for inter_dataset_comparison
 }

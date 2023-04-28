@@ -1,23 +1,13 @@
 #' Inter-dataset cluster similarity
-#' @param gbc_1 genes-by-cells expression matrix of dataset 1
-#' @param gbc_2 genes-by-cells expression matrix of dataset 2
-#' @param clusters_1 named vector with cell clustering fo dataset 1
-#' @param clusters_2 named vector with cell clustering fo dataset 2
-#' @param cluster_markers_1 list of markers for each cluster of dataset 1
-#' @param cluster_markers_2 list of markers for each cluster of dataset 2
-#' @param genes_min minimum number of genes required among the markers of a cluster
+#' @param seu_obj_list list of Seurat objects
+#' @param gsl gene set list
+##' @param genes_min minimum number of genes required among the markers of a cluster
 #' @param genes_max maximum number of genes required among the markers of a cluster
 #' @param mc.cores number of cores
 #' @param null_model whether to use or not the empirical null model. See calculate_signature
 #' @param ncells_min minim number of cells in a cluster 
-#' @param do_plot whether to plot or not the results
-#' @param dataset_name_1 dataset 1 name
-#' @param dataset_name_2 dataset 2 name
-#' @param outfile out file name
-#' @param pal palette for the output heatmap
 #' @param cluster_rows whether to cluster or not the rows
 #' @param cluster_columns whether to cluster or not the columns
-#' @param top_genes If specified, only the first top_genes genes of every element of the lists cluster_markers_1 and cluster_markers_2 will be considered. This implies that the markers for each clusters are considered sorted by decreasing relevance. Default is FALSE, which
 #' @param ... arguments passed to calculate_signatures
 #' @export
 #' @description Quantify the similarity between clusters of two datasets, on the basis of the average cluster marker expression
@@ -32,7 +22,7 @@
 #'   \item{markers_2, markers of dataset 2;}
 #' }
 
-inter_dataset_comparison <- function(seu_obj_list=NULL, gsl=NULL, genes_min=3, genes_max=500, mc.cores=1, null_model=TRUE, ncells_min=5, do_plot=FALSE, outfile=NULL, pal=NULL, cluster_rows = FALSE, cluster_columns = FALSE, top_genes=FALSE,  ...){
+inter_dataset_comparison <- function(seu_obj_list=NULL, gsl=NULL, genes_min=3, genes_max=500, mc.cores=1, null_model=TRUE, ncells_min=5, cluster_rows = FALSE, cluster_columns = FALSE,  ...){
   
   scMuffinList_list <- seu_obj_list
   score_matrix <- vector("list", length(scMuffinList_list))

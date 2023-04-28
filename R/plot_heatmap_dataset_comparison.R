@@ -1,11 +1,12 @@
 #' plot_heatmap_dataset_comparison
-#' @param dataset_cmp_list
+#' @param dataset_cmp_list list resulting from inter_dataset_comparison()
 #' @param type "score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of CSEA.
 #' @param width image width
 #' @param height image height
 #' @param units image units
 #' @param res image res
 #' @param outfile out file name
+#' @param show.gs.source whether to show or not gene set source
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap pals

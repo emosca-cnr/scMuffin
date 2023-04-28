@@ -38,6 +38,14 @@ barplot_cluster(
 \item{cex.axis}{cex.axis}
 
 \item{p.type}{p for nominal p-value or p_adj for BH FDR.}
+
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

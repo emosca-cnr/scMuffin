@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,19 +53,23 @@
 <span>  mc.cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  null_model <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ncells_min <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  do_plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  outfile <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  pal <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cluster_rows <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cluster_columns <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  top_genes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>genes_min</dt>
+    <dl><dt>seu_obj_list</dt>
+<dd><p>list of Seurat objects</p></dd>
+
+
+<dt>gsl</dt>
+<dd><p>gene set list</p></dd>
+
+
+<dt>genes_min</dt>
 <dd><p>minimum number of genes required among the markers of a cluster</p></dd>
 
 
@@ -85,18 +89,6 @@
 <dd><p>minim number of cells in a cluster</p></dd>
 
 
-<dt>do_plot</dt>
-<dd><p>whether to plot or not the results</p></dd>
-
-
-<dt>outfile</dt>
-<dd><p>out file name</p></dd>
-
-
-<dt>pal</dt>
-<dd><p>palette for the output heatmap</p></dd>
-
-
 <dt>cluster_rows</dt>
 <dd><p>whether to cluster or not the rows</p></dd>
 
@@ -105,44 +97,8 @@
 <dd><p>whether to cluster or not the columns</p></dd>
 
 
-<dt>top_genes</dt>
-<dd><p>If specified, only the first top_genes genes of every element of the lists cluster_markers_1 and cluster_markers_2 will be considered. This implies that the markers for each clusters are considered sorted by decreasing relevance. Default is FALSE, which</p></dd>
-
-
 <dt>...</dt>
 <dd><p>arguments passed to calculate_signatures</p></dd>
-
-
-<dt>gbc_1</dt>
-<dd><p>genes-by-cells expression matrix of dataset 1</p></dd>
-
-
-<dt>gbc_2</dt>
-<dd><p>genes-by-cells expression matrix of dataset 2</p></dd>
-
-
-<dt>clusters_1</dt>
-<dd><p>named vector with cell clustering fo dataset 1</p></dd>
-
-
-<dt>clusters_2</dt>
-<dd><p>named vector with cell clustering fo dataset 2</p></dd>
-
-
-<dt>cluster_markers_1</dt>
-<dd><p>list of markers for each cluster of dataset 1</p></dd>
-
-
-<dt>cluster_markers_2</dt>
-<dd><p>list of markers for each cluster of dataset 2</p></dd>
-
-
-<dt>dataset_name_1</dt>
-<dd><p>dataset 1 name</p></dd>
-
-
-<dt>dataset_name_2</dt>
-<dd><p>dataset 2 name</p></dd>
 
 </dl></div>
     <div class="section level2">

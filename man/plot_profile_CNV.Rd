@@ -36,6 +36,14 @@ plot_profile_CNV(
 \item{res}{image resolution}
 
 \item{image_format}{png or jpeg}
+
+\item{cex.points}{cex of points}
+
+\item{cex.lab}{cex of labs}
+
+\item{cex.axis}{cex of axis}
+
+\item{cex.main}{cex of main}
 }
 \description{
 Plot an heatmap of the CNV.

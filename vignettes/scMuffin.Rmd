@@ -196,7 +196,6 @@ heatmap_CNV(scMuffinList = scMuffinList_demo, genes = c("YBX1", "HNRNPM"), genes
 
 heatmap_CNV(scMuffinList = scMuffinList_demo, mark.detected.cnv = T, col=col_fun)
 
-plot_profile_CNV(scMuffinList = scMuffinList_demo, cluster = 0, cex.points = 0.5) 
 ```
 
 ![caption](images/heatmap_CNV_PJ016_vignette_genes.jpg){width=600px}

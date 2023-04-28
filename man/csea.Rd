@@ -22,7 +22,11 @@ csea(
 
 \item{k}{number of permutations}
 
+\item{min.size}{minimum number of cells with a not null value}
+
 \item{ord.mode}{ordering mode: -1 -> descending; 1 ascending; must be of length equal to `ncol(rl)`}
+
+\item{min.k.nes}{minimum number of not null NES values}
 
 \item{mc_cores_path}{number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path x mc_cores_perm}
 

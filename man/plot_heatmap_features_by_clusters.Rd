@@ -49,8 +49,6 @@ plot_heatmap_features_by_clusters(
 \item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
 
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
-
-\item{image_format}{png or jpeg}
 }
 \description{
 Plot an heatmap of feature values in cell clusters

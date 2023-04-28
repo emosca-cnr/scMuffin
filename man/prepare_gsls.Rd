@@ -32,7 +32,11 @@ prepare_gsls(
 
 \item{genes_max}{maximum number of genes required in a gene set}
 
+\item{id_type}{type of id: Symbol or EntrezID}
+
 \item{scMuffinList}{scMuffinList object}
+
+\item{genes}{all genes to be considered}
 }
 \value{
 A lists of gene set lists

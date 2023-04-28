@@ -6,6 +6,9 @@
 \usage{
 genes_in_detected_CNV_regions(scMuffinList = NULL)
 }
+\arguments{
+\item{scMuffinList}{scMuffinList object}
+}
 \description{
 Retrieve genes in detected CNV regions
 }

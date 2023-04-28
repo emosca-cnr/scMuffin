@@ -1,13 +1,16 @@
 #' Boxplot clusters 
-#' Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @param scMuffinList scMuffinList object
-#' @param feature_id names of the features to be used.
 #' @param partition_id one among the partitions
 #' @param n_features maximum number of features that will be shown
 #' @param cex.axis cex.axis
 #' @param only_pos_nes whether to consider only positive enrichments
 #' @param do_scale_features whether to scale features
 #' @param dir_out output directory
+#' @param width image width
+#' @param height image height
+#' @param units image units
+#' @param res image resolution
+#' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
 #' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
 #' @importFrom grDevices jpeg
 #' @importFrom plotrix thigmophobe.labels

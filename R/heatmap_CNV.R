@@ -6,11 +6,18 @@
 #' @param units image units
 #' @param res image resolution
 #' @param image_format png or jpeg
+#' @param genes gene labels to show as row annotation
+#' @param genes.labels whether to show gene labels or just mark their position
+#' @param mark.detected.cnv whether to show detected CNV regions
+#' @param cluster_fontsize cluster fontsize
+#' @param chrom_fontsize chromosome fontsize
+#' @param legend_fontsize legend fontsize
+#' @param genes.labels.fontsize gene labels fontsize
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
 #' @import ComplexHeatmap grDevices grid
 #' @export
 
-heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, regions=NULL, mark.detected.cnv=FALSE, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=8, ...) {
+heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mark.detected.cnv=FALSE, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=8, ...) {
   
   #column_title_fontsize=8
   

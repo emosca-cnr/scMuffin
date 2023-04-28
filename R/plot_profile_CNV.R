@@ -7,6 +7,10 @@
 #' @param units image units
 #' @param res image resolution
 #' @param image_format png or jpeg
+#' @param cex.points cex of points
+#' @param cex.lab cex of labs
+#' @param cex.axis cex of axis
+#' @param cex.main cex of main
 #' @description Plot an heatmap of the CNV.
 #' @details CNV Profile of every cluster
 #' @import ComplexHeatmap grDevices grid

@@ -8,7 +8,6 @@ heatmap_CNV(
   scMuffinList = NULL,
   genes = NULL,
   genes.labels = FALSE,
-  regions = NULL,
   mark.detected.cnv = FALSE,
   file = NULL,
   width = 180,
@@ -26,6 +25,12 @@ heatmap_CNV(
 \arguments{
 \item{scMuffinList}{scMuffinList object}
 
+\item{genes}{gene labels to show as row annotation}
+
+\item{genes.labels}{whether to show gene labels or just mark their position}
+
+\item{mark.detected.cnv}{whether to show detected CNV regions}
+
 \item{file}{output file}
 
 \item{width}{image width}
@@ -37,6 +42,14 @@ heatmap_CNV(
 \item{res}{image resolution}
 
 \item{image_format}{png or jpeg}
+
+\item{cluster_fontsize}{cluster fontsize}
+
+\item{chrom_fontsize}{chromosome fontsize}
+
+\item{legend_fontsize}{legend fontsize}
+
+\item{genes.labels.fontsize}{gene labels fontsize}
 
 \item{...}{arguments passed to ComplexHeatmap::Heatmap}
 }

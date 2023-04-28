@@ -10,6 +10,8 @@
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
 #' @param method mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.
+#' @param z.score whether to use z-scores of the cluster median CNV profile, instead of the median itself.
+#' @param eps absolute threshold to call CNV regions.
 #' @export 
 
 CNV_analysis <- function(scMuffinList=NULL, mc.cores=1, reference = NULL, min_cells = 100, min_genes = 100, wnd_size = 100, scale_cells = TRUE, center_genes = FALSE, expr_lim = FALSE, method="mean", na.rm=FALSE, z.score=FALSE, eps=NULL){

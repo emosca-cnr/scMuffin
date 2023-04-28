@@ -49,6 +49,8 @@ plot_umap(
 
 \item{image_format}{png or jpeg}
 
+\item{text.size}{text size}
+
 \item{...}{further arguments for Seurat::FeaturePlot or Seurat::DimPlot}
 }
 \description{

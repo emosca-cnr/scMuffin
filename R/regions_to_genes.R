@@ -1,4 +1,7 @@
 #' Create a map between CNV regions and genes
+#' @param CNV CNV matrix
+#' @param CNV_input CNV_input
+#' @export
 
 regions_to_genes <- function(CNV=NULL, CNV_input=NULL){
 	

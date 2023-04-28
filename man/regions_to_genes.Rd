@@ -6,6 +6,11 @@
 \usage{
 regions_to_genes(CNV = NULL, CNV_input = NULL)
 }
+\arguments{
+\item{CNV}{CNV matrix}
+
+\item{CNV_input}{CNV_input}
+}
 \description{
 Create a map between CNV regions and genes
 }

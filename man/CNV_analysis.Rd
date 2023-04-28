@@ -42,6 +42,10 @@ CNV_analysis(
 \item{method}{mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.}
 
 \item{na.rm}{whether to remove 0 values in CNV estimation}
+
+\item{z.score}{whether to use z-scores of the cluster median CNV profile, instead of the median itself.}
+
+\item{eps}{absolute threshold to call CNV regions.}
 }
 \description{
 CNV analysis

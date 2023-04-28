@@ -1,5 +1,13 @@
-#' prepare_cluster_markers_list
-#'
+#' Prepare cluster markers list
+#' Prepare cluster markers list for inter_dataset_comparison
+#' @param marker_table_list list of marker tables, as produced by Seurat::FindAllMarkers
+#' @param effect_size name of effect size column
+#' @param effect_size_thr threshold over effect size
+#' @param sig_column column with significance score
+#' @param sig_thr threshold over effect significance score
+#' @param id_column column with IDs
+#' @param cluster column with cell cluster
+#' @param top maximum number of markers per cluster
 #' @export
 
 prepare_cluster_markers_list <- function(marker_table_list=NULL, effect_size="avg_logFC", effect_size_thr=0.25, sig_column="p_val_adj", sig_thr=0.1, id_column=0, cluster="cluster", top=500){

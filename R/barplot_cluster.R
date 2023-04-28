@@ -8,6 +8,10 @@
 #' @param only_pos_nes whether to consider only positive enrichments
 #' @param p.type p for nominal p-value or p_adj for BH FDR.
 #' @param dir_out string, output directory
+#' @param width image width
+#' @param height image height
+#' @param units image units
+#' @param res image resolution
 #' @importFrom grDevices jpeg
 #' @importFrom stats setNames
 #' @importFrom plotrix thigmophobe.labels

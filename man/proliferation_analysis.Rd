@@ -38,6 +38,8 @@ proliferation_analysis(
 \item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
 \item{mean_scale}{whether to scale the values obtained using score_type="mean"}
+
+\item{gsl}{gene set list with cell cycle genes}
 }
 \value{
 scMuffinList with element "proliferation", a list with:

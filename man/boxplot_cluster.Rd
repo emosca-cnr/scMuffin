@@ -2,8 +2,7 @@
 % Please edit documentation in R/boxplot_cluster.R
 \name{boxplot_cluster}
 \alias{boxplot_cluster}
-\title{Boxplot clusters 
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.}
+\title{Boxplot clusters}
 \usage{
 boxplot_cluster(
   scMuffinList = NULL,
@@ -23,6 +22,8 @@ boxplot_cluster(
 \arguments{
 \item{scMuffinList}{scMuffinList object}
 
+\item{feature_name}{the names of the feature that should be considered. It must be one of names(scMuffinList)}
+
 \item{partition_id}{one among the partitions}
 
 \item{dir_out}{output directory}
@@ -35,7 +36,13 @@ boxplot_cluster(
 
 \item{cex.axis}{cex.axis}
 
-\item{feature_id}{names of the features to be used.}
+\item{width}{image width}
+
+\item{height}{image height}
+
+\item{units}{image units}
+
+\item{res}{image resolution}
 }
 \description{
 Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.

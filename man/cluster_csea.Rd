@@ -26,6 +26,8 @@ cluster_csea(
 \item{mc.cores}{number of cores}
 
 \item{csea.k}{number of permutations}
+
+\item{min.k.nes}{minimum number of not null NES values}
 }
 \value{
 list with two elements: gs_table and leading_edge. See [csea()]

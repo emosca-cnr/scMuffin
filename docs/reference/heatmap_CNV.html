@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,6 @@
 <span>  scMuffinList <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  genes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  genes.labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  regions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mark.detected.cnv <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  width <span class="op">=</span> <span class="fl">180</span>,</span>
@@ -69,6 +68,18 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>scMuffinList</dt>
 <dd><p>scMuffinList object</p></dd>
+
+
+<dt>genes</dt>
+<dd><p>gene labels to show as row annotation</p></dd>
+
+
+<dt>genes.labels</dt>
+<dd><p>whether to show gene labels or just mark their position</p></dd>
+
+
+<dt>mark.detected.cnv</dt>
+<dd><p>whether to show detected CNV regions</p></dd>
 
 
 <dt>file</dt>
@@ -93,6 +104,22 @@
 
 <dt>image_format</dt>
 <dd><p>png or jpeg</p></dd>
+
+
+<dt>cluster_fontsize</dt>
+<dd><p>cluster fontsize</p></dd>
+
+
+<dt>chrom_fontsize</dt>
+<dd><p>chromosome fontsize</p></dd>
+
+
+<dt>legend_fontsize</dt>
+<dd><p>legend fontsize</p></dd>
+
+
+<dt>genes.labels.fontsize</dt>
+<dd><p>gene labels fontsize</p></dd>
 
 
 <dt>...</dt>

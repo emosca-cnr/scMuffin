@@ -10,7 +10,6 @@
 #' @param units image units
 #' @param res image resolution
 #' @param partition_id identifier of the partition to be considered
-#' @param image_format png or jpeg
 #' @param scale whether to scale the features
 #' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
 #' @param ... further arguments to ComplexHeatmap::Heatmap

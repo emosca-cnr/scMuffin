@@ -5,6 +5,8 @@
 #' @param ord.mode ordering mode: -1 -> descending; 1 ascending; must be of length equal to `ncol(rl)`
 #' @param mc_cores_path number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path x mc_cores_perm
 #' @param mc_cores_perm number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm
+#' @param min.k.nes minimum number of not null NES values
+#' @param min.size minimum number of cells with a not null value
 #' @import parallel
 #' @importFrom stats p.adjust
 #' @return list with two data.frames, gs_table and leading_edge. gs_table contains: es, enrichment score; nes normalized enrichment score; p-value, empirical p-value; adjusted p-value, BH FDR; FDR q-value, empirical FDR. leading_edge contains: tags, leading edge size; tags_perc, leading edge size percent over gene set; list_top, rank of the ES; list_top_perc, rank of the ES percent over full ranked list; lead_edge, gene names of the leading edge.

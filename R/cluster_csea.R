@@ -6,6 +6,7 @@
 #' @param min.cells.cluster minimum number of cells of a cluster
 #' @param mc.cores number of cores
 #' @param csea.k number of permutations
+#' @param min.k.nes minimum number of not null NES values
 #' @return list with two elements: gs_table and leading_edge. See [csea()]
 #' @export
 #' @description Calculate cluster enrichment by csea approach

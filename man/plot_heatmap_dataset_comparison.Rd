@@ -17,7 +17,11 @@ plot_heatmap_dataset_comparison(
 )
 }
 \arguments{
+\item{dataset_cmp_list}{list resulting from inter_dataset_comparison()}
+
 \item{type}{"score" or "significance" for, respectively, cluster median marker set score or -log10(FDRq) of CSEA.}
+
+\item{show.gs.source}{whether to show or not gene set source}
 
 \item{outfile}{out file name}
 

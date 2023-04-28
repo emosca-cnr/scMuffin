@@ -14,6 +14,7 @@
 #' @param units image units
 #' @param res image resolution
 #' @param image_format png or jpeg
+#' @param text.size text size
 #' @param ... further arguments for Seurat::FeaturePlot or Seurat::DimPlot
 #' @import Seurat graphics ggplot2
 #' @description Generate a UMAP visualization

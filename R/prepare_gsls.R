@@ -8,6 +8,8 @@
 #' @param genes_min minimum number of genes required in a gene set
 #' @param genes_max maximum number of genes required in a gene set
 #' @param scMuffinList scMuffinList object
+#' @param id_type type of id: Symbol or EntrezID
+#' @param genes all genes to be considered
 #' @importFrom utils data
 #' @return A lists of gene set lists
 #' @export
