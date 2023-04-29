@@ -46,7 +46,7 @@ library(scMuffin)
 ```
 
 ```{r, include=F, message=FALSE, warning=FALSE, eval=T}
-devtools::load_all("~/source/general/single_cell/scMuffin")
+devtools::load_all()
 ```
 
 # Input
