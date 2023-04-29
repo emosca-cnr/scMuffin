@@ -23,6 +23,8 @@ plot_profile_CNV(
 \arguments{
 \item{scMuffinList}{scMuffinList object}
 
+\item{cluster}{cluster to be plotted}
+
 \item{z.score}{whether to plot clustere median z-scores of CNV signal (TRUE) or cluster median CNV signal (FALSE).}
 
 \item{file}{output file}

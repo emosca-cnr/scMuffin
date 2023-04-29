@@ -1,6 +1,7 @@
 #' CNV Profile
 #' @param scMuffinList scMuffinList object
 #' @param z.score whether to plot clustere median z-scores of CNV signal (TRUE) or cluster median CNV signal (FALSE).
+#' @param cluster cluster to be plotted
 #' @param file output file
 #' @param width image width
 #' @param height image height
