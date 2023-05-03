@@ -23,6 +23,13 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 		dir.create(dir_out, recursive = TRUE)
 	}
 	
+  if(length(scMuffinList[[feature_name]]$summary) == 0){
+    stop("Can't find scMuffinList[[feature_name]]$summary\n")
+  }
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
   #cells_by_features <- features$df[, features$type!="factor", drop=F]
   cells_by_features <- scMuffinList[[feature_name]]$summary
   

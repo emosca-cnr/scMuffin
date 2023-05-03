@@ -1,7 +1,7 @@
 #' Create scMuffinList
-#' @description Create scMuffinList from counts and/or normalized data. 
-#' @param counts genes-by-cell matrix or data.frame of counts.
-#' @param normalized genes-by-cell matrix or data.frame with normalized expression.
+#' @description Create scMuffinList from counts and/or normalized data. The gene identifiers must be the same. Note that CNV analysis is currently available only for symbols as gene identifiers.
+#' @param counts genes-by-cells matrix or data.frame of counts. Rownames must be gene identifiers. 
+#' @param normalized genes-by-cells matrix or data.frame with normalized expression. Rownames must be gene identifiers. 
 #' @return scMuffinList with counts and normalized elements as dgCMatrix.
 #' @importFrom Matrix Matrix
 #' @importFrom methods is

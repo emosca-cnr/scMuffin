@@ -16,6 +16,8 @@
 
 CNV_analysis <- function(scMuffinList=NULL, mc.cores=1, reference = NULL, min_cells = 100, min_genes = 100, wnd_size = 100, scale_cells = TRUE, center_genes = FALSE, expr_lim = FALSE, method="mean", na.rm=FALSE, z.score=FALSE, eps=NULL){
   
+  cat("IMPORTANT: CNV analysis requires gene symbols as gene identifiers!\n")
+  
   cnv_res <- calculate_CNV(scMuffinList$normalized, mc.cores = mc.cores, reference = reference, min_cells = min_cells, min_genes = min_genes, wnd_size = wnd_size, scale_cells = scale_cells, center_genes = center_genes, expr_lim = expr_lim, na.rm=na.rm)
   
   cnv_clustering <- cluster_by_features(cnv_res$CNV, cnv=TRUE) 

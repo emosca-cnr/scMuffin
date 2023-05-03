@@ -7,13 +7,13 @@
 create_scMuffinList(counts = NULL, normalized = NULL)
 }
 \arguments{
-\item{counts}{genes-by-cell matrix or data.frame of counts.}
+\item{counts}{genes-by-cells matrix or data.frame of counts. Rownames must be gene identifiers.}
 
-\item{normalized}{genes-by-cell matrix or data.frame with normalized expression.}
+\item{normalized}{genes-by-cells matrix or data.frame with normalized expression. Rownames must be gene identifiers.}
 }
 \value{
 scMuffinList with counts and normalized elements as dgCMatrix.
 }
 \description{
-Create scMuffinList from counts and/or normalized data.
+Create scMuffinList from counts and/or normalized data. The gene identifiers must be the same. Note that CNV analysis is currently available only for symbols as gene identifiers.
 }

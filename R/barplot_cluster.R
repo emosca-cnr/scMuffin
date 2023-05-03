@@ -26,7 +26,18 @@ barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NUL
   
   p.type <- match.arg(p.type, c("p", "p_adj"))
   
+  if(length(scMuffinList[[feature_name]]$summary) == 0){
+    stop("Can't find scMuffinList[[feature_name]]$summary\n")
+  }
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
   cell_category <- scMuffinList[[feature_name]]$summary
+  if(!any(colnames(cell_category) %in% feature_id)){
+    stop("Can't find any colnames of scMuffinList[[feature_name]]$summary equal to", feature_id, "\n")
+  }
+  
   cell_category <- factor(setNames(cell_category[, colnames(cell_category) %in% feature_id], rownames(cell_category)))
   cell_category_names <- setNames(paste0("v", 1:length(levels(cell_category))), levels(cell_category))
   

@@ -13,7 +13,7 @@ inter_ds_cluster_sim(
   cluster_markers_2,
   genes_min = 3,
   genes_max = 500,
-  mc.cores = 2,
+  mc.cores = 1,
   null_model = TRUE,
   ncells_min = 5,
   do_plot = TRUE,

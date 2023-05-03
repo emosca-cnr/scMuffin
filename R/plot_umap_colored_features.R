@@ -24,6 +24,11 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
     dir.create(out_dir, recursive = T)
   }
   
+  if(length(scMuffinList[[feature_name]]$summary) == 0){
+    stop("Can't find scMuffinList[[feature_name]]$summary\n")
+  }
+  
+  
   #feature_data <- features$df
   feature_data <- scMuffinList[[feature_name]]$summary
   feature_data <- feature_data[match(colnames(Seu_obj), rownames(feature_data)), , drop=FALSE]

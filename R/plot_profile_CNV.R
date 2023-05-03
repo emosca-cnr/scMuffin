@@ -19,6 +19,10 @@
 
 plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=NULL, width=300, height=90, units="mm", res=300, image_format="png", cex.points=0.7, cex.lab=0.7, cex.axis=0.7, cex.main=0.7){
   
+  if(length(scMuffinList$partitions[, "CNV"])==0){
+    stop("scMuffinList$partitions[, 'CNV'] does not exist\n")
+  }
+  
   cnv_clustering <- scMuffinList$partitions[, "CNV"]
   names(cnv_clustering) <- rownames(scMuffinList$partitions)
   cnv <- scMuffinList$CNV$full$CNV

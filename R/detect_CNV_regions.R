@@ -9,6 +9,10 @@
 
 detect_CNV_regions <- function(scMuffinList = NULL, z.score=FALSE, eps=NULL){
   
+  if(length(scMuffinList$partitions[, "CNV"])==0){
+    stop("CNV regions detection requires scMuffinList$partitions[, 'CNV']\n")
+  }
+  
   cnv_clustering <- scMuffinList$partitions[, "CNV"]
   names(cnv_clustering) <- rownames(scMuffinList$partitions)
   cnv <- scMuffinList$CNV$full$CNV

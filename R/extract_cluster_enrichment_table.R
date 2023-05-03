@@ -14,10 +14,21 @@ extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, ty
   if(is.null(quantity)){
     stop("quantity can not be null.\n")
   }
+  
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
+  
   if(type == "CSEA" & !is.null(scMuffinList$cluster_data[[partition_id]]$CSEA)){
     
     ans <- scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table
     if(!is.null(feature_id)){
+      
+      if(!any(colnames(ans) %in% feature_id)){
+        stop("Can't find any colnames of scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table equal to", feature_id, "\n")
+      }
+      
       ans <- ans[names(ans) %in% feature_id]
     }
     ans <- do.call(cbind, lapply(ans, function(x) array(x[, colnames(x)==quantity], dimnames = list(x$id))))
@@ -28,6 +39,10 @@ extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, ty
     
     ans <- scMuffinList$cluster_data[[partition_id]]$ORA
     if(!is.null(feature_id)){
+      if(!any(colnames(ans) %in% feature_id)){
+        stop("Can't find any names of scMuffinList$cluster_data[[partition_id]]$ORA equal to", feature_id, "\n")
+      }
+      
       ans <- ans[names(ans) %in% feature_id]
     }
     ans <- lapply(ans, function(ans_i) do.call(cbind, lapply(ans_i, function(x) setNames(x[, colnames(x)==quantity], x$id))))

@@ -7,7 +7,7 @@
 calculate_CNV(
   genes_by_cells,
   reference = NULL,
-  mc.cores = 2,
+  mc.cores = 1,
   wnd_size = 100,
   min_genes = 1000,
   min_cells = 100,

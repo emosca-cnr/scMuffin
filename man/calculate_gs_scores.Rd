@@ -7,7 +7,7 @@
 calculate_gs_scores(
   scMuffinList = NULL,
   gs_list = NULL,
-  mc.cores = 2,
+  mc.cores = 1,
   nbins = 25,
   nmark_min = 5,
   ncells_min = 10,

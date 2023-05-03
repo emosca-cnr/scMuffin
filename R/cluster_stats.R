@@ -1,7 +1,7 @@
 #' Cell cluster statistics
 #' @param scMuffinList scMuffinList object
 #' @param partition_id partition id
-#' @param feature_id feature id
+#' @param feature_name feature name
 #' @param mean_f function to use for average
 #' @param var_f function to use for variability
 #' @param na.rm whether to remove na or not
@@ -10,9 +10,16 @@
 #' @return scMuffinList with data.frames "mean" and "var" added to "scMuffinList$cluster_data[[partition_id]]"
 #' @export
 
-cluster_stats <- function(scMuffinList=NULL, partition_id=NULL, feature_id=NULL, mean_f=mean, var_f=sd, na.rm=TRUE){
+cluster_stats <- function(scMuffinList=NULL, partition_id=NULL, feature_name=NULL, mean_f=mean, var_f=sd, na.rm=TRUE){
   
-  X <- as.matrix(scMuffinList[[feature_id]]$summary)
+  if(length(scMuffinList[[feature_name]]$summary) == 0){
+    stop("Can't find scMuffinList[[feature_name]]$summary\n")
+  }
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
+  X <- as.matrix(scMuffinList[[feature_name]]$summary)
   X_clusters <- setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))
   
   X_clusters <- X_clusters[match(rownames(X), names(X_clusters))]
@@ -21,7 +28,7 @@ cluster_stats <- function(scMuffinList=NULL, partition_id=NULL, feature_id=NULL,
     X_mean <- apply(X, 2, function(i_col) tapply(i_col, X_clusters, FUN = mean_f, na.rm=na.rm))
     X_var <- apply(X, 2, function(i_col) tapply(i_col, X_clusters, FUN = var_f, na.rm=na.rm))
   }else{
-    stop("scMuffinList[[feature_id]]$summary is not numeric\n")
+    stop("scMuffinList[[feature_name]]$summary is not numeric\n")
   }
   
   if(length(scMuffinList$cluster_data[[partition_id]]$mean)==0){

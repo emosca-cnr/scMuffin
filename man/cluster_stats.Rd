@@ -7,7 +7,7 @@
 cluster_stats(
   scMuffinList = NULL,
   partition_id = NULL,
-  feature_id = NULL,
+  feature_name = NULL,
   mean_f = mean,
   var_f = sd,
   na.rm = TRUE
@@ -18,7 +18,7 @@ cluster_stats(
 
 \item{partition_id}{partition id}
 
-\item{feature_id}{feature id}
+\item{feature_name}{feature name}
 
 \item{mean_f}{function to use for average}
 

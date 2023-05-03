@@ -13,6 +13,10 @@
 
 extract_cluster_enrichment_tags <- function(scMuffinList=NULL, partition_id=NULL, CSEA_selection_criterion="FDRq", CSEA_selection_threshold=0.25, only_pos_nes=TRUE, ORA_selection_criterion="p_adj", ORA_selection_threshold=0.1, n_max_per_cluster=3){
   
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
   clust_enrich_res <- scMuffinList$cluster_data[[partition_id]][c("CSEA", "ORA")]
   
   ans <- vector("list", 2)

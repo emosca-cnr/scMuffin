@@ -23,15 +23,22 @@ add_partitions <- function(scMuffinList=NULL, clusters=NULL, partition_id=NULL){
   
   if(length(scMuffinList$partitions)==0){
     
+    cat("Creating 'scMuffinList$partitions'\n")
     scMuffinList$partitions <- setNames(data.frame(clusters, row.names = names(clusters)), partition_id)
     
   }else{
+    
     idx_exist_part <- which(colnames(scMuffinList$partitions) == partition_id)
     
     if(length(idx_exist_part) > 0){ #overwrites
+      
+      cat("Overwriting an existing partition\n")
+      
       scMuffinList$partitions[, idx_exist_part] <- clusters[match(rownames(scMuffinList$partitions), names(clusters))]
     
     }else{ #merge
+      
+      cat("Adding the partition\n")
       
       scMuffinList$partitions <- merge(scMuffinList$partitions, setNames(data.frame(clusters, row.names = names(clusters)), partition_id), by=0, sort=F, all=T)
       rownames(scMuffinList$partitions) <- scMuffinList$partitions$Row.names

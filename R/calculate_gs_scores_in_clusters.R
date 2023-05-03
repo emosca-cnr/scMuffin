@@ -10,6 +10,10 @@
 
 calculate_gs_scores_in_clusters <- function(scMuffinList=NULL, partition_id=NULL, ncells_min = 5, null_model = TRUE, alt="g", test="t"){
   
+  if(!any(colnames(scMuffinList$partitions) == partition_id)){
+    stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
   cat("Clusters...\n")
   print(table(setNames(scMuffinList$partitions[, partition_id], rownames(scMuffinList$partitions))))
   
