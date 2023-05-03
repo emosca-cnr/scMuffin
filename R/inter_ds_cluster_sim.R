@@ -32,7 +32,7 @@
 #'   \item{markers_2, markers of dataset 2;}
 #' }
 
-inter_ds_cluster_sim <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2, genes_min=3, genes_max=500, mc.cores=2, null_model=TRUE, ncells_min=5, do_plot=TRUE, dataset_name_1="S1", dataset_name_2="S2", outfile="cluster_similarity.jpg", pal=NULL, cluster_rows = FALSE, cluster_columns = FALSE, top_genes=FALSE, ...){
+inter_ds_cluster_sim <- function(gbc_1, gbc_2, clusters_1, clusters_2, cluster_markers_1, cluster_markers_2, genes_min=3, genes_max=500, mc.cores=1, null_model=TRUE, ncells_min=5, do_plot=TRUE, dataset_name_1="S1", dataset_name_2="S2", outfile="cluster_similarity.jpg", pal=NULL, cluster_rows = FALSE, cluster_columns = FALSE, top_genes=FALSE, ...){
   
   if(any(lengths(cluster_markers_1)) > genes_max | any(lengths(cluster_markers_1) < genes_min)){
     message("number of genes beyond the chosen limits in at least one signature\n")

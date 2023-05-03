@@ -19,7 +19,7 @@
 #' @export
 #' @import parallel
 
-calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=2, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE, overwrite=FALSE){
+calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE, overwrite=FALSE){
   
   
   cat("nbins:", nbins, "\n")

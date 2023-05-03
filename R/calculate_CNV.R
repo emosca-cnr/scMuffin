@@ -13,7 +13,7 @@
 #' @description Calculate CNV using the moving average approach firstly described in Patel et al., 2014 Science (DOI: 10.1126/science)
 #' @export
 #' 
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=2, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=NULL, scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=NULL, scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
 	
  	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
