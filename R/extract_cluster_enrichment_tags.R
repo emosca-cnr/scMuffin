@@ -22,40 +22,48 @@ extract_cluster_enrichment_tags <- function(scMuffinList=NULL, partition_id=NULL
   ans <- vector("list", 2)
   names(ans) <- c("cluster_csea_tags", "cluster_hyper_tags")
   
-  ##CSEA results
-  CSEA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "CSEA", quantity = CSEA_selection_criterion)
-  #if(only_pos_nes){
-  #  CSEA_table_nes <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "CSEA", quantity = "nes")
-  #  CSEA_table[CSEA_table_nes < 0] <- 1 #fdr equal to 1
-  #}
+  csea_tags <- NULL
   
-  #selection of per-cluster tags
-  decreasing <- FALSE
-  if(CSEA_selection_criterion == "nes"){
-    decreasing <- TRUE
-  }
-  
-  if(any(CSEA_selection_criterion %in% c("es", "nes"))){
-    csea_tags <- apply(CSEA_table, 1, function(i_row) intersect(colnames(CSEA_table)[order(i_row, decreasing = decreasing)], colnames(CSEA_table)[i_row > CSEA_selection_threshold]))
+  if(length(scMuffinList$cluster_data[[partition_id]]$CSEA)==0){
+    
+    cat("No CSEA results in the considered partition\n")
+    
   }else{
-    csea_tags <- apply(CSEA_table, 1, function(i_row) intersect(colnames(CSEA_table)[order(i_row, decreasing = decreasing)], colnames(CSEA_table)[i_row < CSEA_selection_threshold]))
+    
+    ##CSEA results
+    CSEA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "CSEA", quantity = CSEA_selection_criterion)
+  
+    if(any(CSEA_selection_criterion %in% c("es", "nes"))){ #decreasing
+      csea_tags <- apply(CSEA_table, 1, function(i_row) intersect(colnames(CSEA_table)[order(i_row, decreasing = TRUE)], colnames(CSEA_table)[i_row > CSEA_selection_threshold]))
+    }else{
+      csea_tags <- apply(CSEA_table, 1, function(i_row) intersect(colnames(CSEA_table)[order(i_row, decreasing = FALSE)], colnames(CSEA_table)[i_row < CSEA_selection_threshold]))
+    }
+    
+    csea_tags <- lapply(csea_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
   }
   
-  csea_tags <- lapply(csea_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
+  ora_tags <- NULL
   
   #selection
-  ORA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "ORA", quantity = ORA_selection_criterion)
-  ORA_table <- do.call(cbind, ORA_table)
-  
-  ora_tags <- apply(ORA_table, 1, function(i_row) intersect(colnames(ORA_table)[order(i_row, decreasing = decreasing)], colnames(ORA_table)[i_row < ORA_selection_threshold]))
-  ora_tags <- lapply(ora_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
-  
-  
-  decreasing <- TRUE
-  if(CSEA_selection_criterion %in% c("p", "p_adj")){
-    decreasing <- FALSE
+  if(length(scMuffinList$cluster_data[[partition_id]]$ORA)==0){
+    
+    cat("No ORA results in the considered partition\n")
+    
+  }else{
+    
+    ORA_table <- extract_cluster_enrichment_table(scMuffinList = scMuffinList, partition_id = partition_id, type = "ORA", quantity = ORA_selection_criterion)
+    ORA_table <- do.call(cbind, ORA_table)
+    
+    if(any(ORA_selection_criterion %in% c("wbd", "exp", "er"))){ #decreasing
+      ora_tags <- apply(ORA_table, 1, function(i_row) intersect(colnames(ORA_table)[order(i_row, decreasing = TRUE)], colnames(ORA_table)[i_row > ORA_selection_threshold]))
+    }else{
+      ora_tags <- apply(ORA_table, 1, function(i_row) intersect(colnames(ORA_table)[order(i_row, decreasing = FALSE)], colnames(ORA_table)[i_row < ORA_selection_threshold]))
+    }
+    
+    
+    ora_tags <- lapply(ora_tags, function(x) x[1:min(n_max_per_cluster, length(x))])
+    
   }
-  ora_tags <- apply(ORA_table, 1, function(y) intersect(colnames(ORA_table)[order(y, decreasing = decreasing)], colnames(ORA_table)[y<ORA_selection_threshold]))
   
   scMuffinList$cluster_data[[partition_id]]$cluster_tags <- list(CSEA=csea_tags, ORA=ora_tags)
   

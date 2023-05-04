@@ -19,6 +19,7 @@ extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, ty
     stop("Can't find any parition named ", partition_id, "\n")
   }
   
+  ans <- NULL
   
   if(type == "CSEA" & !is.null(scMuffinList$cluster_data[[partition_id]]$CSEA)){
     
