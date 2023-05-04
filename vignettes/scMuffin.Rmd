@@ -57,22 +57,17 @@ scMuffin is intended to be used downstream general purpose tasks like quality co
 * genes-by-cells normalized expression matrix;
 * a partition of cells (cell clusters).
 
+The rownames and colnames of the two matrices must be, respectively, gene identifiers and cell identifiers. Currently, we recommend to use official gene symbols. Some analysis, like CNV inference, works only with gene symbols.
+
 Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design one may want to apply strong or mild filters before using scMuffin.
 
 # Obtaining the data used in this vignette
-To run the examples included in this vignette you need the following data:
 
-* two single cell datasets with counts as well as normalized expression values;
-* cell clusters;
-* UMAP visualization;
-* cluster markers.
-
-Here's an example of how these data can be obtained from a publicly available study on High-Grade Glioma [@Yuan2018] (GSE103224):
+Here's an example of how to obtain a publicly available single cell dataset from Gene Expression Omnibus (GEO). In particular, we will consider a sample from a study on High-Grade Glioma [@Yuan2018] (GSE103224):
 
 1. download the filtered genes-by-cells mtrices from the URLs:
 
 * sample PJ016: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758471;
-* sample PJ017: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472.
 
 2. read the text files into R and use the Seurat package [@Hao2021] to perform a series of typical tasks (e.g. normalization, clustering); here's a concise example using sample PJ016:
 ```{r, include=TRUE, eval=FALSE}
@@ -151,7 +146,7 @@ head(scMuffinList_demo$gene_set_scoring$full$CSEA_Angiogenesis)
 
 The function `calculate_gs_scores_in_clusters` defines the median values of gene set scores in every cluster of a given partition id:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList <- calculate_gs_scores_in_clusters(scMuffinList, partition_id = "global_expr")
+scMuffinList_demo <- calculate_gs_scores_in_clusters(scMuffinList_demo, partition_id = "global_expr")
 ```
 ```{r, include=TRUE, eval=TRUE}
 scMuffinList_demo$cluster_data$global_expr$gene_set_scoring$summary
@@ -159,7 +154,7 @@ scMuffinList_demo$cluster_data$global_expr$gene_set_scoring$summary
 
 These mean values are useful to obtain a concise visualization of gene set expression throughout the dataset, using the function `plot_heatmap_features_by_clusters`:
 ```{r, include=TRUE, eval=FALSE}
-plot_heatmap_features_by_clusters(scMuffinList, feature_source = "gss")
+plot_heatmap_features_by_clusters(scMuffinList_demo, feature_source = "gss")
 ```
 ![caption](images/gene_set_scores_clusters.png){width=600px} 
 
