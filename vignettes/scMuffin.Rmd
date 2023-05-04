@@ -95,9 +95,9 @@ Many analyses require cell clusters. Any partition can be added as follows:
 ```{r, include=TRUE, eval=FALSE}
 scMuffinList_demo <- add_partitions(scMuffinList_demo, clusters = seu_obj_1$seurat_clusters, partition_id = "global_expr")
 ```
-where seu_obj_1$seurat_clusters is a named vector that contains cells clusters and whose names are cell labels. 
-```{r, include=T, eval=T, echo=T}
-head(scMuffinList_demo$partitions[, 2, drop=F])
+where seu_obj_1$seurat_clusters is a named vector that contains cells clusters and whose names are cell labels. The element `partitions` of the scMuffinList will contain cell clusters:
+```{r, echo=TRUE}
+head(scMuffinList_demo$partitions[, 1, drop=F])
 ```
 
 # Gene set scoring
@@ -120,8 +120,8 @@ msigdbr::msigdbr_species()
 ```
 
 The gene sets of interest can be selected acting on the corresponding arguments `CM_tissues`, `PNDB_tissues`, and `msigdb_hs_cat_subcat`. In the case of CellMarker and PanglaoDB we can specify a list of desired tissues. The full set can be listed by means of show_tissues. Here we show just the first part of the output:
-```{r, include=TRUE, eval=FALSE}
-head(show_tissues())
+```{r, echo=TRUE}
+lapply(show_tissues(), head)
 ```
 
 Here is an example:
@@ -141,7 +141,7 @@ scMuffinList_demo <- calculate_gs_scores(scMuffinList = scMuffinList_demo, gs_li
 The results of any analysis are stored as elements of the `scMuffinList`. The gene set scoring engine stores its results in `scMuffinList$gene_set_scoring`, where `summary` is a cells-by-features data.frame with cell scores, and `full` contains a series of additional details for every gene set:
 ```{r, include=TRUE, eval=TRUE}
 head(scMuffinList_demo$gene_set_scoring$summary)
-head(scMuffinList_demo$gene_set_scoring$full$CSEA_Angiogenesis)
+head(scMuffinList_demo$gene_set_scoring$full$Angiogenesis)
 ```
 
 The function `calculate_gs_scores_in_clusters` defines the median values of gene set scores in every cluster of a given partition id:
@@ -242,9 +242,9 @@ Cell clusters can be assessed for enrichment in quantitative and categorical val
 ```{r, include=TRUE, eval=FALSE}
 scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
-In case of quantitative features the result is a list named CSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `CSEA_Angiogenesis`:
+In case of quantitative features the result is a list named CSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `Angiogenesis`:
 ```{r, include=TRUE, eval=TRUE}
-scMuffinList_demo$cluster_data$global_expr$CSEA$gs_table$CSEA_Angiogenesis
+scMuffinList_demo$cluster_data$global_expr$CSEA$gs_table$Angiogenesis
 ```
 In this this example we assess cluster enrichment in relation to categorical feature, namely cell cycle phase:
 ```{r, include=TRUE, eval=FALSE}
@@ -268,7 +268,7 @@ These tables can be plotted with the function `plot_heatmap_features_by_clusters
 ```{r, include=TRUE, eval=FALSE}
 plot_heatmap_features_by_clusters(feature_source = csea_nes_table, significance_matrix = csea_fdr_table, sig_threshold = 0.05)
 ```
-![](images/nes.fdr.png){width=300px}
+![](images/nes.fdr.png){width=600px}
 
 Similarly, it's possible to extract the most significant "tags" of any clusters; for example, here we extract the top 3 tags by FDRq (CSEA) and p_adj (ORA):
 ```{r, include=TRUE, eval=FALSE}

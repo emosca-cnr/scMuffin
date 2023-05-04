@@ -35,7 +35,6 @@ extract_cluster_enrichment_table <- function(scMuffinList, partition_id=NULL, ty
     ans <- do.call(cbind, lapply(ans, function(x) array(x[, colnames(x)==quantity], dimnames = list(x$id))))
   }
   
-  
   if(type == "ORA" & !is.null(scMuffinList$cluster_data[[partition_id]]$ORA)){
     
     ans <- scMuffinList$cluster_data[[partition_id]]$ORA

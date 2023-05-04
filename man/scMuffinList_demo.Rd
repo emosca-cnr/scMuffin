@@ -6,7 +6,7 @@
 \title{scMuffinList_demo
 scMuffinList object with a partial dataset used in vignettes.}
 \format{
-An object of class \code{list} of length 9.
+An object of class \code{list} of length 10.
 }
 \usage{
 scMuffinList_demo
