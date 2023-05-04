@@ -22,12 +22,14 @@ Typical applications of scMuffin include:
 - identify subtle differences between cell subtypes or cell states;
 - compare datasets based on gene set expression.
 
-The documentation is available at the URL: https://emosca-cnr.github.io/scMuffin
+Documentation: https://emosca-cnr.github.io/scMuffin
+
+Source code: https://github.com/emosca-cnr/scMuffin
 
 Citation: https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1
 
 Contacts:
 
 - [Ettore Mosca](https://www.itb.cnr.it/en/institute/staff/ettore-mosca), Bioinformatics Lab, CNR-ITB
-- [Paride Pelucchi, Stem Cell Biology and Cancer Lab, CNR-ITB](https://www.itb.cnr.it/en/institute/staff/paride-pelucchi)
+- [Paride Pelucchi](https://www.itb.cnr.it/en/institute/staff/paride-pelucchi), Stem Cell Biology and Cancer Lab, CNR-ITB
 
