@@ -107,6 +107,10 @@ inputs:</p>
 <li>genes-by-cells normalized expression matrix;</li>
 <li>a partition of cells (cell clusters).</li>
 </ul>
+<p>The rownames and colnames of the two matrices must be, respectively,
+gene identifiers and cell identifiers. Currently, we recommend to use
+official gene symbols. Some analysis, like CNV inference, works only
+with gene symbols.</p>
 <p>Typically, the two genes-by-cells matrices have already been filtered
 to exclude low quality cells and genes that could negatively affect the
 analyses. However, the characterization of cells that can be achieved
@@ -119,24 +123,14 @@ filters before using scMuffin.</p>
 <div class="section level2">
 <h2 id="obtaining-the-data-used-in-this-vignette">Obtaining the data used in this vignette<a class="anchor" aria-label="anchor" href="#obtaining-the-data-used-in-this-vignette"></a>
 </h2>
-<p>To run the examples included in this vignette you need the following
-data:</p>
-<ul>
-<li>two single cell datasets with counts as well as normalized
-expression values;</li>
-<li>cell clusters;</li>
-<li>UMAP visualization;</li>
-<li>cluster markers.</li>
-</ul>
-<p>Here’s an example of how these data can be obtained from a publicly
-available study on High-Grade Glioma <span class="citation">(J. Yuan et
-al. 2018)</span> (GSE103224):</p>
+<p>Here’s an example of how to obtain a publicly available single cell
+dataset from Gene Expression Omnibus (GEO). In particular, we will
+consider a sample from a study on High-Grade Glioma <span class="citation">(J. Yuan et al. 2018)</span> (GSE103224):</p>
 <ol style="list-style-type: decimal">
 <li>download the filtered genes-by-cells mtrices from the URLs:</li>
 </ol>
 <ul>
 <li>sample PJ016: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758471" class="external-link uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758471</a>;</li>
-<li>sample PJ017: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472" class="external-link uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM2758472</a>.</li>
 </ul>
 <ol start="2" style="list-style-type: decimal">
 <li>read the text files into R and use the Seurat package <span class="citation">(Hao et al. 2021)</span> to perform a series of typical
@@ -263,7 +257,7 @@ gene set:</p>
 median values of gene set scores in every cluster of a given partition
 id:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores_in_clusters.html">calculate_gs_scores_in_clusters</a></span><span class="op">(</span><span class="va">scMuffinList</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores_in_clusters.html">calculate_gs_scores_in_clusters</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Angiogenesis    Apoptosis   Cell_Cycle Differentiation DNA_damage</span></span>
@@ -303,7 +297,7 @@ id:</p>
 gene set expression throughout the dataset, using the function
 <code>plot_heatmap_features_by_clusters</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span><span class="va">scMuffinList</span>, feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="images/gene_set_scores_clusters.png" width="600" alt=""><p class="caption">caption</p>
 </div>
