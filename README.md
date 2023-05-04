@@ -26,3 +26,8 @@ The documentation is available at the URL: https://emosca-cnr.github.io/scMuffin
 
 Citation: https://www.biorxiv.org/content/10.1101/2022.06.01.494129v1
 
+Contacts:
+
+- [Ettore Mosca](https://www.itb.cnr.it/en/institute/staff/ettore-mosca)
+- [Paride Pelucchi](https://www.itb.cnr.it/en/institute/staff/paride-pelucchi)
+
