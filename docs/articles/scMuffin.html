@@ -117,8 +117,8 @@ analyses. However, the characterization of cells that can be achieved
 with scMuffin offers insights that can be used to (further) filter a
 dataset and/or to decide on which cells apply particular analyses
 (e.g. biomarker identification). In general, according to research
-questions and experimental design one may want to apply strong or mild
-filters before using scMuffin.</p>
+questions and experimental design strong or mild filters should be
+applied before using scMuffin.</p>
 </div>
 <div class="section level2">
 <h2 id="obtaining-the-data-used-in-this-vignette">Obtaining the data used in this vignette<a class="anchor" aria-label="anchor" href="#obtaining-the-data-used-in-this-vignette"></a>
@@ -152,17 +152,17 @@ sample PJ016:</li>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span></code></pre></div>
 <p>The genes-by-cells count matrix available at NCBI GEO is provided
 with Ensembl identifiers and gene symbols, which are not unique. So,
-after having read the table, we take advantage of the function
+after having read the table, we used the function
 <code>keep_strongest_representative</code>, which defines a
 genes-by-cells matrix with symbols as row names. In case of multiple
 Ensembl ids mapped to the same symbol, the row with the highest average
 count is kept as representative of the gene. In a real scenario, the
 functions listed above should be run using appropriate parameters that
 take into account the specificities of the dataset under consideration
-and the objectives of the analysis that one wants to perform. Here we
-just wanted to provide a means to obtain a dataset to follow this
-vignette. Please read the Seurat documentation for further details about
-the functions listed above.</p>
+and the objectives of the analysis the user to perform. Here we just
+wanted to provide a means to obtain a dataset to follow this vignette.
+Please read the Seurat documentation for further details about the
+functions listed above.</p>
 </div>
 <div class="section level2">
 <h2 id="the-scmuffinlist-data-structure">The scMuffinList data structure<a class="anchor" aria-label="anchor" href="#the-scmuffinlist-data-structure"></a>
@@ -195,9 +195,9 @@ clusters:</p>
 </h2>
 <p>scMuffin provides functions to set up one or more collections of gene
 sets and perform cell-level estimation of gene set expression in
-relation to an empirical null model. This can be applied to any gene
-set, and can therefore be used to estimate various cell’s phenotypes,
-like pathway activities or marker set expression.</p>
+relation to an empirical null model. This can be applied to any gene set
+and can therefore be used to estimate various cell’s phenotypes, like
+pathway activities or markers expression.</p>
 <div class="section level3">
 <h3 id="assembling-input-gene-sets">Assembling input gene sets<a class="anchor" aria-label="anchor" href="#assembling-input-gene-sets"></a>
 </h3>
@@ -433,10 +433,10 @@ approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R),
 </h3>
 <p>scMuffin provides two visualizations for CNVs: an heatmap and the
 cluster average profile plot. The heatmap is based on ComnplexHeatmap
-package and beside it, it is possible to visualize the genomic location
-of a series of given genes (specified in the argument
-<code>genes</code>), or, alternatively, the location of detected CNVs
-(argument <code>mark.detected.cnv = T</code>)</p>
+package and enables the visualization of the genomic location of a
+series of given genes (specified in the argument <code>genes</code>),
+or, alternatively, the location of detected CNVs (argument
+<code>mark.detected.cnv = T</code>)</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">col_fun</span> <span class="op">&lt;-</span> <span class="fu">circlize</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/circlize/man/colorRamp2.html" class="external-link">colorRamp2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">pals</span><span class="fu">::</span><span class="fu"><a href="https://kwstat.github.io/pals/reference/brewer.html" class="external-link">brewer.rdylbu</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YBX1"</span>, <span class="st">"HNRNPM"</span><span class="op">)</span>, genes.labels <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span>
@@ -608,7 +608,7 @@ values:</p>
 <span><span class="co">## 9 0.040000000 0.007021063</span></span></code></pre>
 <p>These tables can be plotted with the function
 <code>plot_heatmap_features_by_clusters</code>. In the following example
-we plot NES values with a asterisks according to their significance:</p>
+we plot NES values with asterisks according to their significance:</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>feature_source <span class="op">=</span> <span class="va">csea_nes_table</span>, significance_matrix <span class="op">=</span> <span class="va">csea_fdr_table</span>, sig_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/nes.fdr.png" width="600"></p>

@@ -59,7 +59,7 @@ scMuffin is intended to be used downstream general purpose tasks like quality co
 
 The rownames and colnames of the two matrices must be, respectively, gene identifiers and cell identifiers. Currently, we recommend to use official gene symbols. Some analysis, like CNV inference, works only with gene symbols.
 
-Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design one may want to apply strong or mild filters before using scMuffin.
+Typically, the two genes-by-cells matrices have already been filtered to exclude low quality cells and genes that could negatively affect the analyses. However, the characterization of cells that can be achieved with scMuffin offers insights that can be used to (further) filter a dataset and/or to decide on which cells apply particular analyses (e.g. biomarker identification). In general, according to research questions and experimental design strong or mild filters should be applied before using scMuffin.
 
 # Obtaining the data used in this vignette
 
@@ -84,7 +84,7 @@ seu_obj_1 <- FindNeighbors(seu_obj_1)
 seu_obj_1 <- FindClusters(seu_obj_1)
 seu_obj_1 <- RunUMAP(seu_obj_1)
 ```
-The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we take advantage of the function `keep_strongest_representative`, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis that one wants to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
+The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we used the function `keep_strongest_representative`, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis the user to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
 
 # The scMuffinList data structure
 All data and results of scMuffin are stored in the scMuffinList, so that every function takes in input such structure and returns a modified version of it. The scMuffinList can be created as follows:
@@ -102,7 +102,7 @@ head(scMuffinList_demo$partitions[, 1, drop=F])
 
 # Gene set scoring
 
-scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set, and can therefore be used to estimate various cell’s phenotypes, like pathway activities or marker set expression.
+scMuffin provides functions to set up one or more collections of gene sets and perform cell-level estimation of gene set expression in relation to an empirical null model. This can be applied to any gene set and can therefore be used to estimate various cell’s phenotypes, like pathway activities or markers expression.
 
 ## Assembling input gene sets
 
@@ -182,7 +182,7 @@ The calculation can be demanding. For example, it requires approximately 10 minu
 
 ## CNV visualization
 
-scMuffin provides two visualizations for CNVs: an heatmap and the cluster average profile plot. The heatmap is based on ComnplexHeatmap package and beside it, it is possible to visualize the genomic location of a series of given genes (specified in the argument `genes`), or, alternatively, the location of detected CNVs (argument `mark.detected.cnv = T`)
+scMuffin provides two visualizations for CNVs: an heatmap and the cluster average profile plot. The heatmap is based on ComnplexHeatmap package and enables the visualization of the genomic location of a series of given genes (specified in the argument `genes`), or, alternatively, the location of detected CNVs (argument `mark.detected.cnv = T`)
 
 
 ```{r, include=TRUE, eval=FALSE}
@@ -263,7 +263,7 @@ csea_nes_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition
 ora_p_table <- extract_cluster_enrichment_table(scMuffinList_demo,  partition_id = "global_expr", type = "ORA", quantity = "p")
 csea_fdr_table
 ```
-These tables can be plotted with the function `plot_heatmap_features_by_clusters`. In the following example we plot NES values with a asterisks according to their significance:
+These tables can be plotted with the function `plot_heatmap_features_by_clusters`. In the following example we plot NES values with asterisks according to their significance:
 
 ```{r, include=TRUE, eval=FALSE}
 plot_heatmap_features_by_clusters(feature_source = csea_nes_table, significance_matrix = csea_fdr_table, sig_threshold = 0.05)
