@@ -7,6 +7,7 @@
 #' @param alt alterative passed to [wilcox.test()] or [t.test()]
 #' @param test type of test: t to use [t.test()]; wrs to use [wilcox.test()]
 #' @return scMuffinList with cluster level scores in `sMuffinList$cluster_data[[partition_id]]`. The element [summary] contains a clusters-by-gene sets table, while the element [full] the full result
+#' @export
 
 calculate_gs_scores_in_clusters <- function(scMuffinList=NULL, partition_id=NULL, ncells_min = 5, null_model = TRUE, alt="g", test="t"){
   
