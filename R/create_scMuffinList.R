@@ -5,6 +5,8 @@
 #' @return scMuffinList with counts and normalized elements as dgCMatrix.
 #' @importFrom Matrix Matrix
 #' @importFrom methods is
+#' @export
+#' 
 create_scMuffinList <- function(counts=NULL, normalized=NULL){
   
   scMuffinList <- list()
