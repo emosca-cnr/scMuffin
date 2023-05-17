@@ -144,6 +144,16 @@ head(scMuffinList_demo$gene_set_scoring$summary)
 head(scMuffinList_demo$gene_set_scoring$full$Angiogenesis)
 ```
 
+The values of cell-level scores can be used to color UMAP visualizations, which are automatically generated for every gene set using:
+
+```{r, include=TRUE, eval=FALSE}
+plot_umap_colored_features(scMuffinList_demo, Seu_obj = seu_obj_1, feature_name = "gene_set_scoring")
+```
+
+Here below, an example of UMAP visualization where cells are colored by CancerSEA "Hypoxia" gene set score.
+
+![caption](images/umap_by_genes_col_feature_Hypoxia.jpg){width=600px} 
+
 The function `calculate_gs_scores_in_clusters` defines the median values of gene set scores in every cluster of a given partition id:
 ```{r, include=TRUE, eval=FALSE}
 scMuffinList_demo <- calculate_gs_scores_in_clusters(scMuffinList_demo, partition_id = "global_expr")
