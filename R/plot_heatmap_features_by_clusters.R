@@ -4,7 +4,6 @@
 #' @param feature_source It can be a "mean", "gss" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
 #' @param sig_threshold significance threshold
 #' @param file output file
-#' @param remove_null_features whether to remove null features
 #' @param width image width
 #' @param height image height
 #' @param units image units
@@ -19,7 +18,7 @@
 #' @importFrom pals brewer.rdylbu brewer.ylorrd
 #' @importFrom circlize colorRamp2
 
-plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, remove_null_features=FALSE, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, ...){
+plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, ...){
   
   
   if(!is.null(significance_matrix)){
@@ -55,11 +54,21 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
     }
   }
 
-  if(remove_null_features){
-    X[is.na(X)] <- 0
-    X <- X[rowSums(abs(X))>0, ]
-    print(dim(X))
+  #Detect and remove null features
+  null_rows <- which(rowSums(abs(X), na.rm = T)==0)
+  if(length(null_rows) > 0){
+    cat("Detected features with all null values: these will be removed...\n")
+    if(length(null_rows) == nrow(X)){
+      stop("All features are null.\n")
+    }
+    X <- X[-null_rows, , drop=FALSE]
   }
+  
+  # if(remove_null_features){
+  #   X[is.na(X)] <- 0
+  #   X <- X[rowSums(abs(X))>0, ]
+  #   print(dim(X))
+  # }
   
   if(is.null(pal)){
     X_abs_max <- max(abs(c(min(X, na.rm = TRUE), max(X, na.rm = TRUE))))

@@ -11,7 +11,6 @@ plot_heatmap_features_by_clusters(
   significance_matrix = NULL,
   sig_threshold = 0.05,
   file = NULL,
-  remove_null_features = FALSE,
   width = 180,
   height = 180,
   units = "mm",
@@ -33,8 +32,6 @@ plot_heatmap_features_by_clusters(
 \item{sig_threshold}{significance threshold}
 
 \item{file}{output file}
-
-\item{remove_null_features}{whether to remove null features}
 
 \item{width}{image width}
 
