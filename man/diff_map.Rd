@@ -21,6 +21,3 @@ scMuffinList with element "diffusion_map_pseudo_t", a list with summary and full
 \description{
 The functions computes a Diffusion Map and Diffusion Pseudo Time using package destiny.
 }
-\details{
-The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
-}

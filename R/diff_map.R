@@ -1,6 +1,5 @@
 #' Computation of of Diffusion Map and Diffusion Pseudo Time
 #' 
-#' The function apply Landscent package to a gene by cell matric to compute signal entropy, potency states and diffusion pseudo time
 #' @param scMuffinList scMuffinList object
 #' @param root_cell root cell or "random" to pick up a random root via the destiny::random_root function
 #' @param n_pcs number of PCs to consider, 50 by default
