@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,18 +138,19 @@ tasks (e.g. normalization, clustering); here’s a concise example using
 sample PJ016:</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"GSM2758471_PJ016.filtered.matrix.txt"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"GSM2758471_PJ016.filtered.matrix.txt"</span>, stringsAsFactors <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span><span class="va">sym</span> <span class="op">&lt;-</span> <span class="va">gbc_counts</span><span class="op">[</span>, <span class="st">"V2"</span><span class="op">]</span></span>
-<span><span class="va">gbc_counts</span><span class="op">[</span>, <span class="st">"V2"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_strongest_representative.html">keep_strongest_representative</a></span><span class="op">(</span><span class="va">gbc_counts</span>, <span class="va">sym</span><span class="op">)</span></span>
+<span><span class="va">gbc_counts</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V1"</span>, <span class="st">"V2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_strongest_representative.html">keep_strongest_representative</a></span><span class="op">(</span>genes_by_cells <span class="op">=</span> <span class="va">gbc_counts</span>, <span class="va">sym</span><span class="op">)</span></span>
+<span>    </span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">CreateSeuratObject</span><span class="op">(</span>count<span class="op">=</span><span class="va">gbc_counts</span>, project<span class="op">=</span><span class="st">"PJ016"</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">seu_obj_1</span>, npcs <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <p>The genes-by-cells count matrix available at NCBI GEO is provided
 with Ensembl identifiers and gene symbols, which are not unique. So,
 after having read the table, we used the function
@@ -163,6 +164,9 @@ and the objectives of the analysis the user to perform. Here we just
 wanted to provide a means to obtain a dataset to follow this vignette.
 Please read the Seurat documentation for further details about the
 functions listed above.</p>
+<p>To show examples of results, we take advantage of scMuffinList_demo,
+an scMuffinList object that contains partial results for
+demonstration.</p>
 </div>
 <div class="section level2">
 <h2 id="the-scmuffinlist-data-structure">The scMuffinList data structure<a class="anchor" aria-label="anchor" href="#the-scmuffinlist-data-structure"></a>
@@ -171,14 +175,14 @@ functions listed above.</p>
 that every function takes in input such structure and returns a modified
 version of it. The scMuffinList can be created as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_scMuffinList.html">create_scMuffinList</a></span><span class="op">(</span>counts<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>, normalized<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_scMuffinList.html">create_scMuffinList</a></span><span class="op">(</span>counts<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"counts"</span><span class="op">)</span>, normalized<span class="op">=</span><span class="fu">GetAssayData</span><span class="op">(</span><span class="va">seu_obj_1</span>, assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Many analyses require cell clusters. Any partition can be added as
 follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_partitions.html">add_partitions</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, clusters <span class="op">=</span> <span class="va">seu_obj_1</span><span class="op">$</span><span class="va">seurat_clusters</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p>where seu_obj_1$seurat_clusters is a named vector that contains cells
-clusters and whose names are cell labels. The element
-<code>partitions</code> of the scMuffinList will contain cell
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_partitions.html">add_partitions</a></span><span class="op">(</span><span class="va">scML</span>, clusters <span class="op">=</span> <span class="va">seu_obj_1</span><span class="op">$</span><span class="va">seurat_clusters</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<p>where <code>seu_obj_1$seurat_clusters</code> is a named vector that
+contains cells clusters and whose names are cell labels. The element
+<code>partitions</code> of <code>scML</code> will contain cell
 clusters:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">partitions</span><span class="op">[</span>, <span class="fl">1</span>, drop<span class="op">=</span><span class="cn">F</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -189,6 +193,24 @@ clusters:</p>
 <span><span class="co">## V6           0</span></span>
 <span><span class="co">## V7           7</span></span>
 <span><span class="co">## V8           7</span></span></code></pre>
+<p>To function add_features can be used to add custom results to the
+scMuffinList. In the following example we add the cell cycle phase
+available in a Seurat object (see Seurat <a href="https://satijalab.org/seurat/reference/cellcyclescoring" class="external-link">documentation</a>):</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_features.html">add_features</a></span><span class="op">(</span><span class="va">scMuffinList</span>, name <span class="op">=</span> <span class="st">"CC_Phase"</span>, summary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>CC_Phase<span class="op">=</span><span class="va">seu_obj_1</span><span class="op">$</span><span class="va">Phase</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CC_Phase</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    CC_Phase</span></span>
+<span><span class="co">## V3 "G2M"   </span></span>
+<span><span class="co">## V4 "S"     </span></span>
+<span><span class="co">## V5 "G1"    </span></span>
+<span><span class="co">## V6 "G2M"   </span></span>
+<span><span class="co">## V7 "G1"    </span></span>
+<span><span class="co">## V8 "G1"</span></span></code></pre>
+<p>The <code>summary</code> element of the scMuffinList is a data.frame
+intended to contain data about the feature, while element
+<code>full</code> can be used to store other supporting feature data
+(see other examples below).</p>
 </div>
 <div class="section level2">
 <h2 id="gene-set-scoring">Gene set scoring<a class="anchor" aria-label="anchor" href="#gene-set-scoring"></a>
@@ -208,11 +230,11 @@ et al. 2019)</span> and MSigDB <span class="citation">(Subramanian et
 al. 2005)</span>, and accepts custom gene set as well. The full list of
 gene sets available whitin CellMarker, PanglaoDB and CancerSEA
 collections can be listed using:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"gsls_EntrezID"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"gsls_Symbol"</span><span class="op">)</span></span></code></pre></div>
 <p>while in the case of MSigDB we can use its dedicated functions:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">msigdbr</span><span class="fu">::</span><span class="fu"><a href="https://igordot.github.io/msigdbr/reference/msigdbr_collections.html" class="external-link">msigdbr_collections</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">msigdbr</span><span class="fu">::</span><span class="fu"><a href="https://igordot.github.io/msigdbr/reference/msigdbr_species.html" class="external-link">msigdbr_species</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The gene sets of interest can be selected acting on the corresponding
@@ -221,7 +243,7 @@ arguments <code>CM_tissues</code>, <code>PNDB_tissues</code>, and
 PanglaoDB we can specify a list of desired tissues. The full set can be
 listed by means of show_tissues. Here we show just the first part of the
 output:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="../reference/show_tissues.html">show_tissues</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $PNDB</span></span>
 <span><span class="co">## [1] "Adrenal_glands"    "Blood"             "Bone"             </span></span>
@@ -236,8 +258,8 @@ output:</p>
 <span><span class="co">## [1] "Adipose_tissue" "Ascites"        "Bladder"        "Blood"         </span></span>
 <span><span class="co">## [5] "Blood_vessel"   "Bone"</span></span></code></pre>
 <p>Here is an example:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_gsls.html">prepare_gsls</a></span><span class="op">(</span>gs_sources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CancerSEA"</span>, <span class="st">"PNDB"</span><span class="op">)</span>, PNDB_tissues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Brain"</span><span class="op">)</span>, scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, genes_min <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gsc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_gsls.html">prepare_gsls</a></span><span class="op">(</span>gs_sources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CancerSEA"</span>, <span class="st">"PNDB"</span><span class="op">)</span>, PNDB_tissues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Brain"</span><span class="op">)</span>, scMuffinList <span class="op">=</span> <span class="va">scML</span>, genes_min <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>Note that in the case of MSigDB we have to set up a
 <code>data.frame</code> to specify species, category and sub_category of
 the gene set collections.</p>
@@ -247,15 +269,14 @@ the gene set collections.</p>
 </h3>
 <p>In the following example, we estimate the scores for CancerSEA gene
 sets:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores.html">calculate_gs_scores</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, gs_list <span class="op">=</span> <span class="va">gsc</span><span class="op">$</span><span class="va">CancerSEA</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores.html">calculate_gs_scores</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, gs_list <span class="op">=</span> <span class="va">gsc</span><span class="op">$</span><span class="va">CancerSEA</span><span class="op">)</span></span></code></pre></div>
 <p>The results of any analysis are stored as elements of the
-<code>scMuffinList</code>. The gene set scoring engine stores its
-results in <code>scMuffinList$gene_set_scoring</code>, where
-<code>summary</code> is a cells-by-features data.frame with cell scores,
-and <code>full</code> contains a series of additional details for every
-gene set:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code>scML</code>. The gene set scoring engine stores its results in
+<code>scML$gene_set_scoring</code>, where <code>summary</code> is a
+cells-by-features data.frame with cell scores, and <code>full</code>
+contains a series of additional details for every gene set:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Angiogenesis   Apoptosis  Cell_Cycle Differentiation DNA_damage</span></span>
 <span><span class="co">## V3 -0.089113218 -0.02736876  0.15982556       0.2216575 0.14051428</span></span>
@@ -264,7 +285,7 @@ gene set:</p>
 <span><span class="co">## V6 -0.072394618 -0.01090225  0.38740856       0.2247531 0.19227076</span></span>
 <span><span class="co">## V7  0.114843858  0.18815302 -0.11715432       0.1688834 0.03979306</span></span>
 <span><span class="co">## V8  0.180094845  0.24514734 -0.07518025       0.1015920 0.11925093</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">Angiogenesis</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         case case.N case.AV nmark_min avg_control control.AV null_ok</span></span>
 <span><span class="co">## V3 0.6209460     40      21      TRUE   0.7100592        100    TRUE</span></span>
@@ -283,8 +304,8 @@ gene set:</p>
 <p>The values of cell-level scores can be used to color UMAP
 visualizations, which are automatically generated for every gene set
 using:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_umap_colored_features.html">plot_umap_colored_features</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, Seu_obj <span class="op">=</span> <span class="va">seu_obj_1</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_umap_colored_features.html">plot_umap_colored_features</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, Seu_obj <span class="op">=</span> <span class="va">seu_obj_1</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span><span class="op">)</span></span></code></pre></div>
 <p>Here below, an example of UMAP visualization where cells are colored
 by CancerSEA “Hypoxia” gene set score.</p>
 <div class="figure">
@@ -293,9 +314,9 @@ by CancerSEA “Hypoxia” gene set score.</p>
 <p>The function <code>calculate_gs_scores_in_clusters</code> defines the
 median values of gene set scores in every cluster of a given partition
 id:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores_in_clusters.html">calculate_gs_scores_in_clusters</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_gs_scores_in_clusters.html">calculate_gs_scores_in_clusters</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Angiogenesis    Apoptosis   Cell_Cycle Differentiation DNA_damage</span></span>
 <span><span class="co">## 0  0.047859938 -0.088965155  0.110267077      0.16918450 0.16103980</span></span>
@@ -333,8 +354,8 @@ id:</p>
 <p>These mean values are useful to obtain a concise visualization of
 gene set expression throughout the dataset, using the function
 <code>plot_heatmap_features_by_clusters</code>:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="images/gene_set_scores_clusters.png" width="600" alt=""><p class="caption">caption</p>
 </div>
@@ -348,27 +369,25 @@ gene set expression throughout the dataset, using the function
 </h3>
 <p>CNV inference is performed by the function
 <code>CNV_analysis</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNV_analysis.html">CNV_analysis</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
-<p>The results are stored in <code>scMuffinList_demo$CNV</code>, where
-summary contains the “CNV_signal” and
-<code>scMuffinList_demo$CNV$full$CNV</code> the regions-by-cells CNV
-matrix; the element
-<code>scMuffinList_demo$CNV$full$regions2genes</code> is important to
-map the original data into the CNV regions; lastly, the
-<code>scMuffinList_demo$CNV$full$detected_cnv_regions</code> is a
-data.frame that list the CNV regions detected in each chromosome and
-cell cluster:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    CNV_signal</span></span>
-<span><span class="co">## V3   42.63922</span></span>
-<span><span class="co">## V4   49.41188</span></span>
-<span><span class="co">## V5   40.24116</span></span>
-<span><span class="co">## V6   45.47030</span></span>
-<span><span class="co">## V7   37.84952</span></span>
-<span><span class="co">## V8   45.86847</span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CNV_analysis.html">CNV_analysis</a></span><span class="op">(</span><span class="va">scML</span><span class="op">)</span></span></code></pre></div>
+<p>The results are stored in <code>scML$CNV</code>, where summary
+contains the CNV score and <code>scML$CNV$full$CNV</code> the
+regions-by-cells matrix of CNV profiles; the element
+<code>scML$CNV$full$regions2genes</code> is important to map the
+original data into the CNV regions; lastly, the
+<code>scML$CNV$full$detected_cnv_regions</code> is a data.frame that
+list the CNV regions detected in each chromosome and cell cluster:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    CNV_score</span></span>
+<span><span class="co">## V3  42.63922</span></span>
+<span><span class="co">## V4  49.41188</span></span>
+<span><span class="co">## V5  40.24116</span></span>
+<span><span class="co">## V6  45.47030</span></span>
+<span><span class="co">## V7  37.84952</span></span>
+<span><span class="co">## V8  45.86847</span></span></code></pre>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">CNV</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                                                    V3         V4          V5</span></span>
 <span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.09649985 -0.1330433 -0.08760797</span></span>
@@ -398,7 +417,7 @@ cell cluster:</p>
 <span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.08020467</span></span>
 <span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08020467</span></span>
 <span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07423670</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">regions2genes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $chr1__LINC00115_826205__UQCRHL_15807161</span></span>
 <span><span class="co">##       symbol location</span></span>
@@ -408,7 +427,7 @@ cell cluster:</p>
 <span><span class="co">## 14     NOC2L   944202</span></span>
 <span><span class="co">## 15      HES4   998963</span></span>
 <span><span class="co">## 16     ISG15  1013496</span></span></code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">detected_cnv_regions</span><span class="op">$</span><span class="va">chr1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     chr                                    start start.loc</span></span>
 <span><span class="co">## 1  chr1  chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
@@ -425,7 +444,7 @@ cell cluster:</p>
 <span><span class="co">## 11      chr1__TPM3_154161812__UAP1_162561439 162561439       1 49488242</span></span>
 <span><span class="co">## 12 chr1__METTL18_169792531__ATP2B4_203626831 203626831       1 37964616</span></span></code></pre>
 <p>Importantly, CNV inference adds the “CNV” partition:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">partitions</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    global_expr CNV</span></span>
 <span><span class="co">## V3           0   2</span></span>
@@ -447,16 +466,16 @@ package and enables the visualization of the genomic location of a
 series of given genes (specified in the argument <code>genes</code>),
 or, alternatively, the location of detected CNVs (argument
 <code>mark.detected.cnv = T</code>)</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">col_fun</span> <span class="op">&lt;-</span> <span class="fu">circlize</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/circlize/man/colorRamp2.html" class="external-link">colorRamp2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.2</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">pals</span><span class="fu">::</span><span class="fu"><a href="https://kwstat.github.io/pals/reference/brewer.html" class="external-link">brewer.rdylbu</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YBX1"</span>, <span class="st">"HNRNPM"</span><span class="op">)</span>, genes.labels <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"YBX1"</span>, <span class="st">"HNRNPM"</span><span class="op">)</span>, genes.labels <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, mark.detected.cnv <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, mark.detected.cnv <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/heatmap_CNV_PJ016_vignette_genes.jpg" width="600" alt="caption"><img src="images/heatmap_CNV_PJ016_vignette_cnv.jpg" width="600"></p>
 <p>To function <code>plot_profile_CNV</code> plots the median CNV
 profile of a cluster:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_profile_CNV.html">plot_profile_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scMuffinList_demo</span>, cluster <span class="op">=</span> <span class="fl">0</span>, cex.points <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> </span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_profile_CNV.html">plot_profile_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, cluster <span class="op">=</span> <span class="fl">0</span>, cex.points <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="images/CNV_profile_ref_0.png_0.png" width="600"></p>
 </div>
 </div>
@@ -468,9 +487,9 @@ function <code>transcr_compl</code>. The corresponding summary element
 contains a <code>data.frame</code> with the number of cell transcripts,
 the number of genes detected in every cell, the TC-ratio (C), the TC-LMR
 (linear model residual) and the TC-H (entropy):</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transcr_compl.html">transcr_compl</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transcr_compl.html">transcr_compl</a></span><span class="op">(</span><span class="va">scML</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">transcr_compl</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    tot_counts n_genes         C        H          LM</span></span>
 <span><span class="co">## V3      16228    1051 0.8628900 6.522372 -0.02561130</span></span>
@@ -485,11 +504,11 @@ the number of genes detected in every cell, the TC-ratio (C), the TC-LMR
 </h2>
 <p>Cell proliferation is quantified considering the maximum between the
 two scores of G1/S and G2/M gene sets:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proliferation_analysis.html">proliferation_analysis</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proliferation_analysis.html">proliferation_analysis</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span><span class="op">)</span></span></code></pre></div>
 <p>The proliferation score is stored in the <code>summary</code> element
-of <code>scMuffinList_demo$proliferation</code>:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+of <code>scML$proliferation</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">proliferation</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Proliferation_score</span></span>
 <span><span class="co">## V3          0.24639700</span></span>
@@ -507,13 +526,13 @@ on the diffusion pseudo time calculation available in the R package
 “destiny” <span class="citation">(Angerer et al. 2016)</span>. Here we
 calculate the diffusion map over the first 50 PC (to speed up
 computation), using a random cell to obtain diffusion pseudotimes:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diff_map.html">diff_map</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, root_cell <span class="op">=</span> <span class="st">"random"</span>, n_pcs<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diff_map.html">diff_map</a></span><span class="op">(</span><span class="va">scML</span>, root_cell <span class="op">=</span> <span class="st">"random"</span>, n_pcs<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre></div>
 <p>A data.frame with the most important features of the analysis (the
 first two eigenvectors, pseudotime, branch information and whether a
 cell is a tip of the branch or not) are stored
-<code>scMuffinList_demo$diffusion_map_pseudo_t$summary</code>:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code>scML$diffusion_map_pseudo_t$summary</code>:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">diffusion_map_pseudo_t</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
 <pre><code><span><span class="co">##            DC1         DC2       dpt branch  tips</span></span>
 <span><span class="co">## V3 -0.02439247 0.027065472 0.4543284     NA FALSE</span></span>
@@ -522,6 +541,19 @@ cell is a tip of the branch or not) are stored
 <span><span class="co">## V6 -0.03187947 0.047049007 0.3474134      1 FALSE</span></span>
 <span><span class="co">## V7  0.01855801 0.004949549 1.3447794      2 FALSE</span></span>
 <span><span class="co">## V8  0.01855621 0.005021415 1.3454328      2 FALSE</span></span></code></pre>
+<p>The full DPT object from destiny is stored in the element
+<code>scML$diffusion_map_pseudo_t$full</code>. This allows the user to
+take advantage of destiny <a href="https://github.com/theislab/destiny/" class="external-link">functions</a>, such as
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, e.g.</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">destiny</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">diffusion_map_pseudo_t</span><span class="op">$</span><span class="va">full</span>, col_by <span class="op">=</span> <span class="st">'branch'</span><span class="op">)</span></span></code></pre></div>
+<p>To function <code><a href="../reference/plot_diff_map.html">plot_diff_map()</a></code> visualizes a diffusion map
+where cells are colored by any other set of cell-level values. In the
+following example we plot the diffusion map colored by CNV-based cell
+clusters:</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_diff_map.html">plot_diff_map</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, col_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">partitions</span><span class="op">$</span><span class="va">CNV</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">partitions</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="images/diff_map_CNV.png" width="600"></p>
 </div>
 <div class="section level2">
 <h2 id="cluster-enrichment-assessment">Cluster enrichment assessment<a class="anchor" aria-label="anchor" href="#cluster-enrichment-assessment"></a>
@@ -532,14 +564,14 @@ chosen according to feature type. In this example, we assess cluster
 enrichment for the feature <code>gene_set_scoring</code> (quantitative
 one) for the cluster defined by the partition
 <code>global_expr</code>:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scML</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <p>In case of quantitative features the result is a list named CSEA,
 placed under the elements <code>cluster_data$global_expr</code>
 (partition id). The list contains the gene set table and the leading
 edge results. Here’s the result related to the gene set
 <code>Angiogenesis</code>:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">CSEA</span><span class="op">$</span><span class="va">gs_table</span><span class="op">$</span><span class="va">Angiogenesis</span></span></code></pre></div>
 <pre><code><span><span class="co">##   id         es p_val adj_p_val n_pos_perm n_neg_perm       nes        FDRq</span></span>
 <span><span class="co">## 0  0  0.2551729  0.62 0.8857143        100          0 0.9600786 0.946014127</span></span>
@@ -552,15 +584,18 @@ edge results. Here’s the result related to the gene set
 <span><span class="co">## 7  7  0.6061648  0.01 0.0500000         99          1 2.1895320 0.009081736</span></span>
 <span><span class="co">## 8  8  0.4113923  0.05 0.1666667         97          3 1.4228520 0.031786075</span></span>
 <span><span class="co">## 9  9  0.1897547  0.98 1.0000000         98          2 0.6366039 0.992936428</span></span></code></pre>
-<p>In this this example we assess cluster enrichment in relation to
-categorical feature, namely cell cycle phase:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<p>In this this example, we assess cluster enrichment in relation to the
+categorical feature <code>CC_Phase</code>, namely the cell cycle phase
+calculated by means of Seurat function <a href="https://satijalab.org/seurat/reference/cellcyclescoring" class="external-link"><code>CellCycleScoring()</code></a>
+and added to <code>scML</code> by means of <code><a href="../reference/add_features.html">add_features()</a></code>
+(see above):</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assess_cluster_enrichment.html">assess_cluster_enrichment</a></span><span class="op">(</span><span class="va">scML</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <p>As for categorical features the result is a list named ORA, placed
 under the elements <code>cluster_data$global_expr</code> (partition id).
 The list contains ORA results for every categorical value. Here’s the
 enrichment of clusters in terms of cells with value “G1”:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">ORA</span><span class="op">$</span><span class="va">CC_Phase</span><span class="op">$</span><span class="va">G1</span></span></code></pre></div>
 <pre><code><span><span class="co">##   id    N   wb  bb  bd wbd       exp       er            p        p_adj</span></span>
 <span><span class="co">## 0  0 2828 2049 779 499   0 361.54562 0.000000 1.000000e+00 1.000000e+00</span></span>
@@ -578,7 +613,7 @@ easily extracted and organized in a clusters-by-values table by means of
 <code>extract_cluster_enrichment_table</code>. For instance, here we
 extract CSEA NES and FDRq values, and ORA er (enrichment ratio)
 values:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">csea_fdr_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"CSEA"</span>, quantity <span class="op">=</span> <span class="st">"FDRq"</span><span class="op">)</span></span>
 <span><span class="va">csea_nes_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"CSEA"</span>, quantity <span class="op">=</span> <span class="st">"nes"</span><span class="op">)</span></span>
 <span><span class="va">ora_p_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_table.html">extract_cluster_enrichment_table</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>,  partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, type <span class="op">=</span> <span class="st">"ORA"</span>, quantity <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span>
@@ -619,17 +654,17 @@ values:</p>
 <p>These tables can be plotted with the function
 <code>plot_heatmap_features_by_clusters</code>. In the following example
 we plot NES values with asterisks according to their significance:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>feature_source <span class="op">=</span> <span class="va">csea_nes_table</span>, significance_matrix <span class="op">=</span> <span class="va">csea_fdr_table</span>, sig_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/nes.fdr.png" width="600"></p>
 <p>Similarly, it’s possible to extract the most significant “tags” of
 any clusters; for example, here we extract the top 3 tags by FDRq (CSEA)
 and p_adj (ORA):</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_tags.html">extract_cluster_enrichment_tags</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, n_max_per_cluster <span class="op">=</span> <span class="fl">3</span>, CSEA_selection_criterion<span class="op">=</span><span class="st">"FDRq"</span>, only_pos_nes <span class="op">=</span> <span class="cn">TRUE</span>, CSEA_selection_threshold <span class="op">=</span> <span class="fl">0.05</span>, ORA_selection_criterion <span class="op">=</span> <span class="st">"p_adj"</span>, ORA_selection_threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_cluster_enrichment_tags.html">extract_cluster_enrichment_tags</a></span><span class="op">(</span><span class="va">scML</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, n_max_per_cluster <span class="op">=</span> <span class="fl">3</span>, CSEA_selection_criterion<span class="op">=</span><span class="st">"FDRq"</span>, only_pos_nes <span class="op">=</span> <span class="cn">TRUE</span>, CSEA_selection_threshold <span class="op">=</span> <span class="fl">0.05</span>, ORA_selection_criterion <span class="op">=</span> <span class="st">"p_adj"</span>, ORA_selection_threshold <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p>The results are placed under the <code>cluster_tags</code>
 element:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">cluster_tags</span><span class="op">$</span><span class="va">CSEA</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`0`</span></span>
 <span><span class="co">## [1] "Cell_Cycle" "DNA_repair" "Invasion"  </span></span>
@@ -651,9 +686,9 @@ element:</p>
 <p>The results of cluster enrichment can be visualized by barplots and
 boxplots for, respectively, categorical values and quantitative
 values.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/barplot_cluster.html">barplot_cluster</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, feature_id <span class="op">=</span> <span class="st">"CC_Phase"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/boxplot_cluster.html">boxplot_cluster</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/barplot_cluster.html">barplot_cluster</a></span><span class="op">(</span><span class="va">scML</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span>, feature_name <span class="op">=</span> <span class="st">"CC_Phase"</span>, feature_id <span class="op">=</span> <span class="st">"CC_Phase"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/boxplot_cluster.html">boxplot_cluster</a></span><span class="op">(</span><span class="va">scML</span>, feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/cluster_2_barplot.jpg" width="600" alt="caption"><img src="images/cluster_2.jpg" width="600" alt="caption"></p>
 </div>
 <div class="section level2">
@@ -665,10 +700,10 @@ values.</p>
 <p>The function <code>overlap_matrix</code> calculates the overlap
 coefficient between all-pairs of clusters of two or more partitions of
 the same cells (same dataset):</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scMuffinList_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/overlap_matrix.html">overlap_matrix</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scML</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/overlap_matrix.html">overlap_matrix</a></span><span class="op">(</span><span class="va">scML</span><span class="op">)</span></span></code></pre></div>
 <p>The results are stored under the element `cluster_comparison```:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scMuffinList_demo</span><span class="op">$</span><span class="va">cluster_comparison</span><span class="op">$</span><span class="va">overlap_matrix</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                     CNV_0       CNV_1     CNV_2     CNV_3       CNV_4</span></span>
 <span><span class="co">## CNV_0         1.000000000 0.000000000 0.0000000 0.0000000 0.000000000</span></span>
@@ -708,7 +743,7 @@ objects and a gene set list. The activity of this gene set list will be
 assessed over the clusters of all datasets. In needed, the function
 <code>prepare_cluster_markers_list</code> provides the possibility to
 prepare a gene set list of cluster markers, starting</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dataset_cmp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inter_dataset_comparison.html">inter_dataset_comparison</a></span><span class="op">(</span>seu_obj_list <span class="op">=</span> <span class="va">seu_obj_list</span>, gsl <span class="op">=</span> <span class="va">cluster_markers_list</span>, genes_max <span class="op">=</span> <span class="fl">500</span>, genes_min <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_heatmap_dataset_comparison.html">plot_heatmap_dataset_comparison</a></span><span class="op">(</span><span class="va">dataset_cmp_res</span>, outfile <span class="op">=</span> <span class="st">"vignette/heatmap_ds_cmp.png"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_heatmap_dataset_comparison.html">plot_heatmap_dataset_comparison</a></span><span class="op">(</span><span class="va">dataset_cmp_res</span>, outfile <span class="op">=</span> <span class="st">"vignette/heatmap_ds_cmp_p.png"</span>, type <span class="op">=</span> <span class="st">"significance"</span><span class="op">)</span></span></code></pre></div>
@@ -716,7 +751,7 @@ prepare a gene set list of cluster markers, starting</p>
 <p>The function can be used to analyze any gene set. In the following
 example we assess the expression of CancerSEA gene sets across
 datasets:</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_gsls.html">prepare_gsls</a></span><span class="op">(</span>gs_sources <span class="op">=</span> <span class="st">"CancerSEA"</span>, genes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">seu_obj_list</span>, <span class="va">rownames</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dataset_cmp_res_cancersea</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inter_dataset_comparison.html">inter_dataset_comparison</a></span><span class="op">(</span>seu_obj_list <span class="op">=</span> <span class="va">seu_obj_list</span>, gsl <span class="op">=</span> <span class="va">gsl</span><span class="op">$</span><span class="va">CancerSEA</span>, genes_max <span class="op">=</span> <span class="fl">500</span>, genes_min <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_heatmap_dataset_comparison.html">plot_heatmap_dataset_comparison</a></span><span class="op">(</span><span class="va">dataset_cmp_res_cancersea</span>, outfile <span class="op">=</span> <span class="st">"vignette/heatmap_ds_cmp_cancer.png"</span><span class="op">)</span></span></code></pre></div>

@@ -52,6 +52,9 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
     }
     
     if(!is.null(custom_gsls)){
+      if(!is.list(custom_gsls)){
+        stop("custom_gsls must be a list\n.")
+      }
       gsls <- custom_gsls
     }else{
       gsls <- list()
@@ -116,19 +119,24 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
     genes <- rownames(scMuffinList$normalized)
     idx_zero <- which(rowSums(scMuffinList$normalized)==0)
     if(length(idx_zero)>0){
-      cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
+      cat("Found genes with all-zero values. These genes may cause issues. Trying to proceed removing these genes from the gene sets.\n")
       genes <- genes[-idx_zero]
     }
   }
   gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
   
+  
+  cat("Current gene set size\n.")
+  print(lenghts(gsls))
+  
+  cat("Filtering: [", genes_min, ",", genes_max, "]\n.")
   for(i in 1:length(gsls)){
     gs_length <- unlist(lapply(gsls[[i]], length))
     gsls[[i]] <- gsls[[i]][gs_length >= genes_min & gs_length <= genes_max]
   }
-  
-  #gsls_length <- unlist(lapply(gsls[[i]], length))
-  
+
+  cat("Final gene set size\n.")
+  print(lenghts(gsls))
   
   return(gsls)
   
