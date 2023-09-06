@@ -87,7 +87,7 @@ seu_obj_1 <- RunUMAP(seu_obj_1, dims = 1:20)
 ```
 The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we used the function `keep_strongest_representative`, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis the user to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
 
-To show examples of results, we take advantage of scMuffinList_demo, an scMuffinList object that contains partial results for demonstration.
+In the examples shown below, we'll take advantage of `scMuffinList_demo` data, which contains partial results for demonstration only.
 
 # The scMuffinList data structure
 All data and results of scMuffin are stored in the scMuffinList, so that every function takes in input such structure and returns a modified version of it. The scMuffinList can be created as follows:

@@ -26,7 +26,6 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
     }
   }
   
-  
   id_type <- match.arg(id_type, c("Symbol", "EntrezID"))
   
   if(id_type == "Symbol"){
@@ -126,17 +125,17 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
   gsls <- lapply(gsls, function(x) lapply(x, function(y) unique(y[y %in% genes])))
   
   
-  cat("Current gene set size\n.")
-  print(lenghts(gsls))
+  cat("Current gene set list size.\n")
+  print(lengths(gsls))
   
-  cat("Filtering: [", genes_min, ",", genes_max, "]\n.")
+  cat("Filtering: [", genes_min, ",", genes_max, "].\n")
   for(i in 1:length(gsls)){
     gs_length <- unlist(lapply(gsls[[i]], length))
     gsls[[i]] <- gsls[[i]][gs_length >= genes_min & gs_length <= genes_max]
   }
 
-  cat("Final gene set size\n.")
-  print(lenghts(gsls))
+  cat("Final gene set list size.\n")
+  print(lengths(gsls))
   
   return(gsls)
   
