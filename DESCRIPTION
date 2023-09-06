@@ -1,7 +1,7 @@
 Package: scMuffin
 Title: MUlti-Features INtegrative approach for single-cell data analysis
-Version: 1.1.0
-Date: 2023-04-29
+Version: 1.1.1
+Date: 2023-09-05
 Authors@R: 
      c(person(given = "Valentina",
            family = "Nale",
@@ -26,7 +26,7 @@ Authors@R:
 Description: scMuffin provides functions to calculate a series of qualitative and quantitative scores, such as: expression of marker sets for normal and tumor conditions, pathway activity, cell state trajectories, CNV, chromatin state and proliferation state. scMuffin facilitates the combination of  various cell-level evidences that used to highlight subtle cell-cell similarities, distinguish normal and tumoral cells, define cell identities, obtain alternative clusterings and link genomic aberrations with phenotypes.
 License: GPL-3
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Depends: 
     R (>= 4.0.0)
@@ -59,4 +59,3 @@ Suggests:
     BiocStyle,
     devtools
 VignetteBuilder: knitr
-

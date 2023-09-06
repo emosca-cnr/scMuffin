@@ -71,34 +71,46 @@ Here's an example of how to obtain a publicly available single cell dataset from
 
 2. read the text files into R and use the Seurat package [@Hao2021] to perform a series of typical tasks (e.g. normalization, clustering); here's a concise example using sample PJ016:
 ```{r, include=TRUE, eval=FALSE}
-gbc_counts <- read.table("GSM2758471_PJ016.filtered.matrix.txt")
+gbc_counts <- read.table("GSM2758471_PJ016.filtered.matrix.txt", stringsAsFactors = F)
 sym <- gbc_counts[, "V2"]
-gbc_counts[, "V2"] <- NULL
-gbc_counts <- keep_strongest_representative(gbc_counts, sym)
+gbc_counts[, c("V1", "V2")] <- NULL
+gbc_counts <- keep_strongest_representative(genes_by_cells = gbc_counts, sym)
+	
 seu_obj_1 <- CreateSeuratObject(count=gbc_counts, project="PJ016")
 seu_obj_1 <- NormalizeData(seu_obj_1)
 seu_obj_1 <- FindVariableFeatures(seu_obj_1)
 seu_obj_1 <- ScaleData(seu_obj_1)
-seu_obj_1 <- RunPCA(seu_obj_1)
-seu_obj_1 <- FindNeighbors(seu_obj_1)
+seu_obj_1 <- RunPCA(seu_obj_1, npcs = 20)
+seu_obj_1 <- FindNeighbors(seu_obj_1, dims = 1:20)
 seu_obj_1 <- FindClusters(seu_obj_1)
-seu_obj_1 <- RunUMAP(seu_obj_1)
+seu_obj_1 <- RunUMAP(seu_obj_1, dims = 1:20)
 ```
 The genes-by-cells count matrix available at NCBI GEO is provided with Ensembl identifiers and gene symbols, which are not unique. So, after having read the table, we used the function `keep_strongest_representative`, which defines a genes-by-cells matrix with symbols as row names. In case of multiple Ensembl ids mapped to the same symbol, the row with the highest average count is kept as representative of the gene. In a real scenario, the functions listed above should be run using appropriate parameters that take into account the specificities of the dataset under consideration and the objectives of the analysis the user to perform. Here we just wanted to provide a means to obtain a dataset to follow this vignette. Please read the Seurat documentation for further details about the functions listed above.
+
+To show examples of results, we take advantage of scMuffinList_demo, an scMuffinList object that contains partial results for demonstration.
 
 # The scMuffinList data structure
 All data and results of scMuffin are stored in the scMuffinList, so that every function takes in input such structure and returns a modified version of it. The scMuffinList can be created as follows:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- create_scMuffinList(counts=GetAssayData(seu_obj_1, assay="RNA", slot="counts"), normalized=GetAssayData(seu_obj_1, assay="RNA", slot="data"))
+scML <- create_scMuffinList(counts=GetAssayData(seu_obj_1, assay="RNA", slot="counts"), normalized=GetAssayData(seu_obj_1, assay="RNA", slot="data"))
 ```
 Many analyses require cell clusters. Any partition can be added as follows:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- add_partitions(scMuffinList_demo, clusters = seu_obj_1$seurat_clusters, partition_id = "global_expr")
+scML <- add_partitions(scML, clusters = seu_obj_1$seurat_clusters, partition_id = "global_expr")
 ```
-where seu_obj_1$seurat_clusters is a named vector that contains cells clusters and whose names are cell labels. The element `partitions` of the scMuffinList will contain cell clusters:
+where `seu_obj_1$seurat_clusters` is a named vector that contains cells clusters and whose names are cell labels. The element `partitions` of `scML` will contain cell clusters:
 ```{r, echo=TRUE}
 head(scMuffinList_demo$partitions[, 1, drop=F])
 ```
+
+To function add_features can be used to add custom results to the scMuffinList. In the following example we add the cell cycle phase available in a Seurat object (see Seurat [documentation](https://satijalab.org/seurat/reference/cellcyclescoring)):
+```{r, include=TRUE, eval=FALSE}
+scML <- add_features(scMuffinList, name = "CC_Phase", summary = cbind(CC_Phase=seu_obj_1$Phase))
+```
+```{r, echo=TRUE}
+head(scMuffinList_demo$CC_Phase$summary)
+```
+The `summary` element of the scMuffinList is a data.frame intended to contain data about the feature, while element `full` can be used to store other supporting feature data (see other examples below).
 
 # Gene set scoring
 
@@ -126,7 +138,7 @@ lapply(show_tissues(), head)
 
 Here is an example:
 ```{r, include=TRUE, eval=FALSE}
-gsc <- prepare_gsls(gs_sources = c("CancerSEA", "PNDB"), PNDB_tissues = c("Brain"), scMuffinList = scMuffinList_demo, genes_min = 3)
+gsc <- prepare_gsls(gs_sources = c("CancerSEA", "PNDB"), PNDB_tissues = c("Brain"), scMuffinList = scML, genes_min = 3)
 ```
 
 Note that in the case of MSigDB we have to set up a `data.frame` to specify species, category and sub_category of the gene set collections.
@@ -136,9 +148,9 @@ Note that in the case of MSigDB we have to set up a `data.frame` to specify spec
 In the following example, we estimate the scores for CancerSEA gene sets:
 
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- calculate_gs_scores(scMuffinList = scMuffinList_demo, gs_list = gsc$CancerSEA)
+scML <- calculate_gs_scores(scMuffinList = scML, gs_list = gsc$CancerSEA)
 ```
-The results of any analysis are stored as elements of the `scMuffinList`. The gene set scoring engine stores its results in `scMuffinList$gene_set_scoring`, where `summary` is a cells-by-features data.frame with cell scores, and `full` contains a series of additional details for every gene set:
+The results of any analysis are stored as elements of the `scML`. The gene set scoring engine stores its results in `scML$gene_set_scoring`, where `summary` is a cells-by-features data.frame with cell scores, and `full` contains a series of additional details for every gene set:
 ```{r, include=TRUE, eval=TRUE}
 head(scMuffinList_demo$gene_set_scoring$summary)
 head(scMuffinList_demo$gene_set_scoring$full$Angiogenesis)
@@ -147,7 +159,7 @@ head(scMuffinList_demo$gene_set_scoring$full$Angiogenesis)
 The values of cell-level scores can be used to color UMAP visualizations, which are automatically generated for every gene set using:
 
 ```{r, include=TRUE, eval=FALSE}
-plot_umap_colored_features(scMuffinList_demo, Seu_obj = seu_obj_1, feature_name = "gene_set_scoring")
+plot_umap_colored_features(scMuffinList = scML, Seu_obj = seu_obj_1, feature_name = "gene_set_scoring")
 ```
 
 Here below, an example of UMAP visualization where cells are colored by CancerSEA "Hypoxia" gene set score.
@@ -156,7 +168,7 @@ Here below, an example of UMAP visualization where cells are colored by CancerSE
 
 The function `calculate_gs_scores_in_clusters` defines the median values of gene set scores in every cluster of a given partition id:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- calculate_gs_scores_in_clusters(scMuffinList_demo, partition_id = "global_expr")
+scML <- calculate_gs_scores_in_clusters(scMuffinList = scML, partition_id = "global_expr")
 ```
 ```{r, include=TRUE, eval=TRUE}
 scMuffinList_demo$cluster_data$global_expr$gene_set_scoring$summary
@@ -164,7 +176,7 @@ scMuffinList_demo$cluster_data$global_expr$gene_set_scoring$summary
 
 These mean values are useful to obtain a concise visualization of gene set expression throughout the dataset, using the function `plot_heatmap_features_by_clusters`:
 ```{r, include=TRUE, eval=FALSE}
-plot_heatmap_features_by_clusters(scMuffinList_demo, feature_source = "gss")
+plot_heatmap_features_by_clusters(scMuffinList = scML, feature_source = "gss")
 ```
 ![caption](images/gene_set_scores_clusters.png){width=600px} 
 
@@ -174,9 +186,9 @@ plot_heatmap_features_by_clusters(scMuffinList_demo, feature_source = "gss")
 CNV inference is performed by the function `CNV_analysis`.
 
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- CNV_analysis(scMuffinList_demo)
+scML <- CNV_analysis(scML)
 ```
-The results are stored in `scMuffinList_demo$CNV`, where summary contains the "CNV_signal" and `scMuffinList_demo$CNV$full$CNV` the regions-by-cells CNV matrix; the element `scMuffinList_demo$CNV$full$regions2genes` is important to map the original data into the CNV regions; lastly, the `scMuffinList_demo$CNV$full$detected_cnv_regions` is a data.frame that list the CNV regions detected in each chromosome and cell cluster:
+The results are stored in `scML$CNV`, where summary contains the CNV score and `scML$CNV$full$CNV` the regions-by-cells matrix of CNV profiles; the element `scML$CNV$full$regions2genes` is important to map the original data into the CNV regions; lastly, the `scML$CNV$full$detected_cnv_regions` is a data.frame that list the CNV regions detected in each chromosome and cell cluster:
 ```{r, include=TRUE, eval=TRUE}
 head(scMuffinList_demo$CNV$summary)
 head(scMuffinList_demo$CNV$full$CNV)
@@ -197,9 +209,9 @@ scMuffin provides two visualizations for CNVs: an heatmap and the cluster averag
 
 ```{r, include=TRUE, eval=FALSE}
 col_fun <- circlize::colorRamp2(seq(-0.2, 0.2, length.out = 11), rev(pals::brewer.rdylbu(11)))
-heatmap_CNV(scMuffinList = scMuffinList_demo, genes = c("YBX1", "HNRNPM"), genes.labels = T, col=col_fun)
+heatmap_CNV(scMuffinList = scML, genes = c("YBX1", "HNRNPM"), genes.labels = T, col=col_fun)
 
-heatmap_CNV(scMuffinList = scMuffinList_demo, mark.detected.cnv = T, col=col_fun)
+heatmap_CNV(scMuffinList = scML, mark.detected.cnv = T, col=col_fun)
 
 ```
 
@@ -209,7 +221,7 @@ heatmap_CNV(scMuffinList = scMuffinList_demo, mark.detected.cnv = T, col=col_fun
 To function `plot_profile_CNV` plots the median CNV profile of a cluster:
 
 ```{r, include=TRUE, eval=FALSE}
-plot_profile_CNV(scMuffinList = scMuffinList_demo, cluster = 0, cex.points = 0.5) 
+plot_profile_CNV(scMuffinList = scML, cluster = 0, cex.points = 0.5) 
 ```
 ![](images/CNV_profile_ref_0.png_0.png){width=600px}
 
@@ -218,7 +230,7 @@ plot_profile_CNV(scMuffinList = scMuffinList_demo, cluster = 0, cex.points = 0.5
 The transcriptional complexity can be quantified by means of the function `transcr_compl`. The corresponding summary element contains a `data.frame` with the number of cell transcripts, the number of genes detected in every cell, the TC-ratio (C), the TC-LMR (linear model residual) and the TC-H (entropy):
 
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- transcr_compl(scMuffinList_demo)
+scML <- transcr_compl(scML)
 ```
 ```{r, include=TRUE, eval=TRUE}
 head(scMuffinList_demo$transcr_compl$summary)
@@ -228,9 +240,9 @@ head(scMuffinList_demo$transcr_compl$summary)
 
 Cell proliferation is quantified considering the maximum between the two scores of G1/S and G2/M gene sets:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- proliferation_analysis(scMuffinList_demo)
+scML <- proliferation_analysis(scMuffinList = scML)
 ```
-The proliferation score is stored in the `summary` element of `scMuffinList_demo$proliferation`:
+The proliferation score is stored in the `summary` element of `scML$proliferation`:
 ```{r, include=TRUE, eval=TRUE}
 head(scMuffinList_demo$proliferation$summary)
 ```
@@ -239,26 +251,36 @@ head(scMuffinList_demo$proliferation$summary)
 Diffusion maps identify differentiation trajectories. scMuffin relies on the diffusion pseudo time calculation available in the R package "destiny" [@Angerer2016]. Here we calculate the diffusion map over the first 50 PC (to speed up computation), using a random cell to obtain diffusion pseudotimes:
 
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- diff_map(scMuffinList_demo, root_cell = "random", n_pcs=50)
+scML <- diff_map(scML, root_cell = "random", n_pcs=50)
 ```
-A data.frame with the most important features of the analysis (the first two eigenvectors, pseudotime, branch information and whether a cell is a tip of the branch or not) are stored `scMuffinList_demo$diffusion_map_pseudo_t$summary`:
+A data.frame with the most important features of the analysis (the first two eigenvectors, pseudotime, branch information and whether a cell is a tip of the branch or not) are stored `scML$diffusion_map_pseudo_t$summary`:
 ```{r, include=TRUE, eval=TRUE}
 scMuffinList_demo$diffusion_map_pseudo_t$summary
 ```
+The full DPT object from destiny is stored in the element `scML$diffusion_map_pseudo_t$full`. This allows the user to take advantage of destiny [functions](https://github.com/theislab/destiny/), such as `plot()`, e.g.
+```{r, include=TRUE, eval=FALSE}
+destiny::plot(scML$diffusion_map_pseudo_t$full, col_by = 'branch')
+```
+To function `plot_diff_map()` visualizes a diffusion map where cells are colored by any other set of cell-level values. In the following example we plot the diffusion map colored by CNV-based cell clusters:
+```{r, include=TRUE, eval=FALSE}
+plot_diff_map(scMuffinList = scML, col_data = setNames(scML$partitions$CNV, rownames(scML$partitions)))
+```
+
+![](images/diff_map_CNV.png){width=600px}
 
 # Cluster enrichment assessment
 
 Cell clusters can be assessed for enrichment in quantitative and categorical values. The appropriate statistical test is automatically chosen according to feature type. In this example, we assess cluster enrichment for the feature `gene_set_scoring` (quantitative one) for the cluster defined by the partition `global_expr`:
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
+scML <- assess_cluster_enrichment(scML, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
 In case of quantitative features the result is a list named CSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `Angiogenesis`:
 ```{r, include=TRUE, eval=TRUE}
 scMuffinList_demo$cluster_data$global_expr$CSEA$gs_table$Angiogenesis
 ```
-In this this example we assess cluster enrichment in relation to categorical feature, namely cell cycle phase:
+In this this example, we assess cluster enrichment in relation to the categorical feature `CC_Phase`, namely the cell cycle phase calculated by means of Seurat function [`CellCycleScoring()`](https://satijalab.org/seurat/reference/cellcyclescoring) and added to `scML` by means of `add_features()` (see above):
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- assess_cluster_enrichment(scMuffinList_demo, feature_name = "CC_Phase", partition_id = "global_expr")
+scML <- assess_cluster_enrichment(scML, feature_name = "CC_Phase", partition_id = "global_expr")
 ```
 As for categorical features the result is a list named ORA, placed under the elements `cluster_data$global_expr` (partition id). The list contains ORA results for every categorical value. Here's the enrichment of clusters in terms of cells with value "G1":
 ```{r, include=TRUE, eval=TRUE}
@@ -282,7 +304,7 @@ plot_heatmap_features_by_clusters(feature_source = csea_nes_table, significance_
 
 Similarly, it's possible to extract the most significant "tags" of any clusters; for example, here we extract the top 3 tags by FDRq (CSEA) and p_adj (ORA):
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- extract_cluster_enrichment_tags(scMuffinList_demo, partition_id = "global_expr", n_max_per_cluster = 3, CSEA_selection_criterion="FDRq", only_pos_nes = TRUE, CSEA_selection_threshold = 0.05, ORA_selection_criterion = "p_adj", ORA_selection_threshold = 0.25)
+scML <- extract_cluster_enrichment_tags(scML, partition_id = "global_expr", n_max_per_cluster = 3, CSEA_selection_criterion="FDRq", only_pos_nes = TRUE, CSEA_selection_threshold = 0.05, ORA_selection_criterion = "p_adj", ORA_selection_threshold = 0.25)
 ```
 The results are placed under the `cluster_tags` element:
 ```{r, include=TRUE, eval=TRUE}
@@ -291,8 +313,8 @@ head(scMuffinList_demo$cluster_data$global_expr$cluster_tags$CSEA)
 
 The results of cluster enrichment can be visualized by barplots and boxplots for, respectively, categorical values and quantitative values.
 ```{r, include=TRUE, eval=FALSE}
-barplot_cluster(scMuffinList_demo, partition_id = "global_expr", feature_name = "CC_Phase", feature_id = "CC_Phase")
-boxplot_cluster(scMuffinList_demo, feature_name = "gene_set_scoring", partition_id = "global_expr")
+barplot_cluster(scML, partition_id = "global_expr", feature_name = "CC_Phase", feature_id = "CC_Phase")
+boxplot_cluster(scML, feature_name = "gene_set_scoring", partition_id = "global_expr")
 ```
 ![caption](images/cluster_2_barplot.jpg){width=600px}
  ![caption](images/cluster_2.jpg){width=600px}
@@ -304,7 +326,7 @@ boxplot_cluster(scMuffinList_demo, feature_name = "gene_set_scoring", partition_
 The function `overlap_matrix` calculates the overlap coefficient between all-pairs of clusters of two or more partitions of the same cells (same dataset):
 
 ```{r, include=TRUE, eval=FALSE}
-scMuffinList_demo <- overlap_matrix(scMuffinList_demo)
+scML <- overlap_matrix(scML)
 ```
 The results are stored under the element `cluster_comparison```:
 ```{r, include=TRUE, eval=TRUE}

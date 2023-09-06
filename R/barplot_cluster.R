@@ -1,9 +1,8 @@
-#' Barplot clusters 
+#' Barplot of cluster enrichment in a categorical feature
 #' @param scMuffinList scMuffinList object
 #' @param feature_name name of the features to be used.
 #' @param feature_id identifier of the feature to be used.
 #' @param partition_id one among the partitions
-#' @param n_features maximum number of features that will be shown
 #' @param cex.axis cex.axis
 #' @param only_pos_nes whether to consider only positive enrichments
 #' @param p.type p for nominal p-value or p_adj for BH FDR.
@@ -15,10 +14,10 @@
 #' @importFrom grDevices jpeg
 #' @importFrom stats setNames
 #' @importFrom plotrix thigmophobe.labels
-#' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+#' @description Produce barplots (1 for each cluster) of distribution of cells associated with the values of the selected feature. A png figure for each cluster is saved in dir_out.
 #' @export
 
-barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NULL, partition_id=NULL, dir_out="./", n_features=10, only_pos_nes=TRUE, cex.axis=0.8, p.type=c("p", "p_adj"), width=180, height=180, units="mm", res=300){
+barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NULL, partition_id=NULL, dir_out="./", only_pos_nes=TRUE, cex.axis=0.8, p.type=c("p", "p_adj"), width=180, height=180, units="mm", res=300){
 	
   if(!dir.exists(dir_out)){
     dir.create(dir_out, recursive = TRUE)
@@ -53,7 +52,7 @@ barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NUL
  	#boxplot for each cluster
 	for(cl in 1:length(cell_clusters_set)){ ###for each cluster
 		
-		grDevices::jpeg(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".jpg"), width=width, height=height, units=units, res=res)
+		grDevices::png(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".png"), width=width, height=height, units=units, res=res)
 	  layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = T))
 	  par(mar = c(3, 3, 3, 1))
 	  par(mgp = c(1.5, .5, 0))

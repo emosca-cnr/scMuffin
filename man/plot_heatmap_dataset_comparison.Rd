@@ -23,7 +23,7 @@ plot_heatmap_dataset_comparison(
 
 \item{show.gs.source}{whether to show or not gene set source}
 
-\item{outfile}{out file name}
+\item{outfile}{File name to save the figure as png file}
 
 \item{width}{image width}
 

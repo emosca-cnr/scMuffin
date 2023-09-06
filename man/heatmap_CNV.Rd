@@ -14,7 +14,6 @@ heatmap_CNV(
   height = 180,
   units = "mm",
   res = 300,
-  image_format = "png",
   cluster_fontsize = 8,
   chrom_fontsize = 8,
   legend_fontsize = 8,
@@ -31,7 +30,7 @@ heatmap_CNV(
 
 \item{mark.detected.cnv}{whether to show detected CNV regions}
 
-\item{file}{output file}
+\item{file}{File name to save the figure as png file}
 
 \item{width}{image width}
 
@@ -40,8 +39,6 @@ heatmap_CNV(
 \item{units}{image units}
 
 \item{res}{image resolution}
-
-\item{image_format}{png or jpeg}
 
 \item{cluster_fontsize}{cluster fontsize}
 

@@ -31,7 +31,7 @@ plot_heatmap_features_by_clusters(
 
 \item{sig_threshold}{significance threshold}
 
-\item{file}{output file}
+\item{file}{File name to save the figure as png file}
 
 \item{width}{image width}
 

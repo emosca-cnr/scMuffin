@@ -1,4 +1,4 @@
-#' Boxplot clusters 
+#' Bocplt of cluster enrichment in a quantitative feature
 #' @param scMuffinList scMuffinList object
 #' @param partition_id one among the partitions
 #' @param n_features maximum number of features that will be shown
@@ -11,7 +11,7 @@
 #' @param units image units
 #' @param res image resolution
 #' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
-#' @description Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+#' @description Produce boxplots to visualize the distribution of cell values according to the selected figure. A png figure for each cluster is saved in dir_out.
 #' @importFrom grDevices jpeg
 #' @importFrom plotrix thigmophobe.labels
 #' @import graphics
@@ -88,7 +88,7 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 			cbf_cl <- cells_by_features[, match(names(top_features$fdr), colnames(cells_by_features)), drop=FALSE]
 			
 			
-			grDevices::jpeg(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".jpg"), width=width, height=height, units=units, res=res)
+			grDevices::png(paste0(dir_out, "/cluster_", cell_clusters_set[cl], ".png"), width=width, height=height, units=units, res=res)
 			layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = T))
 			
 			par(mar = c(3, 3, 2, 1))

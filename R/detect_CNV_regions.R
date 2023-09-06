@@ -1,6 +1,6 @@
 #' Detect CNV regions
 #' @param scMuffinList scMuffinList object
-#' @param z.score whether to use clustere median z-scores of CNV signal (TRUE) or cluster median CNV signal (FALSE).
+#' @param z.score whether to use clustere median z-scores of CNV profile (TRUE) or cluster median CNV profile (FALSE).
 #' @param eps the value that defines a CNV. If NUll the stard deviation of the dataset is used.
 #' @description Plot an heatmap of the CNV.
 #' @details CNV Profile of every cluster

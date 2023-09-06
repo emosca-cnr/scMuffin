@@ -9,7 +9,7 @@ detect_CNV_regions(scMuffinList = NULL, z.score = FALSE, eps = NULL)
 \arguments{
 \item{scMuffinList}{scMuffinList object}
 
-\item{z.score}{whether to use clustere median z-scores of CNV signal (TRUE) or cluster median CNV signal (FALSE).}
+\item{z.score}{whether to use clustere median z-scores of CNV profile (TRUE) or cluster median CNV profile (FALSE).}
 
 \item{eps}{the value that defines a CNV. If NUll the stard deviation of the dataset is used.}
 }

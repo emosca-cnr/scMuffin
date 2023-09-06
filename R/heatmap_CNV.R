@@ -1,11 +1,10 @@
 #' CNV Heatmap
 #' @param scMuffinList scMuffinList object
-#' @param file output file
+#' @param file File name to save the figure as png file
 #' @param width image width
 #' @param height image height
 #' @param units image units
 #' @param res image resolution
-#' @param image_format png or jpeg
 #' @param genes gene labels to show as row annotation
 #' @param genes.labels whether to show gene labels or just mark their position
 #' @param mark.detected.cnv whether to show detected CNV regions
@@ -17,7 +16,7 @@
 #' @import ComplexHeatmap grDevices grid
 #' @export
 
-heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mark.detected.cnv=FALSE, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=8, ...) {
+heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mark.detected.cnv=FALSE, file=NULL, width=180, height=180, units="mm", res=300, cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=8, ...) {
   
   #column_title_fontsize=8
   
@@ -91,13 +90,9 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mar
   max_abs <- max(abs(cnv), na.rm = T)
   
   if(!is.null(file)){
-    if(image_format == "jpeg"){
-      jpeg(file, width=width, height=height, units=units, res=res)
-    }
-    if(image_format == "png"){
-      png(file, width=width, height=height, units=units, res=res)
-    }
+    png(file, width=width, height=height, units=units, res=res)
   }
+  
   
   temp<- ComplexHeatmap::Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, row_title_gp=row_title_gp, name="C", heatmap_legend_param=heatmap_legend_param, right_annotation = ha, ...)
   draw(temp)

@@ -3,7 +3,7 @@
 #' @param significance_matrix optional significance matrix (clusters-by-features) of the same size of the data specified by means of feature_source
 #' @param feature_source It can be a "mean", "gss" or a numeric matrix (clusters-by-features). If "mean", the data.frame with average feature values among clusters will be used (default); if "gene_set_scoring", the average gene set values among clusters will be used.
 #' @param sig_threshold significance threshold
-#' @param file output file
+#' @param file File name to save the figure as png file
 #' @param width image width
 #' @param height image height
 #' @param units image units

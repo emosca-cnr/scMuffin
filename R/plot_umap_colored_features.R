@@ -1,6 +1,6 @@
 #' UMAP Visualization colored by features
 #'
-#' @description Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. It requires a Seurat object with UMAP information.
+#' @description Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. For every column a png file is saved in out_dir. It requires a Seurat object with UMAP information.
 #' @param Seu_obj Seurat object with UMAP data
 #' @param scMuffinList scMuffinList object
 #' @param feature_name feature name
@@ -11,14 +11,13 @@
 #' @param height image height
 #' @param units image units
 #' @param res image resolution
-#' @param image_format png or jpeg
 #' @param out_dir output directory
 #' @param ... further arguments to plot_umap
 #' @importFrom pals brewer.rdylbu brewer.purples alphabet
 #' @importFrom stats setNames
 #' @export
 
-plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=TRUE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, image_format="png", ...){
+plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=TRUE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, ...){
   
   if(!dir.exists(out_dir)){
     dir.create(out_dir, recursive = T)
@@ -72,7 +71,7 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
               
               #add the metadata
               Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(pals::brewer.rdylbu(10)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(pals::brewer.rdylbu(10)), width=width, height=height, units=units, res=res, ...)
               
             }else{
               
@@ -80,7 +79,7 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
               md <- ggplot2::cut_interval(feature_data_i, 5, dig.lab = 2)
               md <- factor(md, levels=rev(levels(md)))
               Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(pals::brewer.ylorrd(5)), width=width, height=height, units=units, res=res, image_format=image_format, ...)
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(pals::brewer.ylorrd(5)), width=width, height=height, units=units, res=res, ...)
               
             }
           }
@@ -92,7 +91,7 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
           n_colors <- length(levels(as.factor(feature_data_i)))
           pal <- setNames(pals::alphabet(n_colors), levels(as.factor(feature_data_i)))
           Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=feature_data_i[match(rownames(feature_data), colnames(Seu_obj))], col.name=colnames(feature_data)[i])
-          plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=pal, width=width, height=height, units=units, res=res, image_format=image_format, ...)
+          plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=pal, width=width, height=height, units=units, res=res, ...)
           
         }
         

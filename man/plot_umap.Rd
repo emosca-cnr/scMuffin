@@ -17,7 +17,6 @@ plot_umap(
   height = 180,
   units = "mm",
   res = 300,
-  image_format = "png",
   text.size = 5,
   ...
 )
@@ -46,8 +45,6 @@ plot_umap(
 \item{units}{image units}
 
 \item{res}{image resolution}
-
-\item{image_format}{png or jpeg}
 
 \item{text.size}{text size}
 

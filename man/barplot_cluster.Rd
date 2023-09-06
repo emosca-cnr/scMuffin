@@ -2,7 +2,7 @@
 % Please edit documentation in R/barplot_cluster.R
 \name{barplot_cluster}
 \alias{barplot_cluster}
-\title{Barplot clusters}
+\title{Barplot of cluster enrichment in a categorical feature}
 \usage{
 barplot_cluster(
   scMuffinList = NULL,
@@ -10,7 +10,6 @@ barplot_cluster(
   feature_id = NULL,
   partition_id = NULL,
   dir_out = "./",
-  n_features = 10,
   only_pos_nes = TRUE,
   cex.axis = 0.8,
   p.type = c("p", "p_adj"),
@@ -31,8 +30,6 @@ barplot_cluster(
 
 \item{dir_out}{string, output directory}
 
-\item{n_features}{maximum number of features that will be shown}
-
 \item{only_pos_nes}{whether to consider only positive enrichments}
 
 \item{cex.axis}{cex.axis}
@@ -48,5 +45,5 @@ barplot_cluster(
 \item{res}{image resolution}
 }
 \description{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+Produce barplots (1 for each cluster) of distribution of cells associated with the values of the selected feature. A png figure for each cluster is saved in dir_out.
 }

@@ -5,7 +5,7 @@
 #' @param wnd_size number of adjacent genes considered;
 #' @param min_genes minimun number of genes expressed in a cell;
 #' @param min_cells minimum numbver of cells in which a gene must be expressed;
-#' @param expr_lim min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.
+#' @param expr_lim min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disable the removal of outliers.
 #' @param scale_cells whether to scale cells
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
@@ -29,7 +29,7 @@ CNV_analysis <- function(scMuffinList=NULL, mc.cores=1, reference = NULL, min_ce
   }
   
   cnv_signal <- colSums(cnv_res$CNV^2)
-  cnv_signal <- data.frame(CNV_signal=as.numeric(cnv_signal), row.names = names(cnv_signal), stringsAsFactors = F)
+  cnv_signal <- data.frame(CNV_score=as.numeric(cnv_signal), row.names = names(cnv_signal), stringsAsFactors = F)
   
   
   scMuffinList <- add_features(scMuffinList, name = "CNV", summary = cnv_signal, full=cnv_res)

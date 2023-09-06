@@ -2,7 +2,7 @@
 % Please edit documentation in R/boxplot_cluster.R
 \name{boxplot_cluster}
 \alias{boxplot_cluster}
-\title{Boxplot clusters}
+\title{Bocplt of cluster enrichment in a quantitative feature}
 \usage{
 boxplot_cluster(
   scMuffinList = NULL,
@@ -45,5 +45,5 @@ boxplot_cluster(
 \item{res}{image resolution}
 }
 \description{
-Produce boxplots of the given features in each cluster. A t-test is performed for each feature among clusters.
+Produce boxplots to visualize the distribution of cell values according to the selected figure. A png figure for each cluster is saved in dir_out.
 }

@@ -5,7 +5,7 @@
 #' @param height image height
 #' @param units image units
 #' @param res image res
-#' @param outfile out file name
+#' @param outfile File name to save the figure as png file
 #' @param show.gs.source whether to show or not gene set source
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
 #' @export

@@ -16,7 +16,6 @@ plot_umap_colored_features(
   height = 180,
   units = "mm",
   res = 300,
-  image_format = "png",
   ...
 )
 }
@@ -43,10 +42,8 @@ plot_umap_colored_features(
 
 \item{res}{image resolution}
 
-\item{image_format}{png or jpeg}
-
 \item{...}{further arguments to plot_umap}
 }
 \description{
-Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. It requires a Seurat object with UMAP information.
+Generate UMAP visualizations for all the columns in the "summary" element of a feature available in scMuffinList. For every column a png file is saved in out_dir. It requires a Seurat object with UMAP information.
 }

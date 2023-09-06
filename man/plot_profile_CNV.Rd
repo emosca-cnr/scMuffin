@@ -13,7 +13,6 @@ plot_profile_CNV(
   height = 90,
   units = "mm",
   res = 300,
-  image_format = "png",
   cex.points = 0.7,
   cex.lab = 0.7,
   cex.axis = 0.7,
@@ -25,9 +24,9 @@ plot_profile_CNV(
 
 \item{cluster}{cluster to be plotted}
 
-\item{z.score}{whether to plot clustere median z-scores of CNV signal (TRUE) or cluster median CNV signal (FALSE).}
+\item{z.score}{whether to plot cluster median z-scores of CNV profile (TRUE) or cluster median CNV profile (FALSE).}
 
-\item{file}{output file}
+\item{file}{File name to save the figure as png file}
 
 \item{width}{image width}
 
@@ -36,8 +35,6 @@ plot_profile_CNV(
 \item{units}{image units}
 
 \item{res}{image resolution}
-
-\item{image_format}{png or jpeg}
 
 \item{cex.points}{cex of points}
 

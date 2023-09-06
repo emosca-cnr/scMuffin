@@ -13,17 +13,15 @@
 #' @param height image height
 #' @param units image units
 #' @param res image resolution
-#' @param image_format png or jpeg
 #' @param text.size text size
 #' @param ... further arguments for Seurat::FeaturePlot or Seurat::DimPlot
 #' @import Seurat graphics ggplot2
 #' @description Generate a UMAP visualization
 #' @export
 #' 
-plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, image_format="png", text.size=5, ...){
+plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feature_plot=FALSE, lab_size=1, lab_color="black", adj_outliers=FALSE, width=180, height=180, units="mm", res=300, text.size=5, ...){
 	
-  image_format <- match.arg(image_format, c("png", "jpeg"))
-  
+	
 	if(adj_outliers){
 		if(!is.numeric(Seu_obj@meta.data[, colnames(Seu_obj@meta.data) == group.by])){
 			message("Cannot adjust ", group.by, "because it's not numeric\n")
@@ -32,12 +30,7 @@ plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feat
 		}
 	}
 	
-  if(image_format == "jpeg"){
-    jpeg(file, width=width, height=height, units=units, res=res)
-  }
-  if(image_format == "png"){
-    png(file, width=width, height=height, units=units, res=res)
-  }
+	png(file, width=width, height=height, units=units, res=res)
 	
 	par(mar=c(3, 3, 3, 1))
 	par(mgp=c(2, 0.7, 0))
