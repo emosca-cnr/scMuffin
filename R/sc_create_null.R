@@ -3,7 +3,6 @@
 #' @param bins bins of genes, created by means of \code{\link{sc_data_bin}}
 #' @param gene_set a vector of genes
 #' @param k number of permutations
-#' @author Ettore Mosca
 #' @importFrom stats na.omit
 #' @description sc_create_null
 #' @return A list of null gene sets.
