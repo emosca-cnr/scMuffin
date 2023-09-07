@@ -4,7 +4,7 @@
 #' @param mc.cores number of cores;
 #' @param wnd_size number of adjacent genes considered;
 #' @param min_genes minimun number of genes expressed in a cell;
-#' @param min_cells minimum numbver of cells in which a gene must be expressed;
+#' @param min_cells minimum number of cells in which a gene must be expressed;
 #' @param expr_lim min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.
 #' @param scale_cells whether to scale cells
 #' @param na.rm whether to remove 0 values in CNV estimation
