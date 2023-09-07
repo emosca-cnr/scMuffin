@@ -3,8 +3,8 @@
 #' @param wnd_size number of adjacent genes to consider
 #' @param na.rm whether to remove genes that have missing value of expression or not.
 #' @description Function to be used in calculate_CNV. 
-#' @references "Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al., Supplementary materials
-#' @author Valentina Nale
+#' @references "Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al. (DOI: 10.1126/science.1254257), Supplementary materials
+
 
 
 CNV <- function(x, wnd_size=100, na.rm=FALSE) {
