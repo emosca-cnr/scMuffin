@@ -3,7 +3,7 @@
 #' @param cnv_clustering the output of cluster_by_features(..., cnv=TRUE, ...)
 #' @param reference name of the reference column
 #' @param eps threshold for the min_max method
-#' @param method mean (default): subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al. (DOI: 10.1126/science.aad0501). The min_max method all values below (above) the maximum (minimum) of the reference cluster + (-) eps are set to 0. The lower (upper) extreme whisker are considered as minimum (maximum) values.
+#' @param method "mean" (default): subtract the average profile of the reference cluster to every cell; "min_max" see Tirosh et al. (DOI: 10.1126/science.aad0501). In the "min_max" method all values below (above) the maximum (minimum) of the reference cluster + (-) eps are set to 0. The lower (upper) extreme whisker are considered as minimum (maximum) values.
 #' @description Add reference vector to CNV matrix
 #' @export
 
