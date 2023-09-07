@@ -26,6 +26,7 @@ proliferation_analysis <- function(scMuffinList = NULL, mc.cores=1, nbins=25, nm
 	
 	if(is.null(gsl)){
 		cat("Using gsls_Symbol$Tirosh as gene sets for G1S and G2M.\n")
+		data("gsls_Symbol", envir=environment())
 		gsl <- gsls_Symbol$Tirosh
 	}
 	
