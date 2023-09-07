@@ -10,7 +10,7 @@
 #' @return list with two elements: gs_table and leading_edge. See [csea()]
 #' @export
 #' @description Calculate cluster enrichment by csea approach
-#' @author Ettore Mosca
+
 
 cluster_csea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99, min.k.nes=10){
   
