@@ -9,7 +9,7 @@
 #' @param scale_cells whether to scale cells
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
-#' @param method mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.
+#' @param method "mean": subtract the average profile of the reference cluster to every cell (default); "min_max" (from Tirosh et al.) can be used but is not tested yet
 #' @param z.score whether to use z-scores of the cluster median CNV profile, instead of the median itself.
 #' @param eps absolute threshold to call CNV regions.
 #' @export 
