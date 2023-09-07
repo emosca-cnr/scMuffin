@@ -1,8 +1,8 @@
 #' Inter-dataset cluster similarity
 #' @param gbc_1 genes-by-cells expression matrix of dataset 1
 #' @param gbc_2 genes-by-cells expression matrix of dataset 2
-#' @param clusters_1 named vector with cell clustering fo dataset 1
-#' @param clusters_2 named vector with cell clustering fo dataset 2
+#' @param clusters_1 named vector with cell clustering of dataset 1
+#' @param clusters_2 named vector with cell clustering of dataset 2
 #' @param cluster_markers_1 list of markers for each cluster of dataset 1
 #' @param cluster_markers_2 list of markers for each cluster of dataset 2
 #' @param genes_min minimum number of genes required among the markers of a cluster
