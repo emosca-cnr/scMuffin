@@ -4,7 +4,7 @@
 \alias{preprocess_for_heatmap_CNV}
 \title{preprocess_for_heatmap_CNV}
 \usage{
-preprocess_for_heatmap_CNV(result_cnv)
+preprocess_for_heatmap_CNV(result_cnv = NULL)
 }
 \arguments{
 \item{result_cnv}{object resulting from CNV analyiss}

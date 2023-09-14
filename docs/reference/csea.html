@@ -84,18 +84,18 @@
 
 
 <dt>mc_cores_path</dt>
-<dd><p>number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path x mc_cores_perm</p></dd>
+<dd><p>number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path * mc_cores_perm</p></dd>
 
 
 <dt>mc_cores_perm</dt>
-<dd><p>number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path x mc_cores_perm</p></dd>
+<dd><p>number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path * mc_cores_perm</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>list with two data.frames, gs_table and leading_edge. gs_table contains: es, enrichment score; nes normalized enrichment score; p-value, empirical p-value; adjusted p-value, BH FDR; FDR q-value, empirical FDR. leading_edge contains: tags, leading edge size; tags_perc, leading edge size percent over gene set; list_top, rank of the ES; list_top_perc, rank of the ES percent over full ranked list; lead_edge, gene names of the leading edge.</p>
+<p>list with two data.frames, gs_table and leading_edge.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

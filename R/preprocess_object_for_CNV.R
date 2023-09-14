@@ -4,7 +4,6 @@
 #' @details The preliminary step consist of annotation, duplicates and NA values removal. 
 #' Then, the matrix is splitted as a list of dataframe, where every dataframe is a chromosome.
 #' Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position. 
-#' @usage preprocess_object_for_CNV(genes_by_cells)
 #' @return list of genomically-ordered chromosomes
 #' @import org.Hs.eg.db
 #' @export
