@@ -1,5 +1,5 @@
 version 1.1.1
-- various improvements
+- various improvements: mainly documentation, checks on input and some errors arising whit particular input data
 version 1.1.0
 - various improvements
 version 1.0.3

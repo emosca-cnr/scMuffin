@@ -66,7 +66,9 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
         #temp <- c(temp, (SIG_CM_cancer[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_cancer))]))
         temp <- c(temp, (gsls_source$CM_cancer[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_cancer))]))
       }
-      #gsls$SIG_CM_cancer <- temp
+      if(length(temp)==0){
+        cat("None of the given CM_tissues was found among CM_cancer gene sets.\n")
+      }
       gsls$CM_cancer <- temp
     }
     
@@ -77,16 +79,14 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
         #temp <- c(temp, (SIG_CM_normal[grepl(paste0("^", CM_tissues[i]), names(SIG_CM_normal))]))
         temp <- c(temp, (gsls_source$CM_normal[grepl(paste0("^", CM_tissues[i]), names(gsls_source$CM_normal))]))
       }
-      #gsls$SIG_CM_normal <- temp
+      if(length(temp)==0){
+        cat("None of the given CM_tissues was found among CM_normal gene sets.\n")
+      }
       gsls$CM_normal <- temp
     }
     
     if("CancerSEA" %in% gs_sources){
-      #data("SIG_CancerSEA", envir=environment())
-      #gsls$SIG_CancerSEA <- SIG_CancerSEA
-      
-      gsls$CancerSEA <- gsls_source$CancerSEA
-      
+       gsls$CancerSEA <- gsls_source$CancerSEA
     }
     
     if("PNDB" %in% gs_sources){
@@ -96,7 +96,10 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
         #temp <- c(temp, (SIG_PNDB[grepl(paste0("^", PNDB_tissues[i]), names(SIG_PNDB))]))
         temp <- c(temp, (gsls_source$PNDB[grepl(paste0("^", PNDB_tissues[i]), names(gsls_source$PNDB))]))
       }
-      #gsls$SIG_PNDB <- temp
+      if(length(temp)==0){
+        cat("None of the given CM_tissues was found among PNDB gene sets.\n")
+      }
+      
       gsls$PNDB <- temp
     }
     
@@ -126,7 +129,7 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
   
   
   cat("Current gene set list size.\n")
-  print(lengths(gsls))
+  print(lapply(gsls, lengths))
   
   cat("Filtering: [", genes_min, ",", genes_max, "].\n")
   for(i in 1:length(gsls)){
@@ -135,7 +138,7 @@ prepare_gsls <- function(gs_sources=NULL, custom_gsls=NULL, CM_tissues=NULL, PND
   }
 
   cat("Final gene set list size.\n")
-  print(lengths(gsls))
+  print(lapply(gsls, lengths))
   
   return(gsls)
   

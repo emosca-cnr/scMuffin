@@ -15,7 +15,7 @@ calculate_gs_scores(
   kmin = 50,
   score_type = c("relative", "mean"),
   null_model = TRUE,
-  verbose = TRUE,
+  verbose = FALSE,
   na.rm = TRUE,
   overwrite = FALSE
 )

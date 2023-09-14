@@ -39,7 +39,7 @@ CNV_analysis(
 
 \item{expr_lim}{min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disable the removal of outliers.}
 
-\item{method}{mean: subtract the average profile of the reference cluster to every cell; min_max see Tirosh et al.}
+\item{method}{"mean": subtract the average profile of the reference cluster to every cell (default); "min_max" (from Tirosh et al.) can be used but is not tested yet}
 
 \item{na.rm}{whether to remove 0 values in CNV estimation}
 

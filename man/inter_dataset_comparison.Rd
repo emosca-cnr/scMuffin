@@ -36,7 +36,7 @@ inter_dataset_comparison(
 
 \item{cluster_columns}{whether to cluster or not the columns}
 
-\item{...}{arguments passed to calculate_signatures}
+\item{...}{arguments passed to calculate_gs_scores}
 }
 \value{
 A list with:

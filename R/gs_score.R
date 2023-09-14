@@ -17,13 +17,13 @@
 
 
 #gene_set_score <- function(gene_set_data, control_set_data, nmark_min=5, ncells_min=NULL){
-gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=TRUE, null_model=TRUE, na.rm=TRUE){
+gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5, ncells_min=5, k=100, kmin=50, verbose=FALSE, null_model=TRUE, na.rm=TRUE){
   
   if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
-    if(verbose){
-      message("not enough genes in gene set, please consider only gene set with enough number of genes\n")
-    }
+    
+    message("not enough genes in gene set, please consider only gene set with enough number of genes.\n")
     res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
+    
   }else{
     
     gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
@@ -143,8 +143,11 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
       #cells without a sufficient number of genes
       res$case[!res$nmark_min] <- 0
     }
+    
     #ans <- list(score_table=res, permutations=ans[-1])
+    
   }
+  
   return(res)
   
 }

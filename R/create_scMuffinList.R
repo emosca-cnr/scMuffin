@@ -11,15 +11,43 @@ create_scMuffinList <- function(counts=NULL, normalized=NULL){
   
   scMuffinList <- list()
   
-  if(!is.null(counts) | !is(counts, "dgCMatrix")){
-    scMuffinList$counts <- Matrix::Matrix(counts, sparse = TRUE)
-    cat("counts created\n")
+  if(!is.null(counts) & !is.null(normalized)){
+    if(nrow(counts) != nrow(normalized)){
+      stop("counts and normalized matrices have different number of rows.\n")
+    }else{
+      normalized <- normalized[match(rownames(counts), rownames(normalized)), match(colnames(counts), colnames(normalized))]
+      if(nrow(counts) != nrow(normalized)){
+        stop("counts and normalized matrices have different number of rows after matching identifiers.\n")
+      }
+    }
   }
-
-  if(!is.null(normalized) | !is(normalized, "dgCMatrix")){
-    scMuffinList$normalized <- Matrix::Matrix(normalized, sparse = TRUE)
-    cat("normalized created\n")
+  
+  idx_zero <- which(rowSums(counts)==0)
+  if(length(idx_zero)>0){
+    
+    cat("Found genes with all-zero values. These genes may cause issues and will be removed.\n")
+    counts <- counts[-idx_zero, ]
+    normalized <- normalized[-idx_zero, ]
+    
+    idx_zero <- which(colSums(counts)==0)
+    if(length(idx_zero)>0){
+      counts <- counts[, -idx_zero]
+      normalized <- normalized[, -idx_zero]
+    }
+    
+    cat("Updated size:\n")
+    print(dim(counts))
+    
   }
+  
+  scMuffinList$counts <- Matrix::Matrix(counts, sparse = TRUE)
+  cat("counts created\n")
+  
+  scMuffinList$normalized <- Matrix::Matrix(normalized, sparse = TRUE)
+  cat("normalized created\n")
+ 
+   
+  
   
   return(scMuffinList)
 }

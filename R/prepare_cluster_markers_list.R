@@ -10,9 +10,20 @@
 #' @param top maximum number of markers per cluster
 #' @export
 
-prepare_cluster_markers_list <- function(marker_table_list=NULL, effect_size="avg_logFC", effect_size_thr=0.25, sig_column="p_val_adj", sig_thr=0.1, id_column=0, cluster="cluster", top=500){
+prepare_cluster_markers_list <- function(marker_table_list=NULL, effect_size="avg_log2FC", effect_size_thr=0.25, sig_column="p_val_adj", sig_thr=0.1, id_column="gene", cluster="cluster", top=500){
   
   
+  if(!all(unlist(lapply(marker_table_list, function(x) all(c(effect_size, sig_column, cluster) %in% colnames(x)))))){
+    stop("Any of ", effect_size, " ", sig_column, " ", cluster, " was not found in any element of marker_table_list.\n")
+  }
+  
+  if(id_column!=0){
+    if(!all(unlist(lapply(marker_table_list, function(x) id_column %in% colnames(x))))){
+      stop(id_column, " was not found in any element of marker_table_list.\n")
+    }
+  }
+  
+  #
   for(i in 1:length(marker_table_list)){
     
     #marker selection
@@ -28,7 +39,7 @@ prepare_cluster_markers_list <- function(marker_table_list=NULL, effect_size="av
       }
       
       #limit each cluster to top elements
-      marker_table_list[[i]] <- lapply(marker_table_list[[i]], function(i_list) lapply(i_list, function(i_vector) i_vector[1:min(top, length(i_vector))]))
+      marker_table_list[[i]] <- lapply(marker_table_list[[i]], function(i_list) i_list[1:min(top, length(i_list))])
       
       #create unique dataset markers names
       names(marker_table_list[[i]]) <- paste0(names(marker_table_list)[i], "_M", names(marker_table_list[[i]]))
@@ -42,7 +53,7 @@ prepare_cluster_markers_list <- function(marker_table_list=NULL, effect_size="av
   for(i in 2:length(marker_table_list)){
     gsl <- c(gsl, marker_table_list[[i]])
   }
-  marker_table_list <- gsl
+  print(lengths(gsl))
   
   return(gsl)
   

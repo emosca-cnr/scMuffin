@@ -17,8 +17,5 @@ CNV(x, wnd_size = 100, na.rm = FALSE)
 Function to be used in calculate_CNV.
 }
 \references{
-"Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al., Supplementary materials
-}
-\author{
-Valentina Nale
+"Single-cell RNA-seq highlights intratumoral heterogeneity in primary glioblastoma" Patel et al. (DOI: 10.1126/science.1254257), Supplementary materials
 }

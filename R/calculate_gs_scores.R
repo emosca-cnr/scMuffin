@@ -19,19 +19,22 @@
 #' @export
 #' @import parallel
 
-calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=TRUE, na.rm=TRUE, overwrite=FALSE){
+calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=FALSE, na.rm=TRUE, overwrite=FALSE){
   
   
+  cat("####################################################\n")
   cat("nbins:", nbins, "\n")
   cat("nmark_min:", nmark_min, "\n")
   cat("ncells_min:", ncells_min, "\n")
   cat("k:", k, "\n")
+  kmin <- min(k, kmin)
   cat("kmin:", kmin, "\n")
   cat("score_type:", score_type, "\n")
   cat("null_model:", null_model, "\n")
   cat("verbose:", verbose, "\n")
   cat("na.rm:", na.rm, "\n")
   cat("overwrite:", overwrite, "\n")
+  cat("####################################################\n")
   
   if(length(scMuffinList$normalized)==0){
     stop("scMuffinList does not contain genes_by_cells\n")
@@ -39,7 +42,7 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbi
   
   idx_zero <- which(rowSums(scMuffinList$normalized)==0)
   if(length(idx_zero)>0){
-    cat("Found genes with all-zero values. These genes may cause issues. Trying to perform the analysis removing these genes from the gene sets.\n")
+    stop("Found genes with all-zero values.\n")
   }
   
   if(!overwrite & length(scMuffinList$gene_set_scoring)>0){
@@ -47,11 +50,6 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbi
     if(length(shared_columns)>0){
       stop("names(gs_list) must be different from colnames(scMuffinList$gene_set_scoring$summary) when overwrite is FALSE\n")
     }
-  }
-  
-  if(kmin>k){
-    message("adjusting kmin to k\n")
-    kmin <- k
   }
   
   score_type <- score_type[1]

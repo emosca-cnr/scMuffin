@@ -12,7 +12,7 @@ gs_score(
   ncells_min = 5,
   k = 100,
   kmin = 50,
-  verbose = TRUE,
+  verbose = FALSE,
   null_model = TRUE,
   na.rm = TRUE
 )

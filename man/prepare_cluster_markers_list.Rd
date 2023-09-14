@@ -7,11 +7,11 @@ Prepare cluster markers list for inter_dataset_comparison}
 \usage{
 prepare_cluster_markers_list(
   marker_table_list = NULL,
-  effect_size = "avg_logFC",
+  effect_size = "avg_log2FC",
   effect_size_thr = 0.25,
   sig_column = "p_val_adj",
   sig_thr = 0.1,
-  id_column = 0,
+  id_column = "gene",
   cluster = "cluster",
   top = 500
 )
