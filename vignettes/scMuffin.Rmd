@@ -242,7 +242,7 @@ Importantly, CNV inference adds the "CNV" partition:
 ```{r, include=TRUE, eval=FALSE}
 head(scML$partitions)
 ```
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=FALSE, eval=TRUE}
 head(scMuffinList_demo$partitions)
 ```
 
