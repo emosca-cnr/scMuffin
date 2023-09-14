@@ -4,7 +4,7 @@
 #' @param feature_name feature name
 #' @param mean_f function to use for average
 #' @param var_f function to use for variability
-#' @param na.rm whether to remove na or not
+#' @param na.rm whether to remove NA or not
 #' @importFrom stats sd setNames
 #' @description Calculate mean and variance for partition id and feature id
 #' @return scMuffinList with data.frames "mean" and "var" added to "scMuffinList$cluster_data[[partition_id]]"

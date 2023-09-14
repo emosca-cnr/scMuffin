@@ -1,4 +1,4 @@
-#' Bocplt of cluster enrichment in a quantitative feature
+#' Boxplot of cluster enrichment in a quantitative feature
 #' @param scMuffinList scMuffinList object
 #' @param partition_id one among the partitions
 #' @param n_features maximum number of features that will be shown

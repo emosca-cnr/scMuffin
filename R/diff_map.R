@@ -1,4 +1,4 @@
-#' Computation of of Diffusion Map and Diffusion Pseudo Time
+#' Computation of Diffusion Map and Diffusion Pseudo Time
 #' 
 #' @param scMuffinList scMuffinList object
 #' @param root_cell root cell or "random" to pick up a random root via the destiny::random_root function

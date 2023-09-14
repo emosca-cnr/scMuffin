@@ -6,7 +6,6 @@
 #' Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position. 
 #' @usage preprocess_object_for_CNV(genes_by_cells)
 #' @return list of genomically-ordered chromosomes
-#' @author Valentina Nale
 #' @import org.Hs.eg.db
 #' @export
 preprocess_object_for_CNV <- function(genes_by_cells) {
