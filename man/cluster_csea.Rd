@@ -35,6 +35,3 @@ list with two elements: gs_table and leading_edge. See [csea()]
 \description{
 Calculate cluster enrichment by csea approach
 }
-\author{
-Ettore Mosca
-}

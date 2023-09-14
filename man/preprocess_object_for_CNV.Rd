@@ -20,6 +20,3 @@ The preliminary step consist of annotation, duplicates and NA values removal.
 Then, the matrix is splitted as a list of dataframe, where every dataframe is a chromosome.
 Chromosomes are ordered from 1 to 22 + X +Y, and then re-ordered by start position.
 }
-\author{
-Valentina Nale
-}

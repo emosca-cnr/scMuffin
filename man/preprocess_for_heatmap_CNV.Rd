@@ -15,6 +15,3 @@ A matrix to be used by the function heatmap_CNV.
 \description{
 Bind chromosomes together as a matrix.
 }
-\author{
-Valentina Nale
-}

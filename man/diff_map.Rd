@@ -2,7 +2,7 @@
 % Please edit documentation in R/diff_map.R
 \name{diff_map}
 \alias{diff_map}
-\title{Computation of of Diffusion Map and Diffusion Pseudo Time}
+\title{Computation of Diffusion Map and Diffusion Pseudo Time}
 \usage{
 diff_map(scMuffinList = NULL, root_cell = "random", n_pcs = 50, ...)
 }

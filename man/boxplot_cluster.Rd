@@ -2,7 +2,7 @@
 % Please edit documentation in R/boxplot_cluster.R
 \name{boxplot_cluster}
 \alias{boxplot_cluster}
-\title{Bocplt of cluster enrichment in a quantitative feature}
+\title{Boxplot of cluster enrichment in a quantitative feature}
 \usage{
 boxplot_cluster(
   scMuffinList = NULL,

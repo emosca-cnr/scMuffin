@@ -21,6 +21,3 @@ A list of null gene sets.
 \description{
 sc_create_null
 }
-\author{
-Ettore Mosca
-}
