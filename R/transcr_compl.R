@@ -12,6 +12,7 @@
 #'}
 #' @export
 #' @importFrom stats glm
+#' @importFrom Matrix colSums rowSums
 
 transcr_compl <- function(scMuffinList = NULL, min_counts = 5, min_cells=10, min_genes=500){
   
@@ -25,16 +26,16 @@ transcr_compl <- function(scMuffinList = NULL, min_counts = 5, min_cells=10, min
   if(any(idx)){
     counts[idx] <- 0
   }
-  idx <- Matrix::rowSums(sign(counts)) < min_cells
+  idx <- rowSums(sign(counts)) < min_cells
   if(any(idx)){
     counts[idx, ] <- 0 #only genes in at least 10 cells
   }
-  idx <- Matrix::colSums(sign(counts)) < min_genes
+  idx <- colSums(sign(counts)) < min_genes
   if(any(idx)){
     counts[, idx] <- 0 #only cells in with least 100 genes
   }
   
-  N <- Matrix::colSums(counts)
+  N <- colSums(counts)
   if(sum(N>0) < min_cells){
     stop("not enough cells after filtering")
   }

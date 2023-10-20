@@ -14,8 +14,5 @@ detect_CNV_regions(scMuffinList = NULL, z.score = FALSE, eps = NULL)
 \item{eps}{the value that defines a CNV. If NUll the stard deviation of the dataset is used.}
 }
 \description{
-Plot an heatmap of the CNV.
-}
-\details{
-CNV Profile of every cluster
+Detect the CNV regions in eaach cluster and chromosome
 }

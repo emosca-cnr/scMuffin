@@ -10,8 +10,8 @@
 #' @description GTEx gene reads file is processed to obtain the average normalized gene expression in a tissue
 #' @return average normalized gene expression values
 #' @export
-#' @import Seurat
-#' @import org.Hs.eg.db
+#' @importFrom Seurat NormalizeData
+#' @importFrom org.Hs.eg.db org.Hs.egENSEMBL
 #' @importFrom utils read.delim read.table
 
 

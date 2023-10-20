@@ -12,15 +12,15 @@
 sc_data_bin <- function(genes_by_cells=NULL, nbins=25, na.rm=FALSE){
 
 
-  ans <- Matrix::rowSums(genes_by_cells)
+  ans <- rowSums(genes_by_cells)
   
   #if excluding NA every gene will have a different number of cells; therefore mean is used to define the expression bins
   if(na.rm){
-    n <- Matrix::rowSums(genes_by_cells>0)
+    n <- rowSums(genes_by_cells>0)
     ans <- ans/n
   }
  
-  ans <- ggplot2::cut_number(ans, n = nbins, labels=FALSE)
+  ans <- cut_number(ans, n = nbins, labels=FALSE)
   
   return(ans)
 

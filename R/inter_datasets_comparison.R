@@ -11,8 +11,6 @@
 #' @param ... arguments passed to calculate_gs_scores
 #' @export
 #' @description Quantify the similarity between clusters of two datasets, on the basis of the average cluster marker expression
-#' @import pals
-#' @importFrom circlize colorRamp2
 #' @return A list with:
 #' \itemize{
 #'   \item{clust_sim, matrix of clucster similarity;}

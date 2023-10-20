@@ -14,6 +14,7 @@
 #' @description Plot an heatmap of the CNV.
 #' @details CNV Profile of every cluster
 #' @import ComplexHeatmap grDevices grid
+#' @importFrom ggplot2 cut_interval
 #' @export
 
 plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=NULL, width=300, height=90, units="mm", res=300, cex.points=0.7, cex.lab=0.7, cex.axis=0.7, cex.main=0.7){
@@ -72,11 +73,11 @@ plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=
   ### colors
   idx_neg <- avg_cl_cnv[, j] <= 0
   idx_pos <- avg_cl_cnv[, j] > 0
-  md <- c(setNames(ggplot2::cut_interval(avg_cl_cnv[idx_neg, j], 5, dig.lab = 2), rownames(avg_cl_cnv)[idx_neg]), setNames(ggplot2::cut_interval(avg_cl_cnv[idx_pos, j], 5, dig.lab = 2), rownames(avg_cl_cnv)[idx_pos]))
+  md <- c(setNames(cut_interval(avg_cl_cnv[idx_neg, j], 5, dig.lab = 2), rownames(avg_cl_cnv)[idx_neg]), setNames(cut_interval(avg_cl_cnv[idx_pos, j], 5, dig.lab = 2), rownames(avg_cl_cnv)[idx_pos]))
   md <- md[match(rownames(avg_cl_cnv), names(md))]
   md <- factor(md, levels=levels(md))
   
-  col <- rev(pals::brewer.rdylbu(10))[as.numeric(md)]
+  col <- rev(brewer.rdylbu(10))[as.numeric(md)]
   
   chr_start <- c(1, cumsum(ngenes_chr)[-length(ngenes_chr)]+1)
   chr_end <- cumsum(ngenes_chr)

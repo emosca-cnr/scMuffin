@@ -4,7 +4,7 @@
 #' @param subcategory MsigDB subcategory name, see msigdbr_collections()
 #' @param type Gene name of interest, can be gene_symbol or entrez_gene
 #' @description Returns msigdb geneset in a format compatible with calculate_signatures()
-#' @import msigdbr
+#' @importFrom msigdbr msigdbr
 #' @return List with msigdb_output, the output of msigdbr::msigdbr, and path_list, the list of gene sets
 #' @export
 
@@ -15,7 +15,7 @@ get_msigdb_geneset <- function(species, category=NULL, subcategory=NULL, type="g
 	if(is.na(subcategory)){
 		subcategory <- NULL
 	}
-  msig <- msigdbr::msigdbr(species = species, category = category, subcategory = subcategory)
+  msig <-msigdbr(species = species, category = category, subcategory = subcategory)
   if(type=="gene_symbol") {
     msig_list <- split(x=msig$gene_symbol, f = msig$gs_name)
   } else if (type == "entrez_gene") {

@@ -79,7 +79,7 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbi
     
   }else{
     
-    gs_scores <- parallel::mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(scMuffinList$normalized), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm), mc.cores = mc.cores)
+    gs_scores <- mclapply(gs_list, function(i_marker_set) gs_score(i_marker_set, genes_by_cells = as.matrix(scMuffinList$normalized), bins = data_bins, k=k, nmark_min = nmark_min, ncells_min = ncells_min, null_model=null_model, kmin = kmin, verbose=verbose, na.rm=na.rm), mc.cores = mc.cores)
     
   }
   

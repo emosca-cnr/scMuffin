@@ -13,8 +13,10 @@
 #' @param res image resolution
 #' @param out_dir output directory
 #' @param ... further arguments to plot_umap
-#' @importFrom pals brewer.rdylbu brewer.purples alphabet
+#' @import pals
 #' @importFrom stats setNames
+#' @importFrom ggplot2 cut_interval
+#' @importFrom Seurat AddMetaData
 #' @export
 
 plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=TRUE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, ...){
@@ -65,21 +67,21 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
               #reorder cells according to feature data
               idx_neg <- feature_data_i <= 0
               idx_pos <- feature_data_i > 0
-              md <- c(setNames(ggplot2::cut_interval(feature_data_i[idx_neg], 5, dig.lab = 2), rownames(feature_data)[idx_neg]), setNames(ggplot2::cut_interval(feature_data_i[feature_data_i>0], 5, dig.lab = 2), rownames(feature_data)[idx_pos]))
+              md <- c(setNames(cut_interval(feature_data_i[idx_neg], 5, dig.lab = 2), rownames(feature_data)[idx_neg]), setNames(cut_interval(feature_data_i[feature_data_i>0], 5, dig.lab = 2), rownames(feature_data)[idx_pos]))
               md <- md[match(rownames(feature_data), names(md))]
               md <- factor(md, levels=rev(levels(md)))
               
               #add the metadata
-              Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(pals::brewer.rdylbu(10)), width=width, height=height, units=units, res=res, ...)
+              Seu_obj <- AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(brewer.rdylbu(10)), width=width, height=height, units=units, res=res, ...)
               
             }else{
               
               #if only positive values
-              md <- ggplot2::cut_interval(feature_data_i, 5, dig.lab = 2)
+              md <- cut_interval(feature_data_i, 5, dig.lab = 2)
               md <- factor(md, levels=rev(levels(md)))
-              Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(pals::brewer.ylorrd(5)), width=width, height=height, units=units, res=res, ...)
+              Seu_obj <- AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
+              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=rev(brewer.ylorrd(5)), width=width, height=height, units=units, res=res, ...)
               
             }
           }
@@ -89,8 +91,8 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
           
           #if not numeric...
           n_colors <- length(levels(as.factor(feature_data_i)))
-          pal <- setNames(pals::alphabet(n_colors), levels(as.factor(feature_data_i)))
-          Seu_obj <- Seurat::AddMetaData(Seu_obj, metadata=feature_data_i[match(rownames(feature_data), colnames(Seu_obj))], col.name=colnames(feature_data)[i])
+          pal <- setNames(alphabet(n_colors), levels(as.factor(feature_data_i)))
+          Seu_obj <- AddMetaData(Seu_obj, metadata=feature_data_i[match(rownames(feature_data), colnames(Seu_obj))], col.name=colnames(feature_data)[i])
           plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=pal, width=width, height=height, units=units, res=res, ...)
           
         }

@@ -4,30 +4,14 @@
 \alias{cluster_by_features}
 \title{Cluster by features}
 \usage{
-cluster_by_features(
-  features,
-  n_comp = 10,
-  cnv = FALSE,
-  plot_umap = FALSE,
-  out_dir = "./",
-  scale_features = TRUE,
-  ...
-)
+cluster_by_features(features_by_cells = NULL, n_comp = 10, ...)
 }
 \arguments{
-\item{features}{features object or result of CNV calculation}
+\item{features_by_cells}{features by cells}
 
 \item{n_comp}{numeric, Dimensions of reduction to use as input}
 
-\item{cnv}{TRUE/FALSE set it to TRUE for clustering CNV results}
-
-\item{plot_umap}{whether to plot the UMAP}
-
-\item{out_dir}{output directory}
-
-\item{scale_features}{whether to scale features}
-
-\item{...}{arguments passed to Seurat::DimPlot}
+\item{...}{arguments passed to Seurat::FindCLusters}
 }
 \value{
 features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix

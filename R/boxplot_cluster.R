@@ -12,7 +12,7 @@
 #' @param res image resolution
 #' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
 #' @description Produce boxplots to visualize the distribution of cell values according to the selected figure. A png figure for each cluster is saved in dir_out.
-#' @importFrom grDevices jpeg
+#' @importFrom grDevices png
 #' @importFrom plotrix thigmophobe.labels
 #' @import graphics
 #' @export
@@ -88,7 +88,7 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 			cbf_cl <- cells_by_features[, match(names(top_features$fdr), colnames(cells_by_features)), drop=FALSE]
 			
 			
-			grDevices::png(paste0(dir_out, "/cluster_", cell_clusters_set[cl], ".png"), width=width, height=height, units=units, res=res)
+			png(paste0(dir_out, "/cluster_", cell_clusters_set[cl], ".png"), width=width, height=height, units=units, res=res)
 			layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = T))
 			
 			par(mar = c(3, 3, 2, 1))
@@ -128,7 +128,7 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 			#barplot(rev(-log10(top_features$fdr)), horiz = T, names.arg = "", main = "FDR")
 			
 			plot(top_features$nes, -log10(top_features$fdr), pch=16, xlab="NES", ylab="-log10(q)", cex.axis=cex.axis, cex.lab=cex.axis, cex=cex.axis)
-			plotrix::thigmophobe.labels(top_features$nes, -log10(top_features$fdr), box_names, cex=cex.axis)
+			thigmophobe.labels(top_features$nes, -log10(top_features$fdr), box_names, cex=cex.axis)
 			
 			plot.new()
 			legend(x = "center", legend=paste(box_names, ":", colnames(cbf_cl)), cex = cex.axis, bty = "n", title = "LEGEND")

@@ -14,6 +14,7 @@
 #' @importFrom grDevices jpeg
 #' @importFrom stats setNames
 #' @importFrom plotrix thigmophobe.labels
+#' @import pals
 #' @description Produce barplots (1 for each cluster) of distribution of cells associated with the values of the selected feature. A png figure for each cluster is saved in dir_out.
 #' @export
 
@@ -52,7 +53,7 @@ barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NUL
  	#boxplot for each cluster
 	for(cl in 1:length(cell_clusters_set)){ ###for each cluster
 		
-		grDevices::png(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".png"), width=width, height=height, units=units, res=res)
+		png(paste0(dir_out, "/cluster_", cell_clusters_set[cl],".png"), width=width, height=height, units=units, res=res)
 	  layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = T))
 	  par(mar = c(3, 3, 3, 1))
 	  par(mgp = c(1.5, .5, 0))
@@ -67,11 +68,11 @@ barplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, feature_id=NUL
 		cell_category_cluster <- cell_category_cluster[c(2,1), ] #remove the other clusters
 		colnames(cell_category_cluster) <- cell_category_names[match(colnames(cell_category_cluster), names(cell_category_names))]
 		
-		barplot(cell_category_cluster, beside = T, legend.text = T, main=paste("Cluster", cell_clusters_set[cl]), col=pals::alphabet2(2), cex.axis=cex.axis, cex.names=cex.axis, cex.lab=cex.axis, cex.main=cex.axis, args.legend=list(cex=cex.axis))
+		barplot(cell_category_cluster, beside = T, legend.text = T, main=paste("Cluster", cell_clusters_set[cl]), col=alphabet2(2), cex.axis=cex.axis, cex.names=cex.axis, cex.lab=cex.axis, cex.main=cex.axis, args.legend=list(cex=cex.axis))
 
 		
 		plot(en_res_er[rownames(en_res_er)==cell_clusters_set[cl], ], -log10(en_res_p[rownames(en_res_er)==cell_clusters_set[cl], ]), pch=16, xlab="ER", ylab="-log10(p)", cex.axis=cex.axis, cex.lab=cex.axis, cex=cex.axis)
-		plotrix::thigmophobe.labels(en_res_er[rownames(en_res_er)==cell_clusters_set[cl], ], -log10(en_res_p[rownames(en_res_er)==cell_clusters_set[cl], ]), cell_category_names, cex=cex.axis)
+		thigmophobe.labels(en_res_er[rownames(en_res_er)==cell_clusters_set[cl], ], -log10(en_res_p[rownames(en_res_er)==cell_clusters_set[cl], ]), cell_category_names, cex=cex.axis)
 		
 		plot.new()
 		legend(x = "center", legend=paste(cell_category_names, ":", names(cell_category_names)), cex = cex.axis, bty = "n", title = "LEGEND")

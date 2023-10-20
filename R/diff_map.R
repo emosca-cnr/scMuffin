@@ -12,17 +12,17 @@
 diff_map <- function(scMuffinList = NULL, root_cell="random", n_pcs=50, ...){
   
   cat("Calculating the diffusion map...\n")
-  res <- destiny::DiffusionMap(t(as.matrix(scMuffinList$normalized)), n_pcs=n_pcs, ...)
+  res <- DiffusionMap(t(as.matrix(scMuffinList$normalized)), n_pcs=n_pcs, ...)
   
   #Il DPT ?? metrica che dipende dalla cellula scelta, identical(dpt[root.idx], dpt$dpt) dpt[["dpt"]]
   dpt <- NA
   
   if(root_cell == "random"){
     cat("calculating a random root...\n")
-    root_cell <- destiny::random_root(res) #NUll
+    root_cell <-random_root(res) #NUll
   }
   cat("Diffusion pseudotimes...\n")
-  dpt <- destiny::DPT(res, tips = root_cell)
+  dpt <- DPT(res, tips = root_cell)
 
   scMuffinList$diffusion_map_pseudo_t <- list(
     summary = data.frame(res@eigenvectors[, 1:2], dpt=dpt$dpt, branch=dpt@branch[, 1], tips=dpt@tips[, 1], stringsAsFactors = F, row.names = rownames(res@eigenvectors)),

@@ -6,28 +6,36 @@
 #' @param min_genes minimun number of genes expressed in a cell;
 #' @param min_cells minimum number of cells in which a gene must be expressed;
 #' @param expr_lim min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.
-#' @param scale_cells whether to scale cells
+#' @param center_cells whether to center cells
 #' @param na.rm whether to remove 0 values in CNV estimation
 #' @param center_genes whether to center genes or not
+#' @param gene_ann optional data.frame with gene annotation with mandatory columns "Chromosome", "symbol" and "pos" (genomic location). If NULL gene locations will be collected from org.Hs.eg.db
 #' @importFrom grDevices boxplot.stats
+#' @importFrom Matrix Matrix rowSums colSums
 #' @description Calculate CNV using the moving average approach firstly described in Patel et al., 2014 Science (DOI: 10.1126/science)
 #' @export
 #' 
-calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=100, min_genes=1000, min_cells=100, expr_lim=NULL, scale_cells=TRUE, na.rm=FALSE, center_genes=FALSE) {
+calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=100, min_genes=200, min_cells=100, expr_lim=NULL, center_cells=TRUE, na.rm=FALSE, center_genes=FALSE, gene_ann=NULL) {
 	
  	genes_by_cells[is.na(genes_by_cells)] <- 0
 	
-	cat("Filtering...")
-	idx_keep <- Matrix::rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
+ 	cat("Genes-by-cells matrix size", dim(genes_by_cells), "\n")
+ 	
+ 	cat("Filtering...")
+	idx_keep <- rowSums(genes_by_cells !=0) >= min_cells #genes not missing in at least...
 	#print(table(idx_keep))
 	genes_by_cells <- genes_by_cells[idx_keep, ]
+
+	if(nrow(genes_by_cells) < min_genes){
+	  stop("Less than ", min_genes, "available: considering reducing the parameter min_genes.\n")
+	}
 	
-	idx_keep <- Matrix::colSums(genes_by_cells !=0) >= min(min_genes, nrow(genes_by_cells))
+	idx_keep <- colSums(genes_by_cells !=0) >= min(min_genes, nrow(genes_by_cells))
 	#print(table(idx_keep))
 	genes_by_cells <- genes_by_cells[, idx_keep]
 	cat(" done\n")
-	cat("genes-by-cells:", dim(genes_by_cells), "\n")
-
+	cat("Genes-by-cells matrix size", dim(genes_by_cells), "\n")
+	
 	# ****************************************************************
 	if (!is.null(reference)) {
 		cat("Adding reference vector...\n")
@@ -59,7 +67,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=1
 		rm(temp)
 		
 		if(is.null(expr_lim)){
-		  expr_lim <- grDevices::boxplot.stats(as.numeric(genes_by_cells))$stats[c(1, 5)]
+		  expr_lim <- boxplot.stats(as.numeric(genes_by_cells))$stats[c(1, 5)]
 		}
 		
 		#constraints over relative expression Tirosh et al.
@@ -77,7 +85,7 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=1
 	# ***************************************************************
 	
 	cat("Preprocess object to calculate CNV...\n")	
-	ans <- preprocess_object_for_CNV(genes_by_cells)
+	ans <- preprocess_object_for_CNV(genes_by_cells = genes_by_cells, gene_ann=gene_ann)
 	
 	temp <- factor(names(ans), levels = c(1, 2, 3, 4 ,5 ,6 ,7 ,8 , 9, 10, 11, 12 , 13, 14 ,15, 16, 17, 18, 19, 20, 21, 22, "X", "Y"))
 	temp <- as.character(sort(temp))
@@ -85,29 +93,30 @@ calculate_CNV <- function(genes_by_cells, reference=NULL, mc.cores=1, wnd_size=1
 	ans <- ans[match(temp, names(ans))]
 	
 	#exclude chrom with < wnd_size genes
-	ans <- ans[unlist(lapply(ans, nrow)) > wnd_size]
-	
-	for(i in 1:length(ans)){
-		rownames(ans[[i]]) <- paste(rownames(ans[[i]]), ans[[i]]$pos, sep="_")
-		ans[[i]] <- ans[[i]][, -c(1:3)]
+	chr_size <- unlist(lapply(ans, nrow))
+	cat("Genes in chromosomes:\n")
+	print(chr_size)
+	if(any(chr_size <= wnd_size)){
+	  cat("Excluding chromosomes", names(chr_size)[chr_size<=wnd_size], "\n")
+	  cat("Consider reducing wnd_size parameter.\n")
 	}
+	ans <- ans[chr_size > wnd_size]
 	
 	#calculate CNV
 	cat("Calculating CNV...\n")
-	CNV_data_in <- lapply(ans, function(x) Matrix::Matrix(as.matrix(x), sparse = TRUE))
-	ans <- mclapply(ans, function(x) apply(x, 2, function(y) CNV(setNames(y, rownames(x)), wnd_size=wnd_size, na.rm = na.rm)), mc.cores = mc.cores)
+	CNV_data_in <- lapply(ans, function(x) Matrix(as.matrix(x), sparse = TRUE))
 	
-	#merging chromosomes
 	for(i in 1:length(ans)){
-		if(!is.matrix(ans[[i]])){
-			ans[[i]] <- matrix(ans[[i]], nrow = 1)
-		}
-		rownames(ans[[i]]) <- paste0("chr", names(ans)[i], "__", rownames(ans[[i]]))
-	} 
+	  
+	  cat("Chromosome", names(ans)[i], "...\n")
+	  ans[[i]] <- mclapply(setNames(1:ncol(ans[[i]]), colnames(ans[[i]])), function(j_column) CNV(setNames(ans[[i]][, j_column], rownames(ans[[i]])), wnd_size=wnd_size, na.rm = na.rm), mc.cores = mc.cores)
+	  ans[[i]] <- do.call(cbind, ans[[i]])
+	  
+	}
 	
 	ans <- do.call(rbind, ans)
 	
-	if(scale_cells){
+	if(center_cells){
 		temp <- apply(ans, 2, scale, scale=F)
 		rownames(temp) <- rownames(ans)
 		ans <- temp

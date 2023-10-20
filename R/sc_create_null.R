@@ -10,7 +10,7 @@
 
 sc_create_null <- function(genes_by_cells=NULL, bins=NULL, gene_set=NULL, k=100){
 
-  gene_set_idx <- stats::na.omit(match(gene_set, rownames(genes_by_cells)))
+  gene_set_idx <- na.omit(match(gene_set, rownames(genes_by_cells)))
   ans <- bins[gene_set_idx] ###bins that contain the gene set
   
   #remove the gene of the gene sets from the bins

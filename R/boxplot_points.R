@@ -15,6 +15,7 @@
 #' @param image_format png or jpeg
 #' @param ... further argument to boxplot
 #' @importFrom pals alphabet
+#' @importFrom grDevices png jpeg
 #' @export
 
 boxplot_points <- function(x=NULL, f=NULL, col=NULL, amount=0.2, adj.col=1, pch=16, cex=0.6, ylim=NULL, file=NULL, width=180, height=180, units="mm", res=300, image_format="png", ...){
@@ -23,7 +24,7 @@ boxplot_points <- function(x=NULL, f=NULL, col=NULL, amount=0.2, adj.col=1, pch=
   f_lev <- levels(f)
   
   if(is.null(col)){
-    col <- pals::alphabet(length(f_lev))
+    col <- alphabet(length(f_lev))
   }
   
   if(is.null(ylim)){

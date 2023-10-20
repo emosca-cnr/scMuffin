@@ -90,17 +90,17 @@ csea <- function(rl, gsl, k=100, min.size=100, ord.mode=-1, min.k.nes=10, mc_cor
     }else{
       cat(k, "permutations on", mc_cores_perm, "cores\n")
       #res <- lapply(gsl, function(x) unlist(mclapply(x_perm, function(y) calc_gs_perm(rl, y, x), mc.cores=mc_cores_perm)))
-      res <- lapply(gsl, function(x) do.call(rbind, parallel::mclapply(x_perm, function(y) calc_gs_perm(rll, y, x), mc.cores=mc_cores_perm)))
+      res <- lapply(gsl, function(x) do.call(rbind, mclapply(x_perm, function(y) calc_gs_perm(rll, y, x), mc.cores=mc_cores_perm)))
     }
   }else{
     cat(length(gsl), "gene sets on", mc_cores_path, "cores\n")
     if(mc_cores_perm == 1){
       #res <- parallel::mclapply(gsl, function(x) unlist(lapply(x_perm, function(y) calc_gs_perm(rl, y, x))), mc.cores = mc_cores_path)
-      res <- parallel::mclapply(gsl, function(x) do.call(rbind, lapply(x_perm, function(y) calc_gs_perm(rll, y, x))), mc.cores = mc_cores_path)
+      res <- mclapply(gsl, function(x) do.call(rbind, lapply(x_perm, function(y) calc_gs_perm(rll, y, x))), mc.cores = mc_cores_path)
     }else{
       cat(k, "permutations on", mc_cores_perm, "cores\n")
       #res <- parallel::mclapply(gsl, function(x) unlist(parallel::mclapply(x_perm, function(y) calc_gs_perm(rl, y, x), mc.cores=mc_cores_perm)), mc.cores = mc_cores_path)
-      res <- parallel::mclapply(gsl, function(x) do.call(rbind, parallel::mclapply(x_perm, function(y) calc_gs_perm(rll, y, x), mc.cores=mc_cores_perm)), mc.cores = mc_cores_path)
+      res <- mclapply(gsl, function(x) do.call(rbind, mclapply(x_perm, function(y) calc_gs_perm(rll, y, x), mc.cores=mc_cores_perm)), mc.cores = mc_cores_path)
     }
   }
 
@@ -175,7 +175,7 @@ csea <- function(rl, gsl, k=100, min.size=100, ord.mode=-1, min.k.nes=10, mc_cor
     fdrq[fdrq>1] <- 1
 
     #out table
-    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=stats::p.adjust(p_val, method='fdr'), n_pos_perm=n_pos_perm, n_neg_perm=n_neg_perm, nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
+    out[[i]] <- data.frame(id=rownames(res[[i]]), es=res[[i]][, 1], p_val=p_val, adj_p_val=p.adjust(p_val, method='fdr'), n_pos_perm=n_pos_perm, n_neg_perm=n_neg_perm, nes=nes[, 1], FDRq=fdrq, stringsAsFactors=FALSE)
 
   }
 

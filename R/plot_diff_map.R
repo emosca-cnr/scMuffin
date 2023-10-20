@@ -12,7 +12,9 @@
 #' @param scale_feature logical, whether to scale col_data
 #' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
 #' @description Produce a scatter plot where cells are placed according to the results of diffusion map analysis and colored by values given in col_data.
-#' @import grDevices 
+#' @importFrom grDevices png
+#' @importFrom ggplot2 cut_interval
+#' @import pals
 #' @export
 
 plot_diff_map <- function(scMuffinList = NULL, columns=c(1:2), col_data=NULL, file=NULL, width=200, height=200, units="mm", res=300, adj_outliers=TRUE, scale_feature=FALSE, min_cells=50, ...){
@@ -62,18 +64,18 @@ plot_diff_map <- function(scMuffinList = NULL, columns=c(1:2), col_data=NULL, fi
         #reorder cells according to feature data
         idx_neg <- col_data <= 0
         idx_pos <- col_data > 0
-        md <- c(setNames(ggplot2::cut_interval(col_data[idx_neg], 5, dig.lab = 2), names(col_data)[idx_neg]), setNames(ggplot2::cut_interval(col_data[col_data>0], 5, dig.lab = 2), names(col_data)[idx_pos]))
+        md <- c(setNames(cut_interval(col_data[idx_neg], 5, dig.lab = 2), names(col_data)[idx_neg]), setNames(cut_interval(col_data[col_data>0], 5, dig.lab = 2), names(col_data)[idx_pos]))
         md <- md[match(names(col_data), names(md))]
         md <- factor(md, levels=rev(levels(md)))
-        pal <- pals::brewer.rdylbu(10)
+        pal <- brewer.rdylbu(10)
         cols <- pal[as.numeric(md)]
         
       }else{
         
         #if only positive values
-        md <- ggplot2::cut_interval(col_data, 5, dig.lab = 2)
+        md <- cut_interval(col_data, 5, dig.lab = 2)
         md <- factor(md, levels=rev(levels(md)))
-        pal <- rev(pals::brewer.ylorrd(5))
+        pal <- rev(brewer.ylorrd(5))
         cols <- pal[as.numeric(md)]
         
       }
@@ -83,7 +85,7 @@ plot_diff_map <- function(scMuffinList = NULL, columns=c(1:2), col_data=NULL, fi
     
     md <- as.factor(col_data)
     n_colors <- length(levels(md))
-    pal <- pals::alphabet(n_colors)
+    pal <- alphabet(n_colors)
     cols <- pal[as.numeric(as.factor(col_data))]
     
   }

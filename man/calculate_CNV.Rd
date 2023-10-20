@@ -9,12 +9,13 @@ calculate_CNV(
   reference = NULL,
   mc.cores = 1,
   wnd_size = 100,
-  min_genes = 1000,
+  min_genes = 200,
   min_cells = 100,
   expr_lim = NULL,
-  scale_cells = TRUE,
+  center_cells = TRUE,
   na.rm = FALSE,
-  center_genes = FALSE
+  center_genes = FALSE,
+  gene_ann = NULL
 )
 }
 \arguments{
@@ -32,11 +33,13 @@ calculate_CNV(
 
 \item{expr_lim}{min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disbale the removal of outliers.}
 
-\item{scale_cells}{whether to scale cells}
+\item{center_cells}{whether to center cells}
 
 \item{na.rm}{whether to remove 0 values in CNV estimation}
 
 \item{center_genes}{whether to center genes or not}
+
+\item{gene_ann}{optional data.frame with gene annotation with mandatory columns "Chromosome", "symbol" and "pos" (genomic location). If NULL gene locations will be collected from org.Hs.eg.db}
 }
 \description{
 Calculate CNV using the moving average approach firstly described in Patel et al., 2014 Science (DOI: 10.1126/science)

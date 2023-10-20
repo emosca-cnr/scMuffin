@@ -13,7 +13,9 @@
 #' @param legend_fontsize legend fontsize
 #' @param genes.labels.fontsize gene labels fontsize
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
-#' @import ComplexHeatmap grDevices grid
+#' @import ComplexHeatmap 
+#' @importFrom grid gpar
+#' @importFrom grDevices png
 #' @export
 
 heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mark.detected.cnv=FALSE, file=NULL, width=180, height=180, units="mm", res=300, cluster_fontsize=8, chrom_fontsize=8, legend_fontsize=8, genes.labels.fontsize=8, ...) {
@@ -83,9 +85,9 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mar
     clust_color[levels(cnv_clustering)==ref_cluster] <- "red"
   }
   
-  column_title_gp <- grid::gpar(col = clust_color, fontsize = cluster_fontsize)
-  row_title_gp <- grid::gpar(fontsize = chrom_fontsize)
-  heatmap_legend_param <- list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = grid::gpar(fontsize = legend_fontsize))
+  column_title_gp <- gpar(col = clust_color, fontsize = cluster_fontsize)
+  row_title_gp <- gpar(fontsize = chrom_fontsize)
+  heatmap_legend_param <- list(title_gp = gpar(fontsize = legend_fontsize), labels_gp = gpar(fontsize = legend_fontsize))
   
   max_abs <- max(abs(cnv), na.rm = T)
   
@@ -94,7 +96,7 @@ heatmap_CNV <- function(scMuffinList = NULL, genes=NULL, genes.labels=FALSE, mar
   }
   
   
-  temp<- ComplexHeatmap::Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, row_title_gp=row_title_gp, name="C", heatmap_legend_param=heatmap_legend_param, right_annotation = ha, ...)
+  temp <- Heatmap(cnv, cluster_rows = F, cluster_columns = F, show_row_names = F, show_column_names = F, row_split = row_splits, row_title_rot=0, row_gap = unit(0, "mm"), column_split = col_splits, column_gap = unit(0, "mm"), border=TRUE, column_title_gp=column_title_gp, row_title_gp=row_title_gp, name="C", heatmap_legend_param=heatmap_legend_param, right_annotation = ha, ...)
   draw(temp)
   
   if(!is.null(file)){

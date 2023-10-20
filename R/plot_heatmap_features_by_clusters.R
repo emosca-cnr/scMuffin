@@ -13,9 +13,7 @@
 #' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
-#' @import ComplexHeatmap grDevices
-#' @importFrom utils write.table
-#' @importFrom pals brewer.rdylbu brewer.ylorrd
+#' @import ComplexHeatmap grDevices pals
 #' @importFrom circlize colorRamp2
 
 plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, ...){
@@ -73,10 +71,10 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
   if(is.null(pal)){
     X_abs_max <- max(abs(c(min(X, na.rm = TRUE), max(X, na.rm = TRUE))))
     if(any(X<0)){
-      pal <- rev(pals::brewer.rdylbu(5))
+      pal <- rev(brewer.rdylbu(5))
       pal <- colorRamp2(c(-X_abs_max, 0, X_abs_max), c(pal[1], pal[3], pal[5]))
     }else{
-      pal <- pals::brewer.ylorrd(5)
+      pal <- brewer.ylorrd(5)
     }
   }
   
@@ -99,7 +97,7 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
       X <- t(scale(t(X)))
     }
     
-    h_tot_go <- ComplexHeatmap::Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, ...)
+    h_tot_go <- Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, ...)
     draw(h_tot_go, heatmap_legend_side = "left")
     
     if(!is.null(file)){

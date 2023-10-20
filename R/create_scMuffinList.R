@@ -40,10 +40,10 @@ create_scMuffinList <- function(counts=NULL, normalized=NULL){
     
   }
   
-  scMuffinList$counts <- Matrix::Matrix(counts, sparse = TRUE)
+  scMuffinList$counts <- Matrix(counts, sparse = TRUE)
   cat("counts created\n")
   
-  scMuffinList$normalized <- Matrix::Matrix(normalized, sparse = TRUE)
+  scMuffinList$normalized <- Matrix(normalized, sparse = TRUE)
   cat("normalized created\n")
  
    

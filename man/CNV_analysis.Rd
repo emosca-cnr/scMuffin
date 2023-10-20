@@ -9,15 +9,18 @@ CNV_analysis(
   mc.cores = 1,
   reference = NULL,
   min_cells = 100,
-  min_genes = 100,
+  min_genes = 200,
   wnd_size = 100,
-  scale_cells = TRUE,
+  center_cells = TRUE,
   center_genes = FALSE,
   expr_lim = FALSE,
   method = "mean",
   na.rm = FALSE,
   z.score = FALSE,
-  eps = NULL
+  eps = NULL,
+  n_comp = 10,
+  gene_ann = NULL,
+  ...
 )
 }
 \arguments{
@@ -33,9 +36,9 @@ CNV_analysis(
 
 \item{wnd_size}{number of adjacent genes considered;}
 
-\item{scale_cells}{whether to scale cells}
+\item{center_cells}{whether to center cells. Default is TRUE}
 
-\item{center_genes}{whether to center genes or not}
+\item{center_genes}{whether to center genes or not. Default is FALSE. When using a reference it is useful to set this to TRUE}
 
 \item{expr_lim}{min and max values of relative expression; by default, lower and higher whiskers returned by grDevices::boxplot.stats will be used. Set to NA or anything other value such that length(expr_lim) != 2 to disable the removal of outliers.}
 
@@ -46,6 +49,12 @@ CNV_analysis(
 \item{z.score}{whether to use z-scores of the cluster median CNV profile, instead of the median itself.}
 
 \item{eps}{absolute threshold to call CNV regions.}
+
+\item{n_comp}{number of PCA components used for clustering}
+
+\item{gene_ann}{optional data.frame with gene annotation with mandatory columns "Chromosome", "symbol" and "pos" (genomic location). If NULL gene locations will be collected from org.Hs.eg.db}
+
+\item{...}{arguments passed to Seurat::FindClusters()}
 }
 \description{
 CNV analysis

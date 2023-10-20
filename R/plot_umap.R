@@ -15,7 +15,9 @@
 #' @param res image resolution
 #' @param text.size text size
 #' @param ... further arguments for Seurat::FeaturePlot or Seurat::DimPlot
-#' @import Seurat graphics ggplot2
+#' @importFrom grDevices png
+#' @importFrom ggplot2 annotate theme element_text
+#' @importFrom Seurat FeaturePlot DimPlot FetchData
 #' @description Generate a UMAP visualization
 #' @export
 #' 
@@ -36,20 +38,20 @@ plot_umap <- function(Seu_obj, file="umap.jpg", labels=NULL, group.by=NULL, feat
 	par(mgp=c(2, 0.7, 0))
 	
 	if(feature_plot){
-		res <- Seurat::FeaturePlot(Seu_obj, features = group.by, ...)
+		res <- FeaturePlot(Seu_obj, features = group.by, ...)
 	}else{
-		res <- Seurat::DimPlot(Seu_obj, group.by=group.by, ...)
+		res <- DimPlot(Seu_obj, group.by=group.by, ...)
 	}
 	
 	if(!is.null(labels)){
 		
-		data_plot <- Seurat::FetchData(Seu_obj, vars = c("UMAP_1", "UMAP_2", group.by))
+		data_plot <- FetchData(Seu_obj, vars = c("UMAP_1", "UMAP_2", group.by))
 		
 		labels <- lapply(labels, function(x) paste0(x, collapse = "\n")) #remove sort
 		cluster_xy <- split(data_plot[, 1:2], data_plot[, 3])
 		cluster_xy <- do.call(rbind, lapply(cluster_xy, colMeans))
 		
-		plot(res + ggplot2::annotate(geom="text", x=cluster_xy[, 1], y=cluster_xy[, 2], label=labels, color=lab_color, size=lab_size, fontface = "bold") + theme(text = element_text(size = text.size), axis.text = element_text(size = text.size)))
+		plot(res + annotate(geom="text", x=cluster_xy[, 1], y=cluster_xy[, 2], label=labels, color=lab_color, size=lab_size, fontface = "bold") + theme(text = element_text(size = text.size), axis.text = element_text(size = text.size)))
 		
 	}else{
 		plot(res)

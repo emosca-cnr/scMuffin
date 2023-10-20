@@ -2,9 +2,7 @@
 #' @param scMuffinList scMuffinList object
 #' @param z.score whether to use clustere median z-scores of CNV profile (TRUE) or cluster median CNV profile (FALSE).
 #' @param eps the value that defines a CNV. If NUll the stard deviation of the dataset is used.
-#' @description Plot an heatmap of the CNV.
-#' @details CNV Profile of every cluster
-#' @import ComplexHeatmap grDevices grid
+#' @description Detect the CNV regions in eaach cluster and chromosome
 #' @export
 
 detect_CNV_regions <- function(scMuffinList = NULL, z.score=FALSE, eps=NULL){
@@ -19,7 +17,7 @@ detect_CNV_regions <- function(scMuffinList = NULL, z.score=FALSE, eps=NULL){
   
   cnv <- cnv[, match(names(cnv_clustering), colnames(cnv))]
   
-  row_chr <- row_chr_vector <- gsub("(chr[^_]+)_.+", "\\1", rownames(cnv))
+  row_chr <- row_chr_vector <- gsub("(chr[^_]+)__.+", "\\1", rownames(cnv))
   row_chr <- factor(row_chr, levels = unique(row_chr))
   row_chr <- split(row_chr, row_chr)
   ngenes_chr <- unlist(lapply(row_chr, length))
@@ -95,7 +93,20 @@ detect_CNV_regions <- function(scMuffinList = NULL, z.score=FALSE, eps=NULL){
           }
         }
         
-        temp <- data.frame(chr=gsub("^(chr[^_]+)__.+$", "\\1", temp$region[temp$pattern==1]), start=temp$region[temp$pattern==1], start.loc=as.numeric(gsub("^.+_(\\d+)__.+$", "\\1", temp$region[temp$pattern==1])), stop=temp$region[temp$pattern==-1], stop.loc=as.numeric(gsub("^.+_(\\d+)$", "\\1", temp$region[temp$pattern==-1])), cluster=colnames(cnv_begin_end[[i]])[j], stringsAsFactors = F)
+        start_info <- setNames(data.frame(do.call(rbind, strsplit(temp$region[temp$pattern==1], "__")), stringsAsFactors = F), c("chr_start", "pos_start", "symbol_start", "chr_end", "pos_end", "symbol_end"))
+        stop_info <- setNames(data.frame(do.call(rbind, strsplit(temp$region[temp$pattern==-1], "__")), stringsAsFactors = F), c("chr_start", "pos_start", "symbol_start", "chr_end", "pos_end", "symbol_end"))
+        
+        temp <- data.frame(chr=gsub("^(chr[^_]+)__.+$", "\\1", temp$region[temp$pattern==1]),
+                           start=temp$region[temp$pattern==1],
+                           start.loc=as.numeric(start_info$pos_start),
+                           stop=temp$region[temp$pattern==-1],
+                           stop.loc=as.numeric(stop_info$pos_end),
+                           cluster=colnames(cnv_begin_end[[i]])[j],
+                           stringsAsFactors = F
+        )
+
+        #temp <- data.frame(chr=gsub("^(chr[^_]+)__.+$", "\\1", temp$region[temp$pattern==1]), start=temp$region[temp$pattern==1], start.loc=as.numeric(gsub("^.+__(\\d+)__.+$", "\\1", temp$region[temp$pattern==1])), stop=temp$region[temp$pattern==-1], stop.loc=as.numeric(gsub("^.+_(\\d+)$", "\\1", temp$region[temp$pattern==-1])), cluster=colnames(cnv_begin_end[[i]])[j], stringsAsFactors = F)
+        
         temp$length <- temp$stop.loc - temp$start.loc
         
         if(length(cnv_regions[[i]])==0){

@@ -4,10 +4,12 @@
 \alias{preprocess_object_for_CNV}
 \title{preprocess_object_for_CNV}
 \usage{
-preprocess_object_for_CNV(genes_by_cells)
+preprocess_object_for_CNV(genes_by_cells = NULL, gene_ann = NULL)
 }
 \arguments{
 \item{genes_by_cells}{genes-by-cells input matrix}
+
+\item{gene_ann}{optional data.frame with gene annotation with mandatory columns "Chromosome", "symbol" and "pos" (genomic location). If NULL gene locations will be collected from org.Hs.eg.db}
 }
 \value{
 list of genomically-ordered chromosomes

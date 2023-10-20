@@ -64,7 +64,7 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
     #ans$score <- ans$case - ans$control
     
     #new version
-    ans <- list(gs=data.frame(case=Matrix::colMeans(gene_set_data, na.rm = na.rm), case.N=nrow(gene_set_data), case.AV=Matrix::colSums(!is.na(gene_set_data)), stringsAsFactors = F)) #real
+    ans <- list(gs=data.frame(case=colMeans(gene_set_data, na.rm = na.rm), case.N=nrow(gene_set_data), case.AV=colSums(!is.na(gene_set_data)), stringsAsFactors = F)) #real
     
     #z-scores....
     #temp <- gene_set_data
@@ -77,7 +77,7 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
     
     #attach to ans the genes-by-cells matrix of controls
     if(null_model){
-      ans <- c(ans, lapply(control_set_data, function(x) data.frame(control=Matrix::colMeans(x, na.rm = na.rm), control.N=nrow(x), control.AV=Matrix::colSums(!is.na(x)), stringsAsFactors = F))) #controls
+      ans <- c(ans, lapply(control_set_data, function(x) data.frame(control=colMeans(x, na.rm = na.rm), control.N=nrow(x), control.AV=colSums(!is.na(x)), stringsAsFactors = F))) #controls
     }
     
     #case and control will have NaN for cells with all NA
