@@ -127,9 +127,13 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 			#barplot(rev((top_features$nes)), horiz = T, names.arg = "", main = "NES")
 			#barplot(rev(-log10(top_features$fdr)), horiz = T, names.arg = "", main = "FDR")
 			
-			plot(top_features$nes, -log10(top_features$fdr), pch=16, xlab="NES", ylab="-log10(q)", cex.axis=cex.axis, cex.lab=cex.axis, cex=cex.axis)
-			thigmophobe.labels(top_features$nes, -log10(top_features$fdr), box_names, cex=cex.axis)
+			par(mar = c(3, 3, .1, .1))
 			
+			plot(top_features$nes, -log10(top_features$fdr), pch="", xlab="NES", ylab="-log10(q)", cex.axis=cex.axis, cex.lab=cex.axis, cex=cex.axis)
+			#thigmophobe.labels(top_features$nes, -log10(top_features$fdr), box_names, cex=cex.axis)
+			text(top_features$nes, -log10(top_features$fdr), box_names, cex=cex.axis)
+			
+			par(mar = c(3, 1, .1, .1))
 			plot.new()
 			legend(x = "center", legend=paste(box_names, ":", colnames(cbf_cl)), cex = cex.axis, bty = "n", title = "LEGEND")
 			

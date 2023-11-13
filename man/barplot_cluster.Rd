@@ -16,7 +16,8 @@ barplot_cluster(
   width = 180,
   height = 180,
   units = "mm",
-  res = 300
+  res = 300,
+  legend.pos = "right"
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ barplot_cluster(
 \item{units}{image units}
 
 \item{res}{image resolution}
+
+\item{legend.pos}{position of barplot legend}
 }
 \description{
 Produce barplots (1 for each cluster) of distribution of cells associated with the values of the selected feature. A png figure for each cluster is saved in dir_out.
