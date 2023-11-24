@@ -6,16 +6,17 @@
 #' @param min.cells.cluster minimum number of cells of a cluster
 #' @param mc.cores number of cores
 #' @param csea.k number of CSEA permutations
+#' @param min.k minimum number of valid permutations to support empirical nulls
 #' @description Assess cluster enrichment using ORA for categorical features and CSEA for numeric features.
 #' @details
-#' The output of CSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
+#' The output of CSEA is a table with statistics for every tested gene set. 
 #' The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from CSEA and ORA results.
 #'
 #' @return scMuffinList with CSEA or ORA elements under scMuffinList$cluster_data for the considered partition
 #' @importFrom stats setNames
 #' @export
 
-assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99){
+assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99, min.k=10){
   
   if(length(scMuffinList[[feature_name]]$summary) == 0){
     stop("Can't find scMuffinList[[feature_name]]$summary\n")
@@ -55,7 +56,7 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
     
     cat("CSEA for ", ncol(X), "features\n")
     
-    ans$cluster_csea_res <- cluster_csea(X, cell_clusters = X_clusters, min.cells.feature=min.cells.feature, min.cells.cluster=min.cells.cluster, mc.cores=mc.cores, csea.k=csea.k)
+    ans$cluster_csea_res <- cluster_csea(X, cell_clusters = X_clusters, min.cells.feature=min.cells.feature, min.cells.cluster=min.cells.cluster, mc.cores=mc.cores, csea.k=csea.k, min.k=min.k)
     
     if(length(scMuffinList$cluster_data[partition_id])==0){ # nor ORA neither CSEA
       
@@ -69,15 +70,24 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
         
       }
       
+      #shared_names <- which(names(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table) %in% names(ans$cluster_csea_res$gs_table))
       
-      shared_names <- which(names(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table) %in% names(ans$cluster_csea_res$gs_table))
+      # if(length(shared_names)>0){
+      #   scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table[shared_names] <- NULL
+      #   scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge[shared_names] <- NULL
+      # }
+      # 
+      # scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table <- c(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table, ans$cluster_csea_res$gs_table)
+      # scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge <- c(scMuffinList$cluster_data_full[[partition_id]]$CSEA$leading_edge, ans$cluster_csea_res$leading_edge) ##append 
+      
+      shared_names <- which(names(scMuffinList$cluster_data[[partition_id]]$CSEA) %in% names(ans$cluster_csea_res))
+      
       if(length(shared_names)>0){
-        scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table[shared_names] <- NULL
-        scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge[shared_names] <- NULL
+        scMuffinList$cluster_data[[partition_id]]$CSEA[shared_names] <- NULL
       }
-      
-      scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table <- c(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table, ans$cluster_csea_res$gs_table)
-      scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge <- c(scMuffinList$cluster_data_full[[partition_id]]$CSEA$leading_edge, ans$cluster_csea_res$leading_edge) ##append 
+
+      scMuffinList$cluster_data[[partition_id]]$CSEA <- c(scMuffinList$cluster_data[[partition_id]]$CSEA, ans$cluster_csea_res)
+
     }
     
   }

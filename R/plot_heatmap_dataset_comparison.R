@@ -7,12 +7,13 @@
 #' @param res image res
 #' @param outfile File name to save the figure as png file
 #' @param show.gs.source whether to show or not gene set source
+#' @param na_col color for NA values
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap pals
 #' @importFrom circlize colorRamp2
 
-plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score", show.gs.source=FALSE, outfile=NULL, width=200, height=200, units="mm", res=300, ...){
+plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score", show.gs.source=FALSE, outfile=NULL, width=200, height=200, units="mm", res=300, na_col="black", ...){
   
   type <- match.arg(type, c("score", "significance"))
   if(!is.null(outfile)){
@@ -31,11 +32,11 @@ plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score",
   M <- as.matrix(M)
   X <- adj_outliers_col(as.numeric(M))
   
-  if(any(X<0)){
-    X_extreme <- max(abs(min(X)), max(X))
+  if(any(X<0, na.rm = T)){
+    X_extreme <- max(abs(min(X, na.rm = T)), max(X, na.rm = T), na.rm = T)
     X_extreme <- c(-X_extreme, X_extreme)
   }else{
-    X_extreme <- max(X)
+    X_extreme <- max(X, na.rm = T)
     X_extreme <- c(0, X_extreme)
   }
   
@@ -49,7 +50,7 @@ plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score",
     ca <- columnAnnotation(markers=ca, col=list(markers=setNames(brewer.pastel1(length(levels(ca)))[as.numeric(ca)], ca)))
   }
   
-  hm <- Heatmap(as.matrix(M), col=col_fun, right_annotation = ra, top_annotation = ca, name = name, ...)
+  hm <- Heatmap(as.matrix(M), col=col_fun, right_annotation = ra, top_annotation = ca, name = name, na_col=na_col, ...)
   draw(hm)
   
   if(!is.null(outfile)){

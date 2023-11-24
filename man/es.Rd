@@ -4,18 +4,16 @@
 \alias{es}
 \title{Enrichment Score}
 \usage{
-es(idx, x, le = F)
+es(idx = NULL, x = NULL)
 }
 \arguments{
 \item{idx}{vector of indices a subset of elements of x}
 
 \item{x}{named vector, ranked list}
-
-\item{le}{leading edge information}
 }
 \value{
-enrichment score
+data.frame with as, enrichmet score; tags, leading edge size; tags_perc, leading edge size percent over gene set; list_top, rank of the ES; list_top_perc, rank of the ES percent over full ranked list; lead_edge, gene names of the leading edge.
 }
 \description{
-Enrichment score
+Enrichment Score
 }

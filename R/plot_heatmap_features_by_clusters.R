@@ -11,25 +11,28 @@
 #' @param partition_id identifier of the partition to be considered
 #' @param scale whether to scale the features
 #' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
+#' @param na_col color for NA values
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap grDevices pals
 #' @importFrom circlize colorRamp2
 
-plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, ...){
+plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, na_col="black", ...){
   
   
   if(!is.null(significance_matrix)){
     cell_fun_asterisk <- function(j, i, x, y, w, h, fill) {
-      if(sig_mat[i, j] < sig_threshold) {
-        grid.text("*", x, y)
+      if(!is.na(sig_mat[i, j])){
+        if(sig_mat[i, j] < sig_threshold) {
+          grid.text("*", x, y)
+        }
       }
     }
   }else{
     cell_fun_asterisk <- NULL
   }
   
-   
+  
   if(is.matrix(feature_source)){
     X <- t(feature_source)
   }else{
@@ -51,7 +54,7 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
       }
     }
   }
-
+  
   #Detect and remove null features
   null_rows <- which(rowSums(abs(X), na.rm = T)==0)
   if(length(null_rows) > 0){
@@ -90,21 +93,21 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
     }
     
     if(!is.null(file)){
-        png(file, width=width, height=height, units=units, res=res)
+      png(file, width=width, height=height, units=units, res=res)
     }
     
     if(scale){
       X <- t(scale(t(X)))
     }
     
-    h_tot_go <- Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, ...)
+    h_tot_go <- Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, na_col=na_col, ...)
     draw(h_tot_go, heatmap_legend_side = "left")
     
     if(!is.null(file)){
       dev.off()
     }
     
-
+    
   }else{
     message("Are all rows empty?\n")
   }

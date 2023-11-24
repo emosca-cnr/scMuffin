@@ -11,7 +11,7 @@ cluster_csea(
   min.cells.cluster = 10,
   mc.cores = 1,
   csea.k = 99,
-  min.k.nes = 10
+  min.k = 10
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ cluster_csea(
 
 \item{csea.k}{number of permutations}
 
-\item{min.k.nes}{minimum number of not null NES values}
+\item{min.k}{minimum number of valid permutations to support empirical nulls}
 }
 \value{
 list with two elements: gs_table and leading_edge. See [csea()]

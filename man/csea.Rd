@@ -5,12 +5,12 @@
 \title{Gene Set Enrichment Analysis}
 \usage{
 csea(
-  rl,
-  gsl,
+  rl = NULL,
+  gsl = NULL,
   k = 100,
   min.size = 100,
   ord.mode = -1,
-  min.k.nes = 10,
+  min.k = 10,
   mc_cores_path = 1,
   mc_cores_perm = 1
 )
@@ -26,7 +26,7 @@ csea(
 
 \item{ord.mode}{ordering mode: -1 -> descending; 1 ascending; must be of length equal to `ncol(rl)`}
 
-\item{min.k.nes}{minimum number of not null NES values}
+\item{min.k}{minimum number of valid permutations to support empirical nulls}
 
 \item{mc_cores_path}{number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path * mc_cores_perm}
 

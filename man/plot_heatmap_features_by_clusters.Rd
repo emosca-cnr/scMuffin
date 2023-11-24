@@ -17,6 +17,7 @@ plot_heatmap_features_by_clusters(
   res = 300,
   scale = TRUE,
   pal = NULL,
+  na_col = "black",
   ...
 )
 }
@@ -44,6 +45,8 @@ plot_heatmap_features_by_clusters(
 \item{scale}{whether to scale the features}
 
 \item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
+
+\item{na_col}{color for NA values}
 
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
 }

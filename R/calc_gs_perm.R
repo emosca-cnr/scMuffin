@@ -4,14 +4,12 @@
 #' @param gs gene set
 #' @description Calculate permutations
 
-calc_gs_perm <- function(rll, perm, gs){
-
-  #out <- unlist(lapply(rll, function(x) es(which(perm %in% gs), array(x, dimnames=list(perm)))))
+calc_gs_perm <- function(rll=NULL, perm=NULL, gs=NULL){
 
   out <- setNames(numeric(length(rll)), names(rll))
   
   for(i in 1:length(rll)){
-    out[i] <- es(which(perm[[i]] %in% gs), array(rll[[i]], dimnames=list(perm[[i]])))
+    out[i] <- es(which(perm[[i]] %in% gs), array(rll[[i]], dimnames=list(perm[[i]])))[, 1]
   }
   
   return(out)

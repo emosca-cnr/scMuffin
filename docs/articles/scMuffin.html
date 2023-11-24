@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,30 +144,37 @@ sample PJ016:</li>
 <span><span class="va">gbc_counts</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V1"</span>, <span class="st">"V2"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">gbc_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/keep_strongest_representative.html">keep_strongest_representative</a></span><span class="op">(</span>genes_by_cells <span class="op">=</span> <span class="va">gbc_counts</span>, <span class="va">sym</span><span class="op">)</span></span>
 <span>    </span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>count<span class="op">=</span><span class="va">gbc_counts</span>, project<span class="op">=</span><span class="st">"PJ016"</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">gbc_counts</span>, project <span class="op">=</span> <span class="st">"PJ016"</span>,</span>
+<span>                                min.cells <span class="op">=</span> <span class="fl">100</span>, min.features <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span><span class="op">[[</span><span class="st">"pMito"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html" class="external-link">PercentageFeatureSet</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, pattern <span class="op">=</span> <span class="st">"^MT-"</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">seu_obj_1</span>,  subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span> <span class="op">&amp;</span></span>
+<span>                       <span class="va">nFeature_RNA</span> <span class="op">&lt;</span> <span class="fl">8000</span> <span class="op">&amp;</span> <span class="va">nCount_RNA</span> <span class="op">&lt;</span> <span class="fl">30000</span> <span class="op">&amp;</span> <span class="va">pMito</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, npcs <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindVariableFeatures.html" class="external-link">FindVariableFeatures</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, selection.method <span class="op">=</span> <span class="st">"vst"</span>,</span>
+<span>                                  nfeatures <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunPCA.html" class="external-link">RunPCA</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, npcs <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                    features <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/VariableFeatures.html" class="external-link">VariableFeatures</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html" class="external-link">FindNeighbors</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html" class="external-link">FindClusters</a></span><span class="op">(</span><span class="va">seu_obj_1</span><span class="op">)</span></span>
-<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html" class="external-link">RunUMAP</a></span><span class="op">(</span><span class="va">seu_obj_1</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">seu_obj_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">CellCycleScoring</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seu_obj_1</span>,</span>
-<span>                              g2m.features <span class="op">=</span> <span class="va">cc.genes</span><span class="op">$</span><span class="va">g2m.genes</span>,</span>
-<span>                              s.features <span class="op">=</span> <span class="va">cc.genes</span><span class="op">$</span><span class="va">s.genes</span><span class="op">)</span></span></code></pre></div>
+<span>                              g2m.features <span class="op">=</span> <span class="va">cc.genes.updated.2019</span><span class="op">$</span><span class="va">g2m.genes</span>,</span>
+<span>                              s.features <span class="op">=</span> <span class="va">cc.genes.updated.2019</span><span class="op">$</span><span class="va">s.genes</span><span class="op">)</span></span></code></pre></div>
 <p>The genes-by-cells count matrix available at NCBI GEO is provided
 with Ensembl identifiers and gene symbols, which are not unique. So,
 after having read the table, we used the function
 <code>keep_strongest_representative</code>, which defines a
 genes-by-cells matrix with symbols as row names. In case of multiple
 Ensembl ids mapped to the same symbol, the row with the highest average
-count is kept as representative of the gene. In a real scenario, the
-functions listed above should be run using appropriate parameters that
-take into account the specificities of the dataset under consideration
-and the objectives of the analysis the user to perform. Here we just
-wanted to provide a means to obtain a dataset to follow this vignette.
-Please read the Seurat documentation for further details about the
-functions listed above.</p>
+count is kept as representative of the gene.</p>
+<p>In a real scenario, <strong>the functions listed above should be run
+using appropriate parameter values</strong> that take into account the
+specificities of the dataset under consideration and the objectives of
+the analysis to perform. Here we just wanted to provide a means to
+obtain a dataset to follow this vignette. Please read the Seurat
+documentation for further details about the functions listed above.</p>
 </div>
 <div class="section level2">
 <h2 id="the-scmuffinlist-data-structure">The scMuffinList data structure<a class="anchor" aria-label="anchor" href="#the-scmuffinlist-data-structure"></a>
@@ -191,12 +198,12 @@ clusters:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">partitions</span><span class="op">[</span>, <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">F</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    global_expr</span></span>
-<span><span class="co">## V3           0</span></span>
-<span><span class="co">## V4           0</span></span>
-<span><span class="co">## V5           7</span></span>
-<span><span class="co">## V6           0</span></span>
-<span><span class="co">## V7           7</span></span>
-<span><span class="co">## V8           7</span></span></code></pre>
+<span><span class="co">## V3           2</span></span>
+<span><span class="co">## V4           2</span></span>
+<span><span class="co">## V5           6</span></span>
+<span><span class="co">## V6           2</span></span>
+<span><span class="co">## V7           6</span></span>
+<span><span class="co">## V8           6</span></span></code></pre>
 <p>The function <code><a href="../reference/add_features.html">add_features()</a></code> can be used to add custom
 results to the <code>scMuffinList</code>. In the following example we
 add the cell cycle phase:</p>
@@ -288,27 +295,41 @@ contains a series of additional details for every gene set:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">Angiogenesis</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    Angiogenesis   Apoptosis  Cell_Cycle Differentiation DNA_damage</span></span>
-<span><span class="co">## V3 -0.089113218 -0.02736876  0.15982556       0.2216575 0.14051428</span></span>
-<span><span class="co">## V4 -0.003587037  0.05131560  0.30245301       0.2518166 0.29326775</span></span>
-<span><span class="co">## V5  0.122828520 -0.02124108 -0.01387160       0.1500232 0.16742211</span></span>
-<span><span class="co">## V6 -0.072394618 -0.01090225  0.38740856       0.2247531 0.19227076</span></span>
-<span><span class="co">## V7  0.114843858  0.18815302 -0.11715432       0.1688834 0.03979306</span></span>
-<span><span class="co">## V8  0.180094845  0.24514734 -0.07518025       0.1015920 0.11925093</span></span></code></pre>
+<pre><code><span><span class="co">##    Angiogenesis    Apoptosis  Cell_Cycle Differentiation DNA_damage</span></span>
+<span><span class="co">## V3  -0.10918589 -0.027672315  0.14448128       0.2177449 0.10625520</span></span>
+<span><span class="co">## V4  -0.02872848  0.065879018  0.28261124       0.2546351 0.28273733</span></span>
+<span><span class="co">## V5   0.08863655 -0.003487231 -0.04785548       0.1568680 0.14740373</span></span>
+<span><span class="co">## V6  -0.10802785 -0.010414814  0.36535484       0.2201350 0.16137969</span></span>
+<span><span class="co">## V7   0.09552221  0.214845193 -0.13056901       0.1659778 0.01677083</span></span>
+<span><span class="co">## V8   0.14137853  0.267301590 -0.10286473       0.1054560 0.09103363</span></span>
+<span><span class="co">##      DNA_repair        EMT     Hypoxia Inflammation  Invasion Metastasis</span></span>
+<span><span class="co">## V3  0.148348585 0.05265334  0.09262748  0.009633798 0.3169777  0.2093022</span></span>
+<span><span class="co">## V4  0.181192508 0.13265908  0.12957070  0.050349840 0.5034789  0.2555932</span></span>
+<span><span class="co">## V5 -0.011344590 0.22409580  0.41523704  0.111271235 0.2040137  0.3528524</span></span>
+<span><span class="co">## V6  0.163828298 0.26049885 -0.03046142  0.005814202 0.5683223  0.1564824</span></span>
+<span><span class="co">## V7 -0.071774957 0.35638003  0.39819922  0.004184621 0.3586581  0.3512004</span></span>
+<span><span class="co">## V8  0.001900824 0.23221609  0.32485036 -0.015495107 0.2552769  0.4519555</span></span>
+<span><span class="co">##    Proliferation  Quiescence  Stemness</span></span>
+<span><span class="co">## V3    0.19624494 -0.10718702 0.4275265</span></span>
+<span><span class="co">## V4    0.31782667  0.14023972 0.6338283</span></span>
+<span><span class="co">## V5    0.13657056  0.00557050 0.2942666</span></span>
+<span><span class="co">## V6    0.16174960  0.06201775 0.5979552</span></span>
+<span><span class="co">## V7    0.17320576  0.03903302 0.2387523</span></span>
+<span><span class="co">## V8   -0.03581073  0.07383093 0.2218311</span></span></code></pre>
 <pre><code><span><span class="co">##         case case.N case.AV nmark_min avg_control control.AV null_ok</span></span>
-<span><span class="co">## V3 0.6209460     40      21      TRUE   0.7100592        100    TRUE</span></span>
-<span><span class="co">## V4 0.7282336     40      20      TRUE   0.7318207        100    TRUE</span></span>
-<span><span class="co">## V5 0.8418314     40      23      TRUE   0.7190029        100    TRUE</span></span>
-<span><span class="co">## V6 0.6632416     40      16      TRUE   0.7356362        100    TRUE</span></span>
-<span><span class="co">## V7 0.8363020     40      23      TRUE   0.7214581        100    TRUE</span></span>
-<span><span class="co">## V8 0.8964932     40      19      TRUE   0.7163984        100    TRUE</span></span>
-<span><span class="co">##    avg_delta_score  delta_score</span></span>
-<span><span class="co">## V3    -0.089113218 -0.089113218</span></span>
-<span><span class="co">## V4    -0.003587037 -0.003587037</span></span>
-<span><span class="co">## V5     0.122828520  0.122828520</span></span>
-<span><span class="co">## V6    -0.072394618 -0.072394618</span></span>
-<span><span class="co">## V7     0.114843858  0.114843858</span></span>
-<span><span class="co">## V8     0.180094845  0.180094845</span></span></code></pre>
+<span><span class="co">## V3 0.6209460     40      21      TRUE   0.7301319        100    TRUE</span></span>
+<span><span class="co">## V4 0.7282336     40      20      TRUE   0.7569621        100    TRUE</span></span>
+<span><span class="co">## V5 0.8418314     40      23      TRUE   0.7531949        100    TRUE</span></span>
+<span><span class="co">## V6 0.6632416     40      16      TRUE   0.7712694        100    TRUE</span></span>
+<span><span class="co">## V7 0.8363020     40      23      TRUE   0.7407798        100    TRUE</span></span>
+<span><span class="co">## V8 0.8964932     40      19      TRUE   0.7551147        100    TRUE</span></span>
+<span><span class="co">##    avg_delta_score delta_score</span></span>
+<span><span class="co">## V3     -0.10918589 -0.10918589</span></span>
+<span><span class="co">## V4     -0.02872848 -0.02872848</span></span>
+<span><span class="co">## V5      0.08863655  0.08863655</span></span>
+<span><span class="co">## V6     -0.10802785 -0.10802785</span></span>
+<span><span class="co">## V7      0.09552221  0.09552221</span></span>
+<span><span class="co">## V8      0.14137853  0.14137853</span></span></code></pre>
 <p>The values of cell-level scores can be used to color UMAP
 visualizations, which are automatically generated for every gene set
 using:</p>
@@ -329,39 +350,36 @@ id:</p>
 <span>                                        partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">gene_set_scoring</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
-<pre><code><span><span class="co">##   Angiogenesis    Apoptosis   Cell_Cycle Differentiation DNA_damage</span></span>
-<span><span class="co">## 0  0.047859938 -0.088965155  0.110267077      0.16918450 0.16103980</span></span>
-<span><span class="co">## 1  0.056847826  0.036663900  0.006437504      0.16233049 0.18251283</span></span>
-<span><span class="co">## 2  0.032503390 -0.034567178 -0.065434867      0.08517490 0.14345603</span></span>
-<span><span class="co">## 3  0.056820484 -0.007732416 -0.043253422      0.09640405 0.07634114</span></span>
-<span><span class="co">## 4  0.035065898 -0.020565102 -0.069010461      0.09766083 0.13605394</span></span>
-<span><span class="co">## 5  0.057012002 -0.007916085 -0.027483616      0.12878842 0.15750102</span></span>
-<span><span class="co">## 6  0.009464465 -0.048782422  0.011650033      0.14793156 0.23773401</span></span>
-<span><span class="co">## 7  0.180890552 -0.004328227 -0.026837614      0.18052135 0.14210041</span></span>
-<span><span class="co">## 8  0.144201389 -0.018635396  0.021841089      0.16421038 0.21497220</span></span>
-<span><span class="co">## 9  0.045549704 -0.068738127  0.295309989      0.25482631 0.17238070</span></span>
-<span><span class="co">##     DNA_repair       EMT      Hypoxia Inflammation  Invasion Metastasis</span></span>
-<span><span class="co">## 0  0.098945306 0.1429307 -0.002983632  0.008729023 0.4472744  0.1144382</span></span>
-<span><span class="co">## 1  0.009465724 0.2523039  0.333431166  0.152182984 0.2503599  0.3066740</span></span>
-<span><span class="co">## 2 -0.025654591 0.1912701  0.210172770  0.038350228 0.1130673  0.2673377</span></span>
-<span><span class="co">## 3 -0.011475854 0.2303885  0.167091886  0.005294070 0.1752660  0.2788620</span></span>
-<span><span class="co">## 4  0.030970644 0.2275091  0.304570531  0.110102310 0.1778773  0.2702203</span></span>
-<span><span class="co">## 5 -0.009794570 0.2157880  0.271551139  0.066140185 0.2598153  0.2959017</span></span>
-<span><span class="co">## 6  0.055899011 0.1773771 -0.037244689  0.032686215 0.2602460  0.0970928</span></span>
-<span><span class="co">## 7 -0.027613833 0.3274798  0.295935075  0.110663000 0.2846644  0.3815454</span></span>
-<span><span class="co">## 8  0.016203928 0.1376003 -0.046727520 -0.001804147 0.2446869  0.1113544</span></span>
-<span><span class="co">## 9  0.107220520 0.1154087  0.023735537  0.041855789 0.5635380  0.1552216</span></span>
-<span><span class="co">##   Proliferation   Quiescence  Stemness</span></span>
-<span><span class="co">## 0    0.17611146 -0.009397549 0.3951332</span></span>
-<span><span class="co">## 1    0.01102549  0.068921466 0.2960947</span></span>
-<span><span class="co">## 2   -0.05060590 -0.018336789 0.2438539</span></span>
-<span><span class="co">## 3    0.01032691 -0.037541588 0.2649289</span></span>
-<span><span class="co">## 4    0.12775340  0.153623982 0.3388603</span></span>
-<span><span class="co">## 5    0.03528640 -0.031068515 0.2487021</span></span>
-<span><span class="co">## 6    0.03657727 -0.077159027 0.3848135</span></span>
-<span><span class="co">## 7   -0.03310542  0.051625491 0.2351137</span></span>
-<span><span class="co">## 8    0.06128233  0.041054982 0.4134585</span></span>
-<span><span class="co">## 9    0.37196567 -0.025262162 0.4170985</span></span></code></pre>
+<pre><code><span><span class="co">##   Angiogenesis    Apoptosis  Cell_Cycle Differentiation DNA_damage   DNA_repair</span></span>
+<span><span class="co">## 0  0.005206236  0.019249002 -0.06447346      0.10079093 0.08386659 -0.015634375</span></span>
+<span><span class="co">## 1  0.022524297  0.052477813 -0.02173267      0.16058731 0.15353017 -0.016262480</span></span>
+<span><span class="co">## 2  0.016285304 -0.077046033  0.09287226      0.16931117 0.14490958  0.104084184</span></span>
+<span><span class="co">## 3 -0.011020301 -0.004544935 -0.06073645      0.09458853 0.11932908 -0.001509004</span></span>
+<span><span class="co">## 4  0.022337656  0.021403192 -0.04759109      0.14014722 0.12942893 -0.024110561</span></span>
+<span><span class="co">## 5 -0.031611017 -0.042869916  0.02839297      0.15244780 0.22201017  0.067711722</span></span>
+<span><span class="co">## 6  0.132965431  0.028446423 -0.05078115      0.17077833 0.11716633 -0.035208636</span></span>
+<span><span class="co">## 7  0.083809559 -0.027496365  0.01100746      0.15875134 0.20662126  0.027456269</span></span>
+<span><span class="co">## 8  0.009743315 -0.072038549  0.28456623      0.24816174 0.16453499  0.118506158</span></span>
+<span><span class="co">##         EMT      Hypoxia Inflammation   Invasion Metastasis Proliferation</span></span>
+<span><span class="co">## 0 0.1958425  0.152775367  0.007683201 0.02659866 0.24715672    0.01822001</span></span>
+<span><span class="co">## 1 0.2445520  0.300890417  0.129862284 0.15558955 0.31501115    0.02251154</span></span>
+<span><span class="co">## 2 0.1556018 -0.011922956 -0.003003220 0.38545997 0.10925866    0.16892359</span></span>
+<span><span class="co">## 3 0.2323454  0.267548254  0.086860333 0.09265066 0.24611511    0.12064441</span></span>
+<span><span class="co">## 4 0.2101481  0.262389267  0.056573420 0.17563272 0.29081642    0.03197286</span></span>
+<span><span class="co">## 5 0.1895798 -0.046625305  0.028563842 0.20228425 0.06788279    0.03974853</span></span>
+<span><span class="co">## 6 0.3314966  0.287708428  0.080396645 0.20701318 0.37491821   -0.02531225</span></span>
+<span><span class="co">## 7 0.1290949 -0.044477324 -0.003007760 0.19486268 0.10988028    0.05104020</span></span>
+<span><span class="co">## 8 0.1226556  0.004651646  0.035257815 0.49988275 0.14005943    0.39134694</span></span>
+<span><span class="co">##     Quiescence  Stemness</span></span>
+<span><span class="co">## 0 -0.014092199 0.2370518</span></span>
+<span><span class="co">## 1  0.086151276 0.2942516</span></span>
+<span><span class="co">## 2  0.029009746 0.3854771</span></span>
+<span><span class="co">## 3  0.148241530 0.3829096</span></span>
+<span><span class="co">## 4 -0.003897101 0.2378097</span></span>
+<span><span class="co">## 5 -0.054270405 0.3662737</span></span>
+<span><span class="co">## 6  0.073751645 0.2388921</span></span>
+<span><span class="co">## 7  0.040777466 0.4215733</span></span>
+<span><span class="co">## 8  0.006650415 0.4348696</span></span></code></pre>
 <p>These mean values are useful to obtain a concise visualization of
 gene set expression throughout the dataset, using the function
 <code>plot_heatmap_features_by_clusters</code>:</p>
@@ -369,7 +387,7 @@ gene set expression throughout the dataset, using the function
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, </span>
 <span>                                  feature_source <span class="op">=</span> <span class="st">"gss"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="images/gene_set_scores_clusters.png" width="600" alt=""><p class="caption">caption</p>
+<img src="images/heatmap_features_by_clusters.png" width="600" alt=""><p class="caption">caption</p>
 </div>
 </div>
 </div>
@@ -403,72 +421,174 @@ list the CNV regions detected in each chromosome and cell cluster:</li>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">regions2genes</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">CNV</span><span class="op">$</span><span class="va">full</span><span class="op">$</span><span class="va">detected_cnv_regions</span><span class="op">$</span><span class="va">chr1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    CNV_score</span></span>
-<span><span class="co">## V3  42.63922</span></span>
-<span><span class="co">## V4  49.41188</span></span>
-<span><span class="co">## V5  40.24116</span></span>
-<span><span class="co">## V6  45.47030</span></span>
-<span><span class="co">## V7  37.84952</span></span>
-<span><span class="co">## V8  45.86847</span></span></code></pre>
-<pre><code><span><span class="co">##                                                    V3         V4          V5</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.09649985 -0.1330433 -0.08760797</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.09649985 -0.1330433 -0.08760797</span></span>
-<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.09978001 -0.1363396 -0.08760797</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.09978001 -0.1286003 -0.08760797</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.10306018 -0.1228353 -0.08760797</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.10306018 -0.1203667 -0.08760797</span></span>
-<span><span class="co">##                                                    V6          V7         V8</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.07987470 -0.09295970 -0.1308550</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.07987470 -0.08965322 -0.1308550</span></span>
-<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.07987470 -0.08965322 -0.1250560</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.07657357 -0.08965322 -0.1217379</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08234611 -0.09295970 -0.1184198</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07904497 -0.09295970 -0.1151017</span></span>
-<span><span class="co">##                                                   V9        V10        V11</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.1360846 -0.1135812 0.03934666</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.1394048 -0.1135812 0.04272745</span></span>
-<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.1360846 -0.1102118 0.04862384</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.1360846 -0.1135812 0.05452022</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.1360846 -0.1135812 0.05703581</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.1360846 -0.1102118 0.06041660</span></span>
-<span><span class="co">##                                                   V12</span></span>
-<span><span class="co">## chr1__LINC00115_826205__UQCRHL_15807161   -0.08363167</span></span>
-<span><span class="co">## chr1__LINC01128_827797__FLJ37453_15834214 -0.08363167</span></span>
-<span><span class="co">## chr1__SAMD11_925730__SPEN_15847706        -0.08363167</span></span>
-<span><span class="co">## chr1__NOC2L_944202__ZBTB17_15941868       -0.08020467</span></span>
-<span><span class="co">## chr1__HES4_998963__FBXO42_16246839        -0.08020467</span></span>
-<span><span class="co">## chr1__ISG15_1013496__SZRD1_16367241       -0.07423670</span></span></code></pre>
-<pre><code><span><span class="co">## $chr1__LINC00115_826205__UQCRHL_15807161</span></span>
-<span><span class="co">##       symbol location</span></span>
-<span><span class="co">## 11 LINC00115   826205</span></span>
-<span><span class="co">## 12 LINC01128   827797</span></span>
-<span><span class="co">## 13    SAMD11   925730</span></span>
-<span><span class="co">## 14     NOC2L   944202</span></span>
-<span><span class="co">## 15      HES4   998963</span></span>
-<span><span class="co">## 16     ISG15  1013496</span></span></code></pre>
-<pre><code><span><span class="co">##     chr                                    start start.loc</span></span>
-<span><span class="co">## 1  chr1  chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
-<span><span class="co">## 4  chr1   chr1__HIPK1_113953876__CHTOP_153633981 113953876</span></span>
-<span><span class="co">## 9  chr1   chr1__BLZF1_169367878__CHIT1_203216078 169367878</span></span>
-<span><span class="co">## 10 chr1  chr1__LINC00115_826205__UQCRHL_15807161    826205</span></span>
-<span><span class="co">## 11 chr1  chr1__LRIG2_113073197__S100A6_153534598 113073197</span></span>
-<span><span class="co">## 12 chr1 chr1__ALDH9A1_165662215__LMOD1_201896455 165662215</span></span>
-<span><span class="co">##                                         stop  stop.loc cluster   length</span></span>
-<span><span class="co">## 1      chr1__TMEM201_9588910__STMN1_25900115  25900115       0 25073910</span></span>
-<span><span class="co">## 4  chr1__RAB13_153981604__C1orf226_162378840 162378840       0 48424964</span></span>
-<span><span class="co">## 9    chr1__SLC19A2_169463910__BTG2_203305518 203305518       0 33937640</span></span>
-<span><span class="co">## 10      chr1__ZBTB48_6579993__RPL11_23691778  23691778       1 22865573</span></span>
-<span><span class="co">## 11      chr1__TPM3_154161812__UAP1_162561439 162561439       1 49488242</span></span>
-<span><span class="co">## 12 chr1__METTL18_169792531__ATP2B4_203626831 203626831       1 37964616</span></span></code></pre>
+<span><span class="co">## V3  42.61237</span></span>
+<span><span class="co">## V4  49.29867</span></span>
+<span><span class="co">## V5  40.00239</span></span>
+<span><span class="co">## V6  45.42658</span></span>
+<span><span class="co">## V7  37.62340</span></span>
+<span><span class="co">## V8  45.69161</span></span></code></pre>
+<pre><code><span><span class="co">##                                                            V3         V4</span></span>
+<span><span class="co">## chr1__826205__LINC00115__chr1__15807161__UQCRHL   -0.09701447 -0.1335597</span></span>
+<span><span class="co">## chr1__827590__LINC01128__chr1__15834214__FLJ37453 -0.09701447 -0.1335597</span></span>
+<span><span class="co">## chr1__923922__SAMD11__chr1__15847706__SPEN        -0.10029463 -0.1368559</span></span>
+<span><span class="co">## chr1__944202__NOC2L__chr1__15941868__ZBTB17       -0.10029463 -0.1291166</span></span>
+<span><span class="co">## chr1__998963__HES4__chr1__16246839__FBXO42        -0.10357480 -0.1233517</span></span>
+<span><span class="co">## chr1__1013496__ISG15__chr1__16367241__SZRD1       -0.10357480 -0.1208830</span></span>
+<span><span class="co">##                                                            V5          V6</span></span>
+<span><span class="co">## chr1__826205__LINC00115__chr1__15807161__UQCRHL   -0.08801707 -0.08020141</span></span>
+<span><span class="co">## chr1__827590__LINC01128__chr1__15834214__FLJ37453 -0.08801707 -0.08020141</span></span>
+<span><span class="co">## chr1__923922__SAMD11__chr1__15847706__SPEN        -0.08801707 -0.08020141</span></span>
+<span><span class="co">## chr1__944202__NOC2L__chr1__15941868__ZBTB17       -0.08801707 -0.07690028</span></span>
+<span><span class="co">## chr1__998963__HES4__chr1__16246839__FBXO42        -0.08801707 -0.08267282</span></span>
+<span><span class="co">## chr1__1013496__ISG15__chr1__16367241__SZRD1       -0.08801707 -0.07937168</span></span>
+<span><span class="co">##                                                            V7         V8</span></span>
+<span><span class="co">## chr1__826205__LINC00115__chr1__15807161__UQCRHL   -0.09343743 -0.1312566</span></span>
+<span><span class="co">## chr1__827590__LINC01128__chr1__15834214__FLJ37453 -0.09013095 -0.1312566</span></span>
+<span><span class="co">## chr1__923922__SAMD11__chr1__15847706__SPEN        -0.09013095 -0.1254576</span></span>
+<span><span class="co">## chr1__944202__NOC2L__chr1__15941868__ZBTB17       -0.09013095 -0.1221395</span></span>
+<span><span class="co">## chr1__998963__HES4__chr1__16246839__FBXO42        -0.09343743 -0.1188214</span></span>
+<span><span class="co">## chr1__1013496__ISG15__chr1__16367241__SZRD1       -0.09343743 -0.1155033</span></span>
+<span><span class="co">##                                                           V9        V10</span></span>
+<span><span class="co">## chr1__826205__LINC00115__chr1__15807161__UQCRHL   -0.1363821 -0.1140620</span></span>
+<span><span class="co">## chr1__827590__LINC01128__chr1__15834214__FLJ37453 -0.1397023 -0.1140620</span></span>
+<span><span class="co">## chr1__923922__SAMD11__chr1__15847706__SPEN        -0.1363821 -0.1106926</span></span>
+<span><span class="co">## chr1__944202__NOC2L__chr1__15941868__ZBTB17       -0.1363821 -0.1140620</span></span>
+<span><span class="co">## chr1__998963__HES4__chr1__16246839__FBXO42        -0.1363821 -0.1140620</span></span>
+<span><span class="co">## chr1__1013496__ISG15__chr1__16367241__SZRD1       -0.1363821 -0.1106926</span></span>
+<span><span class="co">##                                                          V11         V12</span></span>
+<span><span class="co">## chr1__826205__LINC00115__chr1__15807161__UQCRHL   0.03868385 -0.08410502</span></span>
+<span><span class="co">## chr1__827590__LINC01128__chr1__15834214__FLJ37453 0.04206464 -0.08410502</span></span>
+<span><span class="co">## chr1__923922__SAMD11__chr1__15847706__SPEN        0.04796102 -0.08410502</span></span>
+<span><span class="co">## chr1__944202__NOC2L__chr1__15941868__ZBTB17       0.05385741 -0.08067802</span></span>
+<span><span class="co">## chr1__998963__HES4__chr1__16246839__FBXO42        0.05637300 -0.08067802</span></span>
+<span><span class="co">## chr1__1013496__ISG15__chr1__16367241__SZRD1       0.05975379 -0.07471005</span></span></code></pre>
+<pre><code><span><span class="co">## $chr1__826205__LINC00115__chr1__15807161__UQCRHL</span></span>
+<span><span class="co">##         chr      pos    symbol</span></span>
+<span><span class="co">## X11.1  chr1   826205 LINC00115</span></span>
+<span><span class="co">## X12.1  chr1   827590 LINC01128</span></span>
+<span><span class="co">## X13.1  chr1   923922    SAMD11</span></span>
+<span><span class="co">## X14.1  chr1   944202     NOC2L</span></span>
+<span><span class="co">## X15.1  chr1   998963      HES4</span></span>
+<span><span class="co">## X16.1  chr1  1013496     ISG15</span></span>
+<span><span class="co">## X17.1  chr1  1216930      SDF4</span></span>
+<span><span class="co">## X18.1  chr1  1232236   B3GALT6</span></span>
+<span><span class="co">## X19.1  chr1  1253911    UBE2J2</span></span>
+<span><span class="co">## X110.1 chr1  1280435    SCNN1D</span></span>
+<span><span class="co">## X111.1 chr1  1292390     ACAP3</span></span>
+<span><span class="co">## X112.1 chr1  1308579     PUSL1</span></span>
+<span><span class="co">## X113.1 chr1  1324801      CPTP</span></span>
+<span><span class="co">## X114.1 chr1  1335277      DVL1</span></span>
+<span><span class="co">## X115.1 chr1  1352688     MXRA8</span></span>
+<span><span class="co">## X116.1 chr1  1373735  AURKAIP1</span></span>
+<span><span class="co">## X117.1 chr1  1385710     CCNL2</span></span>
+<span><span class="co">## X118.1 chr1  1401908    MRPL20</span></span>
+<span><span class="co">## X119.1 chr1  1449688    ATAD3C</span></span>
+<span><span class="co">## X120.1 chr1  1471764    ATAD3B</span></span>
+<span><span class="co">## X121.1 chr1  1512161    ATAD3A</span></span>
+<span><span class="co">## X122.1 chr1  1534777   TMEM240</span></span>
+<span><span class="co">## X123.1 chr1  1541672     SSU72</span></span>
+<span><span class="co">## X124.1 chr1  1615854      MIB2</span></span>
+<span><span class="co">## X125.1 chr1  1635224    CDK11B</span></span>
+<span><span class="co">## X126.1 chr1  1661477  SLC35E2B</span></span>
+<span><span class="co">## X127.1 chr1  1751231      NADK</span></span>
+<span><span class="co">## X128.1 chr1  1785284      GNB1</span></span>
+<span><span class="co">## X129.1 chr1  2189548    FAAP20</span></span>
+<span><span class="co">## X130.1 chr1  2228318       SKI</span></span>
+<span><span class="co">## X131.1 chr1  2391840      RER1</span></span>
+<span><span class="co">## X132.1 chr1  2403973     PEX10</span></span>
+<span><span class="co">## X133.1 chr1  2508536     PANK4</span></span>
+<span><span class="co">## X134.1 chr1  2528744      HES5</span></span>
+<span><span class="co">## X135.1 chr1  2556364  TNFRSF14</span></span>
+<span><span class="co">## X136.1 chr1  3625014    TPRG1L</span></span>
+<span><span class="co">## X137.1 chr1  3630769    WRAP73</span></span>
+<span><span class="co">## X138.1 chr1  3778558    LRRC47</span></span>
+<span><span class="co">## X139.1 chr1  3812085    CEP104</span></span>
+<span><span class="co">## X140.1 chr1  3889132  C1orf174</span></span>
+<span><span class="co">## X141.1 chr1  6185019     RPL22</span></span>
+<span><span class="co">## X142.1 chr1  6221192      ICMT</span></span>
+<span><span class="co">## X143.1 chr1  6247352    GPR153</span></span>
+<span><span class="co">## X144.1 chr1  6264271     ACOT7</span></span>
+<span><span class="co">## X145.1 chr1  6460785  TNFRSF25</span></span>
+<span><span class="co">## X146.1 chr1  6467121   PLEKHG5</span></span>
+<span><span class="co">## X147.1 chr1  6521346      NOL9</span></span>
+<span><span class="co">## X148.1 chr1  6579993    ZBTB48</span></span>
+<span><span class="co">## X149.1 chr1  6590723    KLHL21</span></span>
+<span><span class="co">## X150.1 chr1  6613730     PHF13</span></span>
+<span><span class="co">## X151.1 chr1  6625149     THAP3</span></span>
+<span><span class="co">## X152.1 chr1  6634169   DNAJC11</span></span>
+<span><span class="co">## X153.1 chr1  6785453    CAMTA1</span></span>
+<span><span class="co">## X154.1 chr1  7771295     VAMP3</span></span>
+<span><span class="co">## X155.1 chr1  7784428      PER3</span></span>
+<span><span class="co">## X156.1 chr1  7961710     PARK7</span></span>
+<span><span class="co">## X157.1 chr1  8011726    ERRFI1</span></span>
+<span><span class="co">## X158.1 chr1  8352403      RERE</span></span>
+<span><span class="co">## X159.1 chr1  8860999      ENO1</span></span>
+<span><span class="co">## X160.1 chr1  9148010  MIR34AHG</span></span>
+<span><span class="co">## X161.1 chr1  9234773      H6PD</span></span>
+<span><span class="co">## X162.1 chr1  9292893     SPSB1</span></span>
+<span><span class="co">## X163.1 chr1  9539464  SLC25A33</span></span>
+<span><span class="co">## X164.1 chr1  9588910   TMEM201</span></span>
+<span><span class="co">## X165.1 chr1  9728925    CLSTN1</span></span>
+<span><span class="co">## X166.1 chr1  9848275  CTNNBIP1</span></span>
+<span><span class="co">## X167.1 chr1  9922117      LZIC</span></span>
+<span><span class="co">## X168.1 chr1  9942922    NMNAT1</span></span>
+<span><span class="co">## X169.1 chr1 10032957     UBE4B</span></span>
+<span><span class="co">## X170.1 chr1 10210705     KIF1B</span></span>
+<span><span class="co">## X171.1 chr1 10399063       PGD</span></span>
+<span><span class="co">## X172.1 chr1 10460545      DFFA</span></span>
+<span><span class="co">## X173.1 chr1 10474949     PEX14</span></span>
+<span><span class="co">## X174.1 chr1 10647210     CASZ1</span></span>
+<span><span class="co">## X175.1 chr1 11012653    TARDBP</span></span>
+<span><span class="co">## X176.1 chr1 11054589       SRM</span></span>
+<span><span class="co">## X177.1 chr1 11066618   EXOSC10</span></span>
+<span><span class="co">## X178.1 chr1 11106534      MTOR</span></span>
+<span><span class="co">## X179.1 chr1 11273197    UBIAD1</span></span>
+<span><span class="co">## X180.1 chr1 11654406    FBXO44</span></span>
+<span><span class="co">## X181.1 chr1 11674479    MAD2L2</span></span>
+<span><span class="co">## X182.1 chr1 11691709    DRAXIN</span></span>
+<span><span class="co">## X183.1 chr1 11736084    AGTRAP</span></span>
+<span><span class="co">## X184.1 chr1 11785725     MTHFR</span></span>
+<span><span class="co">## X185.1 chr1 11806095     CLCN6</span></span>
+<span><span class="co">## X186.1 chr1 11845709      NPPA</span></span>
+<span><span class="co">## X187.1 chr1 11919590  KIAA2013</span></span>
+<span><span class="co">## X188.1 chr1 11934716     PLOD1</span></span>
+<span><span class="co">## X189.1 chr1 11980443      MFN2</span></span>
+<span><span class="co">## X190.1 chr1 12019497      MIIP</span></span>
+<span><span class="co">## X191.1 chr1 12230029    VPS13D</span></span>
+<span><span class="co">## X192.1 chr1 12567909     DHRS3</span></span>
+<span><span class="co">## X193.1 chr1 13749414     PRDM2</span></span>
+<span><span class="co">## X194.1 chr1 14945918      KAZN</span></span>
+<span><span class="co">## X195.1 chr1 15409887     EFHD2</span></span>
+<span><span class="co">## X196.1 chr1 15491400     CASP9</span></span>
+<span><span class="co">## X197.1 chr1 15526847   DNAJC16</span></span>
+<span><span class="co">## X198.1 chr1 15617457      DDI2</span></span>
+<span><span class="co">## X199.1 chr1 15684319   PLEKHM2</span></span>
+<span><span class="co">## X1100  chr1 15758794    FBLIM1</span></span>
+<span><span class="co">## X1101  chr1 15807161    UQCRHL</span></span></code></pre>
+<pre><code><span><span class="co">##     chr                                            start start.loc</span></span>
+<span><span class="co">## 1  chr1  chr1__826205__LINC00115__chr1__15807161__UQCRHL    826205</span></span>
+<span><span class="co">## 3  chr1   chr1__113929323__HIPK1__chr1__153633981__CHTOP 113929323</span></span>
+<span><span class="co">## 5  chr1   chr1__169132530__NME7__chr1__203127725__ADORA1 169132530</span></span>
+<span><span class="co">## 6  chr1  chr1__826205__LINC00115__chr1__15807161__UQCRHL    826205</span></span>
+<span><span class="co">## 35 chr1  chr1__826205__LINC00115__chr1__15807161__UQCRHL    826205</span></span>
+<span><span class="co">## 38 chr1 chr1__93180715__CCDC18__chr1__144887287__SRGAP2B  93180715</span></span>
+<span><span class="co">##                                               stop  stop.loc cluster    length</span></span>
+<span><span class="co">## 1    chr1__9588910__TMEM201__chr1__25884178__STMN1  25884178       0  25057973</span></span>
+<span><span class="co">## 3   chr1__153990761__RPS27__chr1__162497804__UHMK1 162497804       0  48568481</span></span>
+<span><span class="co">## 5  chr1__169792531__METTL18__chr1__203305518__BTG2 203305518       0  34172988</span></span>
+<span><span class="co">## 6   chr1__213988532__PROX1__chr1__244653125__DESI2 244653125       1 243826920</span></span>
+<span><span class="co">## 35     chr1__9234773__H6PD__chr1__25616790__MAN1C1  25616790       2  24790585</span></span>
+<span><span class="co">## 38    chr1__154161812__TPM3__chr1__162561898__UAP1 162561898       2  69381183</span></span></code></pre>
 <p>Importantly, CNV inference adds the “CNV” partition:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">partitions</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    global_expr CNV</span></span>
-<span><span class="co">## V3           0   2</span></span>
-<span><span class="co">## V4           0   3</span></span>
-<span><span class="co">## V5           7   0</span></span>
-<span><span class="co">## V6           0   3</span></span>
-<span><span class="co">## V7           7   0</span></span>
-<span><span class="co">## V8           7   1</span></span></code></pre>
+<span><span class="co">## V3           2   1</span></span>
+<span><span class="co">## V4           2   1</span></span>
+<span><span class="co">## V5           6   0</span></span>
+<span><span class="co">## V6           2   1</span></span>
+<span><span class="co">## V7           6   0</span></span>
+<span><span class="co">## V8           6   2</span></span></code></pre>
 <p>The calculation can be demanding. For example, it requires
 approximately 10 minutes on 2 cores (dual Intel(R) Xeon(R),
 2.60GHz).</p>
@@ -491,12 +611,12 @@ or, alternatively, the location of detected CNVs (argument
 <span>            col <span class="op">=</span> <span class="va">col_fun</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/heatmap_CNV.html">heatmap_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, mark.detected.cnv <span class="op">=</span> <span class="cn">T</span>, col<span class="op">=</span><span class="va">col_fun</span><span class="op">)</span></span></code></pre></div>
-<p><img src="images/heatmap_CNV_PJ016_vignette_genes.jpg" width="600" alt="caption"><img src="images/heatmap_CNV_PJ016_vignette_cnv.jpg" width="600"></p>
+<p><img src="images/heatmap_CNV_PJ016_vignette_genes.png" width="600" alt="caption"><img src="images/heatmap_CNV_PJ016_vignette_cnv.png" width="600"></p>
 <p>The function <code>plot_profile_CNV</code> plots the median CNV
 profile of a cluster:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_profile_CNV.html">plot_profile_CNV</a></span><span class="op">(</span>scMuffinList <span class="op">=</span> <span class="va">scML</span>, cluster <span class="op">=</span> <span class="fl">0</span>, cex.points <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="images/CNV_profile_ref_0.png_0.png" width="600"></p>
+<p><img src="images/CNV_profile_0.png" width="600"></p>
 </div>
 </div>
 <div class="section level2">
@@ -531,12 +651,12 @@ of <code>scML$proliferation</code>:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">proliferation</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Proliferation_score</span></span>
-<span><span class="co">## V3          0.24639700</span></span>
-<span><span class="co">## V4          0.49466334</span></span>
-<span><span class="co">## V5         -0.18135986</span></span>
-<span><span class="co">## V6          0.35468552</span></span>
-<span><span class="co">## V7         -0.07408355</span></span>
-<span><span class="co">## V8         -0.11730502</span></span></code></pre>
+<span><span class="co">## V3          0.22333804</span></span>
+<span><span class="co">## V4          0.48095696</span></span>
+<span><span class="co">## V5         -0.21546692</span></span>
+<span><span class="co">## V6          0.33213053</span></span>
+<span><span class="co">## V7         -0.08829706</span></span>
+<span><span class="co">## V8         -0.11826046</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="cell-state-trajectories">Cell state trajectories<a class="anchor" aria-label="anchor" href="#cell-state-trajectories"></a>
@@ -557,12 +677,12 @@ cell is a tip of the branch or not) are stored
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">diffusion_map_pseudo_t</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
 <pre><code><span><span class="co">##            DC1         DC2       dpt branch  tips</span></span>
-<span><span class="co">## V3 -0.02439247 0.027065472 0.4543284     NA FALSE</span></span>
-<span><span class="co">## V4 -0.03067862 0.038183692 0.3605517      1 FALSE</span></span>
-<span><span class="co">## V5  0.01926612 0.005728970 1.3628920      2 FALSE</span></span>
-<span><span class="co">## V6 -0.03187947 0.047049007 0.3474134      1 FALSE</span></span>
-<span><span class="co">## V7  0.01855801 0.004949549 1.3447794      2 FALSE</span></span>
-<span><span class="co">## V8  0.01855621 0.005021415 1.3454328      2 FALSE</span></span></code></pre>
+<span><span class="co">## V3  0.02440015 0.027054071 1.3328347     NA FALSE</span></span>
+<span><span class="co">## V4  0.03072120 0.038239911 1.4752607      2 FALSE</span></span>
+<span><span class="co">## V5 -0.01926577 0.005752026 0.3735439      1 FALSE</span></span>
+<span><span class="co">## V6  0.03191479 0.047083928 1.5085980      2 FALSE</span></span>
+<span><span class="co">## V7 -0.01855966 0.004971247 0.3738625      1 FALSE</span></span>
+<span><span class="co">## V8 -0.01856063 0.005047917 0.3926285      1 FALSE</span></span></code></pre>
 <p>The full DPT object from destiny is stored in the element
 <code>scML$diffusion_map_pseudo_t$full</code>. This allows the user to
 take advantage of destiny <a href="https://github.com/theislab/destiny/" class="external-link">functions</a>, such as
@@ -598,17 +718,7 @@ edge results. Here’s the result related to the gene set
 <code>Angiogenesis</code>:</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">CSEA</span><span class="op">$</span><span class="va">gs_table</span><span class="op">$</span><span class="va">Angiogenesis</span></span></code></pre></div>
-<pre><code><span><span class="co">##   id         es p_val adj_p_val n_pos_perm n_neg_perm       nes        FDRq</span></span>
-<span><span class="co">## 0  0  0.2551729  0.62 0.8857143        100          0 0.9600786 0.946014127</span></span>
-<span><span class="co">## 1  1  0.2674230  0.55 0.8857143        100          0 0.9839195 0.989909183</span></span>
-<span><span class="co">## 2  2  0.1910471  1.00 1.0000000        100          0 0.6916231 1.000000000</span></span>
-<span><span class="co">## 3  3  0.2711880  0.53 0.8857143         98          2 1.0002714 1.000000000</span></span>
-<span><span class="co">## 4  4 -0.2306596  0.01 0.0500000         99          1 0.0000000 1.000000000</span></span>
-<span><span class="co">## 5  5  0.2985592  0.26 0.6500000        100          0 1.0816991 0.823410696</span></span>
-<span><span class="co">## 6  6  0.2494544  0.82 1.0000000        100          0 0.8571037 1.000000000</span></span>
-<span><span class="co">## 7  7  0.6061648  0.01 0.0500000         99          1 2.1895320 0.009081736</span></span>
-<span><span class="co">## 8  8  0.4113923  0.05 0.1666667         97          3 1.4228520 0.031786075</span></span>
-<span><span class="co">## 9  9  0.1897547  0.98 1.0000000         98          2 0.6366039 0.992936428</span></span></code></pre>
+<pre><code><span><span class="co">## NULL</span></span></code></pre>
 <p>In this this example, we assess cluster enrichment in relation to the
 categorical feature <code>CC_Phase</code>, namely the cell cycle phase
 calculated by means of Seurat function <a href="https://satijalab.org/seurat/reference/cellcyclescoring" class="external-link"><code>CellCycleScoring()</code></a>
@@ -625,16 +735,15 @@ enrichment of clusters in terms of cells with value “G1”:</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">ORA</span><span class="op">$</span><span class="va">CC_Phase</span><span class="op">$</span><span class="va">G1</span></span></code></pre></div>
 <pre><code><span><span class="co">##   id    N   wb  bb  bd wbd       exp       er            p        p_adj</span></span>
-<span><span class="co">## 0  0 2828 2049 779 499   0 361.54562 0.000000 1.000000e+00 1.000000e+00</span></span>
-<span><span class="co">## 1  1 2828 2049 779 475 459 344.15665 1.333695 2.289783e-50 2.289783e-49</span></span>
-<span><span class="co">## 2  2 2828 2049 779 378 343 273.87624 1.252391 8.889784e-21 1.777957e-20</span></span>
-<span><span class="co">## 3  3 2828 2049 779 309 293 223.88296 1.308720 2.712597e-26 9.041991e-26</span></span>
-<span><span class="co">## 4  4 2828 2049 779 296 272 214.46393 1.268279 2.060936e-18 3.434894e-18</span></span>
-<span><span class="co">## 5  5 2828 2049 779 257 253 186.20686 1.358704 5.986769e-32 2.993384e-31</span></span>
-<span><span class="co">## 6  6 2828 2049 779 185 145 134.03996 1.081767 3.528719e-02 4.410899e-02</span></span>
-<span><span class="co">## 7  7 2828 2049 779 172 169 124.62093 1.356112 6.593125e-21 1.648281e-20</span></span>
-<span><span class="co">## 8  8 2828 2049 779 142 115 102.88472 1.117756 1.066766e-02 1.523951e-02</span></span>
-<span><span class="co">## 9  9 2828 2049 779 115   0  83.32214 0.000000 1.000000e+00 1.000000e+00</span></span></code></pre>
+<span><span class="co">## 0  0 2831 2056 775 588 547 427.03214 1.280934 4.898697e-43 2.204414e-42</span></span>
+<span><span class="co">## 1  1 2831 2056 775 538 516 390.71989 1.320639 4.370181e-53 3.933163e-52</span></span>
+<span><span class="co">## 2  2 2831 2056 775 500   0 363.12257 0.000000 1.000000e+00 1.000000e+00</span></span>
+<span><span class="co">## 3  3 2831 2056 775 331 299 240.38714 1.243827 4.638303e-17 8.348946e-17</span></span>
+<span><span class="co">## 4  4 2831 2056 775 257 255 186.64500 1.366230 1.095704e-34 3.287111e-34</span></span>
+<span><span class="co">## 5  5 2831 2056 775 186 148 135.08160 1.095634 1.546645e-02 1.988543e-02</span></span>
+<span><span class="co">## 6  6 2831 2056 775 176 174 127.81915 1.361298 1.102600e-22 2.480850e-22</span></span>
+<span><span class="co">## 7  7 2831 2056 775 140 117 101.67432 1.150733 1.320545e-03 1.980817e-03</span></span>
+<span><span class="co">## 8  8 2831 2056 775 115   0  83.51819 0.000000 1.000000e+00 1.000000e+00</span></span></code></pre>
 <p>The enrichment analysis results appearing in these tables can be
 easily extracted and organized in a clusters-by-values table by means of
 <code>extract_cluster_enrichment_table</code>. For instance, here we
@@ -654,39 +763,16 @@ values:</p>
 <span>                                                type <span class="op">=</span> <span class="st">"ORA"</span>, </span>
 <span>                                                quantity <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span>
 <span><span class="va">csea_fdr_table</span></span></code></pre></div>
-<pre><code><span><span class="co">##   Angiogenesis  Apoptosis  Cell_Cycle Differentiation  DNA_damage  DNA_repair</span></span>
-<span><span class="co">## 0  0.946014127 0.00879397 0.003722084      0.02250000 0.690090090 0.004201681</span></span>
-<span><span class="co">## 1  0.989909183 0.01470588 1.000000000      0.11800000 0.102102102 1.000000000</span></span>
-<span><span class="co">## 2  1.000000000 0.64049414 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
-<span><span class="co">## 3  1.000000000 0.09803922 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
-<span><span class="co">## 4  1.000000000 0.23743719 0.032258065      1.00000000 1.000000000 1.000000000</span></span>
-<span><span class="co">## 5  0.823410696 0.88819095 0.058064516      1.00000000 0.955955956 1.000000000</span></span>
-<span><span class="co">## 6  1.000000000 0.01172529 0.579404467      1.00000000 0.009009009 0.111344538</span></span>
-<span><span class="co">## 7  0.009081736 0.01470588 0.048387097      0.02666667 1.000000000 0.031250000</span></span>
-<span><span class="co">## 8  0.031786075 0.76331658 0.967741935      0.01000000 0.009009009 0.110644258</span></span>
-<span><span class="co">## 9  0.992936428 0.00879397 0.003722084      0.01000000 0.315315315 0.004201681</span></span>
-<span><span class="co">##           EMT     Hypoxia Inflammation    Invasion  Metastasis Proliferation</span></span>
-<span><span class="co">## 0 1.000000000 1.000000000  1.000000000 0.007021063 1.000000000   0.005035247</span></span>
-<span><span class="co">## 1 0.013513514 0.006024096  0.006079027 0.968906720 0.006024096   1.000000000</span></span>
-<span><span class="co">## 2 0.951351351 0.013253012  1.000000000 1.000000000 0.075301205   1.000000000</span></span>
-<span><span class="co">## 3 0.012012012 0.952811245  1.000000000 1.000000000 0.065060241   1.000000000</span></span>
-<span><span class="co">## 4 0.416666667 0.006024096  0.030395137 1.000000000 0.201807229   0.005035247</span></span>
-<span><span class="co">## 5 0.953453453 0.009036145  0.167173252 0.937311936 0.008032129   1.000000000</span></span>
-<span><span class="co">## 6 1.000000000 1.000000000  0.954407295 0.546238716 1.000000000   0.992950655</span></span>
-<span><span class="co">## 7 0.009009009 0.006024096  0.036474164 0.252758275 0.006024096   1.000000000</span></span>
-<span><span class="co">## 8 1.000000000 1.000000000  1.000000000 0.235205617 1.000000000   0.308408862</span></span>
-<span><span class="co">## 9 1.000000000 1.000000000  1.000000000 0.007021063 1.000000000   0.005035247</span></span>
-<span><span class="co">##    Quiescence    Stemness</span></span>
-<span><span class="co">## 0 1.000000000 0.007021063</span></span>
-<span><span class="co">## 1 0.004454343 1.000000000</span></span>
-<span><span class="co">## 2 0.040000000 1.000000000</span></span>
-<span><span class="co">## 3 1.000000000 1.000000000</span></span>
-<span><span class="co">## 4 0.004454343 0.007021063</span></span>
-<span><span class="co">## 5 1.000000000 1.000000000</span></span>
-<span><span class="co">## 6 0.040000000 0.007021063</span></span>
-<span><span class="co">## 7 0.129175947 1.000000000</span></span>
-<span><span class="co">## 8 0.534521158 0.007021063</span></span>
-<span><span class="co">## 9 0.040000000 0.007021063</span></span></code></pre>
+<pre><code><span><span class="co">##   Angiogenesis</span></span>
+<span><span class="co">## 0           NA</span></span>
+<span><span class="co">## 1   0.80000000</span></span>
+<span><span class="co">## 2   1.00000000</span></span>
+<span><span class="co">## 3           NA</span></span>
+<span><span class="co">## 4   0.78624535</span></span>
+<span><span class="co">## 5   0.66022305</span></span>
+<span><span class="co">## 6   0.01204819</span></span>
+<span><span class="co">## 7   0.02272727</span></span>
+<span><span class="co">## 8   1.00000000</span></span></code></pre>
 <p>These tables can be plotted with the function
 <code>plot_heatmap_features_by_clusters</code>. In the following example
 we plot NES values with asterisks according to their significance:</p>
@@ -694,7 +780,7 @@ we plot NES values with asterisks according to their significance:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap_features_by_clusters.html">plot_heatmap_features_by_clusters</a></span><span class="op">(</span>feature_source <span class="op">=</span> <span class="va">csea_nes_table</span>, </span>
 <span>                                  significance_matrix <span class="op">=</span> <span class="va">csea_fdr_table</span>, </span>
 <span>                                  sig_threshold <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="images/nes.fdr.png" width="600"></p>
+<p><img src="images/heatmap_features_NES_by_clusters.png" width="600"></p>
 <p>Similarly, it’s possible to extract the most significant “tags” of
 any clusters; for example, here we extract the top 3 tags by FDRq (CSEA)
 and p_adj (ORA):</p>
@@ -712,22 +798,22 @@ element:</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">cluster_tags</span><span class="op">$</span><span class="va">CSEA</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`0`</span></span>
-<span><span class="co">## [1] "Cell_Cycle" "DNA_repair" "Invasion"  </span></span>
+<span><span class="co">## [1] "Cell_Cycle"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1`</span></span>
-<span><span class="co">## [1] "Apoptosis"    "Inflammation" "Hypoxia"     </span></span>
+<span><span class="co">## [1] "Hypoxia"      "Inflammation" "Metastasis"  </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2`</span></span>
-<span><span class="co">## [1] "Hypoxia"    "Metastasis" "EMT"       </span></span>
+<span><span class="co">## [1] "DNA_repair"    "Invasion"      "Proliferation"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`3`</span></span>
-<span><span class="co">## [1] "EMT"        "Metastasis" "Apoptosis" </span></span>
+<span><span class="co">## [1] "Hypoxia"       "Proliferation" "Quiescence"   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`4`</span></span>
-<span><span class="co">## [1] "Quiescence" "Hypoxia"    "Stemness"  </span></span>
+<span><span class="co">## [1] "Hypoxia"    "Metastasis" "Cell_Cycle"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`5`</span></span>
-<span><span class="co">## [1] "Metastasis"   "Hypoxia"      "Inflammation"</span></span></code></pre>
+<span><span class="co">## [1] "DNA_damage" "Stemness"   "DNA_repair"</span></span></code></pre>
 <p>The results of cluster enrichment can be visualized by barplots and
 boxplots for, respectively, categorical values and quantitative
 values.</p>
@@ -739,7 +825,7 @@ values.</p>
 <span><span class="fu"><a href="../reference/boxplot_cluster.html">boxplot_cluster</a></span><span class="op">(</span><span class="va">scML</span>, </span>
 <span>                feature_name <span class="op">=</span> <span class="st">"gene_set_scoring"</span>, </span>
 <span>                partition_id <span class="op">=</span> <span class="st">"global_expr"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="images/cluster_2_barplot.jpg" width="600" alt="caption"><img src="images/cluster_2.jpg" width="600" alt="caption"></p>
+<p><img src="images/barplot_cluster_2.png" width="600" alt="caption"><img src="images/boxplot_cluster_2.png" width="600" alt="caption"></p>
 </div>
 <div class="section level2">
 <h2 id="comparison-between-clusters">Comparison between clusters<a class="anchor" aria-label="anchor" href="#comparison-between-clusters"></a>
@@ -755,34 +841,27 @@ the same cells (same dataset):</p>
 <p>The results are stored under the element `cluster_comparison```:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_comparison</span><span class="op">$</span><span class="va">overlap_matrix</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                     CNV_0       CNV_1     CNV_2     CNV_3       CNV_4</span></span>
-<span><span class="co">## CNV_0         1.000000000 0.000000000 0.0000000 0.0000000 0.000000000</span></span>
-<span><span class="co">## CNV_1         0.000000000 1.000000000 0.0000000 0.0000000 0.000000000</span></span>
-<span><span class="co">## CNV_2         0.000000000 0.000000000 1.0000000 0.0000000 0.000000000</span></span>
-<span><span class="co">## CNV_3         0.000000000 0.000000000 0.0000000 1.0000000 0.000000000</span></span>
-<span><span class="co">## CNV_4         0.000000000 0.000000000 0.0000000 0.0000000 1.000000000</span></span>
-<span><span class="co">## global_expr_0 0.004008016 0.004008016 0.5651303 0.5261845 0.008264463</span></span>
-<span><span class="co">##               global_expr_0 global_expr_1 global_expr_2 global_expr_3</span></span>
-<span><span class="co">## CNV_0           0.004008016     0.6042105   0.394179894   0.372168285</span></span>
-<span><span class="co">## CNV_1           0.004008016     0.3368421   0.531746032   0.559870550</span></span>
-<span><span class="co">## CNV_2           0.565130261     0.0000000   0.007936508   0.006472492</span></span>
-<span><span class="co">## CNV_3           0.526184539     0.0000000   0.002645503   0.000000000</span></span>
-<span><span class="co">## CNV_4           0.008264463     0.1157025   0.099173554   0.078512397</span></span>
-<span><span class="co">## global_expr_0   1.000000000     0.0000000   0.000000000   0.000000000</span></span>
-<span><span class="co">##               global_expr_4 global_expr_5 global_expr_6 global_expr_7</span></span>
-<span><span class="co">## CNV_0            0.14189189   0.657587549    0.00000000     0.7674419</span></span>
-<span><span class="co">## CNV_1            0.19594595   0.334630350    0.01621622     0.2325581</span></span>
-<span><span class="co">## CNV_2            0.09459459   0.000000000    0.74054054     0.0000000</span></span>
-<span><span class="co">## CNV_3            0.02702703   0.000000000    0.22702703     0.0000000</span></span>
-<span><span class="co">## CNV_4            0.66115702   0.008264463    0.01621622     0.0000000</span></span>
-<span><span class="co">## global_expr_0    0.00000000   0.000000000    0.00000000     0.0000000</span></span>
-<span><span class="co">##               global_expr_8 global_expr_9</span></span>
-<span><span class="co">## CNV_0           0.007042254   0.000000000</span></span>
-<span><span class="co">## CNV_1           0.021126761   0.008695652</span></span>
-<span><span class="co">## CNV_2           0.605633803   0.200000000</span></span>
-<span><span class="co">## CNV_3           0.345070423   0.782608696</span></span>
-<span><span class="co">## CNV_4           0.021126761   0.008695652</span></span>
-<span><span class="co">## global_expr_0   0.000000000   0.000000000</span></span></code></pre>
+<pre><code><span><span class="co">##                   CNV_0       CNV_1     CNV_2      CNV_3 global_expr_0</span></span>
+<span><span class="co">## CNV_0         1.0000000 0.000000000 0.0000000 0.00000000   0.389455782</span></span>
+<span><span class="co">## CNV_1         0.0000000 1.000000000 0.0000000 0.00000000   0.005102041</span></span>
+<span><span class="co">## CNV_2         0.0000000 0.000000000 1.0000000 0.00000000   0.559523810</span></span>
+<span><span class="co">## CNV_3         0.0000000 0.000000000 0.0000000 1.00000000   0.082568807</span></span>
+<span><span class="co">## global_expr_0 0.3894558 0.005102041 0.5595238 0.08256881   1.000000000</span></span>
+<span><span class="co">## global_expr_1 0.6115242 0.000000000 0.3401487 0.07951070   0.000000000</span></span>
+<span><span class="co">##               global_expr_1 global_expr_2 global_expr_3 global_expr_4</span></span>
+<span><span class="co">## CNV_0             0.6115242    0.00400000    0.12688822   0.665369650</span></span>
+<span><span class="co">## CNV_1             0.0000000    0.97800000    0.05740181   0.000000000</span></span>
+<span><span class="co">## CNV_2             0.3401487    0.00600000    0.17824773   0.326848249</span></span>
+<span><span class="co">## CNV_3             0.0795107    0.01834862    0.64525994   0.007782101</span></span>
+<span><span class="co">## global_expr_0     0.0000000    0.00000000    0.00000000   0.000000000</span></span>
+<span><span class="co">## global_expr_1     1.0000000    0.00000000    0.00000000   0.000000000</span></span>
+<span><span class="co">##               global_expr_5 global_expr_6 global_expr_7 global_expr_8</span></span>
+<span><span class="co">## CNV_0            0.00000000     0.7386364   0.007142857   0.000000000</span></span>
+<span><span class="co">## CNV_1            0.79569892     0.0000000   0.850000000   0.973913043</span></span>
+<span><span class="co">## CNV_2            0.02150538     0.2613636   0.007142857   0.008695652</span></span>
+<span><span class="co">## CNV_3            0.18279570     0.0000000   0.135714286   0.017391304</span></span>
+<span><span class="co">## global_expr_0    0.00000000     0.0000000   0.000000000   0.000000000</span></span>
+<span><span class="co">## global_expr_1    0.00000000     0.0000000   0.000000000   0.000000000</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="inter-dataset">Inter-dataset<a class="anchor" aria-label="anchor" href="#inter-dataset"></a>

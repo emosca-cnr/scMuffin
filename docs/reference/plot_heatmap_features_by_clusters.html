@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@
 <span>  res <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>  scale <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pal <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  na_col <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,6 +111,10 @@
 
 <dt>pal</dt>
 <dd><p>color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)</p></dd>
+
+
+<dt>na_col</dt>
+<dd><p>color for NA values</p></dd>
 
 
 <dt>...</dt>

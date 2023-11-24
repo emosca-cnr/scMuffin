@@ -11,7 +11,8 @@ assess_cluster_enrichment(
   min.cells.feature = 100,
   min.cells.cluster = 10,
   mc.cores = 1,
-  csea.k = 99
+  csea.k = 99,
+  min.k = 10
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ assess_cluster_enrichment(
 \item{mc.cores}{number of cores}
 
 \item{csea.k}{number of CSEA permutations}
+
+\item{min.k}{minimum number of valid permutations to support empirical nulls}
 }
 \value{
 scMuffinList with CSEA or ORA elements under scMuffinList$cluster_data for the considered partition
@@ -36,6 +39,6 @@ scMuffinList with CSEA or ORA elements under scMuffinList$cluster_data for the c
 Assess cluster enrichment using ORA for categorical features and CSEA for numeric features.
 }
 \details{
-The output of CSEA is a table with statistics for every tested gene set (gs_table element) and a table with the results of the leading edge (leading_edge element). 
+The output of CSEA is a table with statistics for every tested gene set. 
 The output of ORA is composed of a series of tables with enrichment results, one for every possible categorical value. See [extract_cluster_enrichment_table] to extract summary table from CSEA and ORA results.
 }

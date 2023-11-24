@@ -13,6 +13,7 @@ plot_heatmap_dataset_comparison(
   height = 200,
   units = "mm",
   res = 300,
+  na_col = "black",
   ...
 )
 }
@@ -32,6 +33,8 @@ plot_heatmap_dataset_comparison(
 \item{units}{image units}
 
 \item{res}{image res}
+
+\item{na_col}{color for NA values}
 
 \item{...}{arguments passed to ComplexHeatmap::Heatmap}
 }
