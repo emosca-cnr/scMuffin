@@ -26,7 +26,7 @@ Documentation: https://emosca-cnr.github.io/scMuffin
 
 Source code: https://github.com/emosca-cnr/scMuffin
 
-Citation: https://www.biorxiv.org/content/10.1101/2022.06.01.494129v2
+Citation: https://doi.org/10.1186/s12859-023-05563-y
 
 Contacts:
 
