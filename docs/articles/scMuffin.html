@@ -717,8 +717,27 @@ placed under the elements <code>cluster_data$global_expr</code>
 edge results. Here’s the result related to the gene set
 <code>Angiogenesis</code>:</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">CSEA</span><span class="op">$</span><span class="va">gs_table</span><span class="op">$</span><span class="va">Angiogenesis</span></span></code></pre></div>
-<pre><code><span><span class="co">## NULL</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">scML</span><span class="op">$</span><span class="va">cluster_data</span><span class="op">$</span><span class="va">global_expr</span><span class="op">$</span><span class="va">CSEA</span><span class="op">$</span><span class="va">Angiogenesis</span></span></code></pre></div>
+<pre><code><span><span class="co">##   id size         es        nes nperm      p_val  adj_p_val q_val       FDRq</span></span>
+<span><span class="co">## 1  0  588 -0.1912822         NA     2         NA         NA    NA         NA</span></span>
+<span><span class="co">## 2  1  538  0.1957418  0.8894305    95 0.80000000 0.93333333    NA 0.80000000</span></span>
+<span><span class="co">## 3  2  500  0.2160336  0.9846048    94 0.56382979 0.78936170    NA 1.00000000</span></span>
+<span><span class="co">## 4  3  331 -0.3133212         NA     7         NA         NA    NA         NA</span></span>
+<span><span class="co">## 5  4  257  0.2206047  0.9748262    89 0.48314607 0.78936170    NA 0.78624535</span></span>
+<span><span class="co">## 6  5  186  0.2309628  0.9659241    81 0.53086420 0.78936170    NA 0.66022305</span></span>
+<span><span class="co">## 7  6  176  0.6179953  2.4796553    83 0.01204819 0.07954545    NA 0.01204819</span></span>
+<span><span class="co">## 8  7  140  0.4205973  1.6200568    88 0.02272727 0.07954545    NA 0.02272727</span></span>
+<span><span class="co">## 9  8  115 -0.1547180 -0.7373612    14 1.00000000 1.00000000    NA 1.00000000</span></span>
+<span><span class="co">##   tags tags_perc list_top list_top_perc lead_edge</span></span>
+<span><span class="co">## 1  123 0.2525667      505     0.2056189 0.2502578</span></span>
+<span><span class="co">## 2   95 0.1779026      477     0.1942182 0.1831786</span></span>
+<span><span class="co">## 3   62 0.1593830      334     0.1359935 0.1636240</span></span>
+<span><span class="co">## 4   95 0.3356890      503     0.2048046 0.3017030</span></span>
+<span><span class="co">## 5   85 0.3333333      768     0.3127036 0.2556414</span></span>
+<span><span class="co">## 6   23 0.1729323      387     0.1575733 0.1540237</span></span>
+<span><span class="co">## 7  107 0.6079545      633     0.2577362 0.4860970</span></span>
+<span><span class="co">## 8   37 0.3700000      676     0.2752443 0.2795416</span></span>
+<span><span class="co">## 9   31 0.3131313      662     0.2695440 0.2383358</span></span></code></pre>
 <p>In this this example, we assess cluster enrichment in relation to the
 categorical feature <code>CC_Phase</code>, namely the cell cycle phase
 calculated by means of Seurat function <a href="https://satijalab.org/seurat/reference/cellcyclescoring" class="external-link"><code>CellCycleScoring()</code></a>

@@ -350,10 +350,10 @@ scML <- assess_cluster_enrichment(scML,
 ```
 In case of quantitative features the result is a list named CSEA, placed under the elements `cluster_data$global_expr` (partition id). The list contains the gene set table and the leading edge results. Here's the result related to the gene set `Angiogenesis`:
 ```{r, include=TRUE, eval=FALSE}
-scML$cluster_data$global_expr$CSEA$gs_table$Angiogenesis
+scML$cluster_data$global_expr$CSEA$Angiogenesis
 ```
 ```{r, echo=FALSE, eval=TRUE}
-scML_demo$cluster_data$global_expr$CSEA$gs_table$Angiogenesis
+scML_demo$cluster_data$global_expr$CSEA$Angiogenesis
 ```
 In this this example, we assess cluster enrichment in relation to the categorical feature `CC_Phase`, namely the cell cycle phase calculated by means of Seurat function [`CellCycleScoring()`](https://satijalab.org/seurat/reference/cellcyclescoring) and added to `scML` by means of `add_features()` (see above):
 ```{r, include=TRUE, eval=FALSE}
