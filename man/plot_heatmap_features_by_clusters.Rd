@@ -15,9 +15,10 @@ plot_heatmap_features_by_clusters(
   height = 180,
   units = "mm",
   res = 300,
-  scale = TRUE,
+  scale = FALSE,
   pal = NULL,
   na_col = "black",
+  X_abs_max = NULL,
   ...
 )
 }
@@ -47,6 +48,8 @@ plot_heatmap_features_by_clusters(
 \item{pal}{color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)}
 
 \item{na_col}{color for NA values}
+
+\item{X_abs_max}{maximum absolute value permitted, useful to avoid the effect of outliers over colors}
 
 \item{...}{further arguments to ComplexHeatmap::Heatmap}
 }

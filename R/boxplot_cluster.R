@@ -11,7 +11,7 @@
 #' @param units image units
 #' @param res image resolution
 #' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
-#' @description Produce boxplots to visualize the distribution of cell values according to the selected figure. A png figure for each cluster is saved in dir_out.
+#' @description Produce boxplots to visualize the distribution of cell values according to the selected feature A png figure for each cluster is saved in dir_out.
 #' @importFrom grDevices png
 #' @importFrom plotrix thigmophobe.labels
 #' @import graphics
@@ -28,6 +28,10 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
   }
   if(!any(colnames(scMuffinList$partitions) == partition_id)){
     stop("Can't find any parition named ", partition_id, "\n")
+  }
+  
+  if(length(scMuffinList$cluster_data[[partition_id]]$CSEA)==0){
+    stop("This visualization requires CSEA results. Please run assess_cluster_enrichment() first.\n")
   }
   
   #cells_by_features <- features$df[, features$type!="factor", drop=F]

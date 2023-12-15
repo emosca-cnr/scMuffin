@@ -33,7 +33,7 @@ es <- function(idx=NULL, x=NULL){
     list_top <- 0
     list_top_perc <- 0
     lead_edge <- 0
-    lead_edge_subset <- 0
+    lead_edge_subset <- ""
     
   }else{
     

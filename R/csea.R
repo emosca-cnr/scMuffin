@@ -7,6 +7,7 @@
 #' @param mc_cores_perm number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path * mc_cores_perm
 #' @param min.k minimum number of valid permutations to support empirical nulls
 #' @param min.size minimum number of cells with a not null value
+#' @param fract_min only cluster of size less or equal to this fraction of cell with not null feature values will be analysed
 #' @import parallel
 #' @importFrom stats p.adjust
 #' @importFrom qvalue qvalue
@@ -32,7 +33,7 @@
 #' @export
 
 
-csea <- function(rl=NULL, gsl=NULL, k=100, min.size=100, ord.mode=-1, min.k=10, mc_cores_path=1, mc_cores_perm=1){
+csea <- function(rl=NULL, gsl=NULL, k=99, min.size=100, ord.mode=-1, min.k=10, mc_cores_path=1, mc_cores_perm=1, fract_min=0.2){
 
   #cheks
   if(!is.matrix(rl) | !is.numeric(rl)){
@@ -55,14 +56,32 @@ csea <- function(rl=NULL, gsl=NULL, k=100, min.size=100, ord.mode=-1, min.k=10, 
   ##keep just elements that are !=0
   rll <- lapply(rll, function(x) x[x!=0])
   rll <- rll[lengths(rll)>min.size]
-  cat("Ranked list that passed the checks:", names(rll), "\n")
+  cat("Non null values for the considered features:\n")
+  print(lengths(rll))
   
+  cat("Cluster sizes:\n")
+  gsl_size <- lengths(gsl)
+  print(gsl_size)
+  
+  for(i in 1:length(rll)){
+    idx_na <- which(gsl_size > length(rll[[i]])*fract_min)
+    if(length(idx_na)>0){
+      cat("not enough values for", names(rll)[i], names(gsl_size)[idx_na], "\n")
+    }
+  }
+
   #real es
   cat("ES of input data...\n")
   
-  gsl_size <- lengths(gsl)
-  
-  real_es_data <- lapply(gsl, function(x) lapply(rll, function(y) es(which(names(y) %in% x), y)))
+  #only if the current cluster_size is less or equal to fract_min*feature_size
+  real_es_data <- lapply(gsl, function(x) lapply(rll, function(y){
+    if( length(x) <= length(y)*fract_min){
+      es(which(names(y) %in% x), y)
+    }else{
+      data.frame(es=0, tags=0, tags_perc=0, list_top=0, list_top_perc=0, lead_edge=0, lead_edge_subset="", stringsAsFactors = F)
+    }
+  }
+  ))
   real_es <- do.call(rbind, lapply(real_es_data, function(x) unlist(lapply(x, function(y) y$es))))
   
   leading_edge <- vector("list", length(rll))
@@ -83,7 +102,7 @@ csea <- function(rl=NULL, gsl=NULL, k=100, min.size=100, ord.mode=-1, min.k=10, 
   }
   
   cat("ES of permutations...\n")
-  res <- mclapply(gsl, function(x) do.call(rbind, mclapply(x_perm, function(y) calc_gs_perm(rll, y, x), mc.cores=mc_cores_perm)), mc.cores = mc_cores_path)
+  res <- mclapply(gsl, function(x) do.call(rbind, mclapply(x_perm, function(y) calc_gs_perm(rll=rll, perm=y, gs=x, fract_min=fract_min), mc.cores=mc_cores_perm)), mc.cores = mc_cores_path)
  
   temp <- vector('list', length(rll))
   names(temp) <- colnames(rl)

@@ -12,12 +12,13 @@
 #' @param scale whether to scale the features
 #' @param pal color palette. Default to rev(pals::brewer.rdylbu(10)) (negative values) or pals::brewer.ylorrd(5)) (positive values)
 #' @param na_col color for NA values
+#' @param X_abs_max maximum absolute value permitted, useful to avoid the effect of outliers over colors
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
 #' @import ComplexHeatmap grDevices pals
 #' @importFrom circlize colorRamp2
 
-plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=TRUE, pal=NULL, na_col="black", ...){
+plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=FALSE, pal=NULL, na_col="black", X_abs_max=NULL, ...){
   
   
   if(!is.null(significance_matrix)){
@@ -72,12 +73,18 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
   # }
   
   if(is.null(pal)){
-    X_abs_max <- max(abs(c(min(X, na.rm = TRUE), max(X, na.rm = TRUE))))
+    if(is.null(X_abs_max)){
+      X_abs_max <- max(abs(c(min(X, na.rm = TRUE), max(X, na.rm = TRUE))))
+    }else{
+      X[X > X_abs_max] <- X_abs_max
+      X[X < -X_abs_max] <- -X_abs_max
+    }
     if(any(X<0)){
       pal <- rev(brewer.rdylbu(5))
       pal <- colorRamp2(c(-X_abs_max, 0, X_abs_max), c(pal[1], pal[3], pal[5]))
     }else{
       pal <- brewer.ylorrd(5)
+      pal <- colorRamp2(c(0, X_abs_max), c(pal[1], pal[5]))
     }
   }
   
@@ -98,6 +105,8 @@ plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=
     
     if(scale){
       X <- t(scale(t(X)))
+      cat("Distribution of z-scores, set X_abs_max to control the colors of the maximum absolute values:\n")
+      print(summary(as.numeric(unlist(X))))
     }
     
     h_tot_go <- Heatmap(X, show_row_names = T, cell_fun = cell_fun_asterisk, col=pal, na_col=na_col, ...)

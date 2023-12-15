@@ -10,6 +10,7 @@ assess_cluster_enrichment(
   partition_id = NULL,
   min.cells.feature = 100,
   min.cells.cluster = 10,
+  fract_min = 0.2,
   mc.cores = 1,
   csea.k = 99,
   min.k = 10
@@ -25,6 +26,8 @@ assess_cluster_enrichment(
 \item{min.cells.feature}{minimum number of cells in which a feature must have value}
 
 \item{min.cells.cluster}{minimum number of cells of a cluster}
+
+\item{fract_min}{only cluster of size less or equal to this fraction of cell with not null feature values will be analysed}
 
 \item{mc.cores}{number of cores}
 

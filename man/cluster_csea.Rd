@@ -11,7 +11,8 @@ cluster_csea(
   min.cells.cluster = 10,
   mc.cores = 1,
   csea.k = 99,
-  min.k = 10
+  min.k = 10,
+  fract_min = 0.2
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ cluster_csea(
 \item{csea.k}{number of permutations}
 
 \item{min.k}{minimum number of valid permutations to support empirical nulls}
+
+\item{fract_min}{only cluster of size less or equal to this fraction of cell with not null feature values will be analysed}
 }
 \value{
 list with two elements: gs_table and leading_edge. See [csea()]

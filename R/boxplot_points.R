@@ -28,7 +28,7 @@ boxplot_points <- function(x=NULL, f=NULL, col=NULL, amount=0.2, adj.col=1, pch=
   }
   
   if(is.null(ylim)){
-    ylim=c(min(x), max(x))
+    ylim=c(min(x, na.rm = T), max(x, na.rm = T))
   }
   
   

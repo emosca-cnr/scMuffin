@@ -5,16 +5,18 @@
 #' @param alt alterative passed to [wilcox.test()] or [t.test()]
 #' @param test type of test: t to use [t.test()]; wrs to use [wilcox.test()]
 #' @param null_model TRUE to consider the empirical null based on gene set permutations
+#' @param fract_min only clusters with this fraction of cells with not null gene set score will be considered
 #' @description Gene set scoring in clusters
 #' @importFrom stats median wilcox.test t.test p.adjust
 #' @export
 
-gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_min=5, alt="g", test="t", null_model=TRUE){
+gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_min=5, alt="g", test="t", null_model=TRUE, fract_min=0.5){
 	
 	if(!is.factor(cell_clusters)){
 		cell_clusters <- as.factor(cell_clusters)
 	}
 	
+  clusters_size <- table(cell_clusters)
 	clusters <- levels(cell_clusters)
 	
 	score_table_clusters <- merge(data.frame(cluster=as.character(cell_clusters), stringsAsFactors = F, row.names = names(cell_clusters)), score_table, by=0, sort=F) #modified 2020-06-09; keep all clusters
@@ -63,6 +65,7 @@ gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_m
 				}
 				
 			}
+			
 			res_stat <- unlist(lapply(temp, function(x) ifelse(class(x) == "htest", as.numeric(x$statistic), 0)))
 			res_p <- unlist(lapply(temp, function(x) ifelse(class(x) == "htest", as.numeric(x$p.value), 1)))
 			
@@ -102,7 +105,20 @@ gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_m
 		cluster_scores <- data.frame(cluster=clusters, cells=NA, med_case=NA, med_control=NA, score=0, stat=0, p=1, fdr=1, stringsAsFactors = F)
 	}
 	
+	#cluster original size
+	cluster_scores$size <- clusters_size[match(cluster_scores$cluster, names(clusters_size))]
+	
+	#requirements
+	idx_na <- ((cluster_scores$cells / cluster_scores$size) < fract_min) | (cluster_scores$cells < ncells_min)
+	cluster_scores$med_case[idx_na] <- NA
+	cluster_scores$med_control[idx_na] <- NA
+	cluster_scores$score[idx_na] <- 0
+	cluster_scores$stat[idx_na] <- 0
+	cluster_scores$p[idx_na] <- 0
+	cluster_scores$fdr[idx_na] <- 0
+	
 	cluster_scores <- cluster_scores[match(clusters, cluster_scores$cluster), ]
+	
 	return(cluster_scores)
 	
 }

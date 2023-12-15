@@ -7,12 +7,13 @@
 #' @param mc.cores number of cores
 #' @param csea.k number of permutations
 #' @param min.k minimum number of valid permutations to support empirical nulls
+#' @param fract_min only cluster of size less or equal to this fraction of cell with not null feature values will be analysed
 #' @return list with two elements: gs_table and leading_edge. See [csea()]
 #' @export
 #' @description Calculate cluster enrichment by csea approach
 
 
-cluster_csea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99, min.k=10){
+cluster_csea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99, min.k=10, fract_min=0.2){
   
   
   X <- as.matrix(feature_values)
@@ -35,7 +36,7 @@ cluster_csea <- function(feature_values=NULL, cell_clusters=NULL, min.cells.feat
   
   #CSEA process on features-by-cells
   gsl <- lapply(split(cell_cluster_ok, cell_cluster_ok), function(x) names(x))
-  csea_res <- csea(X, gsl, mc_cores_perm = mc.cores, ord.mode = rep(-1, ncol(X)), k = csea.k, min.size = min.cells.feature, min.k = min.k)
+  csea_res <- csea(X, gsl, mc_cores_perm = mc.cores, ord.mode = rep(-1, ncol(X)), k = csea.k, min.size = min.cells.feature, min.k = min.k, fract_min=fract_min)
   
   # insert a row for excluded clusters
   if(length(excluded_clusters)>0){

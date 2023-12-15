@@ -19,7 +19,7 @@
 #' @importFrom Seurat AddMetaData
 #' @export
 
-plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=TRUE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, ...){
+plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=FALSE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, ...){
   
   if(!dir.exists(out_dir)){
     dir.create(out_dir, recursive = T)
@@ -73,7 +73,7 @@ plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_
               
               #add the metadata
               Seu_obj <- AddMetaData(Seu_obj, metadata=md, col.name=colnames(feature_data)[i])
-              plot_umap(Seu_obj, file = out_file, group.by = colnames(feature_data)[i], cols=(brewer.rdylbu(10)), width=width, height=height, units=units, res=res, ...)
+              plot_umap(Seu_obj, file = out_file, group.by = make.names(colnames(feature_data)[i]), cols=(brewer.rdylbu(10)), width=width, height=height, units=units, res=res, ...)
               
             }else{
               

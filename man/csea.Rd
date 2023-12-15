@@ -7,12 +7,13 @@
 csea(
   rl = NULL,
   gsl = NULL,
-  k = 100,
+  k = 99,
   min.size = 100,
   ord.mode = -1,
   min.k = 10,
   mc_cores_path = 1,
-  mc_cores_perm = 1
+  mc_cores_perm = 1,
+  fract_min = 0.2
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ csea(
 \item{mc_cores_path}{number of cores to use for parallel calculation of gene set lists; the total number of cpu used will be mc_cores_path * mc_cores_perm}
 
 \item{mc_cores_perm}{number of cores to use for parallel calculation of ranked list permutations; the total number of cpu used will be mc_cores_path * mc_cores_perm}
+
+\item{fract_min}{only cluster of size less or equal to this fraction of cell with not null feature values will be analysed}
 }
 \value{
 list with two data.frames, gs_table and leading_edge.

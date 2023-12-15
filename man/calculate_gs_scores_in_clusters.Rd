@@ -10,7 +10,8 @@ calculate_gs_scores_in_clusters(
   ncells_min = 5,
   null_model = TRUE,
   alt = "g",
-  test = "t"
+  test = "t",
+  fract_min = 0.5
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ calculate_gs_scores_in_clusters(
 \item{alt}{alterative passed to [wilcox.test()] or [t.test()]}
 
 \item{test}{type of test: t to use [t.test()]; wrs to use [wilcox.test()]}
+
+\item{fract_min}{only clusters with this fraction of cells with not null gene set score will be considered}
 }
 \value{
 scMuffinList with cluster level scores in `sMuffinList$cluster_data[[partition_id]]`. The element [summary] contains a clusters-by-gene sets table, while the element [full] the full result

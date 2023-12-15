@@ -1,3 +1,7 @@
+version 1.1.5
+- introduced parameters to control cluster level gene set scores and CSEA, based on the number of valid cell-scores;
+- introduced parameter to control the maximum value to plot 
+mber of valid cell-scores;
 version 1.1.4
 - updtaes over csea and vignette
 version 1.1.3

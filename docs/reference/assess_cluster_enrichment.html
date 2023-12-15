@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
 <span>  partition_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  min.cells.feature <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  min.cells.cluster <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  fract_min <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  mc.cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  csea.k <span class="op">=</span> <span class="fl">99</span>,</span>
 <span>  min.k <span class="op">=</span> <span class="fl">10</span></span>
@@ -77,6 +78,10 @@
 
 <dt>min.cells.cluster</dt>
 <dd><p>minimum number of cells of a cluster</p></dd>
+
+
+<dt>fract_min</dt>
+<dd><p>only cluster of size less or equal to this fraction of cell with not null feature values will be analysed</p></dd>
 
 
 <dt>mc.cores</dt>

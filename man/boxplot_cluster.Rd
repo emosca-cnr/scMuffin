@@ -45,5 +45,5 @@ boxplot_cluster(
 \item{res}{image resolution}
 }
 \description{
-Produce boxplots to visualize the distribution of cell values according to the selected figure. A png figure for each cluster is saved in dir_out.
+Produce boxplots to visualize the distribution of cell values according to the selected feature A png figure for each cluster is saved in dir_out.
 }

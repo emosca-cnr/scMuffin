@@ -4,7 +4,7 @@
 \alias{calc_gs_perm}
 \title{Calculate permutations}
 \usage{
-calc_gs_perm(rll = NULL, perm = NULL, gs = NULL)
+calc_gs_perm(rll = NULL, perm = NULL, gs = NULL, fract_min = 0.2)
 }
 \arguments{
 \item{rll}{numeric matrix of genes-by-ranking criteria; each column contains numeric values; rownames are mandatory}
@@ -12,6 +12,8 @@ calc_gs_perm(rll = NULL, perm = NULL, gs = NULL)
 \item{perm}{vector of permuted names}
 
 \item{gs}{gene set}
+
+\item{fract_min}{only cluster of size less or equal to this fraction of cell with not null feature values will be analysed}
 }
 \description{
 Calculate permutations

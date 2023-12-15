@@ -7,6 +7,7 @@
 #' @param mc.cores number of cores
 #' @param csea.k number of CSEA permutations
 #' @param min.k minimum number of valid permutations to support empirical nulls
+#' @param fract_min only cluster of size less or equal to this fraction of cell with not null feature values will be analysed
 #' @description Assess cluster enrichment using ORA for categorical features and CSEA for numeric features.
 #' @details
 #' The output of CSEA is a table with statistics for every tested gene set. 
@@ -16,7 +17,7 @@
 #' @importFrom stats setNames
 #' @export
 
-assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=10, mc.cores=1, csea.k=99, min.k=10){
+assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, min.cells.feature=100, min.cells.cluster=10, fract_min=0.2, mc.cores=1, csea.k=99, min.k=10){
   
   if(length(scMuffinList[[feature_name]]$summary) == 0){
     stop("Can't find scMuffinList[[feature_name]]$summary\n")
@@ -32,31 +33,13 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
   ans <- vector("list", 2)
   names(ans) <- c("cluster_csea_res", "cluster_hyper_res")
   
-  # if(meta_clusters){
-  #   
-  #   ##### NUMERCIC -> CSEA
-  #   if(ncol(X)>0){
-  #     
-  #     cat("CSEA for ", ncol(X), "features\n")
-  #     ans$cluster_csea_res <- cluster_csea(X, setNames(partitions$meta_cl, partitions$cell_id))
-  #     
-  #   }
-  #   
-  #   ##### FACTOR -> Fisher exact test
-  #   if(ncol(X)>0){
-  #     cat("ORA for ", ncol(X), "features\n")
-  #     ans$cluster_hyper_res <- cluster_hyper(X, cell_clusters = X_clusters)
-  #     
-  #   }
-  #   
-  # }else{
-  
+
   ##### NUMERCIC -> CSEA
   if(is.numeric(X[, 1])){
     
     cat("CSEA for ", ncol(X), "features\n")
     
-    ans$cluster_csea_res <- cluster_csea(X, cell_clusters = X_clusters, min.cells.feature=min.cells.feature, min.cells.cluster=min.cells.cluster, mc.cores=mc.cores, csea.k=csea.k, min.k=min.k)
+    ans$cluster_csea_res <- cluster_csea(X, cell_clusters = X_clusters, min.cells.feature=min.cells.feature, min.cells.cluster=min.cells.cluster, mc.cores=mc.cores, csea.k=csea.k, min.k=min.k, fract_min=fract_min)
     
     if(length(scMuffinList$cluster_data[partition_id])==0){ # nor ORA neither CSEA
       
@@ -70,16 +53,7 @@ assess_cluster_enrichment <- function(scMuffinList=NULL, feature_name=NULL, part
         
       }
       
-      #shared_names <- which(names(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table) %in% names(ans$cluster_csea_res$gs_table))
-      
-      # if(length(shared_names)>0){
-      #   scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table[shared_names] <- NULL
-      #   scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge[shared_names] <- NULL
-      # }
-      # 
-      # scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table <- c(scMuffinList$cluster_data[[partition_id]]$CSEA$gs_table, ans$cluster_csea_res$gs_table)
-      # scMuffinList$cluster_data[[partition_id]]$CSEA$leading_edge <- c(scMuffinList$cluster_data_full[[partition_id]]$CSEA$leading_edge, ans$cluster_csea_res$leading_edge) ##append 
-      
+     
       shared_names <- which(names(scMuffinList$cluster_data[[partition_id]]$CSEA) %in% names(ans$cluster_csea_res))
       
       if(length(shared_names)>0){
