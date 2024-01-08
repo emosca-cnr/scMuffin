@@ -33,15 +33,18 @@ preprocess_object_for_CNV <- function(genes_by_cells=NULL, gene_ann=NULL) {
     gene_locations$pos <- apply(abs(gene_locations[, c("start_location", "end_location")]), 1, min) 
     gene_locations$gene_id <- gene_locations$start_location <- gene_locations$end_location <- NULL
     #gene_locations$end_location <- NULL
-    gene_locations$Chrom_symbol <- apply(gene_locations[, c("Chromosome", "symbol")], 1, function(x) paste0("chr", x[1], "__", x[2]))
-    gene_locations$Chrom_pos_symbol <- apply(gene_locations[, c("Chromosome", "pos", "symbol")], 1, function(x) paste0("chr", x[1], "__", x[2], "__", x[3]))
-    gene_locations$Chrom_pos_symbol <- gsub(" +", "", gene_locations$Chrom_pos_symbol )
   }
+
+  # defines Chrom_symbol and Chrom_pos_symbol
+  gene_locations$Chrom_symbol <- apply(gene_locations[, c("Chromosome", "symbol")], 1, function(x) paste0("chr", x[1], "__", x[2]))
+  gene_locations$Chrom_pos_symbol <- apply(gene_locations[, c("Chromosome", "pos", "symbol")], 1, function(x) paste0("chr", x[1], "__", x[2], "__", x[3]))
+  gene_locations$Chrom_pos_symbol <- gsub(" +", "", gene_locations$Chrom_pos_symbol )
   
   matrix_complete <- merge(gene_locations, genes_by_cells, by.x="symbol", by.y=0, sort=FALSE)
   
   # remove chromosome names not in 1:22 and X,Y -- long names, duplicates
-  matrix_complete <- matrix_complete[-which(grepl("_", matrix_complete$Chromosome)), ]
+  # matrix_complete <- matrix_complete[-which(grepl("_", matrix_complete$Chromosome)), ]
+  matrix_complete <- matrix_complete[!grepl("_", matrix_complete$Chromosome), ]
   
   # remove NA values across symbol
   #matrix_complete <- matrix_complete[!is.na(matrix_complete$gene_id), ]
