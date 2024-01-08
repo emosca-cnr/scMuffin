@@ -32,6 +32,7 @@ preprocess_object_for_CNV <- function(genes_by_cells=NULL, gene_ann=NULL) {
     gene_locations <- merge(gene_locations, temp, by=c("gene_id", "Chromosome"), sort=F)
     gene_locations$pos <- apply(abs(gene_locations[, c("start_location", "end_location")]), 1, min) 
     gene_locations$gene_id <- gene_locations$start_location <- gene_locations$end_location <- NULL
+    gene_locations <- unique(gene_locations)
     #gene_locations$end_location <- NULL
   }
 
