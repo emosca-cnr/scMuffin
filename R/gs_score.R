@@ -21,7 +21,6 @@
 #`  \item control.AV: number of available control cells;
 #`  \item null_ok: whether a null could be defined for the cell; 
 #`  \item avg_delta_score: average of case minu each control cell; 
-#`  \item delta_score: case - avg_control.
 #` }
 #' @export
 #' @references Tirosh2016 10.1126/science.aad0501
@@ -33,9 +32,11 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
   if(sum(rownames(genes_by_cells) %in% gene_set) < nmark_min){
     
     message("not enough genes in gene set, please consider only gene set with enough number of genes.\n")
-    res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
+    res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
     
   }else{
+    
+    cat("# gene set genes available:", sum(rownames(genes_by_cells) %in% gene_set), "/", length(gene_set), "\n")
     
     gene_set_data <- genes_by_cells[rownames(genes_by_cells) %in% gene_set, , drop=F]
     
@@ -54,26 +55,12 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
         }
       }
       
-      #null_mod_gs <- list(gs=hist(log2(rowSums(gene_set_data, na.rm = T)), 20, plot = F))
-      #null_mod_gs <- c(null_mod_gs, lapply(control_set_data, function(x) hist(log2(rowSums(x, na.rm = T)), 20, plot = F)))
-      
     }
     
-    #old version
-    #ans <- data.frame(case=colMeans(gene_set_data), control=colMeans(control_set_data), case.N=nrow(gene_set_data), case.AV=colSums(gene_set_data!=0), case.NA=colSums(gene_set_data==0), control.N=nrow(control_set_data), control.AV=colSums(control_set_data != 0), control.NA=colSums(control_set_data==0), stringsAsFactors = F)
-    #ans$score <- ans$case - ans$control
     
     #new version
     ans <- list(gs=data.frame(case=colMeans(gene_set_data, na.rm = na.rm), case.N=nrow(gene_set_data), case.AV=colSums(!is.na(gene_set_data)), stringsAsFactors = F)) #real
     
-    #z-scores....
-    #temp <- gene_set_data
-    #for(i in 1:nrow(temp)){
-    #  temp_idx <- !is.na(temp[i, ])
-    #  temp[i, temp_idx] <- scale(temp[i, temp_idx])
-    #}
-    
-    #ans[[1]] <- cbind(ans[[1]], case.z=colMeans(temp, na.rm = T))
     
     #attach to ans the genes-by-cells matrix of controls
     if(null_model){
@@ -88,11 +75,13 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
     ans <- lapply(ans, function(x) cbind(x, nmark_min=x[,3]>=nmark_min)) #add nmark_min flag
     
     if(null_model){
+      
       #cells with enough genes
       vect_selected <- do.call(cbind, t(lapply(ans, function(x) x$nmark_min))) #the first column contains real data
       
       #null_ok <- rowSums(vect_selected[, -1])  > (ncol(vect_selected[, -1])) #old
       gene_set_ok_in_nulls <- rowSums(vect_selected[, -1], na.rm = na.rm) #number of permutations in which each cell satistfies nmark_min
+      
       if(verbose){
         cat("gene_set_ok_in_nulls...\n")
         print(table(gene_set_ok_in_nulls[gene_set_ok_in_nulls>0]))
@@ -102,55 +91,50 @@ gs_score <- function(gene_set=NULL, genes_by_cells=NULL, bins=NULL, nmark_min=5,
         cat("kmin", kmin, "; found, ", max(gene_set_ok_in_nulls), "\n")
         cat("Consider reducing kmin\n")
       }
-      #null_ok <- gene_set_ok_in_nulls > (ncol(vect_selected)-1)*0.9 #nubmer of cells that have a sufficient number of available permutations
+      
       null_ok <- gene_set_ok_in_nulls >= kmin
+      cat("# cells with valid permutations (at least nmark_min markers):", sum(null_ok), "\n")
+      cat("# max k:", max(gene_set_ok_in_nulls), "\n")
       
-      
-      if(sum(vect_selected[, 1]) >= ncells_min){
+      if(sum(vect_selected[, 1]) >= ncells_min){ #enough valid cells
         
-        vect_selected[, 1] <- vect_selected[, 1] & null_ok
+        vect_selected[, 1] <- vect_selected[, 1] & null_ok #cells with enough valid permutations
+        #vect_selected <- vect_selected & null_ok #cells with enough valid permutations
         
         if(sum(vect_selected[, 1]) >= ncells_min){
           
           #score matrix
           score <- do.call(cbind, t(lapply(ans[-1], function(x) ans[[1]]$case - x$control)))
-          #score <- score * sign(vect_selected[, -1]) #remove permutations not valid
-          #score[score==0] <- NA #0 appeared due sign
-          score[!vect_selected[, -1]] <- NA #new
+          score[!vect_selected[, -1]] <- NA #differences without valid permutations (on the basis of nmark_min) are set to NA
           score <- rowMeans(score, na.rm = na.rm)
           score[is.nan(score)] <- NA
           
           #average control value for each cell
           avg_control <- do.call(cbind, t(lapply(ans[-1], function(x) x$control)))
-          #avg_control <- avg_control * sign(vect_selected[, -1])
-          #avg_control[avg_control==0] <- NA
-          avg_control[!vect_selected[, -1]] <- NA #new
+          avg_control[!vect_selected[, -1]] <- NA #controls without valid permutations (on the basis of nmark_min) are set to NA
           avg_control <- rowMeans(avg_control, na.rm = na.rm)
           avg_control[is.nan(avg_control)] <- NA
           
-          res <- data.frame(ans[[1]], avg_control=avg_control, control.AV=gene_set_ok_in_nulls, null_ok=null_ok, avg_delta_score=score, delta_score=ans[[1]]$case-avg_control, stringsAsFactors = F) #difference between real gs score (1), and each of the null values [2, k]
-          
-          #res <- res[res$nmark_min, ] #eliminate cells without a sufficient number of genes
+          res <- data.frame(ans[[1]], avg_control=avg_control, control.AV=gene_set_ok_in_nulls, null_ok=null_ok, avg_delta_score=score, stringsAsFactors = F) #difference between real gs score (1), and each of the null values [2, k]
           
         }else{
           message("cannot create null models for at least ", ncells_min, " cells\n")
-          res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
+          res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, stringsAsFactors = F)
         }
         
         #cells without a sufficient number of genes
-        res$avg_delta_score[!res$nmark_min] <- 0 
-        res$delta_score[!res$nmark_min] <- 0
-        
+        res$avg_delta_score[!res$nmark_min | !res$null_ok] <- NA 
+
       }else{
         
         message("cannot calcolate gene set score for at least ", ncells_min, " cells\n")
-        res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
+        res <- data.frame(case=rep(NA, ncol(genes_by_cells)), case.N=NA, case.AV=NA, nmark_min=F, avg_control=NA, control.AV=NA, null_ok=F, avg_delta_score=NA, stringsAsFactors = F, row.names = colnames(genes_by_cells))
         
       }
       
     }else{ #without nullmodel
       
-      res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, delta_score=NA, stringsAsFactors = F)
+      res <- data.frame(ans[[1]], avg_control=NA, control.AV=NA, null_ok=NA, avg_delta_score=NA, stringsAsFactors = F)
       #cells without a sufficient number of genes
       res$case[!res$nmark_min] <- 0
     }
