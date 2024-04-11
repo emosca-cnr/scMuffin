@@ -5,7 +5,7 @@
 #' @param n_comp numeric, Dimensions of reduction to use as input
 #' @param ... arguments passed to Seurat::FindCLusters
 #' @return features_by_cells Seurat Object, object with saved dimension reduction components calculate on features by cells matrix
-#' @import Seurat
+#' @importFrom Seurat CreateSeuratObject ScaleData RunPCA FindNeighbors FindClusters
 #' @export
 
 cluster_by_features <- function(features_by_cells=NULL, n_comp = 10, ...){

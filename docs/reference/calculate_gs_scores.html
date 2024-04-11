@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scMuffin</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,6 @@
 <span>  k <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  kmin <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  score_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"relative"</span>, <span class="st">"mean"</span><span class="op">)</span>,</span>
-<span>  null_model <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -98,10 +97,6 @@
 
 <dt>score_type</dt>
 <dd><p>type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression</p></dd>
-
-
-<dt>null_model</dt>
-<dd><p>TRUE if permutations have to be used. Required for score_type="relative"</p></dd>
 
 
 <dt>verbose</dt>

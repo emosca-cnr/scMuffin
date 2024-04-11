@@ -13,7 +13,6 @@ proliferation_analysis(
   k = 99,
   kmin = 49,
   score_type = c("relative", "mean"),
-  null_model = TRUE,
   mean_scale = TRUE,
   gsl = NULL
 )
@@ -34,8 +33,6 @@ proliferation_analysis(
 \item{kmin}{minimum number of permutations; due to missing values it is hard to ensure that a signature can be compared to k permutations in every cell}
 
 \item{score_type}{type of score. if "relative", then the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression}
-
-\item{null_model}{TRUE if permutations have to be used. Required for score_type="relative"}
 
 \item{mean_scale}{whether to scale the values obtained using score_type="mean"}
 

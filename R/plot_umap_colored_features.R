@@ -13,10 +13,10 @@
 #' @param res image resolution
 #' @param out_dir output directory
 #' @param ... further arguments to plot_umap
-#' @import pals
 #' @importFrom stats setNames
 #' @importFrom ggplot2 cut_interval
 #' @importFrom Seurat AddMetaData
+#' @importFrom pals brewer.rdylbu brewer.ylorrd
 #' @export
 
 plot_umap_colored_features <- function(Seu_obj=NULL, scMuffinList=NULL, feature_name=NULL, scale_feature=FALSE, adj_outliers=FALSE, min_cells=10, out_dir="./", width=180, height=180, units="mm", res=300, ...){

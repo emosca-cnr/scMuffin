@@ -9,10 +9,11 @@
 #' @param show.gs.source whether to show or not gene set source
 #' @param na_col color for NA values
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
-#' @export
-#' @import ComplexHeatmap pals
+#' @importFrom ComplexHeatmap rowAnnotation columnAnnotation Heatmap
 #' @importFrom circlize colorRamp2
-
+#' @importFrom pals brewer.pastel1 brewer.accent brewer.rdylbu brewer.purples
+#' @export
+#'  
 plot_heatmap_dataset_comparison <- function(dataset_cmp_list=NULL, type="score", show.gs.source=FALSE, outfile=NULL, width=200, height=200, units="mm", res=300, na_col="black", ...){
   
   type <- match.arg(type, c("score", "significance"))

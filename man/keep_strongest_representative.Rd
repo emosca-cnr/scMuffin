@@ -2,7 +2,7 @@
 % Please edit documentation in R/keep_strongest_representative.R
 \name{keep_strongest_representative}
 \alias{keep_strongest_representative}
-\title{Keep the feature with the average highest values}
+\title{Keep the feature with the highest average across cells}
 \usage{
 keep_strongest_representative(genes_by_cells = NULL, row.names = NULL)
 }
@@ -12,5 +12,5 @@ keep_strongest_representative(genes_by_cells = NULL, row.names = NULL)
 \item{row.names}{row.names that have to be assigned}
 }
 \description{
-Keep the feature with the average highest values
+Keep the feature with the highest average across cells
 }

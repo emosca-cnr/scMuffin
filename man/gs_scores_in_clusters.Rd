@@ -10,7 +10,6 @@ gs_scores_in_clusters(
   ncells_min = 5,
   alt = "g",
   test = "t",
-  null_model = TRUE,
   fract_min = 0.5
 )
 }
@@ -24,8 +23,6 @@ gs_scores_in_clusters(
 \item{alt}{alterative passed to [wilcox.test()] or [t.test()]}
 
 \item{test}{type of test: t to use [t.test()]; wrs to use [wilcox.test()]}
-
-\item{null_model}{TRUE to consider the empirical null based on gene set permutations}
 
 \item{fract_min}{only clusters with this fraction of cells with not null gene set score will be considered}
 }

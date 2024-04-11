@@ -12,9 +12,9 @@
 #' @param res image resolution
 #' @param feature_name the names of the feature that should be considered. It must be one of names(scMuffinList)
 #' @description Produce boxplots to visualize the distribution of cell values according to the selected feature A png figure for each cluster is saved in dir_out.
-#' @importFrom grDevices png
+#' @importFrom grDevices png dev.off
 #' @importFrom plotrix thigmophobe.labels
-#' @import graphics
+#' @importFrom graphics layout par points boxplot legend
 #' @export
 
 boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=NULL, dir_out="./", n_features=10, only_pos_nes=TRUE, do_scale_features=FALSE, cex.axis=0.8, width=180, height=180, units="mm", res=300){
@@ -92,7 +92,7 @@ boxplot_cluster <- function(scMuffinList=NULL, feature_name=NULL, partition_id=N
 			cbf_cl <- cells_by_features[, match(names(top_features$fdr), colnames(cells_by_features)), drop=FALSE]
 			
 			
-			png(paste0(dir_out, "/cluster_", cell_clusters_set[cl], ".png"), width=width, height=height, units=units, res=res)
+			png(file.path(dir_out, paste0("cluster_", cell_clusters_set[cl], ".png")), width=width, height=height, units=units, res=res)
 			layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = T))
 			
 			par(mar = c(3, 3, 2, 1))

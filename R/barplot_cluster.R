@@ -12,10 +12,11 @@
 #' @param units image units
 #' @param res image resolution
 #' @param legend.pos position of barplot legend
-#' @importFrom grDevices jpeg
+#' @importFrom grDevices jpeg adjustcolor
 #' @importFrom stats setNames
 #' @importFrom plotrix thigmophobe.labels
-#' @import pals
+#' @importFrom pals alphabet2
+#' @importFrom graphics barplot text plot.new
 #' @description Produce barplots (1 for each cluster) of distribution of cells associated with the values of the selected feature. A png figure for each cluster is saved in dir_out.
 #' @export
 

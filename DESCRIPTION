@@ -1,7 +1,7 @@
 Package: scMuffin
 Title: MUlti-Features INtegrative approach for single-cell data analysis
-Version: 1.1.7
-Date: 2024-02-26
+Version: 1.2.0
+Date: 2024-04-10
 Authors@R: 
      c(person(given = "Valentina",
            family = "Nale",
@@ -30,34 +30,6 @@ RoxygenNote: 7.2.3
 Encoding: UTF-8
 Depends: 
     R (>= 4.0.0)
-Imports:
-    graphics,
-    parallel,
-    org.Hs.eg.db,
-    RColorBrewer,
-    dendextend,
-    destiny,
-    Seurat,
-    stats,
-    utils,
-    DESeq2,
-    msigdbr,
-    methods,
-    cluster,
-    ComplexHeatmap,
-    VGAM,
-    dendsort,
-    grDevices,
-    ggplot2,
-    circlize,
-    Matrix,
-    pals,
-    plotrix,
-    qvalue
-Suggests: 
-    rmarkdown,
-    knitr,
-    BiocStyle,
-    devtools,
-    sf
+Imports: graphics, parallel, org.Hs.eg.db, destiny, Seurat, stats, utils, msigdbr, methods, ComplexHeatmap, grDevices, ggplot2, circlize, Matrix, pals, plotrix, qvalue
+Suggests: rmarkdown, knitr, BiocStyle, devtools
 VignetteBuilder: knitr

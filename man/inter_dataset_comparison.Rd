@@ -10,7 +10,6 @@ inter_dataset_comparison(
   genes_min = 3,
   genes_max = 500,
   mc.cores = 1,
-  null_model = TRUE,
   ncells_min = 5,
   cluster_rows = FALSE,
   cluster_columns = FALSE,
@@ -27,8 +26,6 @@ inter_dataset_comparison(
 \item{genes_max}{maximum number of genes required among the markers of a cluster}
 
 \item{mc.cores}{number of cores}
-
-\item{null_model}{whether to use or not the empirical null model. See calculate_signature}
 
 \item{ncells_min}{minim number of cells in a cluster}
 

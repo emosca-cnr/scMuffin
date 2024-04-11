@@ -13,8 +13,10 @@
 #' @param cex.main cex of main
 #' @description Plot an heatmap of the CNV.
 #' @details CNV Profile of every cluster
-#' @import ComplexHeatmap grDevices grid
 #' @importFrom ggplot2 cut_interval
+#' @importFrom grDevices png dev.off
+#' @importFrom pals brewer.rdylbu
+#' @importFrom graphics rect abline axis
 #' @export
 
 plot_profile_CNV <- function(scMuffinList = NULL, cluster=0, z.score=TRUE, file=NULL, width=300, height=90, units="mm", res=300, cex.points=0.7, cex.lab=0.7, cex.axis=0.7, cex.main=0.7){

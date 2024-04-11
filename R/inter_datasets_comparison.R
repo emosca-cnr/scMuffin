@@ -1,14 +1,14 @@
 #' Inter-dataset cluster similarity
 #' @param seu_obj_list list of Seurat objects
 #' @param gsl gene set list
-##' @param genes_min minimum number of genes required among the markers of a cluster
+#' @param genes_min minimum number of genes required among the markers of a cluster
 #' @param genes_max maximum number of genes required among the markers of a cluster
 #' @param mc.cores number of cores
-#' @param null_model whether to use or not the empirical null model. See calculate_signature
 #' @param ncells_min minim number of cells in a cluster 
 #' @param cluster_rows whether to cluster or not the rows
 #' @param cluster_columns whether to cluster or not the columns
 #' @param ... arguments passed to calculate_gs_scores
+#' @importFrom Seurat GetAssayData
 #' @export
 #' @description Quantify the similarity between clusters of two datasets, on the basis of the average cluster marker expression
 #' @return A list with:
@@ -20,7 +20,7 @@
 #'   \item{markers_2, markers of dataset 2;}
 #' }
 
-inter_dataset_comparison <- function(seu_obj_list=NULL, gsl=NULL, genes_min=3, genes_max=500, mc.cores=1, null_model=TRUE, ncells_min=5, cluster_rows = FALSE, cluster_columns = FALSE,  ...){
+inter_dataset_comparison <- function(seu_obj_list=NULL, gsl=NULL, genes_min=3, genes_max=500, mc.cores=1, ncells_min=5, cluster_rows = FALSE, cluster_columns = FALSE,  ...){
   
   
   if(!all(unlist(lapply(seu_obj_list, function(x) is(x, "Seurat"))))){

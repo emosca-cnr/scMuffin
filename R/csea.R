@@ -8,7 +8,7 @@
 #' @param min.k minimum number of valid permutations to support empirical nulls
 #' @param min.size minimum number of cells with a not null value
 #' @param fract_min only cluster of size less or equal to this fraction of cell with not null feature values will be analysed
-#' @import parallel
+#' @importFrom parallel mclapply
 #' @importFrom stats p.adjust
 #' @importFrom qvalue qvalue
 #' @return list with two data.frames, gs_table and leading_edge. 

@@ -4,16 +4,20 @@
 #' @param ncells_min minimum number of cells required for the calculation of the average signature in the cluster
 #' @param alt alterative passed to [wilcox.test()] or [t.test()]
 #' @param test type of test: t to use [t.test()]; wrs to use [wilcox.test()]
-#' @param null_model TRUE to consider the empirical null based on gene set permutations
 #' @param fract_min only clusters with this fraction of cells with not null gene set score will be considered
 #' @description Gene set scoring in clusters
 #' @importFrom stats median wilcox.test t.test p.adjust
 #' @export
 
-gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_min=5, alt="g", test="t", null_model=TRUE, fract_min=0.5){
+gs_scores_in_clusters <- function(score_table=NULL, cell_clusters=NULL, ncells_min=5, alt="g", test="t", fract_min=0.5){
 	
 	if(!is.factor(cell_clusters)){
 		cell_clusters <- as.factor(cell_clusters)
+	}
+	
+	null_model <- FALSE
+	if(any(!is.na(score_table$avg_control))){
+		null_model <- TRUE
 	}
 	
   clusters_size <- table(cell_clusters)

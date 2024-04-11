@@ -13,8 +13,8 @@
 #' @param legend_fontsize legend fontsize
 #' @param genes.labels.fontsize gene labels fontsize
 #' @param ... arguments passed to ComplexHeatmap::Heatmap
-#' @import ComplexHeatmap 
-#' @importFrom grid gpar
+#' @importFrom ComplexHeatmap rowAnnotation anno_mark Heatmap draw
+#' @importFrom grid gpar unit
 #' @importFrom grDevices png
 #' @export
 

@@ -8,7 +8,6 @@ calculate_gs_scores_in_clusters(
   scMuffinList = NULL,
   partition_id = NULL,
   ncells_min = 5,
-  null_model = TRUE,
   alt = "g",
   test = "t",
   fract_min = 0.5
@@ -20,8 +19,6 @@ calculate_gs_scores_in_clusters(
 \item{partition_id}{identifier of the partition to be used}
 
 \item{ncells_min}{minimum number of cells required for the calculation of the average signature in the cluster}
-
-\item{null_model}{TRUE to consider the empirical null based on gene set permutations}
 
 \item{alt}{alterative passed to [wilcox.test()] or [t.test()]}
 

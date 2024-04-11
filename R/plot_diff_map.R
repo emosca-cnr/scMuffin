@@ -13,8 +13,9 @@
 #' @param adj_outliers logical, whether to adjust the group.by scores, removing outliers
 #' @description Produce a scatter plot where cells are placed according to the results of diffusion map analysis and colored by values given in col_data.
 #' @importFrom grDevices png
+#' @importFrom graphics plot.new
 #' @importFrom ggplot2 cut_interval
-#' @import pals
+#' @importFrom pals brewer.ylorrd brewer.rdylbu
 #' @export
 
 plot_diff_map <- function(scMuffinList = NULL, columns=c(1:2), col_data=NULL, file=NULL, width=200, height=200, units="mm", res=300, adj_outliers=TRUE, scale_feature=FALSE, min_cells=50, ...){

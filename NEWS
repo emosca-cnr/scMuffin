@@ -1,3 +1,6 @@
+version 1.2.0
+- removed null_model as argument of calculate_gs_score;
+- addedd the function cell_coocc_partitions
 version 1.1.7
 - introduced support for NA values in keep strongest representative
 version 1.1.6

@@ -9,7 +9,6 @@
 #' @param k number of permutations
 #' @param kmin minimum number of permutations; due to missing values it is hard to ensure that a gene set score can be compared to k permutations in every cell
 #' @param score_type type of score. if "relative", than the score is the difference between the observed gene set average expression and that of a k permutations; if "mean" the score is equal to the observed gene set average expression
-#' @param null_model TRUE if permutations have to be used. Required for score_type="relative"
 #' @param verbose verbosity
 #' @param na.rm whether to use NA or not
 #' @param overwrite whether to update or not gene_set_scoring and gene_set_scoring_full elements of scMuffinList. 
@@ -17,10 +16,12 @@
 #' @references Tirosh2016 10.1126/science.aad0501
 #' 
 #' @export
-#' @import parallel
+#' @importFrom parallel mclapply
 
-calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), null_model=TRUE, verbose=FALSE, na.rm=TRUE, overwrite=FALSE){
+calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbins=25, nmark_min = 5, ncells_min = 10, k=100, kmin=50, score_type=c("relative", "mean"), verbose=FALSE, na.rm=TRUE, overwrite=FALSE){
   
+  
+  score_type <- match.arg(arg = score_type, choices = c("relative", "mean"))
   
   cat("####################################################\n")
   cat("nbins:", nbins, "\n")
@@ -30,12 +31,17 @@ calculate_gs_scores <- function(scMuffinList=NULL, gs_list=NULL, mc.cores=1, nbi
   kmin <- min(k, kmin)
   cat("kmin:", kmin, "\n")
   cat("score_type:", score_type, "\n")
-  cat("null_model:", null_model, "\n")
   cat("verbose:", verbose, "\n")
   cat("na.rm:", na.rm, "\n")
   cat("overwrite:", overwrite, "\n")
   cat("####################################################\n")
   
+  if(score_type == "relative"){
+    null_model <- TRUE
+  }else{
+    null_model <- FALSE
+  }
+
   if(length(scMuffinList$normalized)==0){
     stop("scMuffinList does not contain genes_by_cells\n")
   }

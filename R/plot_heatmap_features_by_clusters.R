@@ -15,8 +15,11 @@
 #' @param X_abs_max maximum absolute value permitted, useful to avoid the effect of outliers over colors
 #' @param ... further arguments to ComplexHeatmap::Heatmap
 #' @export
-#' @import ComplexHeatmap grDevices pals
+#' @importFrom ComplexHeatmap Heatmap draw
 #' @importFrom circlize colorRamp2
+#' @importFrom grDevices png dev.off
+#' @importFrom pals brewer.rdylbu brewer.ylorrd
+#' @importFrom grid grid.text
 
 plot_heatmap_features_by_clusters <- function(scMuffinList=NULL, feature_source=NULL, partition_id=NULL, significance_matrix=NULL, sig_threshold=0.05, file=NULL, width=180, height=180, units="mm", res=300, scale=FALSE, pal=NULL, na_col="black", X_abs_max=NULL, ...){
   
